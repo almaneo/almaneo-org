@@ -1,11 +1,9 @@
 import React from 'react';
-import { Box, Container, Typography, Paper, List, ListItem, ListItemIcon, ListItemText, Link as MuiLink, Alert, useTheme } from '@mui/material';
+import { Box, Container, Typography, Paper, List, ListItem, ListItemIcon, ListItemText, Link as MuiLink, Alert } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Description, Warning, Gavel, AccountBalance, People, Security, ArrowBack } from '@mui/icons-material';
 
 const TermsOfService: React.FC = () => {
-  const theme = useTheme();
-
   const sections = [
     {
       icon: <People />,

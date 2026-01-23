@@ -1,11 +1,9 @@
 import React from 'react';
-import { Box, Container, Typography, Paper, List, ListItem, ListItemIcon, ListItemText, Link as MuiLink, useTheme } from '@mui/material';
+import { Box, Container, Typography, Paper, List, ListItem, ListItemIcon, ListItemText, Link as MuiLink } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Shield, Lock, Visibility, Storage, Public, Email, ArrowBack } from '@mui/icons-material';
 
 const PrivacyPolicy: React.FC = () => {
-  const theme = useTheme();
-
   const sections = [
     {
       icon: <Visibility />,
