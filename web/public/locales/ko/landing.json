@@ -256,42 +256,46 @@
     "titlePrefix": "",
     "titleHighlight": "정(情)",
     "titleSuffix": "을 나누는 사람들",
-    "coreTeam": "Core Team",
-    "advisors": "Advisors",
+    "coFounders": "Co-Founders",
+    "lookingForKindPeople": "함께할 친절한 사람들을 찾고 있습니다",
+    "joinUsMessage": "AlmaNEO의 비전에 공감하신다면 함께해주세요",
+    "hiring": "채용 중",
+    "applyNow": "지원하기",
     "joinCta": "정(情)의 가치에 공감하시나요?",
     "contactMessage": "로 연락주세요",
     "roles": {
-      "founderCeo": "Founder & CEO",
-      "cto": "CTO",
-      "headOfProduct": "Head of Product",
-      "headOfCommunity": "Head of Community",
-      "aiEthicsAdvisor": "AI Ethics Advisor",
-      "globalSouthAdvisor": "Global South Advisor"
+      "coFounder": "Co-Founder"
     },
     "members": {
-      "alexKim": {
-        "name": "Alex Kim",
-        "description": "AI 민주화와 정(情)의 가치를 세계에 전파하는 비전리더"
+      "rucaLee": {
+        "name": "Ruca Lee",
+        "description": "AI 민주화와 정(情)의 가치를 세계에 전파하는 비전리더, AI/Blockchain Contract"
       },
-      "sarahPark": {
-        "name": "Sarah Park",
-        "description": "블록체인 & AI 시스템 아키텍트, 10년+ 개발 경력"
-      },
-      "mikeChen": {
-        "name": "Mike Chen",
-        "description": "UX/UI 전문가, Global South 사용자 경험 최적화"
-      },
-      "yunaLee": {
-        "name": "Yuna Lee",
+      "patrickMa": {
+        "name": "Patrick Ma",
         "description": "글로벌 커뮤니티 빌더, 다문화 커뮤니케이션 전문가"
       },
-      "jamesWong": {
-        "name": "Dr. James Wong",
-        "description": "Stanford AI Lab 연구원, AI 윤리 분야 전문가"
+      "lionKim": {
+        "name": "Lion Kim",
+        "description": "블록체인 토큰 비즈니스, 결제 시스템 스페셜리스트"
+      }
+    },
+    "openRoles": {
+      "cto": {
+        "title": "CTO",
+        "description": "블록체인 & AI 시스템 아키텍처를 이끌어갈 기술 리더"
       },
-      "mariaSantos": {
-        "name": "Maria Santos",
-        "description": "UN 지속가능발전 컨설턴트, 개발도상국 전문가"
+      "headOfProduct": {
+        "title": "Head of Product",
+        "description": "Global South 사용자 경험을 최적화할 프로덕트 리더"
+      },
+      "communityLead": {
+        "title": "Community Lead",
+        "description": "전 세계 친절 커뮤니티를 성장시킬 리더"
+      },
+      "aiResearcher": {
+        "title": "AI Researcher",
+        "description": "AI 불평등 연구 및 GAII 지수 개발을 담당할 연구원"
       }
     }
   },

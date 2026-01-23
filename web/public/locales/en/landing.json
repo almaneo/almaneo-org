@@ -256,42 +256,46 @@
     "titlePrefix": "People Who Share ",
     "titleHighlight": "Jeong (情)",
     "titleSuffix": "",
-    "coreTeam": "Core Team",
-    "advisors": "Advisors",
+    "coFounders": "Co-Founders",
+    "lookingForKindPeople": "Looking for Kind People to Join Us",
+    "joinUsMessage": "If you share our vision, we'd love to have you on board",
+    "hiring": "Hiring",
+    "applyNow": "Apply Now",
     "joinCta": "Do you share the values of Jeong (情)?",
     "contactMessage": "Contact us at",
     "roles": {
-      "founderCeo": "Founder & CEO",
-      "cto": "CTO",
-      "headOfProduct": "Head of Product",
-      "headOfCommunity": "Head of Community",
-      "aiEthicsAdvisor": "AI Ethics Advisor",
-      "globalSouthAdvisor": "Global South Advisor"
+      "coFounder": "Co-Founder"
     },
     "members": {
-      "alexKim": {
-        "name": "Alex Kim",
-        "description": "Visionary leader spreading AI democratization and Jeong values globally"
+      "rucaLee": {
+        "name": "Ruca Lee",
+        "description": "Visionary leader spreading AI democratization and Jeong values globally, AI/Blockchain Contract"
       },
-      "sarahPark": {
-        "name": "Sarah Park",
-        "description": "Blockchain & AI system architect with 10+ years of experience"
-      },
-      "mikeChen": {
-        "name": "Mike Chen",
-        "description": "UX/UI expert optimizing experience for Global South users"
-      },
-      "yunaLee": {
-        "name": "Yuna Lee",
+      "patrickMa": {
+        "name": "Patrick Ma",
         "description": "Global community builder with multicultural communication expertise"
       },
-      "jamesWong": {
-        "name": "Dr. James Wong",
-        "description": "Stanford AI Lab researcher, AI ethics expert"
+      "lionKim": {
+        "name": "Lion Kim",
+        "description": "Blockchain token business and payment system specialist"
+      }
+    },
+    "openRoles": {
+      "cto": {
+        "title": "CTO",
+        "description": "Technical leader to drive blockchain & AI system architecture"
       },
-      "mariaSantos": {
-        "name": "Maria Santos",
-        "description": "UN sustainable development consultant, developing nations expert"
+      "headOfProduct": {
+        "title": "Head of Product",
+        "description": "Product leader to optimize experience for Global South users"
+      },
+      "communityLead": {
+        "title": "Community Lead",
+        "description": "Leader to grow our global kindness community"
+      },
+      "aiResearcher": {
+        "title": "AI Researcher",
+        "description": "Researcher for AI inequality studies and GAII index development"
       }
     }
   },

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Github, Linkedin, Twitter, UserPlus, Heart } from 'lucide-react';
 import { Section, Container } from '../../layout';
 import { SectionHeader, GlassCard, GradientText } from '../../ui';
 
@@ -13,25 +13,25 @@ interface TeamMember {
   };
 }
 
-const teamMemberIds: TeamMember[] = [
-  { id: 'alexKim', avatar: 'AK', socials: { twitter: '#', linkedin: '#' } },
-  { id: 'sarahPark', avatar: 'SP', socials: { github: '#', linkedin: '#' } },
-  { id: 'mikeChen', avatar: 'MC', socials: { twitter: '#', linkedin: '#' } },
-  { id: 'yunaLee', avatar: 'YL', socials: { twitter: '#' } },
+// Co-Founders (실제 팀원)
+const coFounders: TeamMember[] = [
+  { id: 'rucaLee', avatar: 'RL', socials: { twitter: '#', linkedin: '#' } },
+  { id: 'patrickMa', avatar: 'PM', socials: { twitter: '#', linkedin: '#' } },
+  { id: 'lionKim', avatar: 'LK', socials: { twitter: '#', linkedin: '#' } },
 ];
 
-const advisorIds: TeamMember[] = [
-  { id: 'jamesWong', avatar: 'JW' },
-  { id: 'mariaSantos', avatar: 'MS' },
+// 모집 중인 역할들
+const openRoles = [
+  { id: 'cto', icon: '💻' },
+  { id: 'headOfProduct', icon: '🎨' },
+  { id: 'communityLead', icon: '🌍' },
+  { id: 'aiResearcher', icon: '🤖' },
 ];
 
 const roleKeys: Record<string, string> = {
-  alexKim: 'founderCeo',
-  sarahPark: 'cto',
-  mikeChen: 'headOfProduct',
-  yunaLee: 'headOfCommunity',
-  jamesWong: 'aiEthicsAdvisor',
-  mariaSantos: 'globalSouthAdvisor',
+  rucaLee: 'coFounder',
+  patrickMa: 'coFounder',
+  lionKim: 'coFounder',
 };
 
 function MemberCard({ member }: { member: TeamMember }) {
@@ -47,7 +47,7 @@ function MemberCard({ member }: { member: TeamMember }) {
 
       {/* Info */}
       <h4 className="text-lg font-bold mb-1">{t(`team.members.${member.id}.name`)}</h4>
-      <p className="text-sm text-neos-blue mb-3">{t(`team.roles.${roleKey}`)}</p>
+      <p className="text-sm text-jeong-orange mb-3">{t(`team.roles.${roleKey}`)}</p>
       <p className="text-xs text-text-muted leading-relaxed mb-4">
         {t(`team.members.${member.id}.description`)}
       </p>
@@ -91,6 +91,40 @@ function MemberCard({ member }: { member: TeamMember }) {
   );
 }
 
+function OpenRoleCard({ roleId, icon }: { roleId: string; icon: string }) {
+  const { t } = useTranslation('landing');
+
+  return (
+    <GlassCard
+      hover
+      padding="lg"
+      className="text-center group border-dashed border-2 border-white/20 hover:border-jeong-orange/50"
+    >
+      {/* Icon */}
+      <div className="w-20 h-20 rounded-full mx-auto mb-4 bg-white/5 border-2 border-dashed border-white/20 flex items-center justify-center text-3xl group-hover:border-jeong-orange/30 transition-colors">
+        {icon}
+      </div>
+
+      {/* Info */}
+      <h4 className="text-lg font-bold mb-1 text-text-secondary group-hover:text-white transition-colors">
+        {t(`team.openRoles.${roleId}.title`)}
+      </h4>
+      <p className="text-sm text-neos-blue mb-3">{t('team.hiring')}</p>
+      <p className="text-xs text-text-muted leading-relaxed mb-4">
+        {t(`team.openRoles.${roleId}.description`)}
+      </p>
+
+      {/* CTA */}
+      <div className="flex justify-center">
+        <span className="inline-flex items-center gap-1 text-xs text-jeong-orange opacity-0 group-hover:opacity-100 transition-opacity">
+          <UserPlus className="w-3 h-3" />
+          {t('team.applyNow')}
+        </span>
+      </div>
+    </GlassCard>
+  );
+}
+
 export function TeamSection() {
   const { t } = useTranslation('landing');
 
@@ -108,26 +142,32 @@ export function TeamSection() {
           subtitle={t('team.subtitle')}
         />
 
-        {/* Core Team */}
+        {/* Co-Founders */}
         <div className="mb-16">
           <h3 className="text-lg font-semibold text-text-secondary mb-6 text-center">
-            {t('team.coreTeam')}
+            {t('team.coFounders')}
           </h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamMemberIds.map((member, i) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {coFounders.map((member, i) => (
               <MemberCard key={i} member={member} />
             ))}
           </div>
         </div>
 
-        {/* Advisors */}
-        <div>
-          <h3 className="text-lg font-semibold text-text-secondary mb-6 text-center">
-            {t('team.advisors')}
-          </h3>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {advisorIds.map((advisor, i) => (
-              <MemberCard key={i} member={advisor} />
+        {/* Open Positions - Looking for Kind People */}
+        <div className="mb-12">
+          <div className="text-center mb-8">
+            <h3 className="text-lg font-semibold text-text-secondary mb-2 flex items-center justify-center gap-2">
+              <Heart className="w-5 h-5 text-jeong-orange" strokeWidth={1.5} />
+              {t('team.lookingForKindPeople')}
+            </h3>
+            <p className="text-sm text-text-muted">
+              {t('team.joinUsMessage')}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {openRoles.map((role, i) => (
+              <OpenRoleCard key={i} roleId={role.id} icon={role.icon} />
             ))}
           </div>
         </div>
