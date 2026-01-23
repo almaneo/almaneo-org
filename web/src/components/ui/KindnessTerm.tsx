@@ -3,7 +3,7 @@
  * 친절 모드에서 용어에 도움말 툴팁을 표시하는 컴포넌트
  */
 
-import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { useKindnessMode } from '../../contexts/KindnessModeContext';
 import { findTerm, type GlossaryTerm } from '../../data/glossary';
@@ -19,6 +19,11 @@ interface KindnessTermProps {
   inline?: boolean;
 }
 
+interface TooltipPosition {
+  vertical: 'top' | 'bottom';
+  horizontal: 'left' | 'center' | 'right';
+}
+
 export function KindnessTerm({
   termKey,
   children,
@@ -27,22 +32,67 @@ export function KindnessTerm({
 }: KindnessTermProps) {
   const { isKindnessMode } = useKindnessMode();
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState<'top' | 'bottom'>('top');
+  const [position, setPosition] = useState<TooltipPosition>({ vertical: 'top', horizontal: 'center' });
+  const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
   const triggerRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const term = findTerm(termKey);
 
-  // 툴팁 위치 계산
-  useEffect(() => {
-    if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const spaceAbove = rect.top;
+  // 툴팁 위치 계산 (상하좌우 경계 체크)
+  const calculatePosition = useCallback(() => {
+    if (!triggerRef.current) return;
 
-      // 위 공간이 부족하면 아래에 표시
-      setPosition(spaceAbove < 200 ? 'bottom' : 'top');
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const tooltipWidth = 280; // 툴팁 너비
+    const margin = 12; // 화면 가장자리 여백
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // 상하 위치 결정
+    const spaceAbove = triggerRect.top;
+    const spaceBelow = viewportHeight - triggerRect.bottom;
+    const vertical = spaceAbove < 200 && spaceBelow > spaceAbove ? 'bottom' : 'top';
+
+    // 좌우 위치 결정
+    const triggerCenter = triggerRect.left + triggerRect.width / 2;
+    const tooltipHalfWidth = tooltipWidth / 2;
+
+    let horizontal: 'left' | 'center' | 'right' = 'center';
+    let leftOffset = 0;
+
+    // 왼쪽으로 벗어나는 경우
+    if (triggerCenter - tooltipHalfWidth < margin) {
+      horizontal = 'left';
+      leftOffset = margin - triggerRect.left;
     }
-  }, [isOpen]);
+    // 오른쪽으로 벗어나는 경우
+    else if (triggerCenter + tooltipHalfWidth > viewportWidth - margin) {
+      horizontal = 'right';
+      leftOffset = viewportWidth - margin - tooltipWidth - triggerRect.left;
+    }
+    // 가운데 정렬 가능
+    else {
+      horizontal = 'center';
+      leftOffset = triggerRect.width / 2 - tooltipHalfWidth;
+    }
+
+    setPosition({ vertical, horizontal });
+    setTooltipStyle({
+      left: horizontal === 'center' ? '50%' : `${leftOffset}px`,
+      transform: horizontal === 'center' ? 'translateX(-50%)' : 'none',
+    });
+  }, []);
+
+  // 툴팁 열릴 때 위치 계산
+  useEffect(() => {
+    if (isOpen) {
+      calculatePosition();
+      // 리사이즈 시 재계산
+      window.addEventListener('resize', calculatePosition);
+      return () => window.removeEventListener('resize', calculatePosition);
+    }
+  }, [isOpen, calculatePosition]);
 
   // 외부 클릭 시 닫기
   useEffect(() => {
@@ -92,11 +142,20 @@ export function KindnessTerm({
       {isOpen && (
         <div
           ref={tooltipRef}
-          className={`kindness-tooltip ${position === 'bottom' ? 'kindness-tooltip-bottom' : 'kindness-tooltip-top'}`}
+          className={`kindness-tooltip ${position.vertical === 'bottom' ? 'kindness-tooltip-bottom' : 'kindness-tooltip-top'}`}
+          style={tooltipStyle}
           role="tooltip"
         >
-          {/* Arrow */}
-          <div className={`kindness-tooltip-arrow ${position === 'bottom' ? 'kindness-tooltip-arrow-top' : 'kindness-tooltip-arrow-bottom'}`} />
+          {/* Arrow - 좌우 위치에 따라 화살표 위치 조정 */}
+          <div
+            className={`kindness-tooltip-arrow ${position.vertical === 'bottom' ? 'kindness-tooltip-arrow-top' : 'kindness-tooltip-arrow-bottom'}`}
+            style={{
+              left: position.horizontal === 'center' ? '50%' :
+                    position.horizontal === 'left' ? '20px' : 'auto',
+              right: position.horizontal === 'right' ? '20px' : 'auto',
+              transform: position.horizontal === 'center' ? 'translateX(-50%)' : 'none',
+            }}
+          />
 
           {/* Content */}
           <div className="kindness-tooltip-content">

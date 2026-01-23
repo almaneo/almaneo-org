@@ -38,7 +38,7 @@ export function CTASection() {
           size="lg"
           glow
           heartbeat
-          className="text-xl mb-10"
+          className="text-lg sm:text-xl mb-10 w-full sm:w-auto"
           icon={<Heart className="w-5 h-5" strokeWidth={2} />}
         >
           {t('cta.button')}

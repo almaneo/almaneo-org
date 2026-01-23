@@ -192,14 +192,16 @@ export const HeroSection = () => {
             glow
             icon={<Globe className="w-5 h-5" strokeWidth={1.5} />}
             onClick={() => setIsSnsModalOpen(true)}
+            className="w-full sm:w-auto"
           >
             {t('hero.cta.joinMovement')}
           </Button>
-          <Link to="/whitepaper">
+          <Link to="/whitepaper" className="w-full sm:w-auto">
             <Button
               variant="secondary"
               size="lg"
               icon={<FileText className="w-5 h-5" strokeWidth={1.5} />}
+              className="w-full"
             >
               {t('hero.cta.whitepaper')}
             </Button>
