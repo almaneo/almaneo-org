@@ -1,4 +1,4 @@
-# Google Cloud Policy Violation Appeal Document
+# Google Cloud Policy Violation Appeal 
 
 **Date:** January 23, 2026
 **Project ID:** almaneo-org
@@ -22,8 +22,8 @@ We are writing to appeal the phishing classification of our website almaneo.org.
 AlmaNEO (formerly NEO-SAPIENS) is a decentralized platform that aims to reduce global AI inequality through:
 
 1. **GAII (Global AI Inequality Index)** - A metric to measure AI access disparity worldwide
-2. **Kindness Protocol** - A Proof of Humanity consensus mechanism
-3. **ALMAN Token** - An ERC-20 governance token (8 billion supply for 8 billion humans)
+2. **Kindness Protocol** - A Proof of Humanity consensus mechanism, (progressing)
+3. **ALMAN Token** - An ERC-20 governance token (8 billion supply for 8 billion humans)(progressing)
 
 ### Our Mission
 
@@ -48,7 +48,7 @@ Our website contains elements that automated phishing detection systems may misi
 ### Key Differentiators from Phishing Sites
 
 1. **We NEVER ask for private keys or seed phrases**
-2. **We use official Web3Auth SDK** (verified partner)
+2. **We use official Web3Auth SDK** (verified)
 3. **All smart contracts are publicly deployed and verifiable**
 4. **We have legitimate business documentation**
 
@@ -107,7 +107,6 @@ All contracts are publicly verifiable on Polygonscan:
 2. ✅ **Terms of Service page** - `/terms`
 3. ✅ **Legal disclaimer in footer**
 4. ✅ **Smart contract transparency section**
-5. ✅ **Contact information (info@almaneo.org,ruca@almaneo.org)**
 
 ### Existing Security Features
 
@@ -123,8 +122,8 @@ All contracts are publicly verifiable on Polygonscan:
 
 ### Available Resources
 
-1. **Whitepaper:** https://almaneo.org/whitepaper (13 sections, 15 languages)
-2. **GitHub:** https://github.com/almaneo (open source)
+1. **Whitepaper:** https://almaneo.org/whitepaper (13 sections, 14 languages)
+2. **GitHub:** https://github.com/almaneo/almaneo-org
 3. **Smart Contracts:** Verified on Polygonscan
 
 
@@ -142,9 +141,8 @@ All contracts are publicly verifiable on Polygonscan:
 
 **Project Name:** AlmaNEO
 **Official Domain:** almaneo.org
-**Email:** legal@almaneo.org, privacy@almaneo.org
-**Discord:** https://discord.gg/almaneo
-**Twitter:** https://x.com/almaneo
+**Email:** info@almaneo.org, ruca@almaneo.org, patrick@almaneo.org
+
 
 ---
 
