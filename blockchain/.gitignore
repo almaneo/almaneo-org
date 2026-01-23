@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build & Cache
+artifacts/
+cache/
+typechain-types/
+
+# Environment Variables (CONTAINS PRIVATE KEY!)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Coverage
+coverage/
+coverage.json
+
+# Deployment (local only)
+deployments/localhost/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ignition
+ignition/deployments/

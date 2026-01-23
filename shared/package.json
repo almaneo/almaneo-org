@@ -1,0 +1,31 @@
+{
+  "name": "@neos/shared",
+  "version": "0.1.0",
+  "description": "NEOS Platform Shared Modules - Auth, Firebase, Types, Contracts",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./auth": "./auth/index.ts",
+    "./firebase": "./firebase/index.ts",
+    "./contracts": "./contracts/index.ts",
+    "./types": "./types/index.ts"
+  },
+  "dependencies": {
+    "@web3auth/base": "^9.0.0",
+    "firebase": "^11.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "neos",
+    "web3auth",
+    "firebase",
+    "polygon",
+    "blockchain"
+  ],
+  "author": "NEOS Foundation",
+  "license": "MIT"
+}

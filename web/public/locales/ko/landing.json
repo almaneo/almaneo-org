@@ -1,0 +1,500 @@
+{
+  "hero": {
+    "title": "차가운 코드, 따뜻한 영혼",
+    "subtitle": "AI 기술을 모든 이에게 공정하게 나누어 드립니다",
+    "description": "AlmaNEO는 정(情)의 철학을 바탕으로 AI 불평등 문제를 해결하는 Web3 플랫폼입니다. 80억 인류 모두가 AI의 혜택을 누릴 수 있는 세상을 만들어 갑니다.",
+    "cta": {
+      "joinMovement": "함께하기",
+      "learnMore": "더 알아보기",
+      "whitepaper": "백서 읽기"
+    },
+    "stats": {
+      "totalSupply": "총 공급량",
+      "forHumans": "80억 인류를 위한",
+      "countries": "지원 국가",
+      "communityMembers": "커뮤니티 멤버"
+    },
+    "snsModal": {
+      "title": "커뮤니티에 참여하세요",
+      "description": "AlmaNEO의 최신 소식을 받아보세요"
+    }
+  },
+  "problem": {
+    "title": "문제 인식",
+    "subtitle": "세계 AI 불평등",
+    "description": "선진국과 개발도상국 사이의 AI 격차는 점점 벌어지고 있습니다",
+    "cards": {
+      "developed": {
+        "title": "선진국 청년 A",
+        "subtitle": "AI 구독료 = 커피 4잔",
+        "result": "무한한 가능성 ✨"
+      },
+      "globalSouth": {
+        "title": "Global South 청년 B",
+        "subtitle": "AI 구독료 = 월 생활비의 30%",
+        "result": "막힌 기회의 사다리 😔"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "ChatGPT로 이력서 첨삭",
+        "afternoon": "Copilot으로 코딩",
+        "evening": "AI 튜터와 학습"
+      },
+      "globalSouth": {
+        "morning": "무료 버전 한도 소진",
+        "afternoon": "느린 인터넷",
+        "evening": "데이터 라벨링 부업"
+      }
+    },
+    "timeLabels": {
+      "morning": "☀️ 아침",
+      "afternoon": "🌤️ 오후",
+      "evening": "🌙 저녁"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "AI 자원 상위 1% 집중"
+      },
+      "stat2": {
+        "value": "$20",
+        "label": "월 구독료 부담"
+      },
+      "stat3": {
+        "value": "80%",
+        "label": "투자 미국+중국 집중"
+      },
+      "stat4": {
+        "value": "90%",
+        "label": "학습 데이터 영어"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "핵심 철학",
+    "subtitle": "의 가치",
+    "description": "한국에서 세계로, 따뜻함의 철학",
+    "jeong": "정(情)",
+    "jeongCard": {
+      "title": "정(情)",
+      "description1": "은 단순한 친절이 아닙니다.",
+      "description2": "오랜 시간 함께하며 쌓이는 깊은 유대, 말하지 않아도 통하는 마음입니다.",
+      "footer": "정은 AI가 대체할 수 없는 ",
+      "footerHighlight": "인간 고유의 가치",
+      "footerEnd": "입니다."
+    },
+    "principles": {
+      "people": {
+        "title": "정치가 아닌 사람",
+        "description": "어느 나라에서 태어났는지는 그 사람의 가치를 결정하지 않습니다."
+      },
+      "individual": {
+        "title": "국가가 아닌 개인",
+        "description": "통계가 놓치는 개인의 노력과 희망을 AlmaNEO는 봅니다."
+      },
+      "human": {
+        "title": "도구는 기술, 주체는 인간",
+        "description": "AI는 강력한 도구일 뿐. 결정은 인간의 몫입니다."
+      }
+    }
+  },
+  "solution": {
+    "title": "해결책",
+    "subtitle": "세 개의 기둥",
+    "description": "AlmaNEO 생태계를 지탱하는 핵심 요소",
+    "solutions": {
+      "gaii": {
+        "title": "GAII",
+        "subtitle": "Global AI Inequality Index",
+        "description": "AI 불평등을 실시간 측정하고 공개",
+        "items": {
+          "item1": "접근성 · 인프라 측정",
+          "item2": "편향성 · 기회 분석",
+          "item3": "온체인 데이터 공개"
+        }
+      },
+      "aiHub": {
+        "title": "AI Hub",
+        "subtitle": "DePIN 분산 컴퓨팅",
+        "description": "비용 걱정 없는 AI 플랫폼",
+        "items": {
+          "item1": "무료 AI 접근",
+          "item2": "다국어 최적화",
+          "item3": "저사양 기기 지원"
+        }
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "subtitle": "Proof of Humanity",
+        "description": "친절을 증명하고 보상하는 합의",
+        "items": {
+          "item1": "Kindness Score",
+          "item2": "Jeong-SBT",
+          "item3": "다층 검증 시스템"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "토큰 경제",
+    "subtitle": "ALMAN 토큰",
+    "totalSupply": "총 공급량",
+    "forHumans": "인류, Tokens",
+    "forHumansCount": "80억",
+    "tokenInfo": {
+      "token": "Token",
+      "network": "Network",
+      "standard": "Standard",
+      "supply": "Supply",
+      "forAll": "For All",
+      "forAllValue": "80억 인류"
+    },
+    "distribution": {
+      "title": "토큰 분배",
+      "community": "Community & Ecosystem",
+      "foundation": "Foundation Reserve",
+      "liquidity": "Liquidity & Exchange",
+      "team": "Team & Advisors",
+      "grants": "Kindness Expo & Grants"
+    },
+    "utility": {
+      "title": "토큰 유틸리티",
+      "governance": "거버넌스 투표",
+      "staking": "스테이킹 보상",
+      "access": "AI Hub 접근",
+      "fees": "수수료 할인"
+    }
+  },
+  "ecosystem": {
+    "title": "생태계",
+    "subtitle": "AlmaNEO 생태계 살펴보기",
+    "staking": {
+      "title": "스테이킹",
+      "description": "ALMAN 토큰을 스테이킹하고 보상을 받으세요. 4단계 티어로 더 많은 혜택을 누리세요.",
+      "features": {
+        "apy": "APY 5~18%",
+        "tier": "4-Tier System",
+        "bonus": "Kindness Score 보너스"
+      },
+      "linkText": "스테이킹 시작하기"
+    },
+    "airdrop": {
+      "title": "에어드롭",
+      "description": "친절 활동을 통해 ALMAN 토큰을 에어드롭 받으세요. Merkle Proof 기반 공정 분배.",
+      "features": {
+        "task": "Task-based 보상",
+        "community": "커뮤니티 활동",
+        "protocol": "Kindness Protocol"
+      },
+      "linkText": "에어드롭 참여하기"
+    },
+    "nft": {
+      "title": "NFT 마켓플레이스",
+      "description": "AlmaNEO 생태계의 고유한 NFT를 거래하세요. Jeong-SBT 홀더 특별 혜택.",
+      "features": {
+        "gasless": "가스비 무료",
+        "auction": "경매 & 렌탈",
+        "royalty": "로열티 지원"
+      },
+      "linkText": "NFT 마켓 방문"
+    },
+    "game": {
+      "title": "Kindness Game",
+      "description": "Tap-to-Earn 게임으로 ALMAN을 채굴하세요. 친절을 게임화한 새로운 경험.",
+      "features": {
+        "pool": "800M ALMAN 채굴 풀",
+        "quest": "일일 퀘스트",
+        "leaderboard": "리더보드 경쟁"
+      },
+      "linkText": "게임 시작하기"
+    },
+    "bottomCta": "모든 생태계 서비스는 Web3Auth로 간편하게 로그인하세요"
+  },
+  "web3auth": {
+    "title": "간편한 시작",
+    "subtitle": "시작이 쉬워요",
+    "loginDemo": {
+      "title": "로그인 방법 선택",
+      "description": "원하는 방식으로 시작하세요",
+      "or": "또는",
+      "connectWallet": "기존 지갑 연결"
+    },
+    "benefits": {
+      "social": {
+        "title": "소셜 로그인",
+        "description": "복잡한 시드 구문 없이 익숙한 계정으로 시작하세요."
+      },
+      "secure": {
+        "title": "자산 보안",
+        "description": "MPC 기술로 개인 키를 안전하게 분산 보관합니다."
+      },
+      "gasless": {
+        "title": "가스비 무료",
+        "description": "Biconomy 통합으로 대부분의 트랜잭션 수수료가 면제됩니다."
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "1초",
+        "label": "로그인 소요"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "가스비"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "자산 소유권"
+      }
+    }
+  },
+  "team": {
+    "title": "팀 소개",
+    "subtitle": "AlmaNEO를 만드는 사람들",
+    "tag": "Our Team",
+    "titlePrefix": "",
+    "titleHighlight": "정(情)",
+    "titleSuffix": "을 나누는 사람들",
+    "coreTeam": "Core Team",
+    "advisors": "Advisors",
+    "joinCta": "정(情)의 가치에 공감하시나요?",
+    "contactMessage": "로 연락주세요",
+    "roles": {
+      "founderCeo": "Founder & CEO",
+      "cto": "CTO",
+      "headOfProduct": "Head of Product",
+      "headOfCommunity": "Head of Community",
+      "aiEthicsAdvisor": "AI Ethics Advisor",
+      "globalSouthAdvisor": "Global South Advisor"
+    },
+    "members": {
+      "alexKim": {
+        "name": "Alex Kim",
+        "description": "AI 민주화와 정(情)의 가치를 세계에 전파하는 비전리더"
+      },
+      "sarahPark": {
+        "name": "Sarah Park",
+        "description": "블록체인 & AI 시스템 아키텍트, 10년+ 개발 경력"
+      },
+      "mikeChen": {
+        "name": "Mike Chen",
+        "description": "UX/UI 전문가, Global South 사용자 경험 최적화"
+      },
+      "yunaLee": {
+        "name": "Yuna Lee",
+        "description": "글로벌 커뮤니티 빌더, 다문화 커뮤니케이션 전문가"
+      },
+      "jamesWong": {
+        "name": "Dr. James Wong",
+        "description": "Stanford AI Lab 연구원, AI 윤리 분야 전문가"
+      },
+      "mariaSantos": {
+        "name": "Maria Santos",
+        "description": "UN 지속가능발전 컨설턴트, 개발도상국 전문가"
+      }
+    }
+  },
+  "partners": {
+    "title": "파트너 & 기술",
+    "subtitle": "함께하는 기업과 기술 스택",
+    "tag": "Partners & Integrations",
+    "titlePrefix": "함께하는 ",
+    "titleHighlight": "파트너",
+    "subtitleFull": "검증된 기술 파트너와 함께 안전하고 혁신적인 생태계를 구축합니다",
+    "blockchainStandards": "Blockchain Standards",
+    "partnershipCta": "AlmaNEO와 파트너십에 관심이 있으신가요?",
+    "contactMessage": "로 연락주세요",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "category": "Blockchain",
+        "description": "스케일러블 블록체인 인프라"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "category": "Authentication",
+        "description": "소셜 로그인 & 지갑 솔루션"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "category": "Infrastructure",
+        "description": "가스비 없는 트랜잭션"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "category": "Backend",
+        "description": "실시간 데이터베이스 & 인증"
+      },
+      "openzeppelin": {
+        "name": "OpenZeppelin",
+        "category": "Security",
+        "description": "스마트 컨트랙트 보안 표준"
+      },
+      "ipfs": {
+        "name": "IPFS",
+        "category": "Storage",
+        "description": "분산 파일 저장소"
+      }
+    },
+    "standards": {
+      "erc20": "거버넌스 토큰",
+      "erc721": "NFT 표준",
+      "erc1155": "멀티토큰",
+      "erc4907": "NFT 렌탈",
+      "erc2771": "메타 트랜잭션",
+      "uups": "업그레이드 가능"
+    }
+  },
+  "roadmap": {
+    "title": "로드맵",
+    "subtitle": "AlmaNEO의 여정",
+    "tag": "Roadmap",
+    "titleHighlight": "여정",
+    "titleSuffix": "의 로드맵",
+    "subtitleFull": "AI 민주화를 향한 단계별 계획",
+    "legend": {
+      "completed": "완료",
+      "inProgress": "진행 중",
+      "upcoming": "예정"
+    },
+    "phases": {
+      "foundation": {
+        "title": "기반 구축",
+        "period": "2025 상반기",
+        "items": {
+          "whitepaper": "화이트페이퍼 v3.0 완성",
+          "contracts": "스마트컨트랙트 개발 (토큰, SBT, Staking)",
+          "legal": "재단 설립 및 법률 검토",
+          "community": "초기 커뮤니티 형성"
+        }
+      },
+      "testnet": {
+        "title": "테스트넷 & 커뮤니티",
+        "period": "2025 하반기",
+        "items": {
+          "deployment": "Polygon Amoy 테스트넷 배포",
+          "audit": "스마트컨트랙트 보안 감사",
+          "aiHub": "AI Hub 알파 테스트",
+          "kindness": "Kindness Protocol 베타"
+        }
+      },
+      "tge": {
+        "title": "TGE & 메인넷",
+        "period": "2026 Q1",
+        "items": {
+          "tge": "TGE (Token Generation Event)",
+          "mainnet": "Polygon 메인넷 런칭",
+          "dex": "DEX 상장 (Uniswap, QuickSwap)",
+          "aiHubLaunch": "AlmaNEO AI Hub 정식 오픈"
+        }
+      },
+      "expansion": {
+        "title": "생태계 확장",
+        "period": "2026 Q2-Q3",
+        "items": {
+          "mining": "Kindness Mining 시작",
+          "depin": "DePIN 노드 1,000명 확보",
+          "gaii": "GAII 대시보드 공개",
+          "airdrop": "Global South 에어드랍"
+        }
+      },
+      "expo": {
+        "title": "제1회 Kindness Expo",
+        "period": "2026 Q4",
+        "items": {
+          "event": "첫 오프라인 커뮤니티 행사",
+          "university": "AlmaNEO University 베타",
+          "partners": "임팩트 파트너 10개+",
+          "report": "연간 리포트 발행"
+        }
+      },
+      "global": {
+        "title": "글로벌 확장 & DAO",
+        "period": "2027+",
+        "items": {
+          "dao": "Council 정식 출범, DAO 전환",
+          "users": "사용자 100만 명 돌파",
+          "kinfri": "KINFRI 파일럿 런칭",
+          "decentralized": "완전 탈중앙화 자생 생태계"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "자주 묻는 질문",
+    "subtitle": "궁금한 점이 있으신가요?",
+    "tag": "FAQ",
+    "titlePrefix": "자주 묻는 ",
+    "titleHighlight": "질문",
+    "subtitleFull": "AlmaNEO에 대해 궁금한 점을 확인하세요",
+    "categoryLabel": "카테고리:",
+    "contactCta": "원하는 답변을 찾지 못하셨나요?",
+    "contactMessage": "로 문의해 주세요",
+    "categories": {
+      "general": "General",
+      "token": "Token",
+      "technology": "Technology",
+      "nft": "NFT",
+      "participation": "Participation"
+    },
+    "items": {
+      "whatIsAlmaNEO": {
+        "category": "General",
+        "question": "AlmaNEO란 무엇인가요?",
+        "answer": "AlmaNEO는 AI 불평등을 해소하고 \"정(情)\"의 가치를 블록체인에 담는 프로젝트입니다. Global AI Inequality Index(GAII), AI Hub, Kindness Protocol 세 가지 핵심 솔루션을 통해 80억 인류 모두가 AI의 혜택을 누릴 수 있는 세상을 만듭니다."
+      },
+      "whatIsJeong": {
+        "category": "General",
+        "question": "\"정(情)\"이란 무엇인가요?",
+        "answer": "정(情)은 한국 고유의 개념으로, 단순한 친절을 넘어 오랜 시간 함께하며 쌓이는 깊은 유대와 말하지 않아도 통하는 마음을 의미합니다. AlmaNEO는 이 정(情)의 가치를 Kindness Protocol을 통해 디지털화하고 보상합니다."
+      },
+      "totalSupply": {
+        "category": "Token",
+        "question": "ALMAN 토큰의 총 공급량은 얼마인가요?",
+        "answer": "ALMAN 토큰의 총 공급량은 80억 개입니다. 이는 지구의 80억 인구를 상징하며, \"1인 1토큰\"이라는 철학을 담고 있습니다. 토큰은 ERC-20 표준으로 Polygon 네트워크에서 발행됩니다."
+      },
+      "howToGetToken": {
+        "category": "Token",
+        "question": "ALMAN 토큰은 어떻게 얻을 수 있나요?",
+        "answer": "1) Kindness Game에서 Tap-to-Earn으로 채굴 2) 에어드롭 참여 (친절 활동 기반) 3) 스테이킹 보상 4) 향후 DEX/CEX에서 구매. 초기에는 게임과 에어드롭이 주요 획득 수단입니다."
+      },
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "어떤 블록체인을 사용하나요?",
+        "answer": "AlmaNEO는 Polygon 네트워크를 사용합니다. Polygon은 이더리움 호환성, 낮은 가스비, 빠른 트랜잭션을 제공하여 Global South 사용자들이 부담 없이 참여할 수 있습니다."
+      },
+      "noWallet": {
+        "category": "Technology",
+        "question": "지갑이 없어도 참여할 수 있나요?",
+        "answer": "네! Web3Auth를 통해 Google, Facebook, X 등 소셜 계정으로 바로 로그인할 수 있습니다. 별도의 지갑 설정이나 시드 구문 관리가 필요 없으며, Biconomy 통합으로 대부분의 트랜잭션에서 가스비도 무료입니다."
+      },
+      "whatIsJeongSBT": {
+        "category": "NFT",
+        "question": "Jeong-SBT란 무엇인가요?",
+        "answer": "Jeong-SBT는 양도 불가능한 소울바운드 토큰(Soulbound Token)으로, 사용자의 Kindness Score를 기록합니다. 4단계 티어(Seed → Sprout → Tree → Forest)로 성장하며, 높은 티어일수록 NFT 수수료 할인, 스테이킹 보너스 등 혜택이 증가합니다."
+      },
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "NFT 마켓플레이스의 특징은 무엇인가요?",
+        "answer": "1) 가스비 무료 (Biconomy 통합) 2) Jeong-SBT 보유자 수수료 최대 50% 할인 3) ALMAN 토큰 결제 시 추가 5% 할인 4) NFT 렌탈 지원 (ERC-4907/5006) 5) 다양한 결제 수단 (POL, USDC, ALMAN)"
+      },
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "스테이킹은 어떻게 작동하나요?",
+        "answer": "ALMAN 토큰을 예치하면 연 5~18%의 보상을 받습니다. 4단계 티어(30일/90일/180일/365일)로 구분되며, Jeong-SBT 티어에 따라 추가 보너스가 적용됩니다. 스테이킹된 토큰은 거버넌스 투표권도 가집니다."
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "Kindness Game은 어떤 게임인가요?",
+        "answer": "Tap-to-Earn 방식의 게임으로, 화면을 터치하며 ALMAN 토큰을 채굴합니다. 일일 퀘스트, 업그레이드 시스템, 리더보드 경쟁 등 다양한 요소가 있으며, 총 8억 ALMAN(전체 공급량의 10%)가 채굴 풀로 할당되어 있습니다."
+      }
+    }
+  },
+  "cta": {
+    "title": "함께 시작해요",
+    "subtitle": "AI 민주화의 여정에 동참하세요",
+    "button": "지금 시작하기",
+    "description": "당신의 참여가 세상을 바꿉니다. 지금 바로 AlmaNEO 커뮤니티에 참여하세요."
+  }
+}

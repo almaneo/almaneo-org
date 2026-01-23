@@ -1,0 +1,439 @@
+{
+  "hero": {
+    "title": "โค้ดเย็นชา หัวใจอบอุ่น",
+    "subtitle": "นำเทคโนโลยี AI มาสู่ทุกคนอย่างยุติธรรม",
+    "description": "AlmaNEO คือแพลตฟอร์ม Web3 ที่แก้ปัญหาความไม่เท่าเทียมของ AI โดยยึดหลักปรัชญา 'จอง (情)' เรากำลังสร้างโลกที่มนุษย์ 8 พันล้านคนสามารถเข้าถึงประโยชน์ของ AI ได้",
+    "cta": {
+      "joinMovement": "เข้าร่วมการเคลื่อนไหว",
+      "learnMore": "เรียนรู้เพิ่มเติม",
+      "whitepaper": "อ่าน Whitepaper"
+    },
+    "stats": {
+      "totalSupply": "จำนวนทั้งหมด",
+      "forHumans": "สำหรับ 8 พันล้านคน",
+      "countries": "ประเทศที่รองรับ",
+      "communityMembers": "สมาชิกชุมชน"
+    }
+  },
+  "problem": {
+    "title": "AI ไม่ยุติธรรมในตอนนี้",
+    "subtitle": "สถานการณ์ความไม่เท่าเทียมของ AI ทั่วโลก",
+    "description": "ช่องว่าง AI ระหว่างประเทศพัฒนาแล้วและกำลังพัฒนายังคงกว้างขึ้น นี่ไม่ใช่ปัญหาเทคโนโลยี แต่เป็นปัญหาการเข้าถึง",
+    "cards": {
+      "developed": {
+        "title": "ประเทศพัฒนาแล้ว",
+        "subtitle": "AI ในชีวิตประจำวัน",
+        "result": "ผลผลิตเพิ่มขึ้น 40%"
+      },
+      "globalSouth": {
+        "title": "ประเทศกำลังพัฒนา",
+        "subtitle": "ค่า AI = 10-30% ของรายได้ต่อเดือน",
+        "result": "ช่องว่างกว้างขึ้น"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "AI จัดตารางวันนี้",
+        "afternoon": "AI ช่วยเขียนรายงาน",
+        "evening": "AI แนะนำเนื้อหา"
+      },
+      "globalSouth": {
+        "morning": "ป้อนข้อมูลด้วยมือ",
+        "afternoon": "งานซ้ำๆ ไม่มีที่สิ้นสุด",
+        "evening": "การเข้าถึงข้อมูลจำกัด"
+      }
+    },
+    "timeLabels": {
+      "morning": "เช้า",
+      "afternoon": "บ่าย",
+      "evening": "เย็น"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "ทรัพยากรการคำนวณ AI กระจุกตัวอยู่ที่ 1% บน"
+      },
+      "stat2": {
+        "value": "$20/เดือน",
+        "label": "ค่าสมัครสมาชิก AI (10-30% ของรายได้ในประเทศกำลังพัฒนา)"
+      },
+      "stat3": {
+        "value": "90%",
+        "label": "ข้อมูลฝึก AI เป็นภาษาอังกฤษ"
+      },
+      "stat4": {
+        "value": "72",
+        "label": "ประเทศ Global South ที่มีการเข้าถึง AI จำกัด"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "ปรัชญาแห่ง 'จอง'",
+    "subtitle": "คุณค่าหลักของเรา",
+    "description": "AlmaNEO แก้ปัญหาความไม่เท่าเทียมของ AI โดยยึดหลักปรัชญา 'จอง (情)'",
+    "jeong": "จอง (情)",
+    "jeongCard": {
+      "title": "'จอง (情)' คืออะไร?",
+      "description1": "แนวคิดทางอารมณ์เฉพาะของเกาหลี",
+      "description2": "ไม่ใช่แค่ความใจดี แต่เป็นความอบอุ่นลึกซึ้งที่เกิดจากเวลาและประสบการณ์ร่วมกัน",
+      "footer": "มนุษย์ ",
+      "footerHighlight": "8 พันล้าน",
+      "footerEnd": " ร่วมกันในความอบอุ่น"
+    },
+    "principles": {
+      "people": {
+        "title": "เพื่อทุกคน",
+        "description": "เหนือกว่ากำไรและประสิทธิภาพ ให้ความสำคัญกับความเป็นมนุษย์"
+      },
+      "individual": {
+        "title": "เคารพทุกคน",
+        "description": "ความสำเร็จวัดจากชีวิตจริงที่เปลี่ยนแปลง"
+      },
+      "human": {
+        "title": "ความเป็นมนุษย์ก่อน",
+        "description": "เทคโนโลยีและปรัชญาสร้างโลกที่ดีกว่าร่วมกัน"
+      }
+    }
+  },
+  "solution": {
+    "title": "โซลูชันของเรา",
+    "subtitle": "3 โซลูชันหลัก",
+    "description": "ดัชนี GAII, AI Hub และโปรโตคอลความใจดีเพื่อแก้ปัญหาความไม่เท่าเทียมของ AI ทั่วโลก",
+    "solutions": {
+      "gaii": {
+        "title": "ดัชนี GAII",
+        "subtitle": "Global AI Inequality Index",
+        "description": "วัดและแสดงภาพความไม่เท่าเทียมของ AI ทั่วโลกแบบเรียลไทม์",
+        "items": {
+          "item1": "แดชบอร์ดเรียลไทม์ความไม่เท่าเทียม AI 100+ ประเทศ",
+          "item2": "ดัชนีจากข้อมูลโปร่งใส",
+          "item3": "ระบุปัญหาและค้นหาโซลูชัน"
+        }
+      },
+      "aiHub": {
+        "title": "AlmaNEO AI Hub",
+        "subtitle": "แพลตฟอร์มเข้าถึง AI แบบกระจายศูนย์",
+        "description": "แพลตฟอร์มกระจายศูนย์ที่ทุกคนสามารถเข้าถึงบริการ AI ได้ฟรี",
+        "items": {
+          "item1": "เข้าถึง AI ฟรีผ่านเครือข่าย DePIN",
+          "item2": "รางวัลโทเค็นสำหรับการแชร์ทรัพยากร",
+          "item3": "รองรับหลายภาษา (14+ ภาษา)"
+        }
+      },
+      "kindness": {
+        "title": "โปรโตคอลความใจดี",
+        "subtitle": "Proof of Humanity",
+        "description": "กลไกฉันทามติใหม่ที่พิสูจน์และให้รางวัลการกระทำที่ดี",
+        "items": {
+          "item1": "NFT Jeong-SBT ที่พิสูจน์ความใจดี",
+          "item2": "รางวัลตามการมีส่วนร่วม",
+          "item3": "การปรับปรุงความใจดีที่วัดได้"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "เศรษฐศาสตร์โทเค็น",
+    "subtitle": "โทเค็น ALMAN",
+    "totalSupply": "จำนวนทั้งหมด",
+    "forHumans": "คน, โทเค็น",
+    "forHumansCount": "8 พันล้าน",
+    "tokenInfo": {
+      "token": "โทเค็น",
+      "network": "เครือข่าย",
+      "standard": "มาตรฐาน",
+      "supply": "จำนวน",
+      "forAll": "สำหรับทุกคน",
+      "forAllValue": "มนุษย์ 8 พันล้านคน"
+    },
+    "distribution": {
+      "title": "การจัดสรรโทเค็น",
+      "community": "ชุมชนและระบบนิเวศ",
+      "foundation": "สำรองของมูลนิธิ",
+      "liquidity": "สภาพคล่องและตลาด",
+      "team": "ทีมและที่ปรึกษา",
+      "grants": "Kindness Expo และทุน"
+    },
+    "utility": {
+      "title": "ประโยชน์ของโทเค็น",
+      "governance": "การโหวตกำกับดูแล",
+      "staking": "รางวัล Staking",
+      "access": "เข้าถึง AI Hub",
+      "fees": "ส่วนลดค่าธรรมเนียม"
+    }
+  },
+  "ecosystem": {
+    "title": "ระบบนิเวศ",
+    "subtitle": "สำรวจระบบนิเวศ AlmaNEO",
+    "staking": {
+      "title": "การ Stake",
+      "description": "Stake โทเค็น ALMAN และรับผลตอบแทน 5-18% ต่อปี รางวัลเพิ่มขึ้นตามคะแนนความใจดีของคุณ",
+      "apy": "สูงสุด 18% APY",
+      "info": "ตัวคูณคะแนนความใจดี"
+    },
+    "airdrop": {
+      "title": "Airdrop",
+      "description": "เข้าร่วมกิจกรรมความใจดีและรับโทเค็น ALMAN ฟรี การแจกจ่ายอย่างยุติธรรมผ่าน Task-based Airdrop",
+      "reward": "รางวัลตามภารกิจ",
+      "info": "การแจกจ่ายที่ยุติธรรม"
+    },
+    "nft": {
+      "title": "ตลาด NFT",
+      "description": "ซื้อขาย Jeong-SBT และตราความใจดี รองรับการทำธุรกรรมไร้ Gas และค่าลิขสิทธิ์ผู้สร้าง",
+      "feature": "ไม่มีค่า Gas",
+      "info": "ค่าลิขสิทธิ์ผู้สร้าง"
+    },
+    "game": {
+      "title": "เกมความใจดี",
+      "description": "ปฏิบัติความใจดีสนุกๆ และรับโทเค็น เข้าร่วมง่ายด้วยกลไก Tap-to-Earn",
+      "mechanism": "Tap-to-Earn",
+      "info": "กำลังพัฒนา"
+    }
+  },
+  "web3auth": {
+    "title": "เริ่มต้นง่าย",
+    "subtitle": "เริ่มต้นได้ง่ายด้วย Web3Auth",
+    "loginDemo": {
+      "title": "เข้าสู่ระบบ AlmaNEO",
+      "description": "เริ่มต้นโดยไม่ต้องมีกระเป๋าเงินด้วยบัญชีโซเชียล",
+      "or": "หรือ",
+      "connectWallet": "เชื่อมต่อกระเป๋า"
+    },
+    "benefits": {
+      "social": {
+        "title": "เข้าสู่ระบบโซเชียล",
+        "description": "เริ่มต้นทันทีด้วย Google, Facebook หรือ Twitter ไม่ต้องตั้งค่ากระเป๋าที่ซับซ้อน"
+      },
+      "secure": {
+        "title": "ปลอดภัย",
+        "description": "การจัดการคีย์แบบกระจายศูนย์ผ่าน MPC คีย์ส่วนตัวถูกเข้ารหัสและกระจายอย่างปลอดภัย"
+      },
+      "gasless": {
+        "title": "ไม่มีค่า Gas",
+        "description": "ผู้ใช้ใหม่สามารถทำธุรกรรมโดยไม่มีค่า Gas เราจัดการให้ผ่าน Biconomy Paymaster"
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "< 30 วินาที",
+        "label": "เวลาลงทะเบียน"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "ค่าใช้จ่ายเริ่มต้น"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "ความเป็นเจ้าของสินทรัพย์"
+      }
+    }
+  },
+  "team": {
+    "title": "ทีมของเรา",
+    "subtitle": "ผู้คนเบื้องหลัง AlmaNEO",
+    "coreTeam": "ทีมหลัก",
+    "advisors": "ที่ปรึกษา",
+    "joinCta": "เข้าร่วมทีมของเราเพื่อนำประชาธิปไตย AI",
+    "contactMessage": "ติดต่อ: team@almaneo.org",
+    "roles": {
+      "founder": "ผู้ก่อตั้งและ CEO",
+      "cto": "CTO",
+      "coo": "COO",
+      "communityLead": "หัวหน้าชุมชน",
+      "advisorBlockchain": "ที่ปรึกษา Blockchain",
+      "advisorAI": "ที่ปรึกษา AI"
+    },
+    "members": {
+      "alex": {
+        "name": "Alex Kim",
+        "description": "อดีตหัวหน้าทีม blockchain ที่บริษัทเทคโนโลยีใหญ่"
+      },
+      "sarah": {
+        "name": "Sarah Park",
+        "description": "10+ ปีประสบการณ์พัฒนาระบบกระจาย"
+      },
+      "david": {
+        "name": "David Lee",
+        "description": "ผู้เชี่ยวชาญกลยุทธ์และการดำเนินงานสตาร์ทอัพ"
+      },
+      "emily": {
+        "name": "Emily Chen",
+        "description": "ประสบการณ์สร้างชุมชน Web3 ระดับโลก"
+      },
+      "michael": {
+        "name": "Dr. Michael Wang",
+        "description": "อดีตหัวหน้าวิจัย blockchain ผู้มีส่วนร่วม Ethereum"
+      },
+      "jennifer": {
+        "name": "Dr. Jennifer Liu",
+        "description": "ศาสตราจารย์ AI มหาวิทยาลัยชั้นนำ ผู้เชี่ยวชาญจริยธรรม AI"
+      }
+    }
+  },
+  "partners": {
+    "title": "พันธมิตรและเทคโนโลยี",
+    "subtitle": "บริษัทและ Tech Stack ที่เราทำงานด้วย",
+    "technology": "พันธมิตรเทคโนโลยี",
+    "standards": "มาตรฐานที่รองรับ",
+    "blockchainStandards": "มาตรฐาน Blockchain",
+    "partnershipCta": "สนใจเป็นพันธมิตรหรือไม่?",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "description": "เครือข่าย blockchain หลัก"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "description": "Backend และการยืนยันตัวตน"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "description": "ธุรกรรมไร้ gas"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "description": "เข้าสู่ระบบโซเชียล"
+      }
+    }
+  },
+  "roadmap": {
+    "title": "แผนงาน",
+    "subtitle": "การเดินทางของ AlmaNEO",
+    "legend": {
+      "completed": "เสร็จสมบูรณ์",
+      "inProgress": "กำลังดำเนินการ",
+      "upcoming": "เร็วๆ นี้"
+    },
+    "phases": {
+      "foundation": {
+        "title": "สร้างรากฐาน",
+        "period": "H1 2025",
+        "items": {
+          "whitepaper": "เปิดตัว Whitepaper",
+          "contracts": "พัฒนา Smart Contract",
+          "design": "ออกแบบ UI/UX",
+          "testnet": "เปิดตัว Testnet"
+        }
+      },
+      "testnet": {
+        "title": "Testnet และชุมชน",
+        "period": "H2 2025",
+        "items": {
+          "beta": "ทดสอบ Beta ส่วนตัว",
+          "community": "โปรแกรมสร้างชุมชน",
+          "audit": "ตรวจสอบความปลอดภัย",
+          "partners": "ความร่วมมือเชิงกลยุทธ์"
+        }
+      },
+      "tge": {
+        "title": "TGE และ Mainnet",
+        "period": "Q1 2026",
+        "items": {
+          "tge": "Token Generation Event",
+          "mainnet": "เปิดตัว Mainnet",
+          "staking": "เปิดตัว Staking",
+          "governance": "เปิดใช้งาน Governance"
+        }
+      },
+      "expansion": {
+        "title": "ขยายระบบนิเวศ",
+        "period": "Q2-Q3 2026",
+        "items": {
+          "aihub": "เปิดตัว AI Hub",
+          "nft": "เปิดตลาด NFT",
+          "mobile": "พัฒนาแอปมือถือ",
+          "depin": "ขยายเครือข่าย DePIN"
+        }
+      },
+      "expo": {
+        "title": "Kindness Expo ครั้งที่ 1",
+        "period": "Q4 2026",
+        "items": {
+          "expo": "การประชุมประจำปีครั้งแรก",
+          "grants": "ประกาศผู้รับทุน",
+          "dao": "เปลี่ยนผ่านสู่ DAO Governance เต็มรูปแบบ",
+          "report": "เปิดตัวรายงานประจำปี"
+        }
+      },
+      "global": {
+        "title": "ขยายทั่วโลกและ DAO",
+        "period": "2027+",
+        "items": {
+          "globalExpansion": "ขยายภูมิภาค",
+          "daoGovernance": "ดำเนินงาน DAO อัตโนมัติ",
+          "research": "โปรแกรมทุนวิจัย AI",
+          "un": "ความร่วมมือกับ UN SDGs"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "คำถามที่พบบ่อย",
+    "subtitle": "มีคำถามหรือไม่?",
+    "categoryLabel": "หมวดหมู่",
+    "contactCta": "มีคำถามอื่นๆ? ติดต่อเราที่ support@almaneo.org",
+    "categories": {
+      "all": "ทั้งหมด",
+      "general": "ทั่วไป",
+      "token": "โทเค็น",
+      "technical": "เทคนิค"
+    },
+    "items": {
+      "whatIs": {
+        "question": "AlmaNEO คืออะไร?",
+        "answer": "AlmaNEO คือแพลตฟอร์ม Web3 ที่ออกแบบมาเพื่อแก้ปัญหาความไม่เท่าเทียมของ AI โดยอิงจากวัฒนธรรม 'จอง (情)' ของเกาหลี มุ่งหวังให้มนุษย์ 8 พันล้านคนทั่วโลกได้รับประโยชน์จากเทคโนโลยี AI อย่างเท่าเทียมกัน",
+        "category": "general"
+      },
+      "whatIsJeong": {
+        "question": "'จอง (情)' คืออะไร?",
+        "answer": "'จอง' เป็นแนวคิดเฉพาะตัวของเกาหลีเกี่ยวกับความผูกพันทางอารมณ์ ไม่ใช่แค่ความใจดี แต่หมายถึงความสัมพันธ์ลึกซึ้งและหัวใจที่อบอุ่น",
+        "category": "general"
+      },
+      "whatIsGAII": {
+        "question": "ดัชนี GAII คืออะไร?",
+        "answer": "GAII (Global AI Inequality Index) เป็นดัชนีที่วัดความไม่เท่าเทียมของ AI ทั่วโลกแบบเรียลไทม์ พิจารณาการเข้าถึง AI ค่าใช้จ่าย โครงสร้างพื้นฐาน และปัจจัยอื่นๆ เพื่อประเมินความยุติธรรมของ AI ในแต่ละประเทศ",
+        "category": "general"
+      },
+      "tokenUtility": {
+        "question": "โทเค็น ALMAN ใช้ทำอะไรได้?",
+        "answer": "โทเค็น ALMAN สามารถใช้สำหรับการโหวตกำกับดูแล รางวัล Staking การเข้าถึง AI Hub ส่วนลดค่าธรรมเนียม ซื้อ NFT และอื่นๆ",
+        "category": "token"
+      },
+      "howToBuy": {
+        "question": "จะได้รับโทเค็น ALMAN ได้อย่างไร?",
+        "answer": "หลังจาก TGE (Token Generation Event) โทเค็น ALMAN จะมีให้บน DEX และ CEX คุณยังสามารถรับได้ผ่าน staking, airdrop และเกมในระบบนิเวศ",
+        "category": "token"
+      },
+      "howToStart": {
+        "question": "จะเริ่มต้นได้อย่างไร?",
+        "answer": "เพียงเข้าสู่ระบบด้วยบัญชี Google, Facebook หรือโซเชียลอื่นๆ ผ่าน Web3Auth คุณสามารถเริ่มต้นได้ทันทีโดยไม่ต้องตั้งค่ากระเป๋าที่ซับซ้อน ธุรกรรมเริ่มต้นไม่มีค่า gas!",
+        "category": "technical"
+      },
+      "isSafe": {
+        "question": "ปลอดภัยหรือไม่?",
+        "answer": "ใช่ Smart Contract ทั้งหมดของเราสร้างด้วยรูปแบบ UUPS ที่อัปเกรดได้โดยใช้ OpenZeppelin 5.x การตรวจสอบความปลอดภัยดำเนินการก่อนเปิดตัว mainnet และเราปรับปรุงการป้องกันความปลอดภัยอย่างต่อเนื่อง",
+        "category": "technical"
+      },
+      "whatIsJeongSBT": {
+        "question": "Jeong-SBT คืออะไร?",
+        "answer": "Jeong-SBT (Soulbound Token) เป็น NFT ที่โอนไม่ได้ที่พิสูจน์การกระทำที่ดีของคุณ ยิ่งทำความดีมาก ยิ่ง tier สูง และยิ่งได้รับประโยชน์มากในระบบนิเวศ",
+        "category": "technical"
+      },
+      "supportedLanguages": {
+        "question": "รองรับภาษาอะไรบ้าง?",
+        "answer": "AlmaNEO รองรับ 14 ภาษา: เกาหลี อังกฤษ จีน ญี่ปุ่น สเปน ฝรั่งเศส อาหรับ โปรตุเกส อินโดนีเซีย มาเลย์ ไทย เวียดนาม เขมร และสวาฮีลี เราเพิ่มภาษาเรื่อยๆ เพื่อสนับสนุน Global South มากขึ้น",
+        "category": "general"
+      },
+      "howToContribute": {
+        "question": "จะมีส่วนร่วมในโครงการได้อย่างไร?",
+        "answer": "คุณสามารถมีส่วนร่วมผ่านกิจกรรมความใจดี การพัฒนาชุมชน การพัฒนาโอเพนซอร์ส และอื่นๆ เข้าร่วม Discord ของเราและค้นพบวิธีต่างๆ ในการมีส่วนร่วม!",
+        "category": "general"
+      }
+    }
+  },
+  "cta": {
+    "title": "มาเริ่มต้นด้วยกัน",
+    "description": "การเข้าร่วมของคุณเปลี่ยนแปลงโลก เข้าร่วมชุมชน AlmaNEO วันนี้",
+    "button": "เริ่มต้นเลย"
+  }
+}

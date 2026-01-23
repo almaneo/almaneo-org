@@ -1,0 +1,439 @@
+{
+  "hero": {
+    "title": "Mã nguội, Tâm hồn ấm",
+    "subtitle": "Mang công nghệ AI đến mọi người một cách công bằng",
+    "description": "AlmaNEO là nền tảng Web3 giải quyết bất bình đẳng AI dựa trên triết lý 'Jeong (情)'. Chúng tôi đang xây dựng một thế giới nơi 8 tỷ người đều có thể hưởng lợi từ AI.",
+    "cta": {
+      "joinMovement": "Tham gia phong trào",
+      "learnMore": "Tìm hiểu thêm",
+      "whitepaper": "Đọc Whitepaper"
+    },
+    "stats": {
+      "totalSupply": "Tổng cung",
+      "forHumans": "Cho 8 tỷ người",
+      "countries": "Quốc gia hỗ trợ",
+      "communityMembers": "Thành viên cộng đồng"
+    }
+  },
+  "problem": {
+    "title": "AI hiện không công bằng",
+    "subtitle": "Tình trạng bất bình đẳng AI toàn cầu",
+    "description": "Khoảng cách AI giữa các nước phát triển và đang phát triển tiếp tục mở rộng. Đây không phải vấn đề công nghệ—mà là vấn đề tiếp cận.",
+    "cards": {
+      "developed": {
+        "title": "Nước phát triển",
+        "subtitle": "AI trong cuộc sống hàng ngày",
+        "result": "Năng suất tăng 40%"
+      },
+      "globalSouth": {
+        "title": "Nước đang phát triển",
+        "subtitle": "Chi phí AI = 10-30% thu nhập hàng tháng",
+        "result": "Khoảng cách ngày càng rộng"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "AI lên lịch hôm nay",
+        "afternoon": "AI giúp viết báo cáo",
+        "evening": "AI đề xuất nội dung"
+      },
+      "globalSouth": {
+        "morning": "Nhập dữ liệu thủ công",
+        "afternoon": "Công việc lặp đi lặp lại không ngừng",
+        "evening": "Tiếp cận thông tin hạn chế"
+      }
+    },
+    "timeLabels": {
+      "morning": "Sáng",
+      "afternoon": "Chiều",
+      "evening": "Tối"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "Tài nguyên tính toán AI tập trung ở top 1%"
+      },
+      "stat2": {
+        "value": "$20/tháng",
+        "label": "Chi phí đăng ký AI (10-30% thu nhập ở nước đang phát triển)"
+      },
+      "stat3": {
+        "value": "90%",
+        "label": "Dữ liệu huấn luyện AI bằng tiếng Anh"
+      },
+      "stat4": {
+        "value": "72",
+        "label": "Quốc gia Global South có quyền truy cập AI hạn chế"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "Triết lý của 'Jeong'",
+    "subtitle": "Giá trị cốt lõi của chúng tôi",
+    "description": "AlmaNEO giải quyết bất bình đẳng AI dựa trên triết lý 'Jeong (情)'.",
+    "jeong": "Jeong (情)",
+    "jeongCard": {
+      "title": "'Jeong (情)' là gì?",
+      "description1": "Khái niệm cảm xúc đặc trưng của Hàn Quốc",
+      "description2": "Không chỉ là sự tử tế—mà là sự ấm áp sâu sắc được hình thành qua thời gian và trải nghiệm chung.",
+      "footer": "Con người ",
+      "footerHighlight": "8 tỷ",
+      "footerEnd": " cùng nhau trong sự ấm áp"
+    },
+    "principles": {
+      "people": {
+        "title": "Vì Mọi Người",
+        "description": "Vượt trên lợi nhuận và hiệu quả, ưu tiên nhân loại"
+      },
+      "individual": {
+        "title": "Tôn Trọng Mỗi Cá Nhân",
+        "description": "Thành công được đo bằng cuộc sống thực sự thay đổi"
+      },
+      "human": {
+        "title": "Nhân Loại Trước Tiên",
+        "description": "Công nghệ và triết lý cùng tạo nên thế giới tốt đẹp hơn"
+      }
+    }
+  },
+  "solution": {
+    "title": "Giải pháp của chúng tôi",
+    "subtitle": "3 Giải pháp cốt lõi",
+    "description": "Chỉ số GAII, AI Hub và Giao thức Tử tế để giải quyết bất bình đẳng AI toàn cầu",
+    "solutions": {
+      "gaii": {
+        "title": "Chỉ số GAII",
+        "subtitle": "Global AI Inequality Index",
+        "description": "Đo lường và trực quan hóa bất bình đẳng AI toàn cầu theo thời gian thực",
+        "items": {
+          "item1": "Dashboard thời gian thực bất bình đẳng AI 100+ quốc gia",
+          "item2": "Chỉ số dựa trên dữ liệu minh bạch",
+          "item3": "Xác định vấn đề và tìm giải pháp"
+        }
+      },
+      "aiHub": {
+        "title": "AlmaNEO AI Hub",
+        "subtitle": "Nền tảng truy cập AI phi tập trung",
+        "description": "Nền tảng phi tập trung nơi mọi người có thể truy cập dịch vụ AI miễn phí",
+        "items": {
+          "item1": "Truy cập AI miễn phí qua mạng DePIN",
+          "item2": "Phần thưởng token cho việc chia sẻ tài nguyên",
+          "item3": "Hỗ trợ đa ngôn ngữ (14+ ngôn ngữ)"
+        }
+      },
+      "kindness": {
+        "title": "Giao thức Tử tế",
+        "subtitle": "Proof of Humanity",
+        "description": "Cơ chế đồng thuận mới chứng minh và khen thưởng hành động tử tế",
+        "items": {
+          "item1": "NFT Jeong-SBT chứng minh lòng tốt",
+          "item2": "Phần thưởng dựa trên đóng góp",
+          "item3": "Cải thiện lòng tốt có thể đo lường"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "Tokenomics",
+    "subtitle": "Token ALMAN",
+    "totalSupply": "Tổng cung",
+    "forHumans": "Người, Token",
+    "forHumansCount": "8 tỷ",
+    "tokenInfo": {
+      "token": "Token",
+      "network": "Mạng lưới",
+      "standard": "Tiêu chuẩn",
+      "supply": "Cung",
+      "forAll": "Cho tất cả",
+      "forAllValue": "8 tỷ người"
+    },
+    "distribution": {
+      "title": "Phân phối Token",
+      "community": "Cộng đồng & Hệ sinh thái",
+      "foundation": "Dự trữ Foundation",
+      "liquidity": "Thanh khoản & Sàn giao dịch",
+      "team": "Đội ngũ & Cố vấn",
+      "grants": "Kindness Expo & Grants"
+    },
+    "utility": {
+      "title": "Tiện ích Token",
+      "governance": "Bỏ phiếu quản trị",
+      "staking": "Phần thưởng Staking",
+      "access": "Truy cập AI Hub",
+      "fees": "Giảm phí"
+    }
+  },
+  "ecosystem": {
+    "title": "Hệ sinh thái",
+    "subtitle": "Khám phá Hệ sinh thái AlmaNEO",
+    "staking": {
+      "title": "Staking",
+      "description": "Stake token ALMAN và kiếm 5-18% APY. Phần thưởng cao hơn dựa trên Điểm Tử tế của bạn.",
+      "apy": "Lên đến 18% APY",
+      "info": "Nhân Điểm Tử tế"
+    },
+    "airdrop": {
+      "title": "Airdrop",
+      "description": "Tham gia hoạt động tử tế và nhận token ALMAN miễn phí. Phân phối công bằng qua task-based airdrop.",
+      "reward": "Phần thưởng dựa trên nhiệm vụ",
+      "info": "Phân phối công bằng"
+    },
+    "nft": {
+      "title": "Chợ NFT",
+      "description": "Giao dịch Jeong-SBT và Huy hiệu Tử tế. Hỗ trợ giao dịch không Gas và tiền bản quyền cho người sáng tạo.",
+      "feature": "Không phí Gas",
+      "info": "Tiền bản quyền người tạo"
+    },
+    "game": {
+      "title": "Trò chơi Tử tế",
+      "description": "Thực hành lòng tốt vui vẻ và kiếm token. Tham gia dễ dàng với cơ chế Tap-to-Earn.",
+      "mechanism": "Tap-to-Earn",
+      "info": "Đang phát triển"
+    }
+  },
+  "web3auth": {
+    "title": "Bắt đầu dễ dàng",
+    "subtitle": "Bắt đầu dễ dàng với Web3Auth",
+    "loginDemo": {
+      "title": "Đăng nhập AlmaNEO",
+      "description": "Bắt đầu không cần ví với tài khoản mạng xã hội",
+      "or": "hoặc",
+      "connectWallet": "Kết nối Ví"
+    },
+    "benefits": {
+      "social": {
+        "title": "Đăng nhập mạng xã hội",
+        "description": "Bắt đầu ngay với Google, Facebook hoặc Twitter. Không cần thiết lập ví phức tạp."
+      },
+      "secure": {
+        "title": "An toàn",
+        "description": "Quản lý khóa phi tập trung qua MPC. Khóa riêng được mã hóa và phân tán an toàn."
+      },
+      "gasless": {
+        "title": "Không Gas",
+        "description": "Người dùng mới có thể giao dịch không cần Gas. Chúng tôi lo liệu qua Biconomy Paymaster."
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "< 30 giây",
+        "label": "Thời gian đăng ký"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "Chi phí ban đầu"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "Quyền sở hữu tài sản"
+      }
+    }
+  },
+  "team": {
+    "title": "Đội ngũ",
+    "subtitle": "Những người đứng sau AlmaNEO",
+    "coreTeam": "Đội ngũ chính",
+    "advisors": "Cố vấn",
+    "joinCta": "Tham gia đội ngũ của chúng tôi để dẫn dắt dân chủ hóa AI.",
+    "contactMessage": "Liên hệ: team@almaneo.org",
+    "roles": {
+      "founder": "Nhà sáng lập & CEO",
+      "cto": "CTO",
+      "coo": "COO",
+      "communityLead": "Trưởng cộng đồng",
+      "advisorBlockchain": "Cố vấn Blockchain",
+      "advisorAI": "Cố vấn AI"
+    },
+    "members": {
+      "alex": {
+        "name": "Alex Kim",
+        "description": "Cựu trưởng nhóm blockchain tại công ty công nghệ lớn"
+      },
+      "sarah": {
+        "name": "Sarah Park",
+        "description": "10+ năm kinh nghiệm phát triển hệ thống phân tán"
+      },
+      "david": {
+        "name": "David Lee",
+        "description": "Chuyên gia chiến lược và vận hành startup"
+      },
+      "emily": {
+        "name": "Emily Chen",
+        "description": "Kinh nghiệm xây dựng cộng đồng Web3 toàn cầu"
+      },
+      "michael": {
+        "name": "Dr. Michael Wang",
+        "description": "Cựu trưởng nghiên cứu blockchain, đóng góp Ethereum"
+      },
+      "jennifer": {
+        "name": "Dr. Jennifer Liu",
+        "description": "Giáo sư AI đại học hàng đầu, chuyên gia Đạo đức AI"
+      }
+    }
+  },
+  "partners": {
+    "title": "Đối tác & Công nghệ",
+    "subtitle": "Các công ty và tech stack chúng tôi hợp tác",
+    "technology": "Đối tác công nghệ",
+    "standards": "Tiêu chuẩn hỗ trợ",
+    "blockchainStandards": "Tiêu chuẩn Blockchain",
+    "partnershipCta": "Quan tâm hợp tác?",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "description": "Mạng blockchain chính"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "description": "Backend và xác thực"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "description": "Giao dịch không gas"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "description": "Đăng nhập mạng xã hội"
+      }
+    }
+  },
+  "roadmap": {
+    "title": "Lộ trình",
+    "subtitle": "Hành trình AlmaNEO",
+    "legend": {
+      "completed": "Hoàn thành",
+      "inProgress": "Đang tiến hành",
+      "upcoming": "Sắp tới"
+    },
+    "phases": {
+      "foundation": {
+        "title": "Xây dựng nền tảng",
+        "period": "H1 2025",
+        "items": {
+          "whitepaper": "Phát hành Whitepaper",
+          "contracts": "Phát triển smart contract",
+          "design": "Thiết kế UI/UX",
+          "testnet": "Ra mắt testnet"
+        }
+      },
+      "testnet": {
+        "title": "Testnet & Cộng đồng",
+        "period": "H2 2025",
+        "items": {
+          "beta": "Thử nghiệm beta riêng",
+          "community": "Chương trình xây dựng cộng đồng",
+          "audit": "Kiểm toán bảo mật",
+          "partners": "Hợp tác chiến lược"
+        }
+      },
+      "tge": {
+        "title": "TGE & Mainnet",
+        "period": "Q1 2026",
+        "items": {
+          "tge": "Token Generation Event",
+          "mainnet": "Ra mắt mainnet",
+          "staking": "Ra mắt staking",
+          "governance": "Kích hoạt governance"
+        }
+      },
+      "expansion": {
+        "title": "Mở rộng hệ sinh thái",
+        "period": "Q2-Q3 2026",
+        "items": {
+          "aihub": "Ra mắt AI Hub",
+          "nft": "Mở chợ NFT",
+          "mobile": "Phát triển ứng dụng di động",
+          "depin": "Mở rộng mạng DePIN"
+        }
+      },
+      "expo": {
+        "title": "Kindness Expo lần 1",
+        "period": "Q4 2026",
+        "items": {
+          "expo": "Hội nghị thường niên đầu tiên",
+          "grants": "Công bố người nhận grant",
+          "dao": "Chuyển đổi sang DAO Governance hoàn toàn",
+          "report": "Phát hành báo cáo thường niên"
+        }
+      },
+      "global": {
+        "title": "Mở rộng toàn cầu & DAO",
+        "period": "2027+",
+        "items": {
+          "globalExpansion": "Mở rộng khu vực",
+          "daoGovernance": "Vận hành DAO tự chủ",
+          "research": "Chương trình tài trợ nghiên cứu AI",
+          "un": "Hợp tác với UN SDGs"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "subtitle": "Có câu hỏi?",
+    "categoryLabel": "Danh mục",
+    "contactCta": "Có câu hỏi khác? Liên hệ chúng tôi tại support@almaneo.org",
+    "categories": {
+      "all": "Tất cả",
+      "general": "Chung",
+      "token": "Token",
+      "technical": "Kỹ thuật"
+    },
+    "items": {
+      "whatIs": {
+        "question": "AlmaNEO là gì?",
+        "answer": "AlmaNEO là nền tảng Web3 được thiết kế để giải quyết bất bình đẳng AI. Dựa trên văn hóa 'Jeong (情)' của Hàn Quốc, nhằm đảm bảo 8 tỷ người trên toàn thế giới có thể hưởng lợi bình đẳng từ công nghệ AI.",
+        "category": "general"
+      },
+      "whatIsJeong": {
+        "question": "'Jeong (情)' là gì?",
+        "answer": "'Jeong' là khái niệm độc đáo của Hàn Quốc về liên kết cảm xúc. Không chỉ là sự tử tế—mà đại diện cho mối quan hệ sâu sắc và trái tim ấm áp.",
+        "category": "general"
+      },
+      "whatIsGAII": {
+        "question": "Chỉ số GAII là gì?",
+        "answer": "GAII (Global AI Inequality Index) là chỉ số đo lường bất bình đẳng AI toàn cầu theo thời gian thực. Nó xem xét quyền truy cập AI, chi phí, cơ sở hạ tầng và các yếu tố khác để đánh giá sự công bằng của AI ở mỗi quốc gia.",
+        "category": "general"
+      },
+      "tokenUtility": {
+        "question": "Token ALMAN dùng để làm gì?",
+        "answer": "Token ALMAN có thể được sử dụng để bỏ phiếu quản trị, phần thưởng staking, truy cập AI Hub, giảm phí, mua NFT và nhiều hơn nữa.",
+        "category": "token"
+      },
+      "howToBuy": {
+        "question": "Làm thế nào để có token ALMAN?",
+        "answer": "Sau TGE (Token Generation Event), token ALMAN sẽ có sẵn trên DEX và CEX. Bạn cũng có thể nhận được thông qua staking, airdrop và các trò chơi hệ sinh thái.",
+        "category": "token"
+      },
+      "howToStart": {
+        "question": "Làm thế nào để bắt đầu?",
+        "answer": "Chỉ cần đăng nhập bằng tài khoản Google, Facebook hoặc mạng xã hội khác qua Web3Auth. Bạn có thể bắt đầu ngay mà không cần thiết lập ví phức tạp. Giao dịch ban đầu không mất phí gas!",
+        "category": "technical"
+      },
+      "isSafe": {
+        "question": "Có an toàn không?",
+        "answer": "Có, tất cả smart contract của chúng tôi được xây dựng với mẫu UUPS có thể nâng cấp sử dụng OpenZeppelin 5.x. Kiểm toán bảo mật được thực hiện trước khi ra mắt mainnet, và chúng tôi liên tục cải thiện bảo vệ an ninh.",
+        "category": "technical"
+      },
+      "whatIsJeongSBT": {
+        "question": "Jeong-SBT là gì?",
+        "answer": "Jeong-SBT (Soulbound Token) là NFT không thể chuyển nhượng chứng minh hành động tốt của bạn. Càng làm nhiều việc tốt, tier càng cao, và càng nhận được nhiều lợi ích trong hệ sinh thái.",
+        "category": "technical"
+      },
+      "supportedLanguages": {
+        "question": "Những ngôn ngữ nào được hỗ trợ?",
+        "answer": "AlmaNEO hỗ trợ 14 ngôn ngữ: Hàn, Anh, Trung, Nhật, Tây Ban Nha, Pháp, Ả Rập, Bồ Đào Nha, Indonesia, Mã Lai, Thái, Việt, Khmer và Swahili. Chúng tôi tiếp tục thêm ngôn ngữ để hỗ trợ nhiều Global South hơn.",
+        "category": "general"
+      },
+      "howToContribute": {
+        "question": "Làm thế nào để đóng góp cho dự án?",
+        "answer": "Bạn có thể đóng góp thông qua hoạt động tử tế, phát triển cộng đồng, phát triển mã nguồn mở và nhiều hơn nữa. Tham gia Discord của chúng tôi và khám phá nhiều cách để đóng góp!",
+        "category": "general"
+      }
+    }
+  },
+  "cta": {
+    "title": "Hãy cùng bắt đầu",
+    "description": "Sự tham gia của bạn thay đổi thế giới. Tham gia cộng đồng AlmaNEO ngay hôm nay.",
+    "button": "Bắt đầu ngay"
+  }
+}

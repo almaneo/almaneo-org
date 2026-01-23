@@ -1,0 +1,439 @@
+{
+  "hero": {
+    "title": "Msimbo Baridi, Roho ya Joto",
+    "subtitle": "Kuleta teknolojia ya AI kwa kila mtu kwa usawa",
+    "description": "AlmaNEO ni jukwaa la Web3 linalotatua ukosefu wa usawa wa AI kulingana na falsafa ya 'Jeong (情)'. Tunajenga ulimwengu ambapo binadamu bilioni 8 wanaweza kunufaika na AI.",
+    "cta": {
+      "joinMovement": "Jiunge na Harakati",
+      "learnMore": "Jifunze Zaidi",
+      "whitepaper": "Soma Karatasi Nyeupe"
+    },
+    "stats": {
+      "totalSupply": "Jumla ya Ugavi",
+      "forHumans": "Kwa Binadamu Bilioni 8",
+      "countries": "Nchi Zinazotumika",
+      "communityMembers": "Wanachama wa Jamii"
+    }
+  },
+  "problem": {
+    "title": "AI Si ya Haki Sasa",
+    "subtitle": "Hali ya Ukosefu wa Usawa wa AI Duniani",
+    "description": "Pengo la AI kati ya mataifa yaliyoendelea na yanayoendelea linaendelea kupanuka. Hii si tatizo la teknolojia—ni tatizo la upatikanaji.",
+    "cards": {
+      "developed": {
+        "title": "Nchi Zilizoendelea",
+        "subtitle": "AI katika maisha ya kila siku",
+        "result": "Uzalishaji umeongezeka 40%"
+      },
+      "globalSouth": {
+        "title": "Nchi Zinazoendelea",
+        "subtitle": "Gharama za AI = 10-30% ya mapato ya kila mwezi",
+        "result": "Pengo linapanuka"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "AI inapanga ratiba ya leo",
+        "afternoon": "AI inasaidia kuandika ripoti",
+        "evening": "AI inapendekeza maudhui"
+      },
+      "globalSouth": {
+        "morning": "Kuingiza data kwa mkono",
+        "afternoon": "Kazi za kurudia bila mwisho",
+        "evening": "Upatikanaji mdogo wa habari"
+      }
+    },
+    "timeLabels": {
+      "morning": "Asubuhi",
+      "afternoon": "Mchana",
+      "evening": "Jioni"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "Rasilimali za kompyuta za AI zimejilimbikizia 1% ya juu"
+      },
+      "stat2": {
+        "value": "$20/mwezi",
+        "label": "Gharama za usajili wa AI (10-30% ya mapato katika nchi zinazoendelea)"
+      },
+      "stat3": {
+        "value": "90%",
+        "label": "Data ya mafunzo ya AI iko katika Kiingereza"
+      },
+      "stat4": {
+        "value": "72",
+        "label": "Nchi za Global South zenye upatikanaji mdogo wa AI"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "Falsafa ya Jeong",
+    "subtitle": "Thamani Zetu za Msingi",
+    "description": "AlmaNEO inatatua ukosefu wa usawa wa AI kulingana na falsafa ya 'Jeong (情)'.",
+    "jeong": "Jeong (情)",
+    "jeongCard": {
+      "title": "'Jeong (情)' ni nini?",
+      "description1": "Dhana ya kihisia ya kipekee ya Kikorea",
+      "description2": "Si upole tu—ni joto la kina linaloundwa kupitia wakati na uzoefu wa pamoja.",
+      "footer": "Binadamu ",
+      "footerHighlight": "bilioni 8",
+      "footerEnd": " pamoja katika joto"
+    },
+    "principles": {
+      "people": {
+        "title": "Kwa Watu Wote",
+        "description": "Zaidi ya faida na ufanisi, kuweka kipaumbele ubinadamu"
+      },
+      "individual": {
+        "title": "Kuheshimu Kila Mtu",
+        "description": "Mafanikio yanapimwa na maisha halisi yanayobadilika"
+      },
+      "human": {
+        "title": "Ubinadamu Kwanza",
+        "description": "Teknolojia na falsafa zinaunda ulimwengu bora pamoja"
+      }
+    }
+  },
+  "solution": {
+    "title": "Suluhisho Letu",
+    "subtitle": "Suluhisho 3 Kuu",
+    "description": "Kielelezo cha GAII, AI Hub, na Itifaki ya Upole kutatua ukosefu wa usawa wa AI duniani",
+    "solutions": {
+      "gaii": {
+        "title": "Kielelezo cha GAII",
+        "subtitle": "Global AI Inequality Index",
+        "description": "Kupima na kuonyesha ukosefu wa usawa wa AI duniani kwa wakati halisi",
+        "items": {
+          "item1": "Dashboard ya wakati halisi ukosefu wa usawa wa AI nchi 100+",
+          "item2": "Kielelezo kinachotegemea data ya uwazi",
+          "item3": "Kutambua matatizo na kutafuta suluhisho"
+        }
+      },
+      "aiHub": {
+        "title": "AlmaNEO AI Hub",
+        "subtitle": "Jukwaa la Upatikanaji wa AI Lililogatuliwa",
+        "description": "Jukwaa lililogatuliwa ambapo mtu yeyote anaweza kupata huduma za AI bure",
+        "items": {
+          "item1": "Upatikanaji wa AI bila malipo kupitia mtandao wa DePIN",
+          "item2": "Zawadi za tokeni kwa kushiriki rasilimali",
+          "item3": "Msaada wa lugha nyingi (14+ lugha)"
+        }
+      },
+      "kindness": {
+        "title": "Itifaki ya Upole",
+        "subtitle": "Uthibitisho wa Ubinadamu",
+        "description": "Utaratibu mpya wa makubaliano unaothibitisha na kutuza vitendo vya upole",
+        "items": {
+          "item1": "NFT ya Jeong-SBT inayothibitisha upole",
+          "item2": "Zawadi zinazotegemea mchango",
+          "item3": "Uboreshaji wa upole unaoweza kupimwa"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "Uchumi wa Tokeni",
+    "subtitle": "Tokeni ya ALMAN",
+    "totalSupply": "Jumla ya Ugavi",
+    "forHumans": "Binadamu, Tokeni",
+    "forHumansCount": "Bilioni 8",
+    "tokenInfo": {
+      "token": "Tokeni",
+      "network": "Mtandao",
+      "standard": "Kiwango",
+      "supply": "Ugavi",
+      "forAll": "Kwa Wote",
+      "forAllValue": "Binadamu bilioni 8"
+    },
+    "distribution": {
+      "title": "Usambazaji wa Tokeni",
+      "community": "Jamii na Mfumo wa Ikolojia",
+      "foundation": "Akiba ya Msingi",
+      "liquidity": "Ukwasi na Soko",
+      "team": "Timu na Washauri",
+      "grants": "Kindness Expo na Ruzuku"
+    },
+    "utility": {
+      "title": "Matumizi ya Tokeni",
+      "governance": "Kupiga Kura kwa Utawala",
+      "staking": "Zawadi za Kuweka Hisa",
+      "access": "Upatikanaji wa AI Hub",
+      "fees": "Punguzo la Ada"
+    }
+  },
+  "ecosystem": {
+    "title": "Mfumo wa Ikolojia",
+    "subtitle": "Chunguza Mfumo wa Ikolojia wa AlmaNEO",
+    "staking": {
+      "title": "Kuweka Hisa",
+      "description": "Weka hisa tokeni za ALMAN na upate 5-18% APY. Zawadi zaidi kulingana na Alama yako ya Upole.",
+      "apy": "Hadi 18% APY",
+      "info": "Kizidishi cha Alama ya Upole"
+    },
+    "airdrop": {
+      "title": "Usambazaji wa Bure",
+      "description": "Shiriki katika shughuli za upole na upate tokeni za ALMAN bure. Usambazaji wa haki kupitia usambazaji unaotegemea kazi.",
+      "reward": "Zawadi Zinazotegemea Kazi",
+      "info": "Usambazaji wa Haki"
+    },
+    "nft": {
+      "title": "Soko la NFT",
+      "description": "Fanya biashara ya Jeong-SBT na Beji za Upole. Miamala bila gesi na mrabaha wa waundaji yanaungwa mkono.",
+      "feature": "Bila Ada ya Gesi",
+      "info": "Mrabaha wa Waundaji"
+    },
+    "game": {
+      "title": "Mchezo wa Upole",
+      "description": "Fanya upole ukifurahia na upate tokeni. Ushiriki rahisi na mbinu za Tap-to-Earn.",
+      "mechanism": "Tap-to-Earn",
+      "info": "Inaendelezwa"
+    }
+  },
+  "web3auth": {
+    "title": "Kuanza kwa Urahisi",
+    "subtitle": "Anza kwa urahisi na Web3Auth",
+    "loginDemo": {
+      "title": "Ingia AlmaNEO",
+      "description": "Anza bila pochi na akaunti ya kijamii",
+      "or": "au",
+      "connectWallet": "Unganisha Pochi"
+    },
+    "benefits": {
+      "social": {
+        "title": "Kuingia kwa Mitandao ya Kijamii",
+        "description": "Anza mara moja na Google, Facebook, au Twitter. Hakuna haja ya kuweka pochi ngumu."
+      },
+      "secure": {
+        "title": "Salama",
+        "description": "Usimamizi wa funguo uliogatuliwa kupitia MPC. Funguo za kibinafsi zimesimbwa na kusambazwa kwa usalama."
+      },
+      "gasless": {
+        "title": "Bila Gesi",
+        "description": "Watumiaji wapya wanaweza kufanya miamala bila ada za gesi. Tunashughulikia kupitia Biconomy Paymaster."
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "< sekunde 30",
+        "label": "Muda wa Kusajili"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "Gharama ya Awali"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "Umiliki wa Mali"
+      }
+    }
+  },
+  "team": {
+    "title": "Timu Yetu",
+    "subtitle": "Watu nyuma ya AlmaNEO",
+    "coreTeam": "Timu Kuu",
+    "advisors": "Washauri",
+    "joinCta": "Jiunge na timu yetu kuongoza demokrasia ya AI.",
+    "contactMessage": "Wasiliana: team@almaneo.org",
+    "roles": {
+      "founder": "Mwanzilishi na CEO",
+      "cto": "CTO",
+      "coo": "COO",
+      "communityLead": "Kiongozi wa Jamii",
+      "advisorBlockchain": "Mshauri wa Blockchain",
+      "advisorAI": "Mshauri wa AI"
+    },
+    "members": {
+      "alex": {
+        "name": "Alex Kim",
+        "description": "Aliyekuwa kiongozi wa timu ya blockchain katika kampuni kubwa ya teknolojia"
+      },
+      "sarah": {
+        "name": "Sarah Park",
+        "description": "Miaka 10+ ya uzoefu wa kuendeleza mfumo uliosambazwa"
+      },
+      "david": {
+        "name": "David Lee",
+        "description": "Mtaalamu wa mkakati na uendeshaji wa startup"
+      },
+      "emily": {
+        "name": "Emily Chen",
+        "description": "Uzoefu wa kujenga jamii za Web3 duniani"
+      },
+      "michael": {
+        "name": "Dr. Michael Wang",
+        "description": "Aliyekuwa kiongozi wa utafiti wa blockchain, mchangiaji wa Ethereum"
+      },
+      "jennifer": {
+        "name": "Dr. Jennifer Liu",
+        "description": "Profesa wa AI chuo kikuu cha juu, mtaalamu wa Maadili ya AI"
+      }
+    }
+  },
+  "partners": {
+    "title": "Washirika na Teknolojia",
+    "subtitle": "Makampuni na teknolojia tunazofanya nao kazi",
+    "technology": "Washirika wa Teknolojia",
+    "standards": "Viwango Vinavyoungwa Mkono",
+    "blockchainStandards": "Viwango vya Blockchain",
+    "partnershipCta": "Una nia ya kushirikiana?",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "description": "Mtandao mkuu wa blockchain"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "description": "Backend na uthibitishaji"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "description": "Miamala bila gesi"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "description": "Kuingia kwa mitandao ya kijamii"
+      }
+    }
+  },
+  "roadmap": {
+    "title": "Ramani ya Njia",
+    "subtitle": "Safari ya AlmaNEO",
+    "legend": {
+      "completed": "Imekamilika",
+      "inProgress": "Inaendelea",
+      "upcoming": "Inakuja"
+    },
+    "phases": {
+      "foundation": {
+        "title": "Msingi",
+        "period": "H1 2025",
+        "items": {
+          "whitepaper": "Kutoa Karatasi Nyeupe",
+          "contracts": "Kuendeleza smart contract",
+          "design": "Kubuni UI/UX",
+          "testnet": "Kuzindua testnet"
+        }
+      },
+      "testnet": {
+        "title": "Testnet na Jamii",
+        "period": "H2 2025",
+        "items": {
+          "beta": "Jaribio la beta la kibinafsi",
+          "community": "Programu ya kujenga jamii",
+          "audit": "Ukaguzi wa usalama",
+          "partners": "Ushirikiano wa kimkakati"
+        }
+      },
+      "tge": {
+        "title": "TGE na Mainnet",
+        "period": "Q1 2026",
+        "items": {
+          "tge": "Token Generation Event",
+          "mainnet": "Kuzindua mainnet",
+          "staking": "Kuzindua staking",
+          "governance": "Kuwezesha governance"
+        }
+      },
+      "expansion": {
+        "title": "Upanuzi wa Mfumo",
+        "period": "Q2-Q3 2026",
+        "items": {
+          "aihub": "Kuzindua AI Hub",
+          "nft": "Kufungua soko la NFT",
+          "mobile": "Kuendeleza programu ya simu",
+          "depin": "Kupanua mtandao wa DePIN"
+        }
+      },
+      "expo": {
+        "title": "Kindness Expo ya Kwanza",
+        "period": "Q4 2026",
+        "items": {
+          "expo": "Mkutano wa kwanza wa kila mwaka",
+          "grants": "Kutangaza wapokeaji wa ruzuku",
+          "dao": "Kubadilisha kuwa DAO Governance kamili",
+          "report": "Kutoa ripoti ya kila mwaka"
+        }
+      },
+      "global": {
+        "title": "Upanuzi wa Kimataifa na DAO",
+        "period": "2027+",
+        "items": {
+          "globalExpansion": "Upanuzi wa kikanda",
+          "daoGovernance": "Uendeshaji wa DAO wa kujitegemea",
+          "research": "Programu ya ufadhili wa utafiti wa AI",
+          "un": "Ushirikiano na UN SDGs"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "Maswali Yanayoulizwa Mara kwa Mara",
+    "subtitle": "Una maswali?",
+    "categoryLabel": "Kategoria",
+    "contactCta": "Una maswali mengine? Wasiliana nasi kwa support@almaneo.org",
+    "categories": {
+      "all": "Yote",
+      "general": "Jumla",
+      "token": "Tokeni",
+      "technical": "Kiufundi"
+    },
+    "items": {
+      "whatIs": {
+        "question": "AlmaNEO ni nini?",
+        "answer": "AlmaNEO ni jukwaa la Web3 lililobuniwa kutatua ukosefu wa usawa wa AI. Kulingana na utamaduni wa Kikorea wa 'Jeong (情)', lengo lake ni kuhakikisha watu bilioni 8 duniani kote wanaweza kunufaika sawa na teknolojia ya AI.",
+        "category": "general"
+      },
+      "whatIsJeong": {
+        "question": "'Jeong (情)' ni nini?",
+        "answer": "'Jeong' ni dhana ya kipekee ya Kikorea ya kifungo cha kihisia. Si upole tu—inawakilisha mahusiano ya kina na mioyo ya joto.",
+        "category": "general"
+      },
+      "whatIsGAII": {
+        "question": "Kielelezo cha GAII ni nini?",
+        "answer": "GAII (Global AI Inequality Index) ni kielelezo kinachopima ukosefu wa usawa wa AI duniani kwa wakati halisi. Inazingatia upatikanaji wa AI, gharama, miundombinu, na mambo mengine kutathmini haki ya AI katika kila nchi.",
+        "category": "general"
+      },
+      "tokenUtility": {
+        "question": "Tokeni za ALMAN zinaweza kutumika kwa nini?",
+        "answer": "Tokeni za ALMAN zinaweza kutumika kwa kupiga kura kwa utawala, zawadi za kuweka hisa, upatikanaji wa AI Hub, punguzo la ada, ununuzi wa NFT na zaidi.",
+        "category": "token"
+      },
+      "howToBuy": {
+        "question": "Nitapata tokeni za ALMAN vipi?",
+        "answer": "Baada ya TGE (Token Generation Event), tokeni za ALMAN zitapatikana kwenye DEX na CEX. Unaweza pia kupata kupitia staking, airdrop, na michezo ya mfumo wa ikolojia.",
+        "category": "token"
+      },
+      "howToStart": {
+        "question": "Ninaanza vipi?",
+        "answer": "Ingia tu na akaunti yako ya Google, Facebook, au mitandao mingine ya kijamii kupitia Web3Auth. Unaweza kuanza mara moja bila kuweka pochi ngumu. Miamala ya awali haina ada ya gesi!",
+        "category": "technical"
+      },
+      "isSafe": {
+        "question": "Je, ni salama?",
+        "answer": "Ndiyo, mikataba yote ya smart imejengwa na muundo wa UUPS unaoweza kuboreshwa kwa kutumia OpenZeppelin 5.x. Ukaguzi wa usalama unafanywa kabla ya kuzindua mainnet, na tunaendelea kuboresha ulinzi wa usalama.",
+        "category": "technical"
+      },
+      "whatIsJeongSBT": {
+        "question": "Jeong-SBT ni nini?",
+        "answer": "Jeong-SBT (Soulbound Token) ni NFT isiyoweza kuhamishwa inayothibitisha vitendo vyako vya upole. Kadri unavyofanya mambo mazuri, ndivyo tier yako inavyoongezeka, na faida zaidi katika mfumo wa ikolojia.",
+        "category": "technical"
+      },
+      "supportedLanguages": {
+        "question": "Lugha zipi zinaungwa mkono?",
+        "answer": "AlmaNEO inasidia lugha 14: Kikorea, Kiingereza, Kichina, Kijapani, Kihispania, Kifaransa, Kiarabu, Kireno, Kiindonesia, Kimalaysia, Kithai, Kivietinamu, Kikhmeri, na Kiswahili. Tunaendelea kuongeza lugha kusaidia Global South zaidi.",
+        "category": "general"
+      },
+      "howToContribute": {
+        "question": "Ninawezaje kuchangia mradi?",
+        "answer": "Unaweza kuchangia kupitia shughuli za upole, kuendeleza jamii, kuendeleza msimbo huria, na zaidi. Jiunge na Discord yetu na gundua njia mbalimbali za kuchangia!",
+        "category": "general"
+      }
+    }
+  },
+  "cta": {
+    "title": "Tuanze Pamoja",
+    "description": "Ushiriki wako unabadilisha ulimwengu. Jiunge na jamii ya AlmaNEO leo.",
+    "button": "Anza Sasa"
+  }
+}

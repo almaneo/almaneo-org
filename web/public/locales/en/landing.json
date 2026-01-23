@@ -1,0 +1,500 @@
+{
+  "hero": {
+    "title": "Cold Code, Warm Soul",
+    "subtitle": "Bringing AI technology to everyone, fairly",
+    "description": "AlmaNEO is a Web3 platform that solves AI inequality based on the philosophy of Jeong (情). We're building a world where all 8 billion humans can benefit from AI.",
+    "cta": {
+      "joinMovement": "Join the Movement",
+      "learnMore": "Learn More",
+      "whitepaper": "Read Whitepaper"
+    },
+    "stats": {
+      "totalSupply": "Total Supply",
+      "forHumans": "For 8 Billion Humans",
+      "countries": "Countries Supported",
+      "communityMembers": "Community Members"
+    },
+    "snsModal": {
+      "title": "Join Our Community",
+      "description": "Stay updated with the latest from AlmaNEO"
+    }
+  },
+  "problem": {
+    "title": "The Problem",
+    "subtitle": "Global AI Inequality",
+    "description": "The AI gap between developed and developing nations continues to widen",
+    "cards": {
+      "developed": {
+        "title": "Youth A in Developed Country",
+        "subtitle": "AI subscription = 4 coffees",
+        "result": "Endless possibilities ✨"
+      },
+      "globalSouth": {
+        "title": "Youth B in Global South",
+        "subtitle": "AI subscription = 30% of monthly income",
+        "result": "Blocked opportunity ladder 😔"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "Resume polishing with ChatGPT",
+        "afternoon": "Coding with Copilot",
+        "evening": "Learning with AI tutor"
+      },
+      "globalSouth": {
+        "morning": "Free tier limit reached",
+        "afternoon": "Slow internet",
+        "evening": "Data labeling side job"
+      }
+    },
+    "timeLabels": {
+      "morning": "☀️ Morning",
+      "afternoon": "🌤️ Afternoon",
+      "evening": "🌙 Evening"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "AI resources in top 1%"
+      },
+      "stat2": {
+        "value": "$20",
+        "label": "Monthly subscription burden"
+      },
+      "stat3": {
+        "value": "80%",
+        "label": "Investment in US+China"
+      },
+      "stat4": {
+        "value": "90%",
+        "label": "Training data in English"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "Core Philosophy",
+    "subtitle": "'s Value",
+    "description": "From Korea to the world, a philosophy of warmth",
+    "jeong": "Jeong (情)",
+    "jeongCard": {
+      "title": "Jeong (情)",
+      "description1": " is not just simple kindness.",
+      "description2": "It's a deep bond built over time together, an understanding without words.",
+      "footer": "Jeong is ",
+      "footerHighlight": "a uniquely human value",
+      "footerEnd": " that AI cannot replace."
+    },
+    "principles": {
+      "people": {
+        "title": "People, Not Politics",
+        "description": "Where you're born doesn't determine your worth."
+      },
+      "individual": {
+        "title": "Individual, Not Nation",
+        "description": "AlmaNEO sees the effort and hope that statistics miss."
+      },
+      "human": {
+        "title": "Tool is Tech, Human is Agent",
+        "description": "AI is just a powerful tool. Decisions belong to humans."
+      }
+    }
+  },
+  "solution": {
+    "title": "Solution",
+    "subtitle": "Three Pillars",
+    "description": "The key elements supporting the AlmaNEO ecosystem",
+    "solutions": {
+      "gaii": {
+        "title": "GAII",
+        "subtitle": "Global AI Inequality Index",
+        "description": "Measure and publish AI inequality in real-time",
+        "items": {
+          "item1": "Access & Infrastructure metrics",
+          "item2": "Bias & Opportunity analysis",
+          "item3": "On-chain data transparency"
+        }
+      },
+      "aiHub": {
+        "title": "AI Hub",
+        "subtitle": "DePIN Distributed Computing",
+        "description": "AI platform without cost worries",
+        "items": {
+          "item1": "Free AI access",
+          "item2": "Multi-language optimization",
+          "item3": "Low-spec device support"
+        }
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "subtitle": "Proof of Humanity",
+        "description": "Consensus that proves and rewards kindness",
+        "items": {
+          "item1": "Kindness Score",
+          "item2": "Jeong-SBT",
+          "item3": "Multi-layer verification"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "Tokenomics",
+    "subtitle": "ALMAN Token",
+    "totalSupply": "Total Supply",
+    "forHumans": "Humans, Tokens",
+    "forHumansCount": "8B",
+    "tokenInfo": {
+      "token": "Token",
+      "network": "Network",
+      "standard": "Standard",
+      "supply": "Supply",
+      "forAll": "For All",
+      "forAllValue": "8B Humans"
+    },
+    "distribution": {
+      "title": "Token Distribution",
+      "community": "Community & Ecosystem",
+      "foundation": "Foundation Reserve",
+      "liquidity": "Liquidity & Exchange",
+      "team": "Team & Advisors",
+      "grants": "Kindness Expo & Grants"
+    },
+    "utility": {
+      "title": "Token Utility",
+      "governance": "Governance Voting",
+      "staking": "Staking Rewards",
+      "access": "AI Hub Access",
+      "fees": "Fee Discounts"
+    }
+  },
+  "ecosystem": {
+    "title": "Ecosystem",
+    "subtitle": "Explore the AlmaNEO Ecosystem",
+    "staking": {
+      "title": "Staking",
+      "description": "Stake ALMAN tokens and earn rewards. Unlock more benefits with 4-tier system.",
+      "features": {
+        "apy": "APY 5-18%",
+        "tier": "4-Tier System",
+        "bonus": "Kindness Score Bonus"
+      },
+      "linkText": "Start Staking"
+    },
+    "airdrop": {
+      "title": "Airdrop",
+      "description": "Earn ALMAN tokens through kindness activities. Fair distribution via Merkle Proof.",
+      "features": {
+        "task": "Task-based Rewards",
+        "community": "Community Activities",
+        "protocol": "Kindness Protocol"
+      },
+      "linkText": "Join Airdrop"
+    },
+    "nft": {
+      "title": "NFT Marketplace",
+      "description": "Trade unique NFTs in the AlmaNEO ecosystem. Special benefits for Jeong-SBT holders.",
+      "features": {
+        "gasless": "Gasless Transactions",
+        "auction": "Auction & Rental",
+        "royalty": "Royalty Support"
+      },
+      "linkText": "Visit NFT Market"
+    },
+    "game": {
+      "title": "Kindness Game",
+      "description": "Mine ALMAN with Tap-to-Earn gameplay. A gamified kindness experience.",
+      "features": {
+        "pool": "800M ALMAN Mining Pool",
+        "quest": "Daily Quests",
+        "leaderboard": "Leaderboard Competition"
+      },
+      "linkText": "Start Playing"
+    },
+    "bottomCta": "Login easily to all ecosystem services with Web3Auth"
+  },
+  "web3auth": {
+    "title": "Easy Onboarding",
+    "subtitle": "Easy to Start",
+    "loginDemo": {
+      "title": "Choose Login Method",
+      "description": "Start with your preferred method",
+      "or": "or",
+      "connectWallet": "Connect Existing Wallet"
+    },
+    "benefits": {
+      "social": {
+        "title": "Social Login",
+        "description": "Start with familiar accounts without complex seed phrases."
+      },
+      "secure": {
+        "title": "Asset Security",
+        "description": "MPC technology distributes and secures your private keys."
+      },
+      "gasless": {
+        "title": "Gas-Free",
+        "description": "Most transaction fees waived through Biconomy integration."
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "1s",
+        "label": "Login Time"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "Gas Fee"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "Asset Ownership"
+      }
+    }
+  },
+  "team": {
+    "title": "Our Team",
+    "subtitle": "The people behind AlmaNEO",
+    "tag": "Our Team",
+    "titlePrefix": "People Who Share ",
+    "titleHighlight": "Jeong (情)",
+    "titleSuffix": "",
+    "coreTeam": "Core Team",
+    "advisors": "Advisors",
+    "joinCta": "Do you share the values of Jeong (情)?",
+    "contactMessage": "Contact us at",
+    "roles": {
+      "founderCeo": "Founder & CEO",
+      "cto": "CTO",
+      "headOfProduct": "Head of Product",
+      "headOfCommunity": "Head of Community",
+      "aiEthicsAdvisor": "AI Ethics Advisor",
+      "globalSouthAdvisor": "Global South Advisor"
+    },
+    "members": {
+      "alexKim": {
+        "name": "Alex Kim",
+        "description": "Visionary leader spreading AI democratization and Jeong values globally"
+      },
+      "sarahPark": {
+        "name": "Sarah Park",
+        "description": "Blockchain & AI system architect with 10+ years of experience"
+      },
+      "mikeChen": {
+        "name": "Mike Chen",
+        "description": "UX/UI expert optimizing experience for Global South users"
+      },
+      "yunaLee": {
+        "name": "Yuna Lee",
+        "description": "Global community builder with multicultural communication expertise"
+      },
+      "jamesWong": {
+        "name": "Dr. James Wong",
+        "description": "Stanford AI Lab researcher, AI ethics expert"
+      },
+      "mariaSantos": {
+        "name": "Maria Santos",
+        "description": "UN sustainable development consultant, developing nations expert"
+      }
+    }
+  },
+  "partners": {
+    "title": "Partners & Technology",
+    "subtitle": "Companies and tech stack we work with",
+    "tag": "Partners & Integrations",
+    "titlePrefix": "Our ",
+    "titleHighlight": "Partners",
+    "subtitleFull": "Building a secure and innovative ecosystem with trusted technology partners",
+    "blockchainStandards": "Blockchain Standards",
+    "partnershipCta": "Interested in partnering with AlmaNEO?",
+    "contactMessage": "Contact us at",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "category": "Blockchain",
+        "description": "Scalable blockchain infrastructure"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "category": "Authentication",
+        "description": "Social login & wallet solution"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "category": "Infrastructure",
+        "description": "Gasless transactions"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "category": "Backend",
+        "description": "Real-time database & authentication"
+      },
+      "openzeppelin": {
+        "name": "OpenZeppelin",
+        "category": "Security",
+        "description": "Smart contract security standards"
+      },
+      "ipfs": {
+        "name": "IPFS",
+        "category": "Storage",
+        "description": "Distributed file storage"
+      }
+    },
+    "standards": {
+      "erc20": "Governance Token",
+      "erc721": "NFT Standard",
+      "erc1155": "Multi-Token",
+      "erc4907": "NFT Rental",
+      "erc2771": "Meta Transaction",
+      "uups": "Upgradeable"
+    }
+  },
+  "roadmap": {
+    "title": "Roadmap",
+    "subtitle": "The AlmaNEO Journey",
+    "tag": "Roadmap",
+    "titleHighlight": "Journey",
+    "titleSuffix": " Roadmap",
+    "subtitleFull": "Step-by-step plan towards AI democratization",
+    "legend": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "upcoming": "Upcoming"
+    },
+    "phases": {
+      "foundation": {
+        "title": "Foundation",
+        "period": "H1 2025",
+        "items": {
+          "whitepaper": "Whitepaper v3.0 Complete",
+          "contracts": "Smart Contract Development (Token, SBT, Staking)",
+          "legal": "Foundation Establishment & Legal Review",
+          "community": "Initial Community Formation"
+        }
+      },
+      "testnet": {
+        "title": "Testnet & Community",
+        "period": "H2 2025",
+        "items": {
+          "deployment": "Polygon Amoy Testnet Deployment",
+          "audit": "Smart Contract Security Audit",
+          "aiHub": "AI Hub Alpha Testing",
+          "kindness": "Kindness Protocol Beta"
+        }
+      },
+      "tge": {
+        "title": "TGE & Mainnet",
+        "period": "Q1 2026",
+        "items": {
+          "tge": "TGE (Token Generation Event)",
+          "mainnet": "Polygon Mainnet Launch",
+          "dex": "DEX Listing (Uniswap, QuickSwap)",
+          "aiHubLaunch": "AlmaNEO AI Hub Official Launch"
+        }
+      },
+      "expansion": {
+        "title": "Ecosystem Expansion",
+        "period": "Q2-Q3 2026",
+        "items": {
+          "mining": "Kindness Mining Start",
+          "depin": "1,000 DePIN Nodes",
+          "gaii": "GAII Dashboard Public Release",
+          "airdrop": "Global South Airdrop"
+        }
+      },
+      "expo": {
+        "title": "1st Kindness Expo",
+        "period": "Q4 2026",
+        "items": {
+          "event": "First Offline Community Event",
+          "university": "AlmaNEO University Beta",
+          "partners": "10+ Impact Partners",
+          "report": "Annual Report Publication"
+        }
+      },
+      "global": {
+        "title": "Global Expansion & DAO",
+        "period": "2027+",
+        "items": {
+          "dao": "Council Launch, DAO Transition",
+          "users": "1 Million Users Milestone",
+          "kinfri": "KINFRI Pilot Launch",
+          "decentralized": "Fully Decentralized Self-sustaining Ecosystem"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Have questions?",
+    "tag": "FAQ",
+    "titlePrefix": "Frequently Asked ",
+    "titleHighlight": "Questions",
+    "subtitleFull": "Find answers to common questions about AlmaNEO",
+    "categoryLabel": "Categories:",
+    "contactCta": "Can't find what you're looking for?",
+    "contactMessage": "Contact us at",
+    "categories": {
+      "general": "General",
+      "token": "Token",
+      "technology": "Technology",
+      "nft": "NFT",
+      "participation": "Participation"
+    },
+    "items": {
+      "whatIsAlmaNEO": {
+        "category": "General",
+        "question": "What is AlmaNEO?",
+        "answer": "AlmaNEO is a project that addresses AI inequality and embodies the value of \"Jeong (情)\" in blockchain. Through three core solutions—Global AI Inequality Index (GAII), AI Hub, and Kindness Protocol—we're building a world where all 8 billion humans can benefit from AI."
+      },
+      "whatIsJeong": {
+        "category": "General",
+        "question": "What is \"Jeong (情)\"?",
+        "answer": "Jeong is a uniquely Korean concept that goes beyond simple kindness. It represents deep bonds and unspoken understanding built over time. AlmaNEO digitalizes and rewards this value of Jeong through the Kindness Protocol."
+      },
+      "totalSupply": {
+        "category": "Token",
+        "question": "What is the total supply of ALMAN tokens?",
+        "answer": "The total supply of ALMAN tokens is 8 billion. This symbolizes Earth's 8 billion people and embodies the philosophy of \"1 token per person.\" Tokens are issued on the Polygon network following the ERC-20 standard."
+      },
+      "howToGetToken": {
+        "category": "Token",
+        "question": "How can I get ALMAN tokens?",
+        "answer": "1) Mine through Tap-to-Earn in Kindness Game 2) Participate in airdrops (based on kindness activities) 3) Staking rewards 4) Purchase on DEX/CEX in the future. Initially, gaming and airdrops are the main ways to earn."
+      },
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "Which blockchain do you use?",
+        "answer": "AlmaNEO uses the Polygon network. Polygon offers Ethereum compatibility, low gas fees, and fast transactions, enabling Global South users to participate without burden."
+      },
+      "noWallet": {
+        "category": "Technology",
+        "question": "Can I participate without a wallet?",
+        "answer": "Yes! You can log in directly with Google, Facebook, X, and other social accounts through Web3Auth. No wallet setup or seed phrase management required, and with Biconomy integration, most transactions are gas-free."
+      },
+      "whatIsJeongSBT": {
+        "category": "NFT",
+        "question": "What is Jeong-SBT?",
+        "answer": "Jeong-SBT is a non-transferable Soulbound Token that records your Kindness Score. It grows through 4 tiers (Seed → Sprout → Tree → Forest), with higher tiers receiving benefits like NFT fee discounts and staking bonuses."
+      },
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "What are the NFT marketplace features?",
+        "answer": "1) Gas-free (Biconomy integration) 2) Up to 50% fee discount for Jeong-SBT holders 3) Additional 5% discount for ALMAN token payments 4) NFT rental support (ERC-4907/5006) 5) Multiple payment options (POL, USDC, ALMAN)"
+      },
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "How does staking work?",
+        "answer": "Deposit ALMAN tokens to earn 5-18% annual rewards. Divided into 4 tiers (30/90/180/365 days), with additional bonuses based on your Jeong-SBT tier. Staked tokens also grant governance voting rights."
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "What is the Kindness Game?",
+        "answer": "A Tap-to-Earn game where you mine ALMAN tokens by tapping the screen. Features include daily quests, upgrade systems, and leaderboard competition. 800 million ALMAN (10% of total supply) is allocated to the mining pool."
+      }
+    }
+  },
+  "cta": {
+    "title": "Let's Begin Together",
+    "subtitle": "Join the journey of AI democratization",
+    "button": "Get Started Now",
+    "description": "Your participation changes the world. Join the AlmaNEO community today."
+  }
+}

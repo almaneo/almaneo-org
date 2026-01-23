@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "ទំព័រដើម",
+    "dashboard": "ផ្ទាំងគ្រប់គ្រង",
+    "platform": "វេទិកា",
+    "ecosystem": "អេកូស៊ីស្តេម",
+    "community": "សហគមន៍",
+    "gaii": "ផ្ទាំងគ្រប់គ្រង GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "ពិធីការសប្បុរស",
+    "staking": "ការដាក់ភាគហ៊ុន",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "ផ្សារ NFT",
+    "kindnessGame": "ហ្គេមសប្បុរស",
+    "governance": "អភិបាលកិច្ច",
+    "docs": "ឯកសារ",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Whitepaper"
+  },
+  "wallet": {
+    "connect": "ភ្ជាប់កាបូប",
+    "disconnect": "ផ្ដាច់",
+    "connected": "បានភ្ជាប់",
+    "copyAddress": "ចម្លងអាសយដ្ឋាន",
+    "viewExplorer": "មើលនៅ Explorer",
+    "balance": "សមតុល្យ"
+  },
+  "common": {
+    "loading": "កំពុងផ្ទុក...",
+    "error": "មានកំហុសកើតឡើង",
+    "retry": "ព្យាយាមម្តងទៀត",
+    "save": "រក្សាទុក",
+    "cancel": "បោះបង់",
+    "confirm": "បញ្ជាក់",
+    "close": "បិទ",
+    "learnMore": "ស្វែងយល់បន្ថែម",
+    "getStarted": "ចាប់ផ្តើម",
+    "comingSoon": "មកដល់ឆាប់ៗនេះ",
+    "viewAll": "មើលទាំងអស់",
+    "back": "ថយក្រោយ",
+    "next": "បន្ទាប់",
+    "previous": "មុន",
+    "submit": "ដាក់ស្នើ",
+    "success": "ជោគជ័យ",
+    "failed": "បរាជ័យ"
+  },
+  "kindnessMode": {
+    "title": "របៀបសប្បុរស",
+    "on": "បើក",
+    "off": "បិទ",
+    "description": "ពន្យល់ពាក្យ Web3 ស្មុគស្មាញជាភាសាសាមញ្ញ"
+  },
+  "footer": {
+    "tagline": "កូដត្រជាក់ ព្រលឹងកក់ក្តៅ",
+    "copyright": "© 2025 AlmaNEO Foundation រក្សាសិទ្ធិគ្រប់យ៉ាង។",
+    "platform": "វេទិកា",
+    "resources": "ធនធាន",
+    "community": "សហគមន៍",
+    "legal": "ច្បាប់",
+    "privacy": "គោលការណ៍ឯកជនភាព",
+    "terms": "លក្ខខណ្ឌសេវាកម្ម"
+  },
+  "language": {
+    "select": "ជ្រើសរើសភាសា",
+    "current": "ភាសាបច្ចុប្បន្ន"
+  }
+}

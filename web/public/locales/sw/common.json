@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Nyumbani",
+    "dashboard": "Dashibodi",
+    "platform": "Jukwaa",
+    "ecosystem": "Mfumo wa Ikolojia",
+    "community": "Jamii",
+    "gaii": "Dashibodi ya GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Itifaki ya Upole",
+    "staking": "Kuweka Hisa",
+    "airdrop": "Usambazaji wa Bure",
+    "nftMarketplace": "Soko la NFT",
+    "kindnessGame": "Mchezo wa Upole",
+    "governance": "Utawala",
+    "docs": "Nyaraka",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Whitepaper"
+  },
+  "wallet": {
+    "connect": "Unganisha Pochi",
+    "disconnect": "Tengua",
+    "connected": "Imeunganishwa",
+    "copyAddress": "Nakili Anwani",
+    "viewExplorer": "Tazama kwenye Explorer",
+    "balance": "Salio"
+  },
+  "common": {
+    "loading": "Inapakia...",
+    "error": "Hitilafu imetokea",
+    "retry": "Jaribu tena",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "confirm": "Thibitisha",
+    "close": "Funga",
+    "learnMore": "Jifunze zaidi",
+    "getStarted": "Anza",
+    "comingSoon": "Inakuja hivi karibuni",
+    "viewAll": "Tazama zote",
+    "back": "Rudi",
+    "next": "Ifuatayo",
+    "previous": "Iliyotangulia",
+    "submit": "Wasilisha",
+    "success": "Imefanikiwa",
+    "failed": "Imeshindwa"
+  },
+  "kindnessMode": {
+    "title": "Hali ya Upole",
+    "on": "Imewashwa",
+    "off": "Imezimwa",
+    "description": "Inaeleza maneno magumu ya Web3 kwa lugha rahisi"
+  },
+  "footer": {
+    "tagline": "Msimbo Baridi, Roho ya Joto",
+    "copyright": "© 2025 AlmaNEO Foundation. Haki zote zimehifadhiwa.",
+    "platform": "Jukwaa",
+    "resources": "Rasilimali",
+    "community": "Jamii",
+    "legal": "Kisheria",
+    "privacy": "Sera ya Faragha",
+    "terms": "Masharti ya Huduma"
+  },
+  "language": {
+    "select": "Chagua lugha",
+    "current": "Lugha ya sasa"
+  }
+}

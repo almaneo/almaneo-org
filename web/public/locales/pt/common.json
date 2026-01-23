@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "platform": "Plataforma",
+    "ecosystem": "Ecossistema",
+    "community": "Comunidade",
+    "gaii": "Painel GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Protocolo de Bondade",
+    "staking": "Staking",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "Mercado NFT",
+    "kindnessGame": "Jogo da Bondade",
+    "governance": "Governança",
+    "docs": "Documentação",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Whitepaper"
+  },
+  "wallet": {
+    "connect": "Conectar Carteira",
+    "disconnect": "Desconectar",
+    "connected": "Conectado",
+    "copyAddress": "Copiar Endereço",
+    "viewExplorer": "Ver no Explorer",
+    "balance": "Saldo"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Ocorreu um erro",
+    "retry": "Tentar novamente",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "learnMore": "Saiba mais",
+    "getStarted": "Começar",
+    "comingSoon": "Em breve",
+    "viewAll": "Ver tudo",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "success": "Sucesso",
+    "failed": "Falhou"
+  },
+  "kindnessMode": {
+    "title": "Modo Bondade",
+    "on": "Ativado",
+    "off": "Desativado",
+    "description": "Explica termos Web3 complexos em linguagem simples"
+  },
+  "footer": {
+    "tagline": "Código Frio, Alma Quente",
+    "copyright": "© 2025 AlmaNEO Foundation. Todos os direitos reservados.",
+    "platform": "Plataforma",
+    "resources": "Recursos",
+    "community": "Comunidade",
+    "legal": "Legal",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço"
+  },
+  "language": {
+    "select": "Selecionar idioma",
+    "current": "Idioma atual"
+  }
+}

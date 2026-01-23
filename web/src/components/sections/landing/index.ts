@@ -1,0 +1,12 @@
+export { ProblemSection } from './ProblemSection';
+export { PhilosophySection } from './PhilosophySection';
+export { SolutionSection } from './SolutionSection';
+export { TokenomicsSection } from './TokenomicsSection';
+export { EcosystemSection } from './EcosystemSection';
+export { Web3AuthSection } from './Web3AuthSection';
+export { TeamSection } from './TeamSection';
+export { PartnersSection } from './PartnersSection';
+export { RoadmapSection } from './RoadmapSection';
+export { FAQSection } from './FAQSection';
+export { CTASection } from './CTASection';
+export { Footer } from './Footer';

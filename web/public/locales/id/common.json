@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "dashboard": "Dasbor",
+    "platform": "Platform",
+    "ecosystem": "Ekosistem",
+    "community": "Komunitas",
+    "gaii": "Dasbor GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Protokol Kebaikan",
+    "staking": "Staking",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "Pasar NFT",
+    "kindnessGame": "Game Kebaikan",
+    "governance": "Tata Kelola",
+    "docs": "Dokumentasi",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Whitepaper"
+  },
+  "wallet": {
+    "connect": "Hubungkan Dompet",
+    "disconnect": "Putuskan",
+    "connected": "Terhubung",
+    "copyAddress": "Salin Alamat",
+    "viewExplorer": "Lihat di Explorer",
+    "balance": "Saldo"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "retry": "Coba lagi",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "close": "Tutup",
+    "learnMore": "Pelajari lebih lanjut",
+    "getStarted": "Mulai",
+    "comingSoon": "Segera hadir",
+    "viewAll": "Lihat semua",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "submit": "Kirim",
+    "success": "Berhasil",
+    "failed": "Gagal"
+  },
+  "kindnessMode": {
+    "title": "Mode Kebaikan",
+    "on": "Aktif",
+    "off": "Nonaktif",
+    "description": "Menjelaskan istilah Web3 yang rumit dengan bahasa sederhana"
+  },
+  "footer": {
+    "tagline": "Kode Dingin, Jiwa Hangat",
+    "copyright": "© 2025 AlmaNEO Foundation. Hak cipta dilindungi.",
+    "platform": "Platform",
+    "resources": "Sumber Daya",
+    "community": "Komunitas",
+    "legal": "Legal",
+    "privacy": "Kebijakan Privasi",
+    "terms": "Ketentuan Layanan"
+  },
+  "language": {
+    "select": "Pilih bahasa",
+    "current": "Bahasa saat ini"
+  }
+}

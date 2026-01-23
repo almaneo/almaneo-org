@@ -1,0 +1,439 @@
+{
+  "hero": {
+    "title": "Kod Sejuk, Jiwa Hangat",
+    "subtitle": "Membawa teknologi AI kepada semua orang secara adil",
+    "description": "AlmaNEO adalah platform Web3 yang menyelesaikan ketidaksamaan AI berdasarkan falsafah 'Jeong (情)'. Kami membina dunia di mana 8 bilion manusia boleh mendapat manfaat daripada AI.",
+    "cta": {
+      "joinMovement": "Sertai Gerakan",
+      "learnMore": "Ketahui Lebih",
+      "whitepaper": "Baca Whitepaper"
+    },
+    "stats": {
+      "totalSupply": "Jumlah Bekalan",
+      "forHumans": "Untuk 8 Bilion Manusia",
+      "countries": "Negara Disokong",
+      "communityMembers": "Ahli Komuniti"
+    }
+  },
+  "problem": {
+    "title": "AI Tidak Adil Sekarang",
+    "subtitle": "Keadaan Ketidaksamaan AI Global",
+    "description": "Jurang AI antara negara maju dan membangun terus melebar. Ini bukan masalah teknologi—ia masalah akses.",
+    "cards": {
+      "developed": {
+        "title": "Negara Maju",
+        "subtitle": "AI dalam kehidupan seharian",
+        "result": "Peningkatan produktiviti 40%"
+      },
+      "globalSouth": {
+        "title": "Negara Membangun",
+        "subtitle": "Kos AI = 10-30% pendapatan bulanan",
+        "result": "Jurang semakin melebar"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "AI menyusun jadual hari ini",
+        "afternoon": "AI membantu menulis laporan",
+        "evening": "AI mencadangkan kandungan"
+      },
+      "globalSouth": {
+        "morning": "Input data manual",
+        "afternoon": "Tugas berulang tanpa henti",
+        "evening": "Akses maklumat terhad"
+      }
+    },
+    "timeLabels": {
+      "morning": "Pagi",
+      "afternoon": "Tengahari",
+      "evening": "Malam"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "Sumber pengkomputeran AI tertumpu di 1% teratas"
+      },
+      "stat2": {
+        "value": "$20/bulan",
+        "label": "Kos langganan AI (10-30% pendapatan di Negara Membangun)"
+      },
+      "stat3": {
+        "value": "90%",
+        "label": "Data latihan AI dalam bahasa Inggeris"
+      },
+      "stat4": {
+        "value": "72",
+        "label": "Negara Global South dengan akses AI terhad"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "Falsafah Jeong",
+    "subtitle": "Nilai Teras Kami",
+    "description": "AlmaNEO menyelesaikan ketidaksamaan AI berdasarkan falsafah 'Jeong (情)'.",
+    "jeong": "Jeong (情)",
+    "jeongCard": {
+      "title": "Apa itu 'Jeong (情)'?",
+      "description1": "Konsep emosi khas Korea",
+      "description2": "Bukan sekadar kebaikan—ia kehangatan mendalam yang terbentuk melalui masa dan pengalaman bersama.",
+      "footer": "Manusia ",
+      "footerHighlight": "8 bilion",
+      "footerEnd": " bersama dalam kehangatan"
+    },
+    "principles": {
+      "people": {
+        "title": "Untuk Semua Orang",
+        "description": "Melampaui keuntungan dan kecekapan, mengutamakan kemanusiaan"
+      },
+      "individual": {
+        "title": "Menghargai Setiap Individu",
+        "description": "Kejayaan diukur daripada kehidupan sebenar yang berubah"
+      },
+      "human": {
+        "title": "Kemanusiaan Pertama",
+        "description": "Teknologi dan falsafah mencipta dunia yang lebih baik bersama"
+      }
+    }
+  },
+  "solution": {
+    "title": "Penyelesaian Kami",
+    "subtitle": "3 Penyelesaian Teras",
+    "description": "Indeks GAII, AI Hub, dan Protokol Kebaikan untuk mengatasi ketidaksamaan AI global",
+    "solutions": {
+      "gaii": {
+        "title": "Indeks GAII",
+        "subtitle": "Indeks Ketidaksamaan AI Global",
+        "description": "Mengukur dan menggambarkan ketidaksamaan AI global secara masa nyata",
+        "items": {
+          "item1": "Papan pemuka masa nyata ketidaksamaan AI 100+ negara",
+          "item2": "Indeks berdasarkan data telus",
+          "item3": "Mengenal pasti masalah dan mencari penyelesaian"
+        }
+      },
+      "aiHub": {
+        "title": "AlmaNEO AI Hub",
+        "subtitle": "Platform Akses AI Terdesentralisasi",
+        "description": "Platform terdesentralisasi di mana sesiapa boleh mengakses perkhidmatan AI secara percuma",
+        "items": {
+          "item1": "Akses AI percuma melalui rangkaian DePIN",
+          "item2": "Ganjaran token untuk perkongsian sumber",
+          "item3": "Sokongan berbilang bahasa (14+ bahasa)"
+        }
+      },
+      "kindness": {
+        "title": "Protokol Kebaikan",
+        "subtitle": "Bukti Kemanusiaan",
+        "description": "Mekanisme konsensus baru yang membuktikan dan memberi ganjaran tindakan kebaikan",
+        "items": {
+          "item1": "NFT Jeong-SBT yang membuktikan kebaikan",
+          "item2": "Ganjaran berdasarkan sumbangan",
+          "item3": "Peningkatan kebaikan yang boleh diukur"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "Tokenomik",
+    "subtitle": "Token ALMAN",
+    "totalSupply": "Jumlah Bekalan",
+    "forHumans": "Manusia, Token",
+    "forHumansCount": "8 Bilion",
+    "tokenInfo": {
+      "token": "Token",
+      "network": "Rangkaian",
+      "standard": "Standard",
+      "supply": "Bekalan",
+      "forAll": "Untuk Semua",
+      "forAllValue": "8 Bilion Manusia"
+    },
+    "distribution": {
+      "title": "Pengagihan Token",
+      "community": "Komuniti & Ekosistem",
+      "foundation": "Rizab Yayasan",
+      "liquidity": "Kecairan & Bursa",
+      "team": "Pasukan & Penasihat",
+      "grants": "Kindness Expo & Geran"
+    },
+    "utility": {
+      "title": "Utiliti Token",
+      "governance": "Undian Tadbir Urus",
+      "staking": "Ganjaran Staking",
+      "access": "Akses AI Hub",
+      "fees": "Diskaun Yuran"
+    }
+  },
+  "ecosystem": {
+    "title": "Ekosistem",
+    "subtitle": "Terokai Ekosistem AlmaNEO",
+    "staking": {
+      "title": "Staking",
+      "description": "Stake token ALMAN dan dapatkan 5-18% APY. Ganjaran lebih tinggi berdasarkan Skor Kebaikan anda.",
+      "apy": "Sehingga 18% APY",
+      "info": "Pengganda Skor Kebaikan"
+    },
+    "airdrop": {
+      "title": "Airdrop",
+      "description": "Sertai aktiviti kebaikan dan terima token ALMAN percuma. Pengagihan adil melalui airdrop berasaskan tugasan.",
+      "reward": "Ganjaran Berasaskan Tugasan",
+      "info": "Pengagihan Adil"
+    },
+    "nft": {
+      "title": "Pasaran NFT",
+      "description": "Dagang Jeong-SBT dan Lencana Kebaikan. Transaksi tanpa gas dan royalti pencipta disokong.",
+      "feature": "Tiada Yuran Gas",
+      "info": "Royalti Pencipta"
+    },
+    "game": {
+      "title": "Permainan Kebaikan",
+      "description": "Amalkan kebaikan sambil berseronok dan dapatkan token. Penyertaan mudah dengan mekanik Tap-to-Earn.",
+      "mechanism": "Tap-to-Earn",
+      "info": "Sedang Dalam Pembangunan"
+    }
+  },
+  "web3auth": {
+    "title": "Permulaan Mudah",
+    "subtitle": "Mulakan dengan mudah menggunakan Web3Auth",
+    "loginDemo": {
+      "title": "Log Masuk ke AlmaNEO",
+      "description": "Mulakan tanpa dompet menggunakan akaun sosial",
+      "or": "atau",
+      "connectWallet": "Sambung Dompet"
+    },
+    "benefits": {
+      "social": {
+        "title": "Log Masuk Sosial",
+        "description": "Mulakan segera dengan Google, Facebook, atau Twitter. Tidak perlu tetapan dompet yang rumit."
+      },
+      "secure": {
+        "title": "Selamat",
+        "description": "Pengurusan kunci terdesentralisasi melalui MPC. Kunci peribadi dienkripsi dan diedarkan dengan selamat."
+      },
+      "gasless": {
+        "title": "Tanpa Gas",
+        "description": "Pengguna baru boleh bertransaksi tanpa yuran gas. Kami yang tanggung melalui Biconomy Paymaster."
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "< 30 saat",
+        "label": "Masa Pendaftaran"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "Kos Awal"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "Pemilikan Aset"
+      }
+    }
+  },
+  "team": {
+    "title": "Pasukan Kami",
+    "subtitle": "Orang di sebalik AlmaNEO",
+    "coreTeam": "Pasukan Teras",
+    "advisors": "Penasihat",
+    "joinCta": "Sertai pasukan kami untuk menerajui pendemokrasian AI.",
+    "contactMessage": "Hubungi: team@almaneo.org",
+    "roles": {
+      "founder": "Pengasas & CEO",
+      "cto": "CTO",
+      "coo": "COO",
+      "communityLead": "Ketua Komuniti",
+      "advisorBlockchain": "Penasihat Blockchain",
+      "advisorAI": "Penasihat AI"
+    },
+    "members": {
+      "alex": {
+        "name": "Alex Kim",
+        "description": "Bekas ketua pasukan blockchain di syarikat teknologi besar"
+      },
+      "sarah": {
+        "name": "Sarah Park",
+        "description": "10+ tahun pengalaman pembangunan sistem teragih"
+      },
+      "david": {
+        "name": "David Lee",
+        "description": "Pakar strategi dan operasi syarikat permulaan"
+      },
+      "emily": {
+        "name": "Emily Chen",
+        "description": "Pengalaman pembangunan komuniti Web3 global"
+      },
+      "michael": {
+        "name": "Dr. Michael Wang",
+        "description": "Bekas ketua penyelidikan blockchain, penyumbang Ethereum"
+      },
+      "jennifer": {
+        "name": "Dr. Jennifer Liu",
+        "description": "Profesor AI universiti terkemuka, pakar Etika AI"
+      }
+    }
+  },
+  "partners": {
+    "title": "Rakan Kongsi & Teknologi",
+    "subtitle": "Syarikat dan stack teknologi yang kami bekerjasama",
+    "technology": "Rakan Kongsi Teknologi",
+    "standards": "Standard Disokong",
+    "blockchainStandards": "Standard Blockchain",
+    "partnershipCta": "Berminat untuk bekerjasama?",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "description": "Rangkaian blockchain utama"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "description": "Backend dan pengesahan"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "description": "Transaksi tanpa gas"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "description": "Log masuk sosial"
+      }
+    }
+  },
+  "roadmap": {
+    "title": "Peta Jalan",
+    "subtitle": "Perjalanan AlmaNEO",
+    "legend": {
+      "completed": "Selesai",
+      "inProgress": "Sedang Berjalan",
+      "upcoming": "Akan Datang"
+    },
+    "phases": {
+      "foundation": {
+        "title": "Asas",
+        "period": "H1 2025",
+        "items": {
+          "whitepaper": "Pelepasan Whitepaper",
+          "contracts": "Pembangunan smart contract",
+          "design": "Reka bentuk UI/UX",
+          "testnet": "Pelancaran testnet"
+        }
+      },
+      "testnet": {
+        "title": "Testnet & Komuniti",
+        "period": "H2 2025",
+        "items": {
+          "beta": "Ujian beta peribadi",
+          "community": "Program pembina komuniti",
+          "audit": "Audit keselamatan",
+          "partners": "Kerjasama strategik"
+        }
+      },
+      "tge": {
+        "title": "TGE & Mainnet",
+        "period": "S1 2026",
+        "items": {
+          "tge": "Token Generation Event",
+          "mainnet": "Pelancaran mainnet",
+          "staking": "Pelancaran staking",
+          "governance": "Pengaktifan governance"
+        }
+      },
+      "expansion": {
+        "title": "Pengembangan Ekosistem",
+        "period": "S2-S3 2026",
+        "items": {
+          "aihub": "Pelancaran AI Hub",
+          "nft": "Pembukaan pasaran NFT",
+          "mobile": "Pembangunan aplikasi mudah alih",
+          "depin": "Pengembangan rangkaian DePIN"
+        }
+      },
+      "expo": {
+        "title": "Kindness Expo Pertama",
+        "period": "S4 2026",
+        "items": {
+          "expo": "Persidangan tahunan pertama",
+          "grants": "Pengumuman penerima geran",
+          "dao": "Peralihan governance DAO penuh",
+          "report": "Pelepasan laporan tahunan"
+        }
+      },
+      "global": {
+        "title": "Pengembangan Global & DAO",
+        "period": "2027+",
+        "items": {
+          "globalExpansion": "Pengembangan serantau",
+          "daoGovernance": "Operasi autonomi DAO",
+          "research": "Program pendanaan penyelidikan AI",
+          "un": "Kerjasama dengan UN SDGs"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "Soalan Lazim",
+    "subtitle": "Ada soalan?",
+    "categoryLabel": "Kategori",
+    "contactCta": "Ada soalan lain? Hubungi kami di support@almaneo.org",
+    "categories": {
+      "all": "Semua",
+      "general": "Am",
+      "token": "Token",
+      "technical": "Teknikal"
+    },
+    "items": {
+      "whatIs": {
+        "question": "Apakah AlmaNEO?",
+        "answer": "AlmaNEO adalah platform Web3 yang direka untuk menyelesaikan ketidaksamaan AI. Berdasarkan budaya Korea 'Jeong (情)', ia bertujuan memastikan 8 bilion orang di seluruh dunia boleh mendapat manfaat sama rata daripada teknologi AI.",
+        "category": "general"
+      },
+      "whatIsJeong": {
+        "question": "Apakah 'Jeong (情)'?",
+        "answer": "'Jeong' adalah konsep Korea yang unik tentang ikatan emosi. Ia bukan sekadar kebaikan—ia mewakili hubungan yang mendalam dan hati yang hangat.",
+        "category": "general"
+      },
+      "whatIsGAII": {
+        "question": "Apakah Indeks GAII?",
+        "answer": "GAII (Global AI Inequality Index) adalah indeks yang mengukur ketidaksamaan AI global secara masa nyata. Ia mempertimbangkan akses AI, kos, infrastruktur, dan faktor lain untuk menilai keadilan AI di setiap negara.",
+        "category": "general"
+      },
+      "tokenUtility": {
+        "question": "Untuk apa token ALMAN boleh digunakan?",
+        "answer": "Token ALMAN boleh digunakan untuk undian tadbir urus, ganjaran staking, akses AI Hub, diskaun yuran, pembelian NFT dan banyak lagi.",
+        "category": "token"
+      },
+      "howToBuy": {
+        "question": "Bagaimana untuk mendapatkan token ALMAN?",
+        "answer": "Selepas TGE (Token Generation Event), token ALMAN akan tersedia di DEX dan CEX. Anda juga boleh mendapatkannya melalui staking, airdrop, dan permainan ekosistem.",
+        "category": "token"
+      },
+      "howToStart": {
+        "question": "Bagaimana untuk bermula?",
+        "answer": "Hanya log masuk dengan akaun Google, Facebook, atau media sosial lain melalui Web3Auth. Anda boleh bermula segera tanpa tetapan dompet yang rumit. Transaksi awal tanpa yuran gas!",
+        "category": "technical"
+      },
+      "isSafe": {
+        "question": "Adakah ia selamat?",
+        "answer": "Ya, semua kontrak pintar kami dibina dengan corak UUPS yang boleh ditingkatkan menggunakan OpenZeppelin 5.x. Audit keselamatan dilakukan sebelum pelepasan mainnet, dan kami terus meningkatkan perlindungan keselamatan.",
+        "category": "technical"
+      },
+      "whatIsJeongSBT": {
+        "question": "Apakah Jeong-SBT?",
+        "answer": "Jeong-SBT (Soulbound Token) adalah NFT yang tidak boleh dipindahkan yang membuktikan tindakan kebaikan anda. Semakin banyak kebaikan, semakin tinggi tier anda, dan semakin besar manfaat dalam ekosistem.",
+        "category": "technical"
+      },
+      "supportedLanguages": {
+        "question": "Bahasa apa yang disokong?",
+        "answer": "AlmaNEO menyokong 14 bahasa: Korea, Inggeris, Cina, Jepun, Sepanyol, Perancis, Arab, Portugis, Indonesia, Melayu, Thai, Vietnam, Khmer, dan Swahili. Kami terus menambah bahasa untuk menyokong lebih banyak Global South.",
+        "category": "general"
+      },
+      "howToContribute": {
+        "question": "Bagaimana untuk menyumbang kepada projek?",
+        "answer": "Anda boleh menyumbang melalui aktiviti kebaikan, pembangunan komuniti, pembangunan sumber terbuka, dan banyak lagi. Sertai Discord kami dan temui pelbagai cara untuk menyumbang!",
+        "category": "general"
+      }
+    }
+  },
+  "cta": {
+    "title": "Jom Mula Bersama",
+    "description": "Penyertaan anda mengubah dunia. Sertai komuniti AlmaNEO hari ini.",
+    "button": "Mula Sekarang"
+  }
+}

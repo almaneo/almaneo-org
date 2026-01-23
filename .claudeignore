@@ -1,0 +1,23 @@
+# Node modules
+**/node_modules/**
+node_modules/
+
+# Build outputs
+**/dist/**
+**/build/**
+**/.next/**
+**/out/**
+
+# Cache directories
+**/cache/**
+**/.cache/**
+**/artifacts/**
+
+# Firebase
+**/.firebase/**
+
+# OpenZeppelin
+**/.openzeppelin/**
+
+# Large reference files
+reference/**

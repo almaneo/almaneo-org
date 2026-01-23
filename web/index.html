@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>AlmaNEO | Cold Code, Warm Soul</title>
+    <meta name="title" content="AlmaNEO | Cold Code, Warm Soul" />
+    <meta name="description" content="AI democratization platform - 기술의 차가움 위에 인간의 따뜻함을 더하여, 모두를 위한 AI 세상을 만듭니다. Join the movement." />
+    <meta name="keywords" content="ALMAN, AlmaNEO, AI, Blockchain, Web3, Kindness Protocol, GAII, Jeong, 정" />
+    <meta name="author" content="AlmaNEO Team" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://almaneo.foundation/" />
+    <meta property="og:title" content="AlmaNEO | Cold Code, Warm Soul" />
+    <meta property="og:description" content="AI democratization platform - 기술의 차가움 위에 인간의 따뜻함을 더하여, 모두를 위한 AI 세상을 만듭니다." />
+    <meta property="og:image" content="/og-image.webp" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://almaneo.foundation/" />
+    <meta property="twitter:title" content="AlmaNEO | Cold Code, Warm Soul" />
+    <meta property="twitter:description" content="AI democratization platform - 기술의 차가움 위에 인간의 따뜻함을 더하여, 모두를 위한 AI 세상을 만듭니다." />
+    <meta property="twitter:image" content="/og-image.webp" />
+
+    <!-- Fonts: Inter + Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Node.js polyfills - must load before any modules -->
+    <script>
+      // process polyfill with nextTick that has bind method
+      if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
+        window.process = {
+          env: {},
+          browser: true,
+          version: '',
+          platform: 'browser',
+          nextTick: function(fn) { setTimeout(fn, 0); },
+          cwd: function() { return '/'; }
+        };
+      }
+      // global polyfill
+      if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
+        window.global = window;
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

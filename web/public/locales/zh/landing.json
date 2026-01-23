@@ -1,0 +1,471 @@
+{
+  "hero": {
+    "title": "冷酷代码，温暖灵魂",
+    "subtitle": "将AI技术公平地分享给每一个人",
+    "description": "AlmaNEO是基于'情'哲学解决AI不平等问题的Web3平台。我们致力于创建一个80亿人类都能享受AI福利的世界。",
+    "cta": {
+      "joinMovement": "加入我们",
+      "learnMore": "了解更多",
+      "whitepaper": "阅读白皮书"
+    },
+    "stats": {
+      "totalSupply": "总供应量",
+      "forHumans": "为80亿人类",
+      "countries": "支持国家",
+      "communityMembers": "社区成员"
+    }
+  },
+  "problem": {
+    "title": "问题认识",
+    "subtitle": "全球AI不平等",
+    "description": "发达国家与发展中国家之间的AI差距正在扩大",
+    "cards": {
+      "developed": {
+        "title": "发达国家青年A",
+        "subtitle": "AI订阅费 = 4杯咖啡",
+        "result": "无限可能 ✨"
+      },
+      "globalSouth": {
+        "title": "全球南方青年B",
+        "subtitle": "AI订阅费 = 月生活费的30%",
+        "result": "机会之门紧闭 😔"
+      }
+    },
+    "activities": {
+      "developed": {
+        "morning": "用ChatGPT修改简历",
+        "afternoon": "用Copilot编程",
+        "evening": "与AI导师学习"
+      },
+      "globalSouth": {
+        "morning": "免费版额度用尽",
+        "afternoon": "网速太慢",
+        "evening": "数据标注兼职"
+      }
+    },
+    "timeLabels": {
+      "morning": "☀️ 早晨",
+      "afternoon": "🌤️ 下午",
+      "evening": "🌙 晚上"
+    },
+    "statistics": {
+      "stat1": {
+        "value": "90%",
+        "label": "AI资源集中于顶层1%"
+      },
+      "stat2": {
+        "value": "$20",
+        "label": "月订阅费负担"
+      },
+      "stat3": {
+        "value": "80%",
+        "label": "投资集中于美中"
+      },
+      "stat4": {
+        "value": "90%",
+        "label": "训练数据为英语"
+      }
+    }
+  },
+  "philosophy": {
+    "title": "核心哲学",
+    "subtitle": "的价值",
+    "description": "从韩国走向世界的温暖哲学",
+    "jeong": "情",
+    "jeongCard": {
+      "title": "情",
+      "description1": "不仅仅是简单的善意。",
+      "description2": "是长时间相处积累的深厚羁绊，是无需言语就能心意相通。",
+      "footer": "情是AI无法替代的",
+      "footerHighlight": "人类独有的价值",
+      "footerEnd": "。"
+    },
+    "principles": {
+      "people": {
+        "title": "看人不看政治",
+        "description": "出生在哪个国家不能决定一个人的价值。"
+      },
+      "individual": {
+        "title": "看个人不看国家",
+        "description": "AlmaNEO关注统计数据忽略的个人努力和希望。"
+      },
+      "human": {
+        "title": "工具是技术，主体是人",
+        "description": "AI只是强大的工具。决定权属于人类。"
+      }
+    }
+  },
+  "solution": {
+    "title": "解决方案",
+    "subtitle": "三大支柱",
+    "description": "支撑AlmaNEO生态系统的核心要素",
+    "solutions": {
+      "gaii": {
+        "title": "GAII",
+        "subtitle": "全球AI不平等指数",
+        "description": "实时测量并公开AI不平等数据",
+        "items": {
+          "item1": "可及性·基础设施测量",
+          "item2": "偏见·机会分析",
+          "item3": "链上数据公开"
+        }
+      },
+      "aiHub": {
+        "title": "AI Hub",
+        "subtitle": "DePIN分布式计算",
+        "description": "无需担心成本的AI平台",
+        "items": {
+          "item1": "免费AI访问",
+          "item2": "多语言优化",
+          "item3": "低配设备支持"
+        }
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "subtitle": "人性证明",
+        "description": "证明并奖励善意的共识机制",
+        "items": {
+          "item1": "善意分数",
+          "item2": "Jeong-SBT",
+          "item3": "多层验证系统"
+        }
+      }
+    }
+  },
+  "tokenomics": {
+    "title": "代币经济",
+    "subtitle": "ALMAN代币",
+    "totalSupply": "总供应量",
+    "forHumans": "人类, 代币",
+    "forHumansCount": "80亿",
+    "tokenInfo": {
+      "token": "代币",
+      "network": "网络",
+      "standard": "标准",
+      "supply": "供应量",
+      "forAll": "面向所有人",
+      "forAllValue": "80亿人类"
+    },
+    "distribution": {
+      "title": "代币分配",
+      "community": "社区与生态系统",
+      "foundation": "基金会储备",
+      "liquidity": "流动性与交易所",
+      "team": "团队与顾问",
+      "grants": "善意博览会与资助"
+    },
+    "utility": {
+      "title": "代币用途",
+      "governance": "治理投票",
+      "staking": "质押奖励",
+      "access": "AI Hub访问",
+      "fees": "费用折扣"
+    }
+  },
+  "ecosystem": {
+    "title": "生态系统",
+    "subtitle": "探索AlmaNEO生态系统",
+    "staking": {
+      "title": "质押",
+      "description": "质押ALMAN代币获得5-18%年化收益。根据善意分数增加奖励。"
+    },
+    "airdrop": {
+      "title": "空投",
+      "description": "参与善意活动获得免费ALMAN代币。通过任务型空投公平分配。"
+    },
+    "nft": {
+      "title": "NFT市场",
+      "description": "交易Jeong-SBT和善意徽章。支持免Gas交易和创作者版税。"
+    },
+    "game": {
+      "title": "善意游戏",
+      "description": "边玩边实践善意并获得代币。Tap-to-Earn方式让每个人都能轻松参与。"
+    }
+  },
+  "web3auth": {
+    "title": "轻松开始",
+    "subtitle": "开始很简单",
+    "loginDemo": {
+      "title": "选择登录方式",
+      "description": "用您喜欢的方式开始",
+      "or": "或者",
+      "connectWallet": "连接已有钱包"
+    },
+    "benefits": {
+      "social": {
+        "title": "社交登录",
+        "description": "无需复杂的助记词，用熟悉的账户即可开始。"
+      },
+      "secure": {
+        "title": "资产安全",
+        "description": "MPC技术安全地分布式保管您的私钥。"
+      },
+      "gasless": {
+        "title": "免Gas费",
+        "description": "通过Biconomy集成免除大部分交易费用。"
+      }
+    },
+    "stats": {
+      "loginTime": {
+        "value": "1秒",
+        "label": "登录时间"
+      },
+      "gasFee": {
+        "value": "$0",
+        "label": "Gas费"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "资产所有权"
+      }
+    }
+  },
+  "team": {
+    "title": "团队介绍",
+    "subtitle": "创造AlmaNEO的人们",
+    "tag": "我们的团队",
+    "titlePrefix": "分享",
+    "titleHighlight": "情",
+    "titleSuffix": "的人们",
+    "coreTeam": "核心团队",
+    "advisors": "顾问",
+    "joinCta": "您认同情的价值吗？",
+    "contactMessage": "请联系",
+    "roles": {
+      "founderCeo": "创始人 & CEO",
+      "cto": "CTO",
+      "headOfProduct": "产品负责人",
+      "headOfCommunity": "社区负责人",
+      "aiEthicsAdvisor": "AI伦理顾问",
+      "globalSouthAdvisor": "全球南方顾问"
+    },
+    "members": {
+      "alexKim": {
+        "name": "Alex Kim",
+        "description": "向世界传播AI民主化和情价值的愿景领导者"
+      },
+      "sarahPark": {
+        "name": "Sarah Park",
+        "description": "区块链和AI系统架构师，10年以上开发经验"
+      },
+      "mikeChen": {
+        "name": "Mike Chen",
+        "description": "UX/UI专家，专注全球南方用户体验优化"
+      },
+      "yunaLee": {
+        "name": "Yuna Lee",
+        "description": "全球社区建设者，多元文化沟通专家"
+      },
+      "jamesWong": {
+        "name": "James Wong博士",
+        "description": "斯坦福AI实验室研究员，AI伦理专家"
+      },
+      "mariaSantos": {
+        "name": "Maria Santos",
+        "description": "联合国可持续发展顾问，发展中国家专家"
+      }
+    }
+  },
+  "partners": {
+    "title": "合作伙伴与技术",
+    "subtitle": "合作企业和技术栈",
+    "tag": "合作伙伴与集成",
+    "titlePrefix": "我们的",
+    "titleHighlight": "合作伙伴",
+    "subtitleFull": "与值得信赖的技术合作伙伴共建安全创新的生态系统",
+    "blockchainStandards": "区块链标准",
+    "partnershipCta": "有兴趣与AlmaNEO合作吗？",
+    "contactMessage": "请联系",
+    "partners": {
+      "polygon": {
+        "name": "Polygon",
+        "category": "区块链",
+        "description": "可扩展的区块链基础设施"
+      },
+      "web3auth": {
+        "name": "Web3Auth",
+        "category": "认证",
+        "description": "社交登录和钱包解决方案"
+      },
+      "biconomy": {
+        "name": "Biconomy",
+        "category": "基础设施",
+        "description": "无Gas交易"
+      },
+      "firebase": {
+        "name": "Firebase",
+        "category": "后端",
+        "description": "实时数据库和认证"
+      },
+      "openzeppelin": {
+        "name": "OpenZeppelin",
+        "category": "安全",
+        "description": "智能合约安全标准"
+      },
+      "ipfs": {
+        "name": "IPFS",
+        "category": "存储",
+        "description": "分布式文件存储"
+      }
+    },
+    "standards": {
+      "erc20": "治理代币",
+      "erc721": "NFT标准",
+      "erc1155": "多代币",
+      "erc4907": "NFT租赁",
+      "erc2771": "元交易",
+      "uups": "可升级"
+    }
+  },
+  "roadmap": {
+    "title": "路线图",
+    "subtitle": "AlmaNEO的旅程",
+    "tag": "路线图",
+    "titleHighlight": "旅程",
+    "titleSuffix": "路线图",
+    "subtitleFull": "迈向AI民主化的分步计划",
+    "legend": {
+      "completed": "已完成",
+      "inProgress": "进行中",
+      "upcoming": "即将推出"
+    },
+    "phases": {
+      "foundation": {
+        "title": "基础建设",
+        "period": "2025上半年",
+        "items": {
+          "whitepaper": "白皮书v3.0完成",
+          "contracts": "智能合约开发（代币、SBT、质押）",
+          "legal": "基金会设立及法律审查",
+          "community": "初期社区形成"
+        }
+      },
+      "testnet": {
+        "title": "测试网与社区",
+        "period": "2025下半年",
+        "items": {
+          "deployment": "Polygon Amoy测试网部署",
+          "audit": "智能合约安全审计",
+          "aiHub": "AI Hub Alpha测试",
+          "kindness": "Kindness Protocol Beta"
+        }
+      },
+      "tge": {
+        "title": "TGE与主网",
+        "period": "2026 Q1",
+        "items": {
+          "tge": "TGE（代币生成事件）",
+          "mainnet": "Polygon主网启动",
+          "dex": "DEX上线（Uniswap、QuickSwap）",
+          "aiHubLaunch": "AlmaNEO AI Hub正式开放"
+        }
+      },
+      "expansion": {
+        "title": "生态系统扩展",
+        "period": "2026 Q2-Q3",
+        "items": {
+          "mining": "善意挖矿开始",
+          "depin": "DePIN节点达1,000个",
+          "gaii": "GAII仪表板公开",
+          "airdrop": "全球南方空投"
+        }
+      },
+      "expo": {
+        "title": "第一届善意博览会",
+        "period": "2026 Q4",
+        "items": {
+          "event": "首次线下社区活动",
+          "university": "AlmaNEO University Beta",
+          "partners": "10+影响力合作伙伴",
+          "report": "年度报告发布"
+        }
+      },
+      "global": {
+        "title": "全球扩展与DAO",
+        "period": "2027+",
+        "items": {
+          "dao": "理事会正式启动，DAO转型",
+          "users": "用户突破100万",
+          "kinfri": "KINFRI试点启动",
+          "decentralized": "完全去中心化自治生态系统"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "常见问题",
+    "subtitle": "有疑问吗？",
+    "tag": "FAQ",
+    "titlePrefix": "常见",
+    "titleHighlight": "问题",
+    "subtitleFull": "了解关于AlmaNEO的常见问题",
+    "categoryLabel": "类别：",
+    "contactCta": "没找到您想要的答案？",
+    "contactMessage": "请联系",
+    "categories": {
+      "general": "一般",
+      "token": "代币",
+      "technology": "技术",
+      "nft": "NFT",
+      "participation": "参与"
+    },
+    "items": {
+      "whatIsAlmaNEO": {
+        "category": "General",
+        "question": "什么是AlmaNEO？",
+        "answer": "AlmaNEO是一个解决AI不平等并将\"情\"价值融入区块链的项目。通过GAII、AI Hub和Kindness Protocol三大核心解决方案，创建一个80亿人类都能享受AI福利的世界。"
+      },
+      "whatIsJeong": {
+        "category": "General",
+        "question": "什么是\"情\"？",
+        "answer": "情是韩国独有的概念，超越简单的善意，代表长时间相处积累的深厚羁绊和无需言语的心意相通。AlmaNEO通过Kindness Protocol将情的价值数字化并给予奖励。"
+      },
+      "totalSupply": {
+        "category": "Token",
+        "question": "ALMAN代币的总供应量是多少？",
+        "answer": "ALMAN代币的总供应量是80亿个。这象征着地球80亿人口，体现了\"每人一枚代币\"的理念。代币在Polygon网络上按ERC-20标准发行。"
+      },
+      "howToGetToken": {
+        "category": "Token",
+        "question": "如何获得ALMAN代币？",
+        "answer": "1）在善意游戏中通过Tap-to-Earn挖矿 2）参与空投（基于善意活动）3）质押奖励 4）未来在DEX/CEX购买。初期主要通过游戏和空投获得。"
+      },
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "使用哪个区块链？",
+        "answer": "AlmaNEO使用Polygon网络。Polygon提供以太坊兼容性、低Gas费和快速交易，使全球南方用户能够无负担地参与。"
+      },
+      "noWallet": {
+        "category": "Technology",
+        "question": "没有钱包也能参与吗？",
+        "answer": "可以！通过Web3Auth可以直接用Google、Facebook、X等社交账户登录。无需钱包设置或助记词管理，Biconomy集成使大多数交易免Gas费。"
+      },
+      "whatIsJeongSBT": {
+        "category": "NFT",
+        "question": "什么是Jeong-SBT？",
+        "answer": "Jeong-SBT是不可转让的灵魂绑定代币，记录用户的善意分数。通过4个等级（种子→萌芽→大树→森林）成长，等级越高，NFT费用折扣和质押奖励等福利越多。"
+      },
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "NFT市场有什么特点？",
+        "answer": "1）免Gas费（Biconomy集成）2）Jeong-SBT持有者最高50%费用折扣 3）ALMAN代币支付额外5%折扣 4）NFT租赁支持（ERC-4907/5006）5）多种支付方式（POL、USDC、ALMAN）"
+      },
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "质押如何运作？",
+        "answer": "质押ALMAN代币可获得5-18%年化奖励。分为4个等级（30/90/180/365天），根据Jeong-SBT等级有额外奖励。质押的代币也有治理投票权。"
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "什么是善意游戏？",
+        "answer": "这是一款Tap-to-Earn游戏，通过点击屏幕挖掘ALMAN代币。包含每日任务、升级系统、排行榜竞争等元素，总共8亿ALMAN（总供应量的10%）分配给挖矿池。"
+      }
+    }
+  },
+  "cta": {
+    "title": "一起开始吧",
+    "subtitle": "加入AI民主化的旅程",
+    "button": "立即开始",
+    "description": "您的参与改变世界。立即加入AlmaNEO社区。"
+  }
+}

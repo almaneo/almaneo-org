@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "platform": "Platform",
+    "ecosystem": "Ecosystem",
+    "community": "Community",
+    "gaii": "GAII Dashboard",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Kindness Protocol",
+    "staking": "Staking",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "NFT Marketplace",
+    "kindnessGame": "Kindness Game",
+    "governance": "Governance",
+    "whitepaper": "Whitepaper",
+    "docs": "Docs",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "copyAddress": "Copy Address",
+    "viewExplorer": "View on Explorer",
+    "balance": "Balance"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "comingSoon": "Coming Soon",
+    "viewAll": "View All",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "success": "Success",
+    "failed": "Failed"
+  },
+  "kindnessMode": {
+    "title": "Kindness Mode",
+    "on": "On",
+    "off": "Off",
+    "description": "Explains complex Web3 terms in simple language"
+  },
+  "footer": {
+    "tagline": "\"Cold Code, Warm Soul\"",
+    "copyright": "© 2026 AlmaNEO Foundation",
+    "contracts": "Verified Smart Contracts on Polygon Amoy",
+    "platform": "Platform",
+    "resources": "Resources",
+    "community": "Community",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "language": {
+    "select": "Select Language",
+    "current": "Current Language"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Utama",
+    "dashboard": "Papan Pemuka",
+    "platform": "Platform",
+    "ecosystem": "Ekosistem",
+    "community": "Komuniti",
+    "gaii": "Papan Pemuka GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Protokol Kebaikan",
+    "staking": "Staking",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "Pasaran NFT",
+    "kindnessGame": "Permainan Kebaikan",
+    "governance": "Tadbir Urus",
+    "docs": "Dokumentasi",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Kertas Putih"
+  },
+  "wallet": {
+    "connect": "Sambung Dompet",
+    "disconnect": "Putuskan",
+    "connected": "Disambung",
+    "copyAddress": "Salin Alamat",
+    "viewExplorer": "Lihat di Explorer",
+    "balance": "Baki"
+  },
+  "common": {
+    "loading": "Memuatkan...",
+    "error": "Ralat berlaku",
+    "retry": "Cuba lagi",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "confirm": "Sahkan",
+    "close": "Tutup",
+    "learnMore": "Ketahui lebih lanjut",
+    "getStarted": "Mulakan",
+    "comingSoon": "Akan datang",
+    "viewAll": "Lihat semua",
+    "back": "Kembali",
+    "next": "Seterusnya",
+    "previous": "Sebelumnya",
+    "submit": "Hantar",
+    "success": "Berjaya",
+    "failed": "Gagal"
+  },
+  "kindnessMode": {
+    "title": "Mod Kebaikan",
+    "on": "Hidup",
+    "off": "Mati",
+    "description": "Menerangkan istilah Web3 yang kompleks dalam bahasa mudah"
+  },
+  "footer": {
+    "tagline": "Kod Sejuk, Jiwa Hangat",
+    "copyright": "© 2025 AlmaNEO Foundation. Hak cipta terpelihara.",
+    "platform": "Platform",
+    "resources": "Sumber",
+    "community": "Komuniti",
+    "legal": "Undang-undang",
+    "privacy": "Dasar Privasi",
+    "terms": "Terma Perkhidmatan"
+  },
+  "language": {
+    "select": "Pilih bahasa",
+    "current": "Bahasa semasa"
+  }
+}

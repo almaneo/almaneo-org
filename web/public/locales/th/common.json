@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "หน้าแรก",
+    "dashboard": "แดชบอร์ด",
+    "platform": "แพลตฟอร์ม",
+    "ecosystem": "ระบบนิเวศ",
+    "community": "ชุมชน",
+    "gaii": "แดชบอร์ด GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "โปรโตคอลความใจดี",
+    "staking": "การ Stake",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "ตลาด NFT",
+    "kindnessGame": "เกมความใจดี",
+    "governance": "การกำกับดูแล",
+    "docs": "เอกสาร",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "ไวท์เปเปอร์"
+  },
+  "wallet": {
+    "connect": "เชื่อมต่อกระเป๋า",
+    "disconnect": "ยกเลิกการเชื่อมต่อ",
+    "connected": "เชื่อมต่อแล้ว",
+    "copyAddress": "คัดลอกที่อยู่",
+    "viewExplorer": "ดูใน Explorer",
+    "balance": "ยอดคงเหลือ"
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "retry": "ลองใหม่",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "close": "ปิด",
+    "learnMore": "เรียนรู้เพิ่มเติม",
+    "getStarted": "เริ่มต้นใช้งาน",
+    "comingSoon": "เร็วๆ นี้",
+    "viewAll": "ดูทั้งหมด",
+    "back": "กลับ",
+    "next": "ถัดไป",
+    "previous": "ก่อนหน้า",
+    "submit": "ส่ง",
+    "success": "สำเร็จ",
+    "failed": "ล้มเหลว"
+  },
+  "kindnessMode": {
+    "title": "โหมดใจดี",
+    "on": "เปิด",
+    "off": "ปิด",
+    "description": "อธิบายคำศัพท์ Web3 ที่ซับซ้อนให้เข้าใจง่าย"
+  },
+  "footer": {
+    "tagline": "โค้ดเย็นชา หัวใจอบอุ่น",
+    "copyright": "© 2025 AlmaNEO Foundation. สงวนลิขสิทธิ์",
+    "platform": "แพลตฟอร์ม",
+    "resources": "ทรัพยากร",
+    "community": "ชุมชน",
+    "legal": "กฎหมาย",
+    "privacy": "นโยบายความเป็นส่วนตัว",
+    "terms": "ข้อกำหนดการใช้งาน"
+  },
+  "language": {
+    "select": "เลือกภาษา",
+    "current": "ภาษาปัจจุบัน"
+  }
+}

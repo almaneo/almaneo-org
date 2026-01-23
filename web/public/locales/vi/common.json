@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "dashboard": "Bảng điều khiển",
+    "platform": "Nền tảng",
+    "ecosystem": "Hệ sinh thái",
+    "community": "Cộng đồng",
+    "gaii": "Bảng điều khiển GAII",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "Giao thức Tử tế",
+    "staking": "Staking",
+    "airdrop": "Airdrop",
+    "nftMarketplace": "Chợ NFT",
+    "kindnessGame": "Trò chơi Tử tế",
+    "governance": "Quản trị",
+    "docs": "Tài liệu",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "whitepaper": "Whitepaper"
+  },
+  "wallet": {
+    "connect": "Kết nối ví",
+    "disconnect": "Ngắt kết nối",
+    "connected": "Đã kết nối",
+    "copyAddress": "Sao chép địa chỉ",
+    "viewExplorer": "Xem trên Explorer",
+    "balance": "Số dư"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "retry": "Thử lại",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "close": "Đóng",
+    "learnMore": "Tìm hiểu thêm",
+    "getStarted": "Bắt đầu",
+    "comingSoon": "Sắp ra mắt",
+    "viewAll": "Xem tất cả",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước đó",
+    "submit": "Gửi",
+    "success": "Thành công",
+    "failed": "Thất bại"
+  },
+  "kindnessMode": {
+    "title": "Chế độ Tử tế",
+    "on": "Bật",
+    "off": "Tắt",
+    "description": "Giải thích thuật ngữ Web3 phức tạp bằng ngôn ngữ đơn giản"
+  },
+  "footer": {
+    "tagline": "Mã nguội, Tâm hồn ấm",
+    "copyright": "© 2025 AlmaNEO Foundation. Bảo lưu mọi quyền.",
+    "platform": "Nền tảng",
+    "resources": "Tài nguyên",
+    "community": "Cộng đồng",
+    "legal": "Pháp lý",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ"
+  },
+  "language": {
+    "select": "Chọn ngôn ngữ",
+    "current": "Ngôn ngữ hiện tại"
+  }
+}

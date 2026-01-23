@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "홈",
+    "dashboard": "대시보드",
+    "platform": "플랫폼",
+    "ecosystem": "생태계",
+    "community": "커뮤니티",
+    "gaii": "GAII 대시보드",
+    "aiHub": "NEOS AI Hub",
+    "kindnessProtocol": "친절 프로토콜",
+    "staking": "스테이킹",
+    "airdrop": "에어드롭",
+    "nftMarketplace": "NFT 마켓플레이스",
+    "kindnessGame": "친절 게임",
+    "governance": "거버넌스",
+    "whitepaper": "화이트페이퍼",
+    "docs": "문서",
+    "discord": "디스코드",
+    "twitter": "트위터",
+    "github": "깃허브"
+  },
+  "wallet": {
+    "connect": "지갑 연결",
+    "disconnect": "연결 해제",
+    "connected": "연결됨",
+    "copyAddress": "주소 복사",
+    "viewExplorer": "탐색기에서 보기",
+    "balance": "잔액"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "save": "저장",
+    "cancel": "취소",
+    "confirm": "확인",
+    "close": "닫기",
+    "learnMore": "더 알아보기",
+    "getStarted": "시작하기",
+    "comingSoon": "곧 출시",
+    "viewAll": "모두 보기",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "submit": "제출",
+    "success": "성공",
+    "failed": "실패"
+  },
+  "kindnessMode": {
+    "title": "친절 모드",
+    "on": "켜기",
+    "off": "끄기",
+    "description": "어려운 Web3 용어를 쉽게 설명해 드립니다"
+  },
+  "footer": {
+    "tagline": "\"Cold Code, Warm Soul\"",
+    "copyright": "© 2026 AlmaNEO Foundation",
+    "contracts": "Polygon Amoy 검증된 스마트 컨트랙트",
+    "platform": "플랫폼",
+    "resources": "리소스",
+    "community": "커뮤니티",
+    "legal": "법적 고지",
+    "privacy": "개인정보처리방침",
+    "terms": "이용약관"
+  },
+  "language": {
+    "select": "언어 선택",
+    "current": "현재 언어"
+  }
+}

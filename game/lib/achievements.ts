@@ -1,0 +1,359 @@
+// Achievement System for MiMiG Carbon Farm
+// Provides long-term goals and player progression tracking
+
+export type AchievementCategory = 'tap' | 'points' | 'upgrade' | 'level' | 'special';
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  category: AchievementCategory;
+  target: number;
+  reward: number;
+  completed: boolean;
+  completedAt?: Date;
+  hidden: boolean; // Hidden achievements (shown only when completed)
+}
+
+export interface AchievementStats {
+  totalTaps: number;
+  totalPoints: number;
+  totalQuests: number;
+  playTime: number; // in seconds
+  loginStreak: number;
+  lastLoginDate: string;
+  firstLoginDate: string;
+}
+
+// Achievement Templates
+export const ACHIEVEMENTS: Achievement[] = [
+  // ========================================
+  // TAP CATEGORY - Click-based achievements
+  // ========================================
+  {
+    id: 'first_harvest',
+    title: 'First Harvest',
+    description: 'Click your farm for the first time',
+    icon: '🌾',
+    category: 'tap',
+    target: 1,
+    reward: 10,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'century_club',
+    title: 'Century Club',
+    description: 'Click your farm 100 times',
+    icon: '💯',
+    category: 'tap',
+    target: 100,
+    reward: 100,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'millennium',
+    title: 'Millennium',
+    description: 'Click your farm 1,000 times',
+    icon: '🎯',
+    category: 'tap',
+    target: 1000,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'click_master',
+    title: 'Click Master',
+    description: 'Click your farm 10,000 times',
+    icon: '🏆',
+    category: 'tap',
+    target: 10000,
+    reward: 2000,
+    completed: false,
+    hidden: false,
+  },
+
+  // ========================================
+  // POINTS CATEGORY - Point accumulation
+  // ========================================
+  {
+    id: 'first_fortune',
+    title: 'First Fortune',
+    description: 'Earn your first 1,000 points',
+    icon: '💎',
+    category: 'points',
+    target: 1000,
+    reward: 100,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'point_collector',
+    title: 'Point Collector',
+    description: 'Earn 10,000 points',
+    icon: '💰',
+    category: 'points',
+    target: 10000,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'wealthy_farmer',
+    title: 'Wealthy Farmer',
+    description: 'Earn 100,000 points',
+    icon: '🤑',
+    category: 'points',
+    target: 100000,
+    reward: 2000,
+    completed: false,
+    hidden: false,
+  },
+
+  // ========================================
+  // UPGRADE CATEGORY - Upgrade achievements
+  // ========================================
+  {
+    id: 'first_upgrade',
+    title: 'First Upgrade',
+    description: 'Purchase your first upgrade',
+    icon: '📈',
+    category: 'upgrade',
+    target: 1,
+    reward: 50,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'max_energy',
+    title: 'Max Energy',
+    description: 'Upgrade Energy Capacity to level 10',
+    icon: '⚡',
+    category: 'upgrade',
+    target: 10,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'power_tapper',
+    title: 'Power Tapper',
+    description: 'Upgrade Tap Power to level 10',
+    icon: '👆',
+    category: 'upgrade',
+    target: 10,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'automation_king',
+    title: 'Automation King',
+    description: 'Upgrade Auto Farm to level 10',
+    icon: '🤖',
+    category: 'upgrade',
+    target: 10,
+    reward: 1000,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'energy_master',
+    title: 'Energy Master',
+    description: 'Upgrade Energy Regen to level 10',
+    icon: '🔋',
+    category: 'upgrade',
+    target: 10,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'perfect_farm',
+    title: 'Perfect Farm',
+    description: 'Upgrade all categories to level 10',
+    icon: '🏆',
+    category: 'upgrade',
+    target: 40, // 4 upgrades * 10 levels
+    reward: 5000,
+    completed: false,
+    hidden: false,
+  },
+
+  // ========================================
+  // LEVEL CATEGORY - Level-based achievements
+  // ========================================
+  {
+    id: 'beginner',
+    title: 'Beginner Farmer',
+    description: 'Reach level 5',
+    icon: '🌱',
+    category: 'level',
+    target: 5,
+    reward: 200,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'advanced',
+    title: 'Advanced Farmer',
+    description: 'Reach level 10',
+    icon: '🌳',
+    category: 'level',
+    target: 10,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'master',
+    title: 'Master Farmer',
+    description: 'Reach level 25',
+    icon: '👑',
+    category: 'level',
+    target: 25,
+    reward: 2000,
+    completed: false,
+    hidden: false,
+  },
+
+  // ========================================
+  // SPECIAL CATEGORY - Special conditions
+  // ========================================
+  {
+    id: 'night_owl',
+    title: 'Night Owl',
+    description: 'Play between midnight and 6 AM',
+    icon: '🦉',
+    category: 'special',
+    target: 1,
+    reward: 100,
+    completed: false,
+    hidden: true,
+  },
+  {
+    id: 'dedicated',
+    title: 'Dedicated Farmer',
+    description: 'Log in for 7 consecutive days',
+    icon: '📅',
+    category: 'special',
+    target: 7,
+    reward: 1000,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'veteran',
+    title: 'Veteran Player',
+    description: 'Play for a total of 10 hours',
+    icon: '🎮',
+    category: 'special',
+    target: 36000, // 10 hours in seconds
+    reward: 1500,
+    completed: false,
+    hidden: true,
+  },
+  {
+    id: 'quest_master',
+    title: 'Quest Master',
+    description: 'Complete 10 daily quests',
+    icon: '🏅',
+    category: 'special',
+    target: 10,
+    reward: 1000,
+    completed: false,
+    hidden: false,
+  },
+];
+
+/**
+ * Check if an achievement should be marked as completed
+ * @param achievement - The achievement to check
+ * @param current - Current progress value
+ * @returns true if achievement is completed
+ */
+export function checkAchievement(achievement: Achievement, current: number): boolean {
+  return current >= achievement.target;
+}
+
+/**
+ * Calculate progress percentage for an achievement
+ * @param achievement - The achievement
+ * @param current - Current progress value
+ * @returns Progress percentage (0-100)
+ */
+export function getProgress(achievement: Achievement, current: number): number {
+  const progress = (current / achievement.target) * 100;
+  return Math.min(progress, 100);
+}
+
+/**
+ * Get achievements by category
+ * @param category - Category to filter by
+ * @returns Filtered achievements
+ */
+export function getAchievementsByCategory(category: AchievementCategory): Achievement[] {
+  return ACHIEVEMENTS.filter(a => a.category === category);
+}
+
+/**
+ * Get total rewards from all achievements
+ * @returns Total reward points
+ */
+export function getTotalRewards(): number {
+  return ACHIEVEMENTS.reduce((sum, a) => sum + a.reward, 0);
+}
+
+/**
+ * Calculate completion rate
+ * @param achievements - User's achievement list
+ * @returns Completion rate (0-100)
+ */
+export function getCompletionRate(achievements: Achievement[]): number {
+  const completed = achievements.filter(a => a.completed).length;
+  return Math.round((completed / achievements.length) * 100);
+}
+
+/**
+ * Check if current time is between midnight and 6 AM (Night Owl achievement)
+ * @returns true if it's night time
+ */
+export function isNightTime(): boolean {
+  const hour = new Date().getHours();
+  return hour >= 0 && hour < 6;
+}
+
+/**
+ * Calculate login streak
+ * @param lastLoginDate - Last login date string
+ * @param currentDate - Current date string
+ * @returns Updated streak count
+ */
+export function calculateLoginStreak(lastLoginDate: string, currentDate: string): number {
+  if (!lastLoginDate) return 1;
+  
+  const last = new Date(lastLoginDate);
+  const current = new Date(currentDate);
+  
+  // Reset to start of day for comparison
+  last.setHours(0, 0, 0, 0);
+  current.setHours(0, 0, 0, 0);
+  
+  const diffDays = Math.floor((current.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // If logged in yesterday, increment streak
+  if (diffDays === 1) {
+    return 1; // Will be incremented by caller
+  }
+  
+  // If logged in today (same day), keep current streak
+  if (diffDays === 0) {
+    return 0; // No change
+  }
+  
+  // If more than 1 day gap, reset streak
+  return -1; // Will be reset to 1 by caller
+}

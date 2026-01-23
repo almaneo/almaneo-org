@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Bash(npm run dev:*)"
+    ]
+  },
+  "fileSearch": {
+    "exclude": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.next/**",
+      "**/out/**",
+      "**/cache/**",
+      "**/artifacts/**",
+      "**/.firebase/**",
+      "**/.openzeppelin/**"
+    ]
+  }
+}
