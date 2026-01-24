@@ -23,6 +23,7 @@ const AMOY_ADDRESSES: ContractAddresses = {
 
   // Kindness Protocol
   JeongSBT: '0x8d8eECb2072Df7547C22e12C898cB9e2326f827D' as ContractAddress,
+  AmbassadorSBT: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B' as ContractAddress,
 
   // NFT
   AlmaNFT721: '0xbFbE2b1eDB0f7F0675D5E449E508adE3697B8dfa' as ContractAddress,
@@ -50,6 +51,7 @@ const MAINNET_ADDRESSES: ContractAddresses = {
 
   // Kindness Protocol
   JeongSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
+  AmbassadorSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
 
   // NFT
   AlmaNFT721: '0x0000000000000000000000000000000000000000' as ContractAddress,

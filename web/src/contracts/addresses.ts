@@ -12,6 +12,7 @@ export const CONTRACT_ADDRESSES = {
     ALMANGovernor: '0xA42A1386a84b146D36a8AF431D5E1d6e845268b8',
     ALMANTimelock: '0xB73532c01CCCE4Ad6e8816fa4CB0E2aeDfe9C8C2',
     KindnessAirdrop: '0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538',
+    AmbassadorSBT: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B',
   },
   // Polygon Mainnet (137)
   polygon: {
@@ -21,6 +22,7 @@ export const CONTRACT_ADDRESSES = {
     ALMANGovernor: '',
     ALMANTimelock: '',
     KindnessAirdrop: '',
+    AmbassadorSBT: '',
   },
 } as const;
 

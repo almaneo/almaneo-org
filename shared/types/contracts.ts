@@ -18,26 +18,26 @@ export type ContractAddress = `0x${string}`;
  */
 export interface ContractAddresses {
   // 토큰
-  NEOSToken: ContractAddress;
+  ALMANToken: ContractAddress;
 
   // 거버넌스
-  NEOSGovernor: ContractAddress;
-  NEOSTimelock: ContractAddress;
+  ALMANGovernor: ContractAddress;
+  ALMANTimelock: ContractAddress;
 
   // 스테이킹 & 에어드롭
-  NEOSStaking: ContractAddress;
+  ALMANStaking: ContractAddress;
   KindnessAirdrop: ContractAddress;
 
   // Kindness Protocol
-  KindnessRegistry: ContractAddress;
   JeongSBT: ContractAddress;
+  AmbassadorSBT: ContractAddress;
 
   // NFT
-  NEOSNFT721: ContractAddress;
-  NEOSNFT1155: ContractAddress;
-  NFTMarketplace: ContractAddress;
-  CollectionManager: ContractAddress;
-  PaymentManager: ContractAddress;
+  AlmaNFT721: ContractAddress;
+  AlmaNFT1155: ContractAddress;
+  AlmaMarketplace: ContractAddress;
+  AlmaCollectionManager: ContractAddress;
+  AlmaPaymentManager: ContractAddress;
 }
 
 /**

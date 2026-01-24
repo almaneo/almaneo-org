@@ -2060,28 +2060,94 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 25)
+### ✅ 완료된 작업 (2026-01-25 - Session 25: AI Hub 배포 및 버그 수정)
 
-#### AI Hub 배포 및 테스트
-1. **Vercel 환경변수 설정**
-   - [ ] `GEMINI_API_KEY` 추가 (Google AI Studio에서 발급)
+#### 1. **AI Hub 배포 준비**
+   - Supabase 마이그레이션 확인 (이미 적용됨)
+   - 빌드 테스트 성공 (33초)
+   - Vercel 환경변수 설정 완료 (`GEMINI_API_KEY`)
 
-2. **Supabase 마이그레이션 적용**
-   - [ ] `npx supabase db push` 실행
+#### 2. **외래키 제약 버그 수정**
+   - 문제: 새 사용자가 AI Hub 접근 시 `users` 테이블에 레코드 없어서 외래키 제약 위반
+   - 해결: `ensureUserExists()` 함수 추가 - 사용자 자동 생성
+   - `createConversation`, `incrementQuotaManually`에서 호출
+   - 커밋: `a435090`
 
-3. **실제 테스트**
-   - [ ] 지갑 연결 → 대화 생성 → 메시지 전송 → 응답 확인
-   - [ ] 쿼터 증가 및 제한 테스트
-   - [ ] 대화 목록/삭제 테스트
+#### 3. **Supabase 406 에러 수정** (미커밋)
+   - 문제: `.single()` 사용 시 행이 없으면 406 에러 발생
+   - 해결: `.single()` → `.maybeSingle()` 변경
+   - 수정 파일: `web/src/services/aiHub.ts`
+     - `ensureUserExists()`: `.maybeSingle()`
+     - `getQuota()`: `.maybeSingle()`
 
-#### Kindness Protocol 마무리
-1. **i18n 번역 확장**
-   - [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
-   - [ ] Kindness/Meetup 페이지 번역 키 생성
+#### 4. **Gemini 모델 변경** (미커밋)
+   - 문제: `gemini-2.0-flash` 모델이 존재하지 않아 429 에러
+   - 해결: `gemini-2.5-flash-lite`로 변경 (RPM 10, 가장 높은 요청 제한)
+   - 수정 파일:
+     - `web/api/chat.ts`: `GEMINI_MODEL = 'gemini-2.5-flash-lite'`
+     - `web/src/services/aiHub.ts`: `DEFAULT_MODEL = 'gemini-2.5-flash-lite'`
 
-2. **스마트 컨트랙트 연동**
-   - [ ] AmbassadorSBT 컨트랙트 개발
-   - [ ] 자동 발급 트리거 구현
+#### 5. **Google AI Studio 모델 정보** (참고)
+   | 모델 | RPM | TPM | RPD |
+   |------|-----|-----|-----|
+   | gemini-2.5-flash-lite | 10 | 250K | 20 |
+   | gemini-2.5-flash | 5 | 250K | 20 |
+   | gemini-3-flash | 5 | 250K | 20 |
+
+---
+
+### ✅ 완료된 작업 (2026-01-25 - Session 26: AmbassadorSBT 컨트랙트 개발)
+
+#### 1. **AmbassadorSBT 스마트 컨트랙트 개발**
+   - `blockchain/contracts/AmbassadorSBT.sol` 작성
+   - ERC-721 Soulbound Token (양도 불가)
+   - UUPS Upgradeable 패턴
+   - 4개 티어: Friend, Host, Ambassador, Guardian
+   - 활동 기반 자동 발급 (밋업 참가, 주최, 점수, 추천인)
+
+#### 2. **티어 조건**
+   | 티어 | 조건 |
+   |------|------|
+   | Friend | 첫 밋업 참가 (1회) |
+   | Host | 밋업 3회 주최 |
+   | Ambassador | Kindness Score 500점 |
+   | Guardian | 1,000점 + 추천인 10명 |
+
+#### 3. **주요 기능**
+   - `recordMeetupAttendance()`: 밋업 참가 기록 (SBT 없으면 자동 발급)
+   - `recordMeetupHosted()`: 밋업 주최 기록
+   - `updateKindnessScore()`: Kindness Score 업데이트
+   - `recordReferral()`: 추천인 기록
+   - `getNextTierRequirements()`: 다음 티어 달성 조건 조회
+
+#### 4. **Polygon Amoy 배포**
+   - 컨트랙트 주소: `0xf368d239a0b756533ff5688021A04Bc62Ab3c27B`
+   - 배포 스크립트: `blockchain/scripts/deploy-ambassador.js`
+
+#### 5. **프론트엔드 연동**
+   - `web/src/contracts/addresses.ts`: AmbassadorSBT 주소 추가
+   - `web/src/contracts/abis/AmbassadorSBT.ts`: ABI + 타입 정의
+   - `shared/contracts/addresses.ts`: 주소 추가
+   - `shared/types/contracts.ts`: ContractAddresses 인터페이스 업데이트
+
+#### 6. **빌드 테스트 성공** (32.82초)
+
+---
+
+### 🔲 다음 세션 작업 (Session 27)
+
+#### Kindness Protocol 프론트엔드 연동
+1. **useAmbassadorSBT 훅 개발**
+   - [ ] 컨트랙트 읽기 기능 (티어, 데이터 조회)
+   - [ ] Kindness 페이지에 Ambassador 정보 표시
+
+2. **자동 발급 트리거 구현**
+   - [ ] 밋업 검증 완료 시 컨트랙트 호출 연동
+   - [ ] 백엔드 서비스 (VERIFIER_ROLE 관리)
+
+#### i18n 번역 확장
+- [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
+- [ ] Kindness/Meetup 페이지 번역 키 생성
 
 #### 기타 작업
 - [ ] SNS URL 실제 주소로 업데이트
@@ -2167,10 +2233,11 @@ VITE_WEB3AUTH_CLIENT_ID=BI8Q1xvlSCu52eYqU2lhkxuvIghBW6LSkXvQXZmbEvTv4PVZe97eUdML
 
 ### 현재 완료된 배포
 
-**Polygon Amoy Testnet - Core (2026-01-20 재배포 - AlmaNEO 브랜딩):**
+**Polygon Amoy Testnet - Core (2026-01-25 업데이트 - AmbassadorSBT 추가):**
 ```
 ALMANToken:       0x261d686c9ea66a8404fBAC978d270a47eFa764bA
 JeongSBT:         0x8d8eECb2072Df7547C22e12C898cB9e2326f827D
+AmbassadorSBT:    0xf368d239a0b756533ff5688021A04Bc62Ab3c27B  # 🆕 Session 26
 ALMANStaking:     0x86777d1834c07E1B08E22FE3E8Ec0AD25a5451ce
 ALMANTimelock:    0xB73532c01CCCE4Ad6e8816fa4CB0E2aeDfe9C8C2
 ALMANGovernor:    0xA42A1386a84b146D36a8AF431D5E1d6e845268b8
