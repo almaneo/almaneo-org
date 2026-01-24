@@ -31,6 +31,7 @@ c:\DEV\ALMANEO\
 │   │   │   ├── useGovernance.ts   # 거버넌스 컨트랙트 연동
 │   │   │   ├── useMeetups.ts      # 🆕 밋업 데이터 관리
 │   │   │   ├── useKindness.ts     # 🆕 Kindness 데이터 관리
+│   │   │   ├── useAmbassadorSBT.ts # 🆕 온체인 Ambassador 데이터 (Session 27)
 │   │   │   └── index.ts
 │   │   │
 │   │   ├── services/              # 🆕 서비스 레이어 (Session 22-23)
@@ -2134,25 +2135,91 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 27)
+### ✅ 완료된 작업 (2026-01-25 - Session 27: useAmbassadorSBT 훅 & SNS URL 업데이트)
 
-#### Kindness Protocol 프론트엔드 연동
-1. **useAmbassadorSBT 훅 개발**
-   - [ ] 컨트랙트 읽기 기능 (티어, 데이터 조회)
-   - [ ] Kindness 페이지에 Ambassador 정보 표시
+#### 1. **useAmbassadorSBT 훅 개발 완료**
+   - `web/src/hooks/useAmbassadorSBT.ts` 생성
+   - 온체인 Ambassador 데이터 조회 (티어, 밋업 통계, Kindness Score, 추천인)
+   - 다음 티어 요구사항 조회 (`getNextTierRequirements`)
+   - 컨트랙트 상수 조회 (티어별 조건, 총 발급량)
+   - 티어별 색상/배경/아이콘 헬퍼 함수
+   - `hooks/index.ts`에 export 추가
 
-2. **자동 발급 트리거 구현**
-   - [ ] 밋업 검증 완료 시 컨트랙트 호출 연동
+#### 2. **Kindness 페이지 온체인 Ambassador 정보 표시**
+   - `web/src/pages/Kindness.tsx` 업데이트
+   - Ambassador SBT 카드 섹션 추가 (On-chain 뱃지)
+   - 온체인 통계 표시 (밋업 참가/주최, Kindness Score, 추천인)
+   - 다음 티어 진행률 및 요구사항 표시
+   - Explorer 링크 연동
+   - 컨트랙트 총 발급량 표시
+
+#### 3. **SNS URL 실제 주소로 업데이트**
+   | 플랫폼 | URL | 위치 |
+   |--------|-----|------|
+   | Twitter/X | https://x.com/almaneo_org | Hero, Header, CTA |
+   | Discord | https://discord.gg/JkRNuj7aYd | Hero, Header, CTA |
+   | TikTok | https://www.tiktok.com/@almaneo | Hero, CTA |
+   | GitHub | https://github.com/almaneo | Header, CTA |
+   | Blog (Medium) | https://medium.com/@news_15809 | Header |
+
+   - **숨김 처리**: Telegram, YouTube (미정)
+   - **Header 메뉴 변경**: "문서(Docs)" → "블로그(Blog)"
+   - **번역 파일**: `nav.blog` 키 추가 (ko/en)
+
+#### 4. **SNS 아이콘 통일**
+   - Hero 섹션 팝업과 CTA 섹션의 아이콘을 동일한 커스텀 SVG로 통일
+   - TwitterXIcon, DiscordIcon, TiktokIcon, GithubIcon
+
+#### 5. **Git 커밋 & 푸시**
+   - 커밋: `e36585b` - feat(web): Add useAmbassadorSBT hook and update SNS links
+   - 8개 파일, +551줄 변경
+
+---
+
+### ✅ 완료된 작업 (2026-01-25 - Session 28: AI Hub 멀티모델 지원)
+
+#### 1. **Groq + Llama 3.3 70B 모델 추가**
+   - `web/api/chat.ts` - Groq API 핸들러 추가 (OpenAI 호환 형식)
+   - `web/src/services/aiHub.ts` - AI_MODELS 상수, AIModelId 타입 추가
+   - `web/src/hooks/useAIHub.ts` - 모델 선택 상태 관리 (currentModel, setModel)
+   - `web/src/pages/AIHub.tsx` - 모델 선택 드롭다운 UI 구현
+
+#### 2. **지원 모델**
+   | 모델 | 제공자 | 특징 |
+   |------|--------|------|
+   | ✨ Gemini 2.5 Flash Lite | Google | 빠르고 효율적 |
+   | 🦙 Llama 3.3 70B | Groq | 강력한 오픈소스, 다국어 우수 |
+
+#### 3. **환경변수 추가**
+   - `GROQ_API_KEY` - Groq API 키
+   - Vercel 환경변수 설정 필요
+
+#### 4. **Git 커밋 & 푸시**
+   - 커밋: `7a12363` - feat(web): Add Groq Llama 3.3 70B model to AI Hub
+   - 4개 파일, +439줄 변경
+
+---
+
+### 🔲 다음 세션 작업 (Session 29)
+
+#### Vercel 환경변수 설정 (필수)
+- [ ] Vercel에 `GROQ_API_KEY` 환경변수 추가
+- [ ] Redeploy 후 Llama 3.3 70B 모델 테스트
+
+#### Kindness Protocol 백엔드 연동
+1. **자동 발급 트리거 구현**
+   - [ ] 밋업 검증 완료 시 AmbassadorSBT 컨트랙트 호출 연동
    - [ ] 백엔드 서비스 (VERIFIER_ROLE 관리)
+   - [ ] Supabase Edge Function 또는 Vercel API Route
 
 #### i18n 번역 확장
 - [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
 - [ ] Kindness/Meetup 페이지 번역 키 생성
+- [ ] 나머지 12개 언어 common.json 업데이트 (`blog` 키)
 
 #### 기타 작업
-- [ ] SNS URL 실제 주소로 업데이트
-- [ ] 나머지 12개 언어 common.json 업데이트 (gaiiReport, new 키)
 - [ ] Grant 프로그램 신청 준비 (Google for Nonprofits, Cloud for Startups)
+- [ ] 메인넷 배포 준비
 
 ### i18n 핵심 해결 방법 (참고용)
 ```
@@ -2208,6 +2275,17 @@ Branch: main
 SSH Remote: git@github-almaneo:almaneo/almaneo-org.git
 User: AlmaNEO <mjy.almaneo@gmail.com>
 SSH Key: ~/.ssh/id_ed25519_almaneo
+```
+
+### SNS 계정 (Session 27 업데이트)
+```
+Twitter/X:  https://x.com/almaneo_org
+Discord:    https://discord.gg/JkRNuj7aYd
+TikTok:     https://www.tiktok.com/@almaneo
+GitHub:     https://github.com/almaneo
+Blog:       https://medium.com/@news_15809
+Telegram:   미정 (숨김)
+YouTube:    미정 (숨김)
 ```
 
 ### 배포된 URL (Vercel)
