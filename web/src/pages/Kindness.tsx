@@ -15,10 +15,19 @@ import {
   Clock,
   CheckCircle2,
   Plus,
+  Shield,
+  ExternalLink,
+  Award,
 } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useKindness, getTierColor, getTierBgColor, getTierIcon } from '../hooks/useKindness';
 import { useMeetups } from '../hooks/useMeetups';
+import {
+  useAmbassadorSBT,
+  getOnchainTierColor,
+  getOnchainTierBgColor,
+  getOnchainTierIcon,
+} from '../hooks/useAmbassadorSBT';
 import { AMBASSADOR_TIERS } from '../services/kindness';
 
 // 주소 축약 유틸리티
@@ -70,7 +79,7 @@ function formatDateTime(dateString: string): string {
 }
 
 export default function Kindness() {
-  const { address, isConnected, isLoading: authLoading, connect: login } = useWallet();
+  const { address, isConnected, isLoading: authLoading, connect: login, getExplorerUrl } = useWallet();
   const {
     kindnessStats,
     activities,
@@ -84,8 +93,17 @@ export default function Kindness() {
     myHostedMeetups,
     isLoading: meetupsLoading,
   } = useMeetups();
+  const {
+    ambassadorData,
+    nextTierRequirements,
+    contractConstants,
+    isLoading: sbtLoading,
+    isContractAvailable,
+    error: sbtError,
+    refresh: refreshSBT,
+  } = useAmbassadorSBT();
 
-  const isLoading = authLoading || kindnessLoading || meetupsLoading;
+  const isLoading = authLoading || kindnessLoading || meetupsLoading || sbtLoading;
 
   // 리더보드 로드
   useEffect(() => {
@@ -210,6 +228,157 @@ export default function Kindness() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Onchain Ambassador SBT Card */}
+        {isContractAvailable && (
+          <div className="card p-6 mb-8 border border-purple-500/30 bg-gradient-to-r from-purple-500/5 to-indigo-500/5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Shield className="w-6 h-6 text-purple-400" />
+                <h2 className="text-xl font-semibold text-white">Ambassador SBT</h2>
+                <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded">
+                  On-chain
+                </span>
+              </div>
+              <button
+                onClick={refreshSBT}
+                disabled={sbtLoading}
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
+                title="Refresh onchain data"
+              >
+                <RefreshCw className={`w-4 h-4 ${sbtLoading ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+
+            {sbtError && (
+              <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+                {sbtError}
+              </div>
+            )}
+
+            {sbtLoading && !ambassadorData ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 text-purple-400 animate-spin" />
+              </div>
+            ) : ambassadorData ? (
+              <div className="space-y-6">
+                {/* SBT 상태 */}
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-16 h-16 rounded-xl ${getOnchainTierBgColor(ambassadorData.tier)} flex items-center justify-center text-3xl`}>
+                      {getOnchainTierIcon(ambassadorData.tier)}
+                    </div>
+                    <div>
+                      {ambassadorData.hasSBT ? (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-lg font-bold ${getOnchainTierColor(ambassadorData.tier)}`}>
+                              {ambassadorData.tierName}
+                            </span>
+                            <Award className="w-4 h-4 text-yellow-400" />
+                          </div>
+                          <p className="text-slate-400 text-sm">
+                            Token ID: #{ambassadorData.tokenId.toString()}
+                          </p>
+                          {ambassadorData.mintedAt && (
+                            <p className="text-slate-500 text-xs">
+                              발급일: {ambassadorData.mintedAt.toLocaleDateString('ko-KR')}
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-lg font-medium text-slate-300">SBT 미보유</p>
+                          <p className="text-slate-400 text-sm">
+                            밋업에 참가하면 자동으로 발급됩니다
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {ambassadorData.hasSBT && address && (
+                    <a
+                      href={getExplorerUrl('address', address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-sm text-neos-blue hover:underline"
+                    >
+                      Explorer에서 보기
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+
+                {/* 온체인 통계 */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-slate-400 text-xs mb-1">밋업 참가</p>
+                    <p className="text-xl font-bold text-white">{ambassadorData.meetupsAttended}</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-slate-400 text-xs mb-1">밋업 주최</p>
+                    <p className="text-xl font-bold text-white">{ambassadorData.meetupsHosted}</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-slate-400 text-xs mb-1">Kindness Score</p>
+                    <p className="text-xl font-bold text-jeong-orange">{ambassadorData.kindnessScore}</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-slate-400 text-xs mb-1">추천인</p>
+                    <p className="text-xl font-bold text-white">{ambassadorData.referralCount}</p>
+                  </div>
+                </div>
+
+                {/* 다음 티어 진행률 */}
+                {nextTierRequirements && (
+                  <div className="bg-slate-800/30 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-slate-300 text-sm">다음 티어</span>
+                      <span className={`font-medium ${getOnchainTierColor(nextTierRequirements.nextTier)}`}>
+                        {getOnchainTierIcon(nextTierRequirements.nextTier)} {nextTierRequirements.nextTierName}
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      {nextTierRequirements.meetupsNeeded > 0 && (
+                        <div className="flex justify-between text-slate-400">
+                          <span>밋업 참가 필요</span>
+                          <span className="text-white">{nextTierRequirements.meetupsNeeded}회</span>
+                        </div>
+                      )}
+                      {nextTierRequirements.hostingsNeeded > 0 && (
+                        <div className="flex justify-between text-slate-400">
+                          <span>밋업 주최 필요</span>
+                          <span className="text-white">{nextTierRequirements.hostingsNeeded}회</span>
+                        </div>
+                      )}
+                      {nextTierRequirements.scoreNeeded > 0 && (
+                        <div className="flex justify-between text-slate-400">
+                          <span>Kindness Score 필요</span>
+                          <span className="text-white">{nextTierRequirements.scoreNeeded}점</span>
+                        </div>
+                      )}
+                      {nextTierRequirements.referralsNeeded > 0 && (
+                        <div className="flex justify-between text-slate-400">
+                          <span>추천인 필요</span>
+                          <span className="text-white">{nextTierRequirements.referralsNeeded}명</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* 컨트랙트 통계 */}
+                {contractConstants && (
+                  <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-700/50">
+                    <span>총 발급된 Ambassador SBT</span>
+                    <span className="text-slate-300">{contractConstants.totalSupply}개</span>
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
         )}
 

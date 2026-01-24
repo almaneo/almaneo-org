@@ -19,3 +19,15 @@ export type { KindnessStats, ActivityStats, LeaderboardEntry } from './useKindne
 
 export { useAIHub } from './useAIHub';
 export type { Message, Conversation, QuotaInfo, UseAIHubReturn } from './useAIHub';
+
+export {
+  useAmbassadorSBT,
+  getOnchainTierColor,
+  getOnchainTierBgColor,
+  getOnchainTierIcon,
+} from './useAmbassadorSBT';
+export type {
+  OnchainAmbassadorData,
+  NextTierRequirements,
+  ContractConstants,
+} from './useAmbassadorSBT';

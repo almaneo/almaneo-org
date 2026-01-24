@@ -60,9 +60,9 @@ const ecosystemItems: NavItem[] = [
 
 const communityItems: NavItem[] = [
   { nameKey: 'nav.whitepaper', path: '/whitepaper', icon: FileText },
-  { nameKey: 'nav.docs', path: 'https://docs.almaneo.org', icon: FileText, external: true },
-  { nameKey: 'nav.discord', path: 'https://discord.gg/almaneo', icon: MessageCircle, external: true },
-  { nameKey: 'nav.twitter', path: 'https://twitter.com/almaneo_ai', icon: Twitter, external: true },
+  { nameKey: 'nav.blog', path: 'https://medium.com/@news_15809', icon: FileText, external: true },
+  { nameKey: 'nav.discord', path: 'https://discord.gg/JkRNuj7aYd', icon: MessageCircle, external: true },
+  { nameKey: 'nav.twitter', path: 'https://x.com/almaneo_org', icon: Twitter, external: true },
   { nameKey: 'nav.github', path: 'https://github.com/almaneo', icon: Github, external: true },
 ];
 
