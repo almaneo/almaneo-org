@@ -7,6 +7,48 @@ import { supabase, type DbConversation, type DbMessage, type DbQuota, type Quota
 
 // 상수
 export const DAILY_QUOTA_LIMIT = 50;
+
+// ============================================
+// 사용자 관리
+// ============================================
+
+/**
+ * 사용자가 users 테이블에 존재하는지 확인하고, 없으면 생성
+ * (ai_hub_conversations, ai_hub_quota 테이블이 users를 참조하므로 필수)
+ */
+export async function ensureUserExists(userAddress: string): Promise<void> {
+  // 먼저 사용자 존재 여부 확인
+  const { data: existingUser, error: selectError } = await supabase
+    .from('users')
+    .select('wallet_address')
+    .eq('wallet_address', userAddress)
+    .single();
+
+  if (existingUser) {
+    // 이미 존재함
+    return;
+  }
+
+  // PGRST116: no rows returned - 사용자가 없으므로 생성
+  if (selectError && selectError.code === 'PGRST116') {
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert({
+        wallet_address: userAddress,
+        nickname: `User_${userAddress.slice(0, 6)}`,
+        kindness_score: 0,
+        total_points: 0,
+        level: 1,
+      });
+
+    if (insertError && insertError.code !== '23505') { // 23505: unique violation (이미 존재)
+      console.error('[AI Hub] Failed to create user:', insertError);
+      throw new Error('사용자 정보를 생성하는데 실패했습니다.');
+    }
+  } else if (selectError) {
+    console.error('[AI Hub] Failed to check user:', selectError);
+  }
+}
 export const DEFAULT_MODEL = 'gemini-2.5-flash';
 export const CONVERSATION_RETENTION_DAYS = 30;
 
@@ -74,6 +116,9 @@ export async function createConversation(
   title?: string,
   model?: string
 ): Promise<DbConversation> {
+  // 먼저 사용자가 존재하는지 확인 (외래키 제약)
+  await ensureUserExists(userAddress);
+
   const { data, error } = await supabase
     .from('ai_hub_conversations')
     .insert({
@@ -233,6 +278,9 @@ export async function incrementQuotaManually(userAddress: string): Promise<{
   quotaUsed: number;
   quotaLimit: number;
 }> {
+  // 먼저 사용자가 존재하는지 확인 (외래키 제약)
+  await ensureUserExists(userAddress);
+
   const today = new Date().toISOString().split('T')[0];
 
   // 기존 쿼터 조회
