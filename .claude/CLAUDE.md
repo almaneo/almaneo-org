@@ -29,6 +29,14 @@ c:\DEV\ALMANEO\
 │   │   │   ├── useUserData.ts     # Supabase 사용자 데이터
 │   │   │   ├── useStaking.ts      # 스테이킹 컨트랙트 연동
 │   │   │   ├── useGovernance.ts   # 거버넌스 컨트랙트 연동
+│   │   │   ├── useMeetups.ts      # 🆕 밋업 데이터 관리
+│   │   │   ├── useKindness.ts     # 🆕 Kindness 데이터 관리
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── services/              # 🆕 서비스 레이어 (Session 22-23)
+│   │   │   ├── meetup.ts          # 밋업 CRUD, 참가/인증
+│   │   │   ├── kindness.ts        # Kindness 활동, 점수, 리더보드
+│   │   │   ├── storage.ts         # Supabase Storage 이미지 업로드
 │   │   │   └── index.ts
 │   │   │
 │   │   ├── contracts/             # ✅ 컨트랙트 연동
@@ -116,12 +124,16 @@ c:\DEV\ALMANEO\
 │   │   │
 │   │   ├── pages/                 # 라우트 페이지
 │   │   │   ├── Home.tsx
-│   │   │   ├── Dashboard.tsx      # ✅ Firebase 연동
+│   │   │   ├── Dashboard.tsx      # ✅ Supabase 연동
 │   │   │   ├── GAII.tsx           # ✅ GAII Dashboard (세계지도)
 │   │   │   ├── GAIIReport.tsx     # ✅ GAII Report v1.0 페이지
 │   │   │   ├── Governance.tsx     # ✅ 컨트랙트 연동
 │   │   │   ├── Staking.tsx        # ✅ 컨트랙트 연동
 │   │   │   ├── Airdrop.tsx
+│   │   │   ├── Kindness.tsx       # 🆕 Kindness 대시보드 (/kindness)
+│   │   │   ├── MeetupList.tsx     # 🆕 밋업 목록 (/meetup)
+│   │   │   ├── MeetupDetail.tsx   # 🆕 밋업 상세 (/meetup/:id)
+│   │   │   ├── MeetupCreate.tsx   # 🆕 밋업 생성 (/meetup/new)
 │   │   │   └── index.ts
 │   │   │
 │   │   ├── i18n/                  # ✅ 다국어 지원 (14개 언어)
@@ -1964,39 +1976,117 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 23)
+### ✅ 완료된 작업 (2026-01-24 - Session 23: Supabase Storage 설정)
+
+#### 1. **Supabase Storage 마이그레이션 생성**
+   - `supabase/migrations/20260124100000_storage_setup.sql`
+   - `meetup-photos` 버킷 생성 (공개, 5MB 제한)
+   - 허용 파일 형식: JPEG, PNG, WebP, GIF
+   - Storage RLS 정책 (읽기/업로드/수정/삭제)
+   - `meetups` 테이블에 검증 컬럼 추가 (`verified`, `verified_at`, `verified_by`, `verification_notes`)
+
+#### 2. **Storage 서비스 구현**
+   - `web/src/services/storage.ts` 생성
+   - `uploadPhotoToStorage()` - Storage 업로드
+   - `deleteMeetupPhoto()` - 사진 삭제
+   - `getMeetupPhotos()` - 밋업 사진 목록
+   - `validateImageFile()` - 파일 유효성 검사 (크기, 형식)
+   - `createPreviewUrl()` / `revokePreviewUrl()` - 미리보기 관리
+
+#### 3. **MeetupDetail.tsx 이미지 업로드 개선**
+   - 이미지 유효성 검사 (크기, 형식)
+   - 업로드 전 미리보기 표시
+   - 에러 메시지 표시
+   - 파일 크기 표시
+
+#### 4. **Supabase 마이그레이션 적용**
+   - `npx supabase db push` 실행
+   - meetup-photos 버킷 및 RLS 정책 적용 완료
+
+#### 5. **Git 커밋 & 푸시**
+   - 커밋: `393b141` - feat(web): Implement Kindness Protocol MVP with meetup system
+   - 20개 파일, +3,192줄 변경
+
+---
+
+### ✅ 완료된 작업 (2026-01-25 - Session 24: AI Hub MVP 구현)
+
+#### 1. **DB 스키마 생성**
+   - `supabase/migrations/20260124200000_ai_hub_setup.sql`
+   - `ai_hub_conversations` - 대화 테이블
+   - `ai_hub_messages` - 메시지 테이블
+   - `ai_hub_quota` - 일일 쿼터 테이블
+   - RLS 정책 및 트리거 설정
+   - `check_and_increment_quota()` RPC 함수
+
+#### 2. **서비스 레이어 구현**
+   - `web/src/services/aiHub.ts` - AI Hub 서비스
+   - 대화 CRUD: `getConversations`, `createConversation`, `deleteConversation`
+   - 메시지 관리: `addMessage`, `getMessages`
+   - 쿼터 관리: `checkAndIncrementQuota`, `getQuotaStatus`
+   - Supabase 타입 추가: `DbConversation`, `DbMessage`, `DbQuota`
+
+#### 3. **API 엔드포인트 생성**
+   - `web/api/chat.ts` - Vercel Edge Function
+   - Google Gemini API 연동 (gemini-2.0-flash 모델)
+   - SSE 스트리밍 응답 지원
+   - 시스템 프롬프트 (다국어 응답)
+
+#### 4. **커스텀 훅 구현**
+   - `web/src/hooks/useAIHub.ts`
+   - 대화/메시지/쿼터 상태 관리
+   - 스트리밍 응답 처리
+   - 중단 기능 (AbortController)
+
+#### 5. **UI 컴포넌트 구현**
+   - `web/src/components/aihub/` 폴더 생성
+   - `ChatMessage.tsx` - 메시지 표시
+   - `ChatInput.tsx` - 입력창 + 전송 버튼
+   - `ConversationList.tsx` - 대화 목록 사이드바
+   - `QuotaBar.tsx` - 일일 쿼터 표시
+   - `WelcomeScreen.tsx` - 환영 화면
+   - `web/src/pages/AIHub.tsx` - 메인 페이지
+
+#### 6. **라우팅 및 네비게이션**
+   - `/ai-hub` 라우트 추가
+   - Header에서 "Coming Soon" → "New" 뱃지로 변경
+
+#### 7. **i18n 번역**
+   - ko/en landing.json에 `aiHub` 섹션 추가
+   - 60+ 번역 키 (quota, welcome, features, suggestions, errors 등)
+
+#### 8. **환경변수**
+   - `GEMINI_API_KEY` - Vercel 환경변수 설정 필요
+
+---
+
+### 🔲 다음 세션 작업 (Session 25)
+
+#### AI Hub 배포 및 테스트
+1. **Vercel 환경변수 설정**
+   - [ ] `GEMINI_API_KEY` 추가 (Google AI Studio에서 발급)
+
+2. **Supabase 마이그레이션 적용**
+   - [ ] `npx supabase db push` 실행
+
+3. **실제 테스트**
+   - [ ] 지갑 연결 → 대화 생성 → 메시지 전송 → 응답 확인
+   - [ ] 쿼터 증가 및 제한 테스트
+   - [ ] 대화 목록/삭제 테스트
 
 #### Kindness Protocol 마무리
-1. **Supabase Storage 설정**
-   - [ ] `meetup-photos` 버킷 생성
-   - [ ] Storage RLS 정책 설정
-   - [ ] 이미지 업로드 테스트
-
-2. **i18n 번역 확장**
-   - [ ] 나머지 12개 언어에 `nav.meetups` 추가
+1. **i18n 번역 확장**
+   - [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
    - [ ] Kindness/Meetup 페이지 번역 키 생성
 
-3. **스마트 컨트랙트 연동**
+2. **스마트 컨트랙트 연동**
    - [ ] AmbassadorSBT 컨트랙트 개발
    - [ ] 자동 발급 트리거 구현
-   - [ ] Admin 검증 UI
-
-#### AlmaNEO AI Hub 준비 작업
-1. **Partnership Deck**
-   - [ ] 파트너십 제안서 초안 작성
-   - [ ] GAII 데이터 시각화 자료
-   - [ ] Google/Anthropic 맞춤 버전
-
-2. **AI Hub MVP 준비**
-   - [ ] Supabase Edge Functions 설정
-   - [ ] `/ai-hub` 페이지 라우트 추가
-   - [ ] 채팅 UI 컴포넌트 설계
 
 #### 기타 작업
-- [x] 커스텀 도메인 DNS 설정 (Namecheap → Vercel) ✅
 - [ ] SNS URL 실제 주소로 업데이트
 - [ ] 나머지 12개 언어 common.json 업데이트 (gaiiReport, new 키)
-- [ ] 화이트페이퍼 section04_solution.md 업데이트 (파트너십 모델 추가)
+- [ ] Grant 프로그램 신청 준비 (Google for Nonprofits, Cloud for Startups)
 
 ### i18n 핵심 해결 방법 (참고용)
 ```

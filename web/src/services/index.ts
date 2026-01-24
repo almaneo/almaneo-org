@@ -6,3 +6,4 @@
 export * from './meetup';
 export * from './kindness';
 export * from './storage';
+export * from './aiHub';

@@ -16,3 +16,6 @@ export {
   getTierIcon,
 } from './useKindness';
 export type { KindnessStats, ActivityStats, LeaderboardEntry } from './useKindness';
+
+export { useAIHub } from './useAIHub';
+export type { Message, Conversation, QuotaInfo, UseAIHubReturn } from './useAIHub';

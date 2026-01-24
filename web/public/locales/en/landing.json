@@ -500,5 +500,66 @@
     "subtitle": "Join the journey of AI democratization",
     "button": "Get Started Now",
     "description": "Your participation changes the world. Join the AlmaNEO community today."
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI for Everyone in the World",
+    "newChat": "New Chat",
+    "deleteChat": "Delete Chat",
+    "placeholder": "Enter your message...",
+    "send": "Send",
+    "stop": "Stop",
+    "newLine": "New Line",
+    "thinking": "Thinking...",
+    "refresh": "Refresh",
+    "dismiss": "Dismiss",
+    "noConversations": "No conversations",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{days}} days ago",
+    "quota": {
+      "used": "{{used}}/{{limit}} used",
+      "exceeded": "Daily quota exceeded",
+      "low": "{{remaining}} queries remaining",
+      "resetTime": "Resets in {{hours}} hours",
+      "resettingSoon": "Resetting soon",
+      "refresh": "Refresh"
+    },
+    "welcome": {
+      "title": "How can I help you?",
+      "description": "Welcome to AlmaNEO AI Hub. You can chat with AI for free up to 50 times a day."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Multilingual Support",
+        "description": "Chat in various languages including Korean and English."
+      },
+      "free": {
+        "title": "Free to Use",
+        "description": "Chat with AI for free up to 50 times a day."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Connecting everyone in the world with kind AI."
+      }
+    },
+    "suggestions": {
+      "title": "Try asking",
+      "coding": "Help me write some code",
+      "explain": "Explain this concept simply",
+      "translate": "Translate this sentence",
+      "brainstorm": "Help me brainstorm ideas"
+    },
+    "connectWallet": {
+      "title": "Connect Your Wallet",
+      "description": "You need to connect your wallet to use AI Hub. Start easily with social login.",
+      "button": "Connect Wallet",
+      "connecting": "Connecting..."
+    },
+    "errors": {
+      "quotaExceeded": "Daily quota exceeded. Please try again tomorrow.",
+      "networkError": "A network error occurred.",
+      "modelError": "An AI model error occurred."
+    }
   }
 }

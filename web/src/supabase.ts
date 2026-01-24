@@ -86,4 +86,36 @@ export interface DbNftListing {
   sold_at: string | null;
 }
 
+// AI Hub 타입 정의
+export interface DbConversation {
+  id: string;
+  user_address: string;
+  title: string;
+  model: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DbMessage {
+  id: string;
+  conversation_id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  created_at: string;
+}
+
+export interface DbQuota {
+  user_address: string;
+  queries_used: number;
+  quota_date: string;
+  updated_at: string;
+}
+
+// AI Hub 함수 반환 타입
+export interface QuotaCheckResult {
+  can_proceed: boolean;
+  current_used: number;
+  daily_limit: number;
+}
+
 export default supabase;

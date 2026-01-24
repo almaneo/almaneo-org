@@ -500,5 +500,66 @@
     "subtitle": "AI 민주화의 여정에 동참하세요",
     "button": "지금 시작하기",
     "description": "당신의 참여가 세상을 바꿉니다. 지금 바로 AlmaNEO 커뮤니티에 참여하세요."
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "세계의 모든 사람을 위한 AI",
+    "newChat": "새 대화",
+    "deleteChat": "대화 삭제",
+    "placeholder": "메시지를 입력하세요...",
+    "send": "전송",
+    "stop": "중지",
+    "newLine": "줄바꿈",
+    "thinking": "생각 중...",
+    "refresh": "새로고침",
+    "dismiss": "닫기",
+    "noConversations": "대화가 없습니다",
+    "today": "오늘",
+    "yesterday": "어제",
+    "daysAgo": "{{days}}일 전",
+    "quota": {
+      "used": "{{used}}/{{limit}} 사용",
+      "exceeded": "일일 쿼터 초과",
+      "low": "쿼터가 {{remaining}}회 남았습니다",
+      "resetTime": "{{hours}}시간 후 리셋",
+      "resettingSoon": "곧 리셋",
+      "refresh": "새로고침"
+    },
+    "welcome": {
+      "title": "무엇을 도와드릴까요?",
+      "description": "AlmaNEO AI Hub에 오신 것을 환영합니다. 일일 50회까지 무료로 AI와 대화할 수 있습니다."
+    },
+    "features": {
+      "multilingual": {
+        "title": "다국어 지원",
+        "description": "한국어, 영어 등 다양한 언어로 대화할 수 있습니다."
+      },
+      "free": {
+        "title": "무료 사용",
+        "description": "일일 50회까지 무료로 AI와 대화할 수 있습니다."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "친절한 AI로 세상의 모든 사람을 연결합니다."
+      }
+    },
+    "suggestions": {
+      "title": "이런 질문을 해보세요",
+      "coding": "코드 작성을 도와주세요",
+      "explain": "이 개념을 쉽게 설명해주세요",
+      "translate": "이 문장을 번역해주세요",
+      "brainstorm": "아이디어를 브레인스토밍 해주세요"
+    },
+    "connectWallet": {
+      "title": "지갑을 연결해주세요",
+      "description": "AI Hub를 사용하려면 지갑을 연결해야 합니다. 소셜 로그인으로 간편하게 시작하세요.",
+      "button": "지갑 연결",
+      "connecting": "연결 중..."
+    },
+    "errors": {
+      "quotaExceeded": "일일 쿼터를 초과했습니다. 내일 다시 시도해주세요.",
+      "networkError": "네트워크 오류가 발생했습니다.",
+      "modelError": "AI 모델 오류가 발생했습니다."
+    }
   }
 }

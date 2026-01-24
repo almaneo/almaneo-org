@@ -18,3 +18,6 @@ export { default as Kindness } from './Kindness';
 export { default as MeetupList } from './MeetupList';
 export { default as MeetupDetail } from './MeetupDetail';
 export { default as MeetupCreate } from './MeetupCreate';
+
+// AI Hub
+export { default as AIHub } from './AIHub';

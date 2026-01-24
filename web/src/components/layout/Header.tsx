@@ -45,7 +45,7 @@ interface NavItem {
 const platformItems: NavItem[] = [
   { nameKey: 'nav.gaii', path: '/gaii', icon: BarChart3 },
   { nameKey: 'nav.gaiiReport', path: '/gaii-report', icon: FileText, badgeKey: 'common.new' },
-  { nameKey: 'nav.aiHub', path: '/ai-hub', icon: Bot, badgeKey: 'common.comingSoon' },
+  { nameKey: 'nav.aiHub', path: '/ai-hub', icon: Bot, badgeKey: 'common.new' },
   { nameKey: 'nav.kindnessProtocol', path: '/kindness', icon: Heart },
   { nameKey: 'nav.meetups', path: '/meetup', icon: Users, badgeKey: 'common.new' },
 ];

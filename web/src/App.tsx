@@ -24,6 +24,7 @@ import {
   MeetupList,
   MeetupDetail,
   MeetupCreate,
+  AIHub,
 } from './pages';
 
 // Loading component for i18n
@@ -62,6 +63,8 @@ function App() {
                   <Route path="/meetup" element={<MeetupList />} />
                   <Route path="/meetup/new" element={<MeetupCreate />} />
                   <Route path="/meetup/:id" element={<MeetupDetail />} />
+                  {/* AI Hub */}
+                  <Route path="/ai-hub" element={<AIHub />} />
                 </Route>
               </Routes>
             </BrowserRouter>
