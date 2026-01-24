@@ -8,6 +8,27 @@ import { supabase, type DbConversation, type DbMessage, type DbQuota, type Quota
 // 상수
 export const DAILY_QUOTA_LIMIT = 50;
 
+// 지원 모델 목록
+export const AI_MODELS = {
+  'gemini-2.5-flash-lite': {
+    id: 'gemini-2.5-flash-lite',
+    name: 'Gemini 2.5 Flash Lite',
+    provider: 'Google',
+    description: 'Fast and efficient for everyday tasks',
+    icon: '✨',
+  },
+  'llama-3.3-70b-versatile': {
+    id: 'llama-3.3-70b-versatile',
+    name: 'Llama 3.3 70B',
+    provider: 'Groq',
+    description: 'Powerful open-source model with excellent multilingual support',
+    icon: '🦙',
+  },
+} as const;
+
+export type AIModelId = keyof typeof AI_MODELS;
+export const AI_MODEL_LIST = Object.values(AI_MODELS);
+
 // ============================================
 // 사용자 관리
 // ============================================
@@ -49,7 +70,7 @@ export async function ensureUserExists(userAddress: string): Promise<void> {
     console.error('[AI Hub] Failed to check user:', selectError);
   }
 }
-export const DEFAULT_MODEL = 'gemini-2.5-flash-lite';
+export const DEFAULT_MODEL: AIModelId = 'gemini-2.5-flash-lite';
 export const CONVERSATION_RETENTION_DAYS = 30;
 
 // ============================================

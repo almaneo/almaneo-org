@@ -5,7 +5,7 @@
 
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, Menu, X, Wallet } from 'lucide-react';
+import { AlertCircle, Menu, X, Wallet, ChevronDown, Check } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useAIHub } from '../hooks/useAIHub';
 import {
@@ -25,6 +25,8 @@ export function AIHub() {
     currentConversation,
     messages,
     quota,
+    currentModel,
+    availableModels,
     isLoading,
     isSending,
     isStreaming,
@@ -37,10 +39,14 @@ export function AIHub() {
     stopStreaming,
     clearError,
     refreshQuota,
+    setModel,
   } = useAIHub();
 
   // 모바일 사이드바 상태
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // 모델 선택 드롭다운 상태
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
 
   // 메시지 스크롤 참조
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -141,11 +147,70 @@ export function AIHub() {
             {currentConversation?.title || t('aiHub.title', 'AlmaNEO AI Hub')}
           </h1>
 
+          {/* 모델 선택 드롭다운 */}
+          <div className="relative ml-auto">
+            <button
+              onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-sm text-slate-200 transition-colors"
+            >
+              <span>{availableModels[currentModel].icon}</span>
+              <span className="hidden sm:inline">{availableModels[currentModel].name}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isModelDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* 드롭다운 메뉴 */}
+            {isModelDropdownOpen && (
+              <>
+                {/* 배경 오버레이 */}
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setIsModelDropdownOpen(false)}
+                />
+                {/* 메뉴 */}
+                <div className="absolute right-0 mt-2 w-72 rounded-lg bg-slate-800 border border-slate-600 shadow-xl z-20 overflow-hidden">
+                  <div className="p-2 border-b border-slate-700">
+                    <p className="text-xs text-slate-400 px-2">
+                      {t('aiHub.selectModel', 'AI 모델 선택')}
+                    </p>
+                  </div>
+                  <div className="p-1">
+                    {Object.values(availableModels).map((model) => (
+                      <button
+                        key={model.id}
+                        onClick={() => {
+                          setModel(model.id);
+                          setIsModelDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors ${
+                          currentModel === model.id
+                            ? 'bg-neos-blue/20 text-white'
+                            : 'hover:bg-slate-700 text-slate-300'
+                        }`}
+                      >
+                        <span className="text-xl">{model.icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{model.name}</span>
+                            {currentModel === model.id && (
+                              <Check className="w-4 h-4 text-neos-blue" />
+                            )}
+                          </div>
+                          <p className="text-xs text-slate-400 mt-0.5">{model.provider}</p>
+                          <p className="text-xs text-slate-500 mt-1">{model.description}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           {/* 새로고침 버튼 */}
           <button
             onClick={loadConversations}
             disabled={isLoading}
-            className="ml-auto p-2 text-slate-400 hover:text-white disabled:opacity-50"
+            className="p-2 text-slate-400 hover:text-white disabled:opacity-50"
             title={t('aiHub.refresh', '새로고침')}
           >
             <svg

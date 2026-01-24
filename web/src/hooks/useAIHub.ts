@@ -16,6 +16,9 @@ import {
   incrementQuotaManually,
   generateTitleFromMessage,
   DAILY_QUOTA_LIMIT,
+  DEFAULT_MODEL,
+  AI_MODELS,
+  type AIModelId,
 } from '../services/aiHub';
 import type { DbConversation, DbMessage } from '../supabase';
 
@@ -53,6 +56,10 @@ export interface UseAIHubReturn {
   // 쿼터
   quota: QuotaInfo;
 
+  // 모델
+  currentModel: AIModelId;
+  availableModels: typeof AI_MODELS;
+
   // 상태
   isLoading: boolean;
   isSending: boolean;
@@ -68,6 +75,7 @@ export interface UseAIHubReturn {
   stopStreaming: () => void;
   clearError: () => void;
   refreshQuota: () => Promise<void>;
+  setModel: (modelId: AIModelId) => void;
 }
 
 // API URL
@@ -110,6 +118,9 @@ export function useAIHub(): UseAIHubReturn {
     remaining: DAILY_QUOTA_LIMIT,
     resetTime: new Date(),
   });
+
+  // 모델 상태
+  const [currentModel, setCurrentModel] = useState<AIModelId>(DEFAULT_MODEL);
 
   // UI 상태
   const [isLoading, setIsLoading] = useState(false);
@@ -281,6 +292,7 @@ export function useAIHub(): UseAIHubReturn {
           body: JSON.stringify({
             conversationId,
             message: content,
+            model: currentModel,
             history: messages.map((m) => ({
               role: m.role,
               content: m.content,
@@ -371,7 +383,7 @@ export function useAIHub(): UseAIHubReturn {
         abortControllerRef.current = null;
       }
     },
-    [address, currentConversation, messages, quota.remaining]
+    [address, currentConversation, messages, quota.remaining, currentModel]
   );
 
   /**
@@ -410,6 +422,13 @@ export function useAIHub(): UseAIHubReturn {
     }
   }, [address]);
 
+  /**
+   * 모델 변경
+   */
+  const setModel = useCallback((modelId: AIModelId) => {
+    setCurrentModel(modelId);
+  }, []);
+
   // 초기 로드
   useEffect(() => {
     if (isConnected && address) {
@@ -428,6 +447,8 @@ export function useAIHub(): UseAIHubReturn {
     currentConversation,
     messages,
     quota,
+    currentModel,
+    availableModels: AI_MODELS,
     isLoading,
     isSending,
     isStreaming,
@@ -440,6 +461,7 @@ export function useAIHub(): UseAIHubReturn {
     stopStreaming,
     clearError,
     refreshQuota,
+    setModel,
   };
 }
 
