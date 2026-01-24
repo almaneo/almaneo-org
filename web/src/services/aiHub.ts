@@ -17,12 +17,12 @@ export const DAILY_QUOTA_LIMIT = 50;
  * (ai_hub_conversations, ai_hub_quota 테이블이 users를 참조하므로 필수)
  */
 export async function ensureUserExists(userAddress: string): Promise<void> {
-  // 먼저 사용자 존재 여부 확인
+  // 먼저 사용자 존재 여부 확인 (maybeSingle: 행이 없어도 에러 없음)
   const { data: existingUser, error: selectError } = await supabase
     .from('users')
     .select('wallet_address')
     .eq('wallet_address', userAddress)
-    .single();
+    .maybeSingle();
 
   if (existingUser) {
     // 이미 존재함
@@ -49,7 +49,7 @@ export async function ensureUserExists(userAddress: string): Promise<void> {
     console.error('[AI Hub] Failed to check user:', selectError);
   }
 }
-export const DEFAULT_MODEL = 'gemini-2.5-flash';
+export const DEFAULT_MODEL = 'gemini-2.5-flash-lite';
 export const CONVERSATION_RETENTION_DAYS = 30;
 
 // ============================================
@@ -236,9 +236,9 @@ export async function getQuota(userAddress: string): Promise<DbQuota | null> {
     .from('ai_hub_quota')
     .select('*')
     .eq('user_address', userAddress)
-    .single();
+    .maybeSingle(); // 행이 없어도 에러 없이 null 반환
 
-  if (error && error.code !== 'PGRST116') { // PGRST116: no rows
+  if (error) {
     console.error('[AI Hub] Failed to get quota:', error);
     return null;
   }
