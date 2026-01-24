@@ -6,3 +6,13 @@ export type { StakeInfo, TierInfo, StakingStats } from './useStaking';
 
 export { useGovernance } from './useGovernance';
 export type { Proposal, GovernanceStats, VotingPower } from './useGovernance';
+
+export { useMeetups } from './useMeetups';
+
+export {
+  useKindness,
+  getTierColor,
+  getTierBgColor,
+  getTierIcon,
+} from './useKindness';
+export type { KindnessStats, ActivityStats, LeaderboardEntry } from './useKindness';

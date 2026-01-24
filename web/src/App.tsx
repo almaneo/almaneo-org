@@ -9,7 +9,22 @@ import i18n from './i18n';
 import { WalletProvider } from './components/wallet';
 import { KindnessModeProvider } from './contexts';
 import { MainLayout } from './components/layout';
-import { Home, Dashboard, GAII, GAIIReport, Governance, Staking, Airdrop, Whitepaper, PrivacyPolicy, TermsOfService } from './pages';
+import {
+  Home,
+  Dashboard,
+  GAII,
+  GAIIReport,
+  Governance,
+  Staking,
+  Airdrop,
+  Whitepaper,
+  PrivacyPolicy,
+  TermsOfService,
+  Kindness,
+  MeetupList,
+  MeetupDetail,
+  MeetupCreate,
+} from './pages';
 
 // Loading component for i18n
 function LoadingFallback() {
@@ -42,6 +57,11 @@ function App() {
                   <Route path="/whitepaper" element={<Whitepaper />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
+                  {/* Kindness Protocol */}
+                  <Route path="/kindness" element={<Kindness />} />
+                  <Route path="/meetup" element={<MeetupList />} />
+                  <Route path="/meetup/new" element={<MeetupCreate />} />
+                  <Route path="/meetup/:id" element={<MeetupDetail />} />
                 </Route>
               </Routes>
             </BrowserRouter>

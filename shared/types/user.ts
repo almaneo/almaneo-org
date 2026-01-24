@@ -1,9 +1,8 @@
 /**
  * NEOS User Types
  * 사용자 관련 타입 정의
+ * Note: Firebase에서 Supabase로 마이그레이션됨 - Timestamp를 string (ISO 8601)으로 변경
  */
-
-import { Timestamp } from 'firebase/firestore';
 
 /**
  * 사용자 프로필
@@ -42,10 +41,10 @@ export interface User {
   stakedAmount?: number;
   stakingTier?: 'bronze' | 'silver' | 'gold' | 'diamond';
 
-  // 타임스탬프
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  lastLoginAt?: Timestamp;
+  // 타임스탬프 (ISO 8601 string)
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
 }
 
 /**
@@ -58,7 +57,7 @@ export interface LeaderboardEntry {
   totalPoints: number;
   level: number;
   kindnessScore?: number;
-  updatedAt: Timestamp;
+  updatedAt: string;
 }
 
 /**
@@ -80,17 +79,17 @@ export interface Meetup {
   description: string;
   hostAddress: string;
   hostName: string;
-  date: Timestamp;
+  date: string;
   location: string;
   maxParticipants: number;
   currentParticipants: number;
   isPublic: boolean;
   status: MeetupStatus;
   photoUrl?: string;
-  verifiedAt?: Timestamp;
+  verifiedAt?: string;
   verifiedBy?: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
 /**
@@ -99,7 +98,7 @@ export interface Meetup {
 export interface MeetupParticipant {
   address: string;
   nickname: string;
-  joinedAt: Timestamp;
+  joinedAt: string;
   pointsAwarded: boolean;
   isFirstMeetup: boolean;
 }
@@ -146,7 +145,7 @@ export interface KindnessActivity {
   verifiedBy?: string;  // 검증자 주소
   proofUrl?: string;    // 증거 URL
   txHash?: string;      // 온체인 기록 트랜잭션
-  createdAt: Timestamp;
+  createdAt: string;
 }
 
 /**

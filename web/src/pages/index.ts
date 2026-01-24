@@ -12,3 +12,9 @@ export { default as Airdrop } from './Airdrop';
 export { default as Whitepaper } from './Whitepaper';
 export { default as PrivacyPolicy } from './PrivacyPolicy';
 export { default as TermsOfService } from './TermsOfService';
+
+// Kindness Protocol
+export { default as Kindness } from './Kindness';
+export { default as MeetupList } from './MeetupList';
+export { default as MeetupDetail } from './MeetupDetail';
+export { default as MeetupCreate } from './MeetupCreate';
