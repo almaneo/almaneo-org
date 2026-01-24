@@ -62,17 +62,76 @@ export interface LeaderboardEntry {
 }
 
 /**
- * 친절 활동 타입
+ * Ambassador 티어
+ */
+export type AmbassadorTier = 'friend' | 'host' | 'ambassador' | 'guardian';
+
+/**
+ * 밋업 상태
+ */
+export type MeetupStatus = 'upcoming' | 'completed' | 'cancelled';
+
+/**
+ * 밋업 정보
+ */
+export interface Meetup {
+  id: string;
+  title: string;
+  description: string;
+  hostAddress: string;
+  hostName: string;
+  date: Timestamp;
+  location: string;
+  maxParticipants: number;
+  currentParticipants: number;
+  isPublic: boolean;
+  status: MeetupStatus;
+  photoUrl?: string;
+  verifiedAt?: Timestamp;
+  verifiedBy?: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+/**
+ * 밋업 참가자
+ */
+export interface MeetupParticipant {
+  address: string;
+  nickname: string;
+  joinedAt: Timestamp;
+  pointsAwarded: boolean;
+  isFirstMeetup: boolean;
+}
+
+/**
+ * 친절 활동 타입 (확장)
  */
 export type KindnessActivityType =
-  | 'mentoring'        // 멘토링 제공
-  | 'knowledge_share'  // 지식 공유 (튜토리얼, 가이드)
-  | 'translation'      // 번역 기여
-  | 'community_help'   // 커뮤니티 지원
-  | 'social_impact'    // 사회 공헌 (AI 활용 문제 해결)
-  | 'referral'         // 친구 초대
-  | 'daily_checkin'    // 일일 체크인
-  | 'quest_complete';  // 퀘스트 완료
+  | 'meetup_attend'     // 밋업 참가
+  | 'meetup_host'       // 밋업 주최
+  | 'meetup_host_large' // 대규모 밋업 주최 (10명+)
+  | 'first_meetup'      // 첫 밋업 보너스
+  | 'monthly_top_host'  // 월간 최다 주최
+  | 'mentoring'         // 멘토링 제공
+  | 'onboarding'        // 신규 사용자 온보딩
+  | 'education_content' // 교육 콘텐츠 제작
+  | 'workshop'          // 워크샵/세미나 진행
+  | 'translation'       // 번역 기여
+  | 'community_leader'  // 지역 커뮤니티 리더
+  | 'new_language'      // 새 언어 커뮤니티 개설
+  | 'volunteer'         // 봉사 활동
+  | 'donation'          // ALMAN 기부
+  | 'charity_event'     // 자선 이벤트 주최
+  | 'twitter_share'     // Twitter 공유
+  | 'discord_help'      // Discord 도움
+  | 'referral'          // 친구 초대
+  | 'governance_vote'   // 거버넌스 투표
+  | 'staking_weekly'    // 스테이킹 유지 (주간)
+  | 'nft_trade'         // NFT 거래
+  | 'daily_quest'       // 일일 퀘스트
+  | 'weekly_mission'    // 주간 미션
+  | 'monthly_challenge';// 월간 챌린지
 
 /**
  * 친절 활동 기록

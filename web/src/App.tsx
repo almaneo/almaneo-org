@@ -9,7 +9,7 @@ import i18n from './i18n';
 import { WalletProvider } from './components/wallet';
 import { KindnessModeProvider } from './contexts';
 import { MainLayout } from './components/layout';
-import { Home, Dashboard, GAII, Governance, Staking, Airdrop, Whitepaper, PrivacyPolicy, TermsOfService } from './pages';
+import { Home, Dashboard, GAII, GAIIReport, Governance, Staking, Airdrop, Whitepaper, PrivacyPolicy, TermsOfService } from './pages';
 
 // Loading component for i18n
 function LoadingFallback() {
@@ -35,6 +35,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/gaii" element={<GAII />} />
+                  <Route path="/gaii-report" element={<GAIIReport />} />
                   <Route path="/governance" element={<Governance />} />
                   <Route path="/staking" element={<Staking />} />
                   <Route path="/airdrop" element={<Airdrop />} />

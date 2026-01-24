@@ -4,17 +4,18 @@ import { ChevronDown, HelpCircle } from 'lucide-react';
 import { Section, Container } from '../../layout';
 import { SectionHeader, GlassCard, GradientText } from '../../ui';
 
-const faqItemIds = [
-  'whatIsAlmaNEO',
-  'whatIsJeong',
-  'totalSupply',
-  'howToGetToken',
-  'whichBlockchain',
-  'noWallet',
-  'whatIsJeongSBT',
-  'nftMarketplaceFeatures',
-  'howStakingWorks',
-  'whatIsKindnessGame',
+// FAQ 아이템과 카테고리 매핑
+const faqItems = [
+  { id: 'whatIsAlmaNEO', category: 'general' },
+  { id: 'whatIsJeong', category: 'general' },
+  { id: 'totalSupply', category: 'token' },
+  { id: 'howToGetToken', category: 'token' },
+  { id: 'whichBlockchain', category: 'technology' },
+  { id: 'noWallet', category: 'technology' },
+  { id: 'whatIsJeongSBT', category: 'nft' },
+  { id: 'nftMarketplaceFeatures', category: 'nft' },
+  { id: 'howStakingWorks', category: 'participation' },
+  { id: 'whatIsKindnessGame', category: 'participation' },
 ];
 
 interface FAQItemProps {
@@ -63,10 +64,26 @@ const categoryKeys = ['general', 'token', 'technology', 'nft', 'participation'];
 export function FAQSection() {
   const { t } = useTranslation('landing');
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const handleToggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  const handleCategoryClick = (category: string) => {
+    if (selectedCategory === category) {
+      // 같은 카테고리 클릭 시 필터 해제
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+      setOpenIndex(null); // 카테고리 변경 시 열린 아이템 닫기
+    }
+  };
+
+  // 선택된 카테고리에 따라 필터링
+  const filteredItems = selectedCategory
+    ? faqItems.filter(item => item.category === selectedCategory)
+    : faqItems;
 
   return (
     <Section id="faq" overlay="warm">
@@ -82,28 +99,33 @@ export function FAQSection() {
           subtitle={t('faq.subtitleFull')}
         />
 
-        {/* Category Filter (Optional - simple version) */}
+        {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           <span className="text-sm text-text-muted flex items-center gap-2">
             <HelpCircle className="w-4 h-4" strokeWidth={1.5} />
             {t('faq.categoryLabel')}
           </span>
-          {categoryKeys.map((cat, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 text-xs rounded-full bg-white/5 text-text-subtle"
+          {categoryKeys.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleCategoryClick(cat)}
+              className={`px-3 py-1 text-xs rounded-full transition-all cursor-pointer ${
+                selectedCategory === cat
+                  ? 'bg-neos-blue text-white'
+                  : 'bg-white/5 text-text-subtle hover:bg-white/10 hover:text-white'
+              }`}
             >
               {t(`faq.categories.${cat}`)}
-            </span>
+            </button>
           ))}
         </div>
 
         {/* FAQ List */}
         <GlassCard padding="lg">
-          {faqItemIds.map((itemId, i) => (
+          {filteredItems.map((item, i) => (
             <FAQItemComponent
-              key={i}
-              itemId={itemId}
+              key={item.id}
+              itemId={item.id}
               isOpen={openIndex === i}
               onToggle={() => handleToggle(i)}
             />

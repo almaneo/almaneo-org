@@ -1,10 +1,11 @@
 /**
- * NEOS Pages Export
+ * AlmaNEO Pages Export
  */
 
 export { default as Home } from './Home';
 export { default as Dashboard } from './Dashboard';
 export { default as GAII } from './GAII';
+export { default as GAIIReport } from './GAIIReport';
 export { default as Governance } from './Governance';
 export { default as Staking } from './Staking';
 export { default as Airdrop } from './Airdrop';

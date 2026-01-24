@@ -1,13 +1,19 @@
 /**
  * GAII Country Data
  * Source: Microsoft Global AI Adoption 2025 Report + Supplementary Data
- * Last Updated: 2025-H2 (2025년 하반기)
+ * Last Updated: 2026-Q1
+ *
+ * GAII v1.0 - 4개 지표 기반
+ * - Access (40%): AI 서비스 보급률, 인터넷 인프라
+ * - Affordability (30%): 구독료/소득 비율, 무료 서비스 가용성
+ * - Language (20%): 현지 언어 AI 지원 수준
+ * - Skill (10%): AI 리터러시, STEM 교육 수준
  */
 
-import type { CountryGAIIData } from './schema';
-import { calculateGaii, calculateGaiiGrade } from './schema';
+import type { CountryGAIIData, GAIIIndicators } from './schema';
+import { calculateGaiiGrade, calculateGaii } from './schema';
 
-// 원본 데이터에서 GAII 계산하여 생성
+// 레거시: 채택률 기반 데이터 생성 (하위 호환)
 function createCountryData(
   iso3: string,
   iso2: string,
@@ -22,6 +28,8 @@ function createCountryData(
   trendValue: number
 ): CountryGAIIData {
   const gaii = calculateGaii(adoptionRate);
+  // 레거시 데이터에는 추정 지표 생성
+  const indicators: GAIIIndicators = estimateIndicators(adoptionRate, paidUserIndex);
   return {
     iso3,
     iso2,
@@ -32,12 +40,50 @@ function createCountryData(
     workingAgePop,
     adoptionRate,
     paidUserIndex,
+    indicators,
     gaii,
     gaiiGrade: calculateGaiiGrade(gaii),
     trend,
     trendValue,
     dataSource: 'Microsoft Global AI Adoption 2025',
     lastUpdated: '2025-H2',
+  };
+}
+
+// 채택률/유료지수 기반 지표 추정 (레거시 데이터용)
+function estimateIndicators(adoptionRate: number, paidUserIndex: number): GAIIIndicators {
+  // 채택률과 유료지수를 기반으로 4개 지표 추정
+  const accessScore = Math.min(100, (adoptionRate / 65) * 100);
+  const affordabilityScore = Math.min(100, paidUserIndex * 0.8 + 20);
+  const languageScore = Math.min(100, adoptionRate * 1.2 + 10);
+  const skillScore = Math.min(100, (adoptionRate + paidUserIndex) / 2);
+
+  return {
+    access: Math.round(accessScore * 10) / 10,
+    accessDetails: {
+      aiAdoptionRate: adoptionRate,
+      internetPenetration: Math.min(100, adoptionRate * 2),
+      mobileConnectivity: Math.min(100, adoptionRate * 1.5),
+      infrastructureQuality: Math.min(100, paidUserIndex),
+    },
+    affordability: Math.round(affordabilityScore * 10) / 10,
+    affordabilityDetails: {
+      aiCostToIncome: Math.max(0, 30 - adoptionRate * 0.4),
+      freeServiceAccess: Math.min(100, adoptionRate * 1.2),
+      purchasingPower: paidUserIndex,
+    },
+    language: Math.round(languageScore * 10) / 10,
+    languageDetails: {
+      nativeLanguageSupport: Math.min(100, adoptionRate * 1.5),
+      translationQuality: Math.min(100, adoptionRate * 1.2),
+      localContentAvailability: Math.min(100, adoptionRate),
+    },
+    skill: Math.round(skillScore * 10) / 10,
+    skillDetails: {
+      aiLiteracy: Math.min(100, adoptionRate * 1.3),
+      stemEducation: Math.min(100, paidUserIndex * 0.9),
+      digitalSkills: Math.min(100, (adoptionRate + paidUserIndex) / 2),
+    },
   };
 }
 
