@@ -1,21 +1,13 @@
 /**
  * useUserData Hook
- * Firebase에서 사용자 데이터를 관리하는 커스텀 훅
+ * Supabase에서 사용자 데이터를 관리하는 커스텀 훅
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  onSnapshot,
-  serverTimestamp,
-  Timestamp,
-} from 'firebase/firestore';
-import { db } from '../firebase';
+import { supabase, type DbUser } from '../supabase';
 import { useWallet } from '../components/wallet';
 
-// 사용자 타입 정의 (shared 타입과 동일)
+// 사용자 타입 정의
 export interface UserProfile {
   nickname: string;
   avatar: string | null;
@@ -39,9 +31,9 @@ export interface User {
   jeongTier?: 'bronze' | 'silver' | 'gold' | 'diamond';
   stakedAmount?: number;
   stakingTier?: 'bronze' | 'silver' | 'gold' | 'diamond';
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  lastLoginAt?: Timestamp;
+  createdAt: Date;
+  updatedAt: Date;
+  lastLoginAt?: Date;
 }
 
 // 스테이킹 티어별 정보
@@ -58,6 +50,28 @@ export function calculateStakingTier(stakedAmount: number): 'bronze' | 'silver' 
   if (stakedAmount >= STAKING_TIERS.gold.minAmount) return 'gold';
   if (stakedAmount >= STAKING_TIERS.silver.minAmount) return 'silver';
   return 'bronze';
+}
+
+// DB 데이터를 User 타입으로 변환
+function dbUserToUser(dbUser: DbUser): User {
+  return {
+    walletAddress: dbUser.wallet_address,
+    profile: {
+      nickname: dbUser.nickname || `ALMAN_${dbUser.wallet_address.slice(0, 6)}`,
+      avatar: dbUser.avatar_url,
+    },
+    kindnessScore: dbUser.kindness_score,
+    totalPoints: dbUser.total_points,
+    level: dbUser.level,
+    settings: {
+      language: dbUser.language,
+      notifications: dbUser.notifications_enabled,
+      theme: 'dark',
+    },
+    stakingTier: 'bronze',
+    createdAt: new Date(dbUser.created_at),
+    updatedAt: new Date(dbUser.updated_at),
+  };
 }
 
 interface UseUserDataReturn {
@@ -82,40 +96,44 @@ export function useUserData(): UseUserDataReturn {
     setError(null);
 
     try {
-      const userRef = doc(db, 'users', address.toLowerCase());
-      const userSnap = await getDoc(userRef);
+      const walletAddress = address.toLowerCase();
 
-      if (userSnap.exists()) {
-        // 기존 사용자 - lastLoginAt 업데이트
-        await setDoc(userRef, {
-          lastLoginAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        }, { merge: true });
+      // 기존 사용자 확인
+      const { data: existingUser, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('wallet_address', walletAddress)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        // PGRST116 = 결과 없음 (새 사용자)
+        throw fetchError;
+      }
+
+      if (existingUser) {
+        // 기존 사용자 - updated_at 업데이트
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ updated_at: new Date().toISOString() })
+          .eq('wallet_address', walletAddress);
+
+        if (updateError) throw updateError;
       } else {
         // 새 사용자 생성
-        const newUser = {
-          walletAddress: address.toLowerCase(),
-          profile: {
-            nickname: userInfo?.name || `NEOS_${address.slice(0, 6)}`,
-            avatar: userInfo?.profileImage || null,
-            bio: '',
-          },
-          kindnessScore: 0,
-          totalPoints: 0,
-          level: 1,
-          settings: {
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert({
+            wallet_address: walletAddress,
+            nickname: userInfo?.name || `ALMAN_${walletAddress.slice(0, 6)}`,
+            avatar_url: userInfo?.profileImage || null,
+            kindness_score: 0,
+            total_points: 0,
+            level: 1,
             language: 'ko',
-            notifications: true,
-            theme: 'dark',
-          },
-          stakedAmount: 0,
-          stakingTier: 'bronze',
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          lastLoginAt: serverTimestamp(),
-        };
+            notifications_enabled: true,
+          });
 
-        await setDoc(userRef, newUser);
+        if (insertError) throw insertError;
       }
     } catch (err) {
       console.error('[useUserData] 사용자 생성/업데이트 실패:', err);
@@ -131,11 +149,16 @@ export function useUserData(): UseUserDataReturn {
 
     setIsLoading(true);
     try {
-      const userRef = doc(db, 'users', address.toLowerCase());
-      const userSnap = await getDoc(userRef);
+      const { data, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('wallet_address', address.toLowerCase())
+        .single();
 
-      if (userSnap.exists()) {
-        setUser(userSnap.data() as User);
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        setUser(dbUserToUser(data));
       }
     } catch (err) {
       console.error('[useUserData] 사용자 조회 실패:', err);
@@ -152,28 +175,37 @@ export function useUserData(): UseUserDataReturn {
       return;
     }
 
+    const walletAddress = address.toLowerCase();
+
     // 사용자 생성/업데이트
     createOrUpdateUser();
 
-    // 실시간 구독
-    const userRef = doc(db, 'users', address.toLowerCase());
-    const unsubscribe = onSnapshot(
-      userRef,
-      (snapshot) => {
-        if (snapshot.exists()) {
-          setUser(snapshot.data() as User);
-        } else {
-          setUser(null);
-        }
-      },
-      (err) => {
-        console.error('[useUserData] 실시간 구독 오류:', err);
-        setError('실시간 데이터 동기화에 실패했습니다.');
-      }
-    );
+    // 초기 데이터 로드
+    refreshUser();
 
-    return () => unsubscribe();
-  }, [isConnected, address, createOrUpdateUser]);
+    // 실시간 구독 (Supabase Realtime)
+    const channel = supabase
+      .channel(`user:${walletAddress}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'users',
+          filter: `wallet_address=eq.${walletAddress}`,
+        },
+        (payload) => {
+          if (payload.new) {
+            setUser(dbUserToUser(payload.new as DbUser));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isConnected, address, createOrUpdateUser, refreshUser]);
 
   return {
     user,
