@@ -33,9 +33,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ========================================
   {
     id: 'first_harvest',
-    title: 'First Harvest',
-    description: 'Click your farm for the first time',
-    icon: '🌾',
+    title: 'Hello World',
+    description: 'Establish your first connection to the Hub',
+    icon: '🛰️',
     category: 'tap',
     target: 1,
     reward: 10,
@@ -44,9 +44,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'century_club',
-    title: 'Century Club',
-    description: 'Click your farm 100 times',
-    icon: '💯',
+    title: 'Data Streamer',
+    description: 'Sync 100 data packets to the Hub',
+    icon: '📡',
     category: 'tap',
     target: 100,
     reward: 100,
@@ -55,9 +55,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'millennium',
-    title: 'Millennium',
-    description: 'Click your farm 1,000 times',
-    icon: '🎯',
+    title: 'High Bandwidth',
+    description: 'Sync 1,000 data packets',
+    icon: '⚡',
     category: 'tap',
     target: 1000,
     reward: 500,
@@ -66,9 +66,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'click_master',
-    title: 'Click Master',
-    description: 'Click your farm 10,000 times',
-    icon: '🏆',
+    title: 'Mainframe Access',
+    description: 'Sync 10,000 data packets',
+    icon: '💻',
     category: 'tap',
     target: 10000,
     reward: 2000,
@@ -81,9 +81,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ========================================
   {
     id: 'first_fortune',
-    title: 'First Fortune',
-    description: 'Earn your first 1,000 points',
-    icon: '💎',
+    title: 'Initial Capital',
+    description: 'Accumulate your first 1,000 kindness points',
+    icon: '💝',
     category: 'points',
     target: 1000,
     reward: 100,
@@ -92,9 +92,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'point_collector',
-    title: 'Point Collector',
-    description: 'Earn 10,000 points',
-    icon: '💰',
+    title: 'Impact Maker',
+    description: 'Accumulate 10,000 kindness points',
+    icon: '🌍',
     category: 'points',
     target: 10000,
     reward: 500,
@@ -103,9 +103,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'wealthy_farmer',
-    title: 'Wealthy Farmer',
-    description: 'Earn 100,000 points',
-    icon: '🤑',
+    title: 'Equality Champion',
+    description: 'Accumulate 100,000 kindness points',
+    icon: '🏆',
     category: 'points',
     target: 100000,
     reward: 2000,
@@ -118,9 +118,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ========================================
   {
     id: 'first_upgrade',
-    title: 'First Upgrade',
-    description: 'Purchase your first upgrade',
-    icon: '📈',
+    title: 'Node Optimization',
+    description: 'Install your first hub optimization module',
+    icon: '⚙️',
     category: 'upgrade',
     target: 1,
     reward: 50,
@@ -129,9 +129,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'max_energy',
-    title: 'Max Energy',
-    description: 'Upgrade Energy Capacity to level 10',
-    icon: '⚡',
+    title: 'Buffer Overflow',
+    description: 'Upgrade Compute Nodes to level 10',
+    icon: '💾',
     category: 'upgrade',
     target: 10,
     reward: 500,
@@ -140,9 +140,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'power_tapper',
-    title: 'Power Tapper',
-    description: 'Upgrade Tap Power to level 10',
-    icon: '👆',
+    title: 'Neural Link',
+    description: 'Upgrade Labeling Speed to level 10',
+    icon: '🧠',
     category: 'upgrade',
     target: 10,
     reward: 500,
@@ -151,8 +151,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'automation_king',
-    title: 'Automation King',
-    description: 'Upgrade Auto Farm to level 10',
+    title: 'AI Singularity',
+    description: 'Upgrade Auto-ML Model to level 10',
     icon: '🤖',
     category: 'upgrade',
     target: 10,
@@ -162,9 +162,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'energy_master',
-    title: 'Energy Master',
-    description: 'Upgrade Energy Regen to level 10',
-    icon: '🔋',
+    title: 'Zero Latency',
+    description: 'Upgrade Cooling System to level 10',
+    icon: '❄️',
     category: 'upgrade',
     target: 10,
     reward: 500,
@@ -173,11 +173,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'perfect_farm',
-    title: 'Perfect Farm',
-    description: 'Upgrade all categories to level 10',
-    icon: '🏆',
+    title: 'Tier 1 Operator',
+    description: 'Maximize all hub modules',
+    icon: '👑',
     category: 'upgrade',
-    target: 40, // 4 upgrades * 10 levels
+    target: 40,
     reward: 5000,
     completed: false,
     hidden: false,
@@ -188,9 +188,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ========================================
   {
     id: 'beginner',
-    title: 'Beginner Farmer',
-    description: 'Reach level 5',
-    icon: '🌱',
+    title: 'Alpha Tester',
+    description: 'Reach Phase 5',
+    icon: '🧪',
     category: 'level',
     target: 5,
     reward: 200,
@@ -199,9 +199,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'advanced',
-    title: 'Advanced Farmer',
-    description: 'Reach level 10',
-    icon: '🌳',
+    title: 'Beta Synchronizer',
+    description: 'Reach Phase 10',
+    icon: '🛰️',
     category: 'level',
     target: 10,
     reward: 500,
@@ -210,9 +210,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'master',
-    title: 'Master Farmer',
-    description: 'Reach level 25',
-    icon: '👑',
+    title: 'Hub Architect',
+    description: 'Reach Phase 25',
+    icon: '💠',
     category: 'level',
     target: 25,
     reward: 2000,
@@ -225,9 +225,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ========================================
   {
     id: 'night_owl',
-    title: 'Night Owl',
-    description: 'Play between midnight and 6 AM',
-    icon: '🦉',
+    title: 'Deep Learning',
+    description: 'Sync data during the night cycle (00:00 - 06:00)',
+    icon: '🌙',
     category: 'special',
     target: 1,
     reward: 100,
@@ -236,8 +236,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'dedicated',
-    title: 'Dedicated Farmer',
-    description: 'Log in for 7 consecutive days',
+    title: 'Stable Connection',
+    description: 'Access the hub for 7 consecutive days',
     icon: '📅',
     category: 'special',
     target: 7,
@@ -247,19 +247,19 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'veteran',
-    title: 'Veteran Player',
-    description: 'Play for a total of 10 hours',
+    title: 'Core Member',
+    description: 'Total uptime exceeds 10 hours',
     icon: '🎮',
     category: 'special',
-    target: 36000, // 10 hours in seconds
+    target: 36000,
     reward: 1500,
     completed: false,
     hidden: true,
   },
   {
     id: 'quest_master',
-    title: 'Quest Master',
-    description: 'Complete 10 daily quests',
+    title: 'Mission Veteran',
+    description: 'Complete 10 daily logs',
     icon: '🏅',
     category: 'special',
     target: 10,
@@ -334,26 +334,26 @@ export function isNightTime(): boolean {
  */
 export function calculateLoginStreak(lastLoginDate: string, currentDate: string): number {
   if (!lastLoginDate) return 1;
-  
+
   const last = new Date(lastLoginDate);
   const current = new Date(currentDate);
-  
+
   // Reset to start of day for comparison
   last.setHours(0, 0, 0, 0);
   current.setHours(0, 0, 0, 0);
-  
+
   const diffDays = Math.floor((current.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   // If logged in yesterday, increment streak
   if (diffDays === 1) {
     return 1; // Will be incremented by caller
   }
-  
+
   // If logged in today (same day), keep current streak
   if (diffDays === 0) {
     return 0; // No change
   }
-  
+
   // If more than 1 day gap, reset streak
   return -1; // Will be reset to 1 by caller
 }

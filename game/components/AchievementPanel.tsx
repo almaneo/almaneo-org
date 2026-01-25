@@ -100,25 +100,25 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
       {/* Header */}
       <Box sx={{ mb: isLandscape ? 2 : 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: isLandscape ? 1.5 : 2 }}>
-          <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: '#FFD700', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
-            🏆 Achievements
+          <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: 'white', fontWeight: 900, display: 'flex', alignItems: 'center', gap: 1 }}>
+            🏆 Mission Accomplishments
           </Typography>
-          
+
           {/* Completion Rate */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Chip
               label={`${completedCount} / ${totalCount}`}
               size="small"
               sx={{
-                bgcolor: 'rgba(255, 215, 0, 0.2)',
-                color: '#FFD700',
-                border: '1px solid rgba(255, 215, 0, 0.4)',
-                fontWeight: 600,
-                fontSize: isLandscape ? 11 : undefined,
+                bgcolor: 'rgba(0, 82, 255, 0.2)',
+                color: '#0052FF',
+                border: '1px solid rgba(0, 82, 255, 0.4)',
+                fontWeight: 900,
+                fontSize: isLandscape ? 10 : 11,
               }}
             />
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              ({completionRate}% Completed)
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold' }}>
+              {completionRate}% SYNCED
             </Typography>
           </Box>
         </Box>
@@ -132,16 +132,19 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
           sx={{
             '& .MuiTab-root': {
               minHeight: isLandscape ? 40 : 48,
-              textTransform: 'none',
-              fontWeight: 500,
-              fontSize: isLandscape ? 13 : undefined,
-              color: 'rgba(255, 255, 255, 0.6)',
+              textTransform: 'uppercase',
+              fontWeight: 800,
+              letterSpacing: 1,
+              fontSize: isLandscape ? 12 : 13,
+              color: 'rgba(255, 255, 255, 0.3)',
               '&.Mui-selected': {
-                color: '#FFD700',
+                color: '#0052FF',
               },
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#FFD700',
+              backgroundColor: '#0052FF',
+              height: 3,
+              borderRadius: '3px 3px 0 0',
             },
           }}
         >

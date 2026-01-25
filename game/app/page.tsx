@@ -9,7 +9,7 @@ import { Howl } from 'howler';
 import GameLayout from '@/components/GameLayout';
 import GameHUD from '@/components/GameHUD';
 import GameNavBar from '@/components/GameNavBar';
-import FarmCanvas from '@/components/FarmCanvas';
+import KindnessCanvas from '@/components/KindnessCanvas';
 import SaveIndicator from '@/components/SaveIndicator';
 import OfflineEarningsModal from '@/components/OfflineEarningsModal';
 import UpgradePanel from '@/components/UpgradePanel';
@@ -34,10 +34,10 @@ import { getEducationByLevel, EducationContent } from '@/lib/educationContent';
 import { getStoryMilestone } from '@/lib/storyContent';
 
 export default function HomePage() {
-  const { 
-    points, 
-    energy, 
-    maxEnergy, 
+  const {
+    points,
+    energy,
+    maxEnergy,
     level,
     upgrades,
     achievements,
@@ -50,7 +50,7 @@ export default function HomePage() {
     checkLevelUp,
     loadGame,
     saveGame,
-    isLoading 
+    isLoading
   } = useGameStore();
 
   // Web3Auth 지갑 연결
@@ -133,10 +133,10 @@ export default function HomePage() {
   // Initial story display (only once)
   useEffect(() => {
     if (web3Loading || isLoading) return;
-    
+
     const gameStarted = localStorage.getItem('gameStarted');
     const storyViewed = localStorage.getItem('storyViewed');
-    
+
     if (!gameStarted) {
       // 첫 방문: StartScreen 표시
       setShowStartScreen(true);
@@ -158,7 +158,7 @@ export default function HomePage() {
         setEducationContent(education);
         setShowEducation(true);
       }
-      
+
       // Check for story milestone
       const milestone = getStoryMilestone(level);
       if (milestone) {
@@ -173,7 +173,7 @@ export default function HomePage() {
   // Watch for newly completed achievements
   useEffect(() => {
     const completedAchievements = achievements.filter(a => a.completed);
-    
+
     // Check if there's a newly completed achievement (completed in last 2 seconds)
     const newlyCompleted = completedAchievements.find(a => {
       if (!a.completedAt) return false;
@@ -187,8 +187,8 @@ export default function HomePage() {
     }
   }, [achievements, notificationAchievement]);
 
-  // 수확 핸들러
-  const handleHarvest = () => {
+  // Kindness Act 핸들러
+  const handleKindnessAct = () => {
     if (energy >= 1) {
       addPoints(upgrades.tapPower);
       consumeEnergy(1);
@@ -210,7 +210,7 @@ export default function HomePage() {
     }
     console.log('🎵 Starting background music from page.tsx');
     bgMusicRef.current.play();
-    
+
     localStorage.setItem('gameStarted', 'true');
     setShowStartScreen(false);
     setShowStory(true);
@@ -229,10 +229,10 @@ export default function HomePage() {
   };
 
   // 에너지가 1 이상인지 체크
-  const canHarvest = energy >= 1;
+  const canAct = energy >= 1;
 
   if (isLoading || web3Loading) {
-    return <LoadingScreen message="Loading your farm..." />;
+    return <LoadingScreen message="Loading Kindness Hub..." />;
   }
 
   // 🔒 로그인 필수 체크
@@ -255,12 +255,12 @@ export default function HomePage() {
             }}
           >
             <Image
-              src="/images/mimig-farm-logo.png"
-              alt="MiMiG Farm"
+              src="/images/almaneo-logo.png"
+              alt="ALMANEO KINDNESS GAME"
               height={120}
               width={400}
-              style={{ 
-                height: '100%', 
+              style={{
+                height: '100%',
                 width: 'auto',
                 objectFit: 'contain',
               }}
@@ -279,9 +279,9 @@ export default function HomePage() {
           />
         }
         canvas={
-          <FarmCanvas
-            onHarvest={handleHarvest}
-            canHarvest={canHarvest}
+          <KindnessCanvas
+            onHarvest={handleKindnessAct}
+            canHarvest={canAct}
             tapPower={upgrades.tapPower}
           />
         }
@@ -490,14 +490,14 @@ export default function HomePage() {
       <OfflineEarningsModal />
 
       {/* Start Screen */}
-      <StartScreen 
+      <StartScreen
         open={showStartScreen}
         onStart={handleStartGame}
       />
 
       {/* Story Introduction */}
-      <StoryIntro 
-        open={showStory} 
+      <StoryIntro
+        open={showStory}
         onClose={handleStoryClose}
       />
 
@@ -528,10 +528,10 @@ export default function HomePage() {
         onClose={() => setMilestoneSnackbar({ open: false, message: '' })}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert 
+        <Alert
           onClose={() => setMilestoneSnackbar({ open: false, message: '' })}
           severity="success"
-          sx={{ 
+          sx={{
             width: '100%',
             fontSize: '1rem',
             '& .MuiAlert-message': {

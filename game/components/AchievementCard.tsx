@@ -37,17 +37,17 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         overflow: 'hidden',
         transition: 'all 0.3s ease',
         background: isCompleted
-          ? 'linear-gradient(145deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)'
-          : 'linear-gradient(145deg, rgba(60, 40, 25, 0.8) 0%, rgba(40, 25, 15, 0.8) 100%)',
-        border: isCompleted ? '2px solid #FFD700' : '2px solid rgba(139, 69, 19, 0.6)',
-        borderRadius: 2,
+          ? 'rgba(0, 82, 255, 0.1)'
+          : 'rgba(255, 255, 255, 0.03)',
+        border: isCompleted ? '2px solid #0052FF' : '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 3,
         filter: isHidden ? 'blur(3px)' : 'none',
         opacity: isHidden ? 0.6 : 1,
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: isCompleted ? '#FFD700' : 'rgba(139, 69, 19, 0.8)',
-          boxShadow: isCompleted 
-            ? '0 8px 24px rgba(255, 215, 0, 0.4)'
+          borderColor: isCompleted ? '#0052FF' : 'rgba(255, 255, 255, 0.2)',
+          boxShadow: isCompleted
+            ? '0 8px 32px rgba(0, 82, 255, 0.2)'
             : '0 8px 24px rgba(0, 0, 0, 0.3)',
         },
       }}
@@ -59,17 +59,18 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             position: 'absolute',
             top: isLandscape ? 8 : 12,
             right: isLandscape ? 8 : 12,
-            background: 'linear-gradient(135deg, #FFD700 0%, #FFA000 100%)',
-            color: '#000',
+            bgcolor: '#0052FF',
+            color: 'white',
             px: isLandscape ? 1 : 1.5,
             py: 0.5,
             borderRadius: 1,
-            fontWeight: 700,
-            fontSize: isLandscape ? 10 : 12,
-            boxShadow: '0 2px 8px rgba(255, 215, 0, 0.5)',
+            fontWeight: 900,
+            fontSize: isLandscape ? 8 : 10,
+            letterSpacing: 1,
+            boxShadow: '0 2px 8px rgba(0, 82, 255, 0.5)',
           }}
         >
-          ✓ Completed
+          EARNED
         </Box>
       )}
 
@@ -81,7 +82,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             fontSize: isLandscape ? 36 : 48,
             lineHeight: 1,
             minWidth: isLandscape ? 36 : 48,
-            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))',
           }}
         >
           {isHidden ? '🔒' : icon}
@@ -92,25 +93,26 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
           <Typography
             variant="h6"
             sx={{
-              fontWeight: 700,
-              color: isCompleted ? '#FFD700' : '#FFF',
+              fontWeight: 800,
+              color: 'white',
               mb: 0.5,
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-              fontSize: isLandscape ? 16 : undefined,
+              fontSize: isLandscape ? 16 : 18,
+              letterSpacing: -0.5,
             }}
           >
-            {isHidden ? 'Secret Achievement' : title}
+            {isHidden ? 'Encrypted Data' : title}
           </Typography>
 
           <Typography
             variant="body2"
             sx={{
-              color: isCompleted ? 'rgba(255, 215, 0, 0.8)' : 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(255, 255, 255, 0.5)',
               lineHeight: 1.5,
               fontSize: isLandscape ? 11 : 13,
+              fontWeight: 300,
             }}
           >
-            {isHidden ? 'Hidden achievement. Complete it to unlock!' : description}
+            {isHidden ? 'Unlock this node to decrypt mission data.' : description}
           </Typography>
         </Box>
       </Box>
@@ -123,14 +125,14 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
               variant="determinate"
               value={progress}
               sx={{
-                height: isLandscape ? 8 : 10,
+                height: isLandscape ? 6 : 8,
                 borderRadius: 1,
-                backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 215, 0, 0.2)',
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
                 '& .MuiLinearProgress-bar': {
                   background: isCompleted
-                    ? 'linear-gradient(90deg, #FFD700 0%, #FFA000 100%)'
-                    : 'linear-gradient(90deg, #4CAF50 0%, #81C784 100%)',
+                    ? 'linear-gradient(90deg, #4CAF50 0%, #81C784 100%)'
+                    : 'linear-gradient(90deg, #0052FF 0%, #00C2FF 100%)',
                 },
               }}
             />
@@ -143,10 +145,10 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
               alignItems: 'center',
             }}
           >
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFF', fontWeight: 600 }}>
-              Progress: {current} / {target}
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+              SYNC: {current} / {target}
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFD700', fontWeight: 600 }}>
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#0052FF', fontWeight: 800 }}>
               {progress.toFixed(0)}%
             </Typography>
           </Box>
@@ -158,28 +160,31 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         sx={{
           mt: isLandscape ? 1.5 : 2,
           pt: isLandscape ? 1.5 : 2,
-          borderTop: '1px solid rgba(255, 215, 0, 0.2)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            color: '#FFD700',
-            fontWeight: 700,
-            fontSize: isLandscape ? 14 : 16,
-          }}
-        >
-          🏆 Reward: {reward} points
-        </Typography>
-        
+        <Box>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: 10 }}>UNLOCKED REWARD</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: isCompleted ? '#4CAF50' : 'white',
+              fontWeight: 800,
+              fontSize: isLandscape ? 14 : 16,
+            }}
+          >
+            💖 +{reward}
+          </Typography>
+        </Box>
+
         {isCompleted && completedAt && (
           <Typography
             variant="caption"
             sx={{
-              color: 'rgba(255, 215, 0, 0.7)',
+              color: 'rgba(255, 255, 255, 0.3)',
               fontSize: isLandscape ? 10 : 11,
             }}
           >

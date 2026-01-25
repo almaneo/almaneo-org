@@ -32,18 +32,18 @@ import {
   getMonthlyTopPlayers,
   getUserRank,
   updateUserRank,
-} from '@/lib/firebaseLeaderboard';
+} from '@/lib/supabaseLeaderboard';
 import { useGameStore } from '@/hooks/useGameStore';
 
 export default function LeaderboardPanel() {
   // Landscape 모드 감지
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
-  
+
   const [activeTab, setActiveTab] = useState<LeaderboardType>('global');
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  
+
   const { totalPoints, level } = useGameStore();
   const currentUserId = 'current_user'; // TODO: 실제 userId로 교체
 
@@ -63,18 +63,18 @@ export default function LeaderboardPanel() {
 
   const loadLeaderboard = async () => {
     setLoading(true);
-    
+
     try {
       // 개발 모드: 목 데이터 우선 사용
-      const USE_MOCK_DATA = true; // TODO: Firebase 준비되면 false로 변경
-      
+      const USE_MOCK_DATA = true; // TODO: Supabase 준비되면 false로 변경
+
       let fetchedData: LeaderboardEntry[] = [];
-      
+
       if (USE_MOCK_DATA) {
         // 목 데이터 사용
         console.log('Using mock data (development mode)');
         fetchedData = generateMockLeaderboard(100);
-        
+
         // 현재 유저 추가
         const currentUserEntry: LeaderboardEntry = {
           userId: currentUserId,
@@ -84,10 +84,10 @@ export default function LeaderboardPanel() {
           rank: 0,
           lastUpdated: new Date(),
         };
-        
+
         fetchedData.push(currentUserEntry);
       } else {
-        // Firebase 데이터 사용
+        // Supabase 데이터 사용
         switch (activeTab) {
           case 'global':
             fetchedData = await getTopPlayers(100);
@@ -99,16 +99,16 @@ export default function LeaderboardPanel() {
             fetchedData = await getMonthlyTopPlayers(100);
             break;
         }
-        
-        // Firebase에 데이터가 없으면 목 데이터 사용
+
+        // Supabase에 데이터가 없으면 목 데이터 사용
         if (fetchedData.length === 0) {
-          console.log('Using mock data - no Firebase data found');
+          console.log('Using mock data - no Supabase data found');
           fetchedData = generateMockLeaderboard(100);
         }
-        
+
         // 현재 유저 정보 가져오기
         const currentUserEntry = await getUserRank(currentUserId);
-        
+
         if (!currentUserEntry) {
           const newUserEntry: LeaderboardEntry = {
             userId: currentUserId,
@@ -118,34 +118,34 @@ export default function LeaderboardPanel() {
             rank: 0,
             lastUpdated: new Date(),
           };
-          
+
           await updateUserRank(currentUserId, {
             username: 'You',
             totalPoints,
             level,
           });
-          
+
           fetchedData.push(newUserEntry);
         } else {
           fetchedData.push(currentUserEntry);
         }
       }
-      
+
       // 포인트 기준 정렬
       fetchedData.sort((a, b) => b.totalPoints - a.totalPoints);
-      
+
       // 순위 재계산
       fetchedData.forEach((entry, index) => {
         entry.rank = index + 1;
       });
-      
+
       setLeaderboard(fetchedData);
       setLastUpdate(new Date());
     } catch (error) {
       console.error('Error loading leaderboard:', error);
       // 에러 시 목 데이터 사용
       const mockData = generateMockLeaderboard(100);
-      
+
       // 현재 유저 추가
       const currentUserEntry: LeaderboardEntry = {
         userId: currentUserId,
@@ -155,13 +155,13 @@ export default function LeaderboardPanel() {
         rank: 0,
         lastUpdated: new Date(),
       };
-      
+
       mockData.push(currentUserEntry);
       mockData.sort((a, b) => b.totalPoints - a.totalPoints);
       mockData.forEach((entry, index) => {
         entry.rank = index + 1;
       });
-      
+
       setLeaderboard(mockData);
     } finally {
       setLoading(false);
@@ -178,7 +178,7 @@ export default function LeaderboardPanel() {
 
   // 통계 계산
   const stats = calculateLeaderboardStats(leaderboard);
-  
+
   // 내 순위 찾기
   const myEntry = leaderboard.find(entry => entry.userId === currentUserId);
 
@@ -194,46 +194,47 @@ export default function LeaderboardPanel() {
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 1.5 : 2 }}>
-          <Typography 
-            variant={isLandscape ? 'h6' : 'h5'} 
-            sx={{ 
-              color: '#FFD700', 
-              fontWeight: 700,
+          <Typography
+            variant={isLandscape ? 'h6' : 'h5'}
+            sx={{
+              color: 'white',
+              fontWeight: 900,
               fontSize: isLandscape ? 20 : undefined,
+              letterSpacing: -0.5,
             }}
           >
-            🏆 Leaderboard
+            🏆 Global Ranking
           </Typography>
           <Chip
-            label={`${stats.totalPlayers} players`}
+            label={`${stats.totalPlayers} AGENTS`}
             size="small"
             sx={{
-              bgcolor: 'rgba(255, 215, 0, 0.2)',
-              color: '#FFD700',
-              border: '1px solid rgba(255, 215, 0, 0.4)',
-              fontWeight: 600,
-              fontSize: isLandscape ? 11 : 12,
+              bgcolor: 'rgba(0, 82, 255, 0.2)',
+              color: '#0052FF',
+              border: '1px solid rgba(0, 82, 255, 0.4)',
+              fontWeight: 900,
+              fontSize: isLandscape ? 10 : 11,
             }}
           />
         </Box>
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-            {getLastUpdatedText(lastUpdate)}
+          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontWeight: 'bold' }}>
+            {getLastUpdatedText(lastUpdate).toUpperCase()}
           </Typography>
           <IconButton
             onClick={handleRefresh}
             disabled={loading}
             size="small"
             sx={{
-              color: '#FFD700',
+              color: '#0052FF',
               '&:hover': {
-                bgcolor: 'rgba(255, 215, 0, 0.1)',
+                bgcolor: 'rgba(0, 82, 255, 0.1)',
               },
             }}
           >
             {loading ? (
-              <CircularProgress size={20} sx={{ color: '#FFD700' }} />
+              <CircularProgress size={20} sx={{ color: '#0052FF' }} />
             ) : (
               <RefreshIcon />
             )}
@@ -251,24 +252,29 @@ export default function LeaderboardPanel() {
           mb: isLandscape ? 1.5 : 2,
           minHeight: isLandscape ? 40 : 48,
           '& .MuiTab-root': {
-            color: 'rgba(255, 255, 255, 0.6)',
-            fontWeight: 600,
+            color: 'rgba(255, 255, 255, 0.3)',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            fontSize: isLandscape ? 12 : 13,
             minHeight: isLandscape ? 40 : 48,
             '&.Mui-selected': {
-              color: '#FFD700',
+              color: '#0052FF',
             },
           },
           '& .MuiTabs-indicator': {
-            backgroundColor: '#FFD700',
+            backgroundColor: '#0052FF',
+            height: 3,
+            borderRadius: '3px 3px 0 0',
           },
         }}
       >
-        <Tab label="🏆 All Time" value="global" />
-        <Tab label="📅 Weekly" value="weekly" />
-        <Tab label="📆 Monthly" value="monthly" />
+        <Tab label="All Time" value="global" />
+        <Tab label="Weekly" value="weekly" />
+        <Tab label="Monthly" value="monthly" />
       </Tabs>
 
-      <Divider sx={{ mb: 2, borderColor: 'rgba(255, 215, 0, 0.2)' }} />
+      <Divider sx={{ mb: 2, borderColor: 'rgba(255, 255, 255, 0.05)' }} />
 
       {loading ? (
         <Box
@@ -298,10 +304,10 @@ export default function LeaderboardPanel() {
               borderRadius: 4,
             },
             '&::-webkit-scrollbar-thumb': {
-              background: 'rgba(255,215,0,0.3)',
+              background: 'rgba(0, 82, 255, 0.3)',
               borderRadius: 4,
               '&:hover': {
-                background: 'rgba(255,215,0,0.5)',
+                background: 'rgba(0, 82, 255, 0.5)',
               },
             },
           }}

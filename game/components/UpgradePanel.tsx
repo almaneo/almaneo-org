@@ -14,29 +14,29 @@ export default function UpgradePanel() {
   const upgradeData = [
     {
       type: 'tapPower' as const,
-      icon: '👆',
-      title: 'Tap Power',
-      description: 'Increase points per tap',
+      icon: '🧠',
+      title: 'Labeling Speed',
+      description: 'Increase efficiency per task',
       currentLevel: upgrades.tapPower,
       maxLevel: UPGRADES.tapPower.maxLevel,
       cost: UPGRADES.tapPower.getCost(upgrades.tapPower + 1),
-      effect: `+${UPGRADES.tapPower.getEffect(upgrades.tapPower + 1)} per tap`,
+      effect: `+${UPGRADES.tapPower.getEffect(upgrades.tapPower + 1)}/tap`,
     },
     {
       type: 'autoFarm' as const,
       icon: '🤖',
-      title: 'Auto Farm',
-      description: 'Earn points while offline',
+      title: 'Auto-ML Model',
+      description: 'Passive learning while offline',
       currentLevel: upgrades.autoFarm,
       maxLevel: UPGRADES.autoFarm.maxLevel,
       cost: UPGRADES.autoFarm.getCost(upgrades.autoFarm + 1),
-      effect: `${UPGRADES.autoFarm.getEffect(upgrades.autoFarm + 1).toFixed(1)} pts/sec`,
+      effect: `${UPGRADES.autoFarm.getEffect(upgrades.autoFarm + 1).toFixed(1)}/sec`,
     },
     {
       type: 'energyCapacity' as const,
-      icon: '⚡',
-      title: 'Energy Capacity',
-      description: 'Increase max energy',
+      icon: '💾',
+      title: 'Compute Nodes',
+      description: 'Increase max BP capacity',
       currentLevel: upgrades.energyCapacity,
       maxLevel: UPGRADES.energyCapacity.maxLevel,
       cost: UPGRADES.energyCapacity.getCost(upgrades.energyCapacity + 1),
@@ -44,13 +44,13 @@ export default function UpgradePanel() {
     },
     {
       type: 'energyRegen' as const,
-      icon: '⏱️',
-      title: 'Energy Regen',
-      description: 'Faster energy recovery',
+      icon: '❄️',
+      title: 'Cooling System',
+      description: 'Faster BP recovery',
       currentLevel: upgrades.energyRegen,
       maxLevel: UPGRADES.energyRegen.maxLevel,
       cost: UPGRADES.energyRegen.getCost(upgrades.energyRegen + 1),
-      effect: `${UPGRADES.energyRegen.getEffect(upgrades.energyRegen + 1).toFixed(1)} pts/min`,
+      effect: `${UPGRADES.energyRegen.getEffect(upgrades.energyRegen + 1).toFixed(1)}/min`,
     },
   ];
 
@@ -60,12 +60,12 @@ export default function UpgradePanel() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: isLandscape 
-            ? 'repeat(2, 1fr)' 
+          gridTemplateColumns: isLandscape
+            ? 'repeat(2, 1fr)'
             : {
-                xs: '1fr',
-                sm: 'repeat(2, 1fr)',
-              },
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+            },
           gap: isLandscape ? 1.5 : 2,
         }}
       >

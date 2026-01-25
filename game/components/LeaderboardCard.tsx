@@ -27,12 +27,12 @@ export default function LeaderboardCard({
 }: LeaderboardCardProps) {
   // Landscape 모드 감지
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
-  
+
   const { rank, username, level, totalPoints, rankChange } = entry;
-  
+
   const medal = getRankMedal(rank);
   const isTopThree = rank <= 3;
-  
+
   // 순위 변동 텍스트 및 색상
   const changeText = rankChange !== undefined ? getRankChangeText(rankChange) : null;
   const changeColor = rankChange !== undefined ? getRankChangeColor(rankChange) : 'text.secondary';
@@ -42,25 +42,22 @@ export default function LeaderboardCard({
       sx={{
         p: isLandscape ? 1.5 : 2,
         background: isCurrentUser
-          ? 'linear-gradient(145deg, rgba(25, 118, 210, 0.3), rgba(13, 71, 161, 0.3))'
+          ? 'rgba(0, 82, 255, 0.15)'
           : isTopThree
-          ? 'linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.15))'
-          : 'linear-gradient(145deg, rgba(60, 40, 25, 0.8), rgba(40, 25, 15, 0.8))',
-        border: isCurrentUser 
-          ? '2px solid #2196F3'
+            ? 'rgba(255, 255, 255, 0.05)'
+            : 'rgba(255, 255, 255, 0.02)',
+        border: isCurrentUser
+          ? '2px solid #0052FF'
           : isTopThree
-          ? '2px solid #FFD700'
-          : '2px solid rgba(139, 69, 19, 0.6)',
-        borderRadius: 2,
+            ? '1px solid rgba(255, 255, 255, 0.2)'
+            : '1px solid rgba(255, 255, 255, 0.05)',
+        borderRadius: 3,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          borderColor: isCurrentUser ? '#2196F3' : isTopThree ? '#FFD700' : 'rgba(139, 69, 19, 0.8)',
-          boxShadow: isCurrentUser 
-            ? '0 8px 24px rgba(33, 150, 243, 0.4)'
-            : isTopThree
-            ? '0 8px 24px rgba(255, 215, 0, 0.3)'
-            : '0 8px 24px rgba(0, 0, 0, 0.3)',
+          borderColor: isCurrentUser ? '#0052FF' : isTopThree ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          bgcolor: 'rgba(255, 255, 255, 0.08)',
         },
       }}
     >
@@ -79,11 +76,12 @@ export default function LeaderboardCard({
           }}
         >
           {medal ? (
-            <Typography 
-              variant={isLandscape ? 'h5' : 'h4'} 
+            <Typography
+              variant={isLandscape ? 'h5' : 'h4'}
               component="span"
               sx={{
-                fontSize: isLandscape ? 32 : undefined,
+                fontSize: isLandscape ? 32 : 40,
+                filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))',
               }}
             >
               {medal}
@@ -93,10 +91,9 @@ export default function LeaderboardCard({
               variant="h6"
               component="span"
               sx={{
-                fontWeight: 700,
-                color: isTopThree ? '#FFD700' : '#FFF',
-                textShadow: isTopThree ? '1px 1px 2px rgba(0,0,0,0.8)' : 'none',
-                fontSize: isLandscape ? 16 : undefined,
+                fontWeight: 900,
+                color: isTopThree ? 'white' : 'rgba(255, 255, 255, 0.4)',
+                fontSize: isLandscape ? 16 : 20,
               }}
             >
               #{formatRank(rank)}
@@ -109,9 +106,9 @@ export default function LeaderboardCard({
           sx={{
             width: isLandscape ? 36 : 48,
             height: isLandscape ? 36 : 48,
-            bgcolor: isCurrentUser ? 'primary.main' : 'grey.600',
+            bgcolor: isCurrentUser ? '#0052FF' : 'rgba(255,255,255,0.1)',
             fontWeight: 'bold',
-            border: isTopThree ? '2px solid #FFD700' : 'none',
+            border: isTopThree ? '2px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.05)',
             fontSize: isLandscape ? 16 : 20,
           }}
         >
@@ -124,37 +121,40 @@ export default function LeaderboardCard({
             <Typography
               variant={isLandscape ? 'body1' : 'h6'}
               sx={{
-                fontWeight: 700,
-                color: isTopThree ? '#FFD700' : '#FFF',
-                textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-                fontSize: isLandscape ? 16 : undefined,
+                fontWeight: 800,
+                color: 'white',
+                fontSize: isLandscape ? 16 : 18,
+                letterSpacing: -0.5,
               }}
             >
               {username}
             </Typography>
             {isCurrentUser && (
               <Chip
-                label="You"
+                label="YOU"
                 size="small"
                 sx={{
-                  bgcolor: '#2196F3',
+                  bgcolor: '#0052FF',
                   color: 'white',
-                  fontWeight: 700,
-                  height: 20,
-                  fontSize: isLandscape ? 10 : 11,
+                  fontWeight: 900,
+                  height: 18,
+                  fontSize: 9,
+                  letterSpacing: 1,
                 }}
               />
             )}
           </Box>
-          
+
           <Typography
-            variant="body2"
+            variant="caption"
             sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
-              fontSize: 13,
+              color: 'rgba(255, 255, 255, 0.5)',
+              fontSize: 11,
+              fontWeight: 'bold',
+              letterSpacing: 1,
             }}
           >
-            Level {level}
+            PHASE {level}
           </Typography>
         </Box>
 
@@ -163,22 +163,22 @@ export default function LeaderboardCard({
           <Typography
             variant={isLandscape ? 'body1' : 'h6'}
             sx={{
-              fontWeight: 700,
-              color: '#FFD700',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-              fontSize: isLandscape ? 16 : undefined,
+              fontWeight: 900,
+              color: 'white',
+              fontSize: isLandscape ? 16 : 18,
             }}
           >
-            🌾 {formatPoints(totalPoints)}
+            💖 {formatPoints(totalPoints)}
           </Typography>
-          
+
           {changeText && (
             <Typography
               variant="caption"
               sx={{
                 color: changeColor,
-                fontWeight: 600,
-                fontSize: 11,
+                fontWeight: 800,
+                fontSize: 10,
+                letterSpacing: 0.5,
               }}
             >
               {changeText}

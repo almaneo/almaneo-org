@@ -161,9 +161,19 @@ export const HeroSection = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
+          <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              glow
+              icon={<Globe className="w-5 h-5" strokeWidth={1.5} />}
+              className="w-full"
+            >
+              Play AI Hub
+            </Button>
+          </a>
           <Button
             size="lg"
-            glow
+            variant="secondary"
             icon={<Globe className="w-5 h-5" strokeWidth={1.5} />}
             onClick={() => setIsSnsModalOpen(true)}
             className="w-full sm:w-auto"
@@ -172,7 +182,7 @@ export const HeroSection = () => {
           </Button>
           <Link to="/whitepaper" className="w-full sm:w-auto">
             <Button
-              variant="secondary"
+              variant="outline"
               size="lg"
               icon={<FileText className="w-5 h-5" strokeWidth={1.5} />}
               className="w-full"

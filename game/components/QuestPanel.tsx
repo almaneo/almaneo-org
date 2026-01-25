@@ -20,12 +20,12 @@ export default function QuestPanel() {
       const now = new Date();
       const tomorrow = new Date(now);
       tomorrow.setUTCHours(24, 0, 0, 0);
-      
+
       const diff = tomorrow.getTime() - now.getTime();
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      
+
       setTimeUntilReset(`${hours}h ${minutes}m ${seconds}s`);
     };
 
@@ -59,9 +59,10 @@ export default function QuestPanel() {
         sx={{
           p: isLandscape ? 1.5 : 2.5,
           mb: isLandscape ? 1.5 : 2,
-          background: 'linear-gradient(145deg, rgba(60, 40, 25, 0.6), rgba(40, 25, 15, 0.6))',
-          border: '2px solid rgba(255, 215, 0, 0.3)',
-          borderRadius: 2,
+          background: 'rgba(255, 255, 255, 0.03)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(0, 82, 255, 0.3)',
+          borderRadius: 3,
         }}
       >
         <Box
@@ -74,18 +75,18 @@ export default function QuestPanel() {
           }}
         >
           <Box>
-            <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: '#FFD700', fontWeight: 700, mb: 0.5 }}>
-              📋 Daily Quests
+            <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: 'white', fontWeight: 900, mb: 0.5 }}>
+              📋 Mission Log
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              Completed: {completedCount} / {dailyQuests.length}
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#0052FF', fontWeight: 'bold' }}>
+              RECONSTRUCTION: {completedCount} / {dailyQuests.length}
             </Typography>
           </Box>
           <Box sx={{ textAlign: 'right' }}>
-            <Typography variant="caption" display="block" sx={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: isLandscape ? 10 : undefined }}>
-              Resets in
+            <Typography variant="caption" display="block" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: isLandscape ? 10 : undefined }}>
+              NEXT REFRESH
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFD700', fontWeight: 700 }}>
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'white', fontWeight: 'bold' }}>
               ⏰ {timeUntilReset}
             </Typography>
           </Box>
@@ -97,11 +98,11 @@ export default function QuestPanel() {
             sx={{
               mt: isLandscape ? 1 : 1.5,
               pt: isLandscape ? 1 : 1.5,
-              borderTop: '1px solid rgba(255, 215, 0, 0.2)',
+              borderTop: '1px solid rgba(0, 82, 255, 0.2)',
             }}
           >
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#4CAF50', fontWeight: 600 }}>
-              Rewards Earned: <strong>+{totalRewards} pts</strong>
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#4CAF50', fontWeight: 800 }}>
+              REWARDS EARNED: <strong style={{ textDecoration: 'underline' }}>+{totalRewards} 💖</strong>
             </Typography>
           </Box>
         )}

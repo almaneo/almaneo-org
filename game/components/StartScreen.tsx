@@ -10,7 +10,7 @@ interface StartScreenProps {
 
 export default function StartScreen({ open, onStart }: StartScreenProps) {
   if (!open) return null;
-  
+
   return (
     <Box
       sx={{
@@ -43,9 +43,12 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             textAlign: 'center',
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
             px: 2,
+            background: 'linear-gradient(90deg, #0052FF 0%, #FF6B00 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
           }}
         >
-          💙 AlmaNEO Kindness 🧡
+          ALMANEO KINDNESS HUB
         </Typography>
       </motion.div>
 
@@ -63,9 +66,11 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             textAlign: 'center',
             fontSize: { xs: '1rem', sm: '1.25rem' },
             px: 2,
+            fontWeight: 'light',
+            letterSpacing: 1
           }}
         >
-          Spread kindness, earn ALMAN tokens
+          Cold Code, Warm Soul.
         </Typography>
       </motion.div>
 
@@ -85,6 +90,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             px: { xs: 4, sm: 6 },
             py: { xs: 1.5, sm: 2 },
             borderRadius: 3,
+            fontWeight: 'bold',
             boxShadow: '0 8px 24px rgba(0, 82, 255, 0.4)',
             '&:hover': {
               bgcolor: '#0041CC',
@@ -94,7 +100,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             transition: 'all 0.3s ease',
           }}
         >
-          🎮 Start Game
+          ENTER THE HUB
         </Button>
       </motion.div>
 
@@ -114,7 +120,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             px: 2,
           }}
         >
-          탭하여 환경을 지키는 여정을 시작하세요
+          Help democratize AI through human connection
         </Typography>
       </motion.div>
     </Box>

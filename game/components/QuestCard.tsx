@@ -24,18 +24,19 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
       sx={{
         position: 'relative',
         background: isCompleted
-          ? 'linear-gradient(145deg, rgba(46, 125, 50, 0.3) 0%, rgba(27, 94, 32, 0.3) 100%)'
-          : 'linear-gradient(145deg, rgba(60, 40, 25, 0.8) 0%, rgba(40, 25, 15, 0.8) 100%)',
-        border: isCompleted ? '2px solid #4CAF50' : '2px solid rgba(139, 69, 19, 0.6)',
-        borderRadius: 2,
+          ? 'rgba(76, 175, 80, 0.05)'
+          : 'rgba(255, 255, 255, 0.03)',
+        backdropFilter: 'blur(10px)',
+        border: isCompleted ? '2px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 3,
         p: isLandscape ? 1.5 : 2.5,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: canClaim ? '#FFD700' : isCompleted ? '#4CAF50' : 'rgba(139, 69, 19, 0.8)',
-          boxShadow: canClaim 
-            ? '0 8px 24px rgba(255, 215, 0, 0.3)'
-            : '0 8px 24px rgba(0, 0, 0, 0.3)',
+          borderColor: canClaim ? '#0052FF' : isCompleted ? '#4CAF50' : 'rgba(255, 255, 255, 0.2)',
+          boxShadow: canClaim
+            ? '0 8px 32px rgba(0, 82, 255, 0.2)'
+            : '0 8px 32px rgba(0, 0, 0, 0.3)',
         },
       }}
     >
@@ -48,17 +49,17 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           mb: isLandscape ? 1 : 1.5,
         }}
       >
-        <Box sx={{ fontSize: isLandscape ? 28 : 36, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+        <Box sx={{ fontSize: isLandscape ? 28 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
           {quest.icon}
         </Box>
         <Box sx={{ flex: 1 }}>
           <Typography
             variant="h6"
             sx={{
-              color: '#FFD700',
-              fontWeight: 700,
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-              fontSize: isLandscape ? 16 : undefined,
+              color: 'white',
+              fontWeight: 800,
+              fontSize: isLandscape ? 16 : 18,
+              letterSpacing: -0.5,
             }}
           >
             {quest.title}
@@ -70,9 +71,10 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
       <Typography
         variant="body2"
         sx={{
-          color: 'rgba(255, 255, 255, 0.7)',
+          color: 'rgba(255, 255, 255, 0.5)',
           mb: isLandscape ? 1 : 2,
           fontSize: isLandscape ? 11 : 13,
+          fontWeight: 300,
         }}
       >
         {quest.description}
@@ -84,14 +86,14 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           variant="determinate"
           value={progress}
           sx={{
-            height: isLandscape ? 8 : 10,
+            height: isLandscape ? 6 : 8,
             borderRadius: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            border: '1px solid rgba(255, 215, 0, 0.2)',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
             '& .MuiLinearProgress-bar': {
-              background: isCompleted 
+              background: isCompleted
                 ? 'linear-gradient(90deg, #4CAF50 0%, #81C784 100%)'
-                : 'linear-gradient(90deg, #FFD700 0%, #FFA000 100%)',
+                : 'linear-gradient(90deg, #0052FF 0%, #00C2FF 100%)',
             },
           }}
         />
@@ -106,10 +108,10 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           mb: isLandscape ? 1.5 : 2,
         }}
       >
-        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFF', fontWeight: 600 }}>
+        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'white', opacity: 0.8, fontWeight: 600 }}>
           {formatNumber(quest.current)} / {formatNumber(quest.target)}
         </Typography>
-        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFD700', fontWeight: 600 }}>
+        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#0052FF', fontWeight: 800 }}>
           {progress.toFixed(0)}%
         </Typography>
       </Box>
@@ -122,17 +124,20 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           alignItems: 'center',
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            color: '#FFD700',
-            fontWeight: 700,
-            fontSize: isLandscape ? 14 : 16,
-          }}
-        >
-          🌾 +{formatNumber(quest.reward)}
-        </Typography>
-        
+        <Box>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: 10 }}>REWARD</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: '#4CAF50',
+              fontWeight: 800,
+              fontSize: isLandscape ? 14 : 16,
+            }}
+          >
+            💖 +{formatNumber(quest.reward)}
+          </Typography>
+        </Box>
+
         <Button
           variant="contained"
           onClick={() => onClaim(quest.id)}
@@ -140,29 +145,24 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           sx={{
             minWidth: isLandscape ? 80 : 100,
             fontSize: isLandscape ? 12 : undefined,
+            borderRadius: 2,
             background: canClaim
-              ? 'linear-gradient(135deg, #FFD700 0%, #FFA000 100%)'
+              ? '#0052FF'
               : isCompleted
-              ? 'rgba(76, 175, 80, 0.5)'
-              : 'rgba(100, 100, 100, 0.5)',
-            color: canClaim ? '#000' : 'rgba(255,255,255,0.5)',
-            fontWeight: 700,
-            textTransform: 'none',
+                ? 'rgba(76, 175, 80, 0.2)'
+                : 'rgba(100, 100, 100, 0.1)',
+            color: canClaim ? 'white' : 'rgba(255,255,255,0.3)',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: 1,
             '&:hover': {
-              background: canClaim
-                ? 'linear-gradient(135deg, #FFA000 0%, #FF6F00 100%)'
-                : isCompleted
-                ? 'rgba(76, 175, 80, 0.5)'
-                : 'rgba(100, 100, 100, 0.5)',
-              transform: canClaim ? 'scale(1.05)' : 'none',
-            },
-            '&:disabled': {
-              color: 'rgba(255,255,255,0.3)',
+              bgcolor: canClaim ? '#0041CC' : undefined,
+              transform: canClaim ? 'translateY(-2px)' : 'none',
             },
             transition: 'all 0.2s ease',
           }}
         >
-          {isCompleted ? '✓ Claimed' : canClaim ? '🎁 Claim' : '⏳ In Progress'}
+          {isCompleted ? 'Completed' : canClaim ? 'Claim' : 'Active'}
         </Button>
       </Box>
     </Box>

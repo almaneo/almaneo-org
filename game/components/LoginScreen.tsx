@@ -17,71 +17,94 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #1a472a 0%, #0d2818 100%)',
+        background: 'radial-gradient(circle at center, #0a192f 0%, #000000 100%)',
         color: 'white',
         padding: { xs: 2, sm: 4 },
         overflow: 'auto',
         position: 'relative',
       }}
     >
-      {/* Background Rice Pattern */}
+      {/* Background Particles Pattern */}
       <Box
         sx={{
           position: 'absolute',
           width: '100%',
           height: '100%',
-          opacity: 0.05,
-          backgroundImage: 'url(/images/rice.png)',
-          backgroundSize: '100px',
-          backgroundRepeat: 'repeat',
-          animation: 'float 20s infinite linear',
+          opacity: 0.1,
+          backgroundImage: 'radial-gradient(#0052ff 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          animation: 'float 60s infinite linear',
           '@keyframes float': {
             '0%': { backgroundPosition: '0 0' },
-            '100%': { backgroundPosition: '100px 100px' },
+            '100%': { backgroundPosition: '500px 500px' },
           },
         }}
       />
 
-      {/* Main Container - 2단 레이아웃 */}
+      {/* Ambient Glow */}
+      <Box sx={{
+        position: 'absolute',
+        top: '20%',
+        left: '20%',
+        width: 400,
+        height: 400,
+        bgcolor: 'rgba(0, 82, 255, 0.1)',
+        filter: 'blur(100px)',
+        borderRadius: '50%',
+        zIndex: 0,
+      }} />
+      <Box sx={{
+        position: 'absolute',
+        bottom: '20%',
+        right: '20%',
+        width: 400,
+        height: 400,
+        bgcolor: 'rgba(255, 107, 0, 0.05)',
+        filter: 'blur(100px)',
+        borderRadius: '50%',
+        zIndex: 0,
+      }} />
+
+      {/* Main Container */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
         sx={{
           position: 'relative',
           zIndex: 1,
           width: '100%',
-          maxWidth: { xs: '100%', sm: 900 },
+          maxWidth: 1000,
           display: 'flex',
-          flexDirection: { xs: 'row', sm: 'row' },
-          gap: { xs: 2, sm: 4 },
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: { xs: 4, md: 8 },
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        {/* 왼쪽: 로고 + 메시지 */}
+        {/* Left Side: Branding */}
         <Box
           sx={{
-            flex: 1,
+            flex: 1.2,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: { xs: 'flex-start', sm: 'center' },
-            textAlign: { xs: 'left', sm: 'center' },
+            alignItems: { xs: 'center', md: 'flex-start' },
+            textAlign: { xs: 'center', md: 'left' },
           }}
         >
           {/* Logo */}
           <Box
             sx={{
-              mb: 1,
-              filter: 'drop-shadow(0 4px 12px rgba(255,215,0,0.6))',
+              mb: 4,
+              filter: 'drop-shadow(0 0 20px rgba(0, 82, 255, 0.4))',
             }}
           >
             <Image
-              src="/images/mimig-farm-logo.png"
-              alt="MiMiG Farm"
-              width={200}
-              height={60}
+              src="/images/almaneo-logo.png"
+              alt="AlmaNEO"
+              width={350}
+              height={100}
               priority
               style={{
                 maxWidth: '100%',
@@ -90,187 +113,126 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             />
           </Box>
 
-          {/* Title */}
+          {/* Slogan */}
           <Typography
-            component={motion.h1}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            variant="h3"
             sx={{
-              mb: 0.5,
-              fontWeight: 'bold',
-              color: '#FFD700',
-              fontSize: { xs: '0.85rem', sm: '1.8rem' },
-              lineHeight: 1.2,
+              fontWeight: 900,
+              mb: 2,
+              letterSpacing: -1,
+              background: 'linear-gradient(90deg, #fff 0%, #0052ff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontSize: { xs: '2rem', sm: '3rem' },
             }}
           >
-            🌾 Welcome to
-            <br />
-            MiMiG Carbon Farm
+            Cold Code, Warm Soul.
           </Typography>
 
-          {/* Description */}
           <Typography
-            component={motion.p}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            variant="h6"
             sx={{
-              color: 'rgba(255,255,255,0.85)',
-              fontSize: { xs: '0.65rem', sm: '0.95rem' },
-              lineHeight: 1.3,
+              color: 'rgba(255,255,255,0.7)',
+              mb: 4,
+              fontWeight: 300,
+              lineHeight: 1.6,
+              maxWidth: 500,
             }}
           >
-            Harvest rice, earn points,
-            <br />
-            and contribute to
-            <br />
-            sustainable farming.
+            Democratizing AI through the power of human kindness.
+            Contribute to the global dataset and earn ALMAN rewards.
           </Typography>
-        </Box>
 
-        {/* 오른쪽: Features + 버튼 */}
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: { xs: 1, sm: 2 },
-          }}
-        >
-          {/* Features - 세로 배치 */}
-          <Box
-            component={motion.div}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0.8,
-              width: '100%',
-            }}
-          >
-            <Box
-              sx={{
-                bgcolor: 'rgba(255,255,255,0.1)',
-                borderRadius: 1.5,
-                p: { xs: 0.8, sm: 1.5 },
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <Typography sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>
-                🌾
-              </Typography>
-              <Typography
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: { xs: '0.7rem', sm: '0.9rem' },
-                  fontWeight: 500,
-                }}
-              >
-                Tap to Harvest
-              </Typography>
+          {/* Stats Preview */}
+          <Box sx={{ display: 'flex', gap: 4 }}>
+            <Box>
+              <Typography sx={{ color: '#0052ff', fontWeight: 'bold' }}>8B+</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>HUMANS TARGETED</Typography>
             </Box>
-
-            <Box
-              sx={{
-                bgcolor: 'rgba(255,255,255,0.1)',
-                borderRadius: 1.5,
-                p: { xs: 0.8, sm: 1.5 },
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <Typography sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>
-                💎
-              </Typography>
-              <Typography
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: { xs: '0.7rem', sm: '0.9rem' },
-                  fontWeight: 500,
-                }}
-              >
-                Earn Rewards
-              </Typography>
-            </Box>
-
-            <Box
-              sx={{
-                bgcolor: 'rgba(255,255,255,0.1)',
-                borderRadius: 1.5,
-                p: { xs: 0.8, sm: 1.5 },
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <Typography sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>
-                🌍
-              </Typography>
-              <Typography
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: { xs: '0.7rem', sm: '0.9rem' },
-                  fontWeight: 500,
-                }}
-              >
-                Save Planet
-              </Typography>
+            <Box>
+              <Typography sx={{ color: '#FF6B00', fontWeight: 'bold' }}>100%</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>OPEN ACCESS</Typography>
             </Box>
           </Box>
+        </Box>
 
-          {/* Connect Button */}
+        {/* Right Side: Login Card */}
+        <Box
+          sx={{
+            flex: 0.8,
+            width: '100%',
+            maxWidth: 400,
+            p: 4,
+            bgcolor: 'rgba(255, 255, 255, 0.03)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 4,
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 4, fontWeight: 'bold', textAlign: 'center' }}>
+            Welcome to AI Hub
+          </Typography>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 4 }}>
+            {[
+              { icon: '🧠', text: 'Label Culture Context' },
+              { icon: '💖', text: 'Earn Kindness Points' },
+              { icon: '💎', text: 'Mine ALMAN Tokens' },
+            ].map((feature, i) => (
+              <Box
+                key={i}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 1.5,
+                  borderRadius: 2,
+                  bgcolor: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.02)',
+                }}
+              >
+                <Typography sx={{ fontSize: '1.5rem' }}>{feature.icon}</Typography>
+                <Typography sx={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
+                  {feature.text}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+
           <Button
-            component={motion.button}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             onClick={onLogin}
+            fullWidth
             variant="contained"
-            size="large"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
             sx={{
-              bgcolor: '#FFD700',
-              color: '#1a472a',
-              px: { xs: 2.5, sm: 5 },
-              py: { xs: 1, sm: 1.8 },
-              borderRadius: 3,
+              py: 2,
+              borderRadius: 2,
+              bgcolor: '#0052ff',
               fontWeight: 'bold',
-              fontSize: { xs: '0.8rem', sm: '1.1rem' },
-              boxShadow: '0 4px 16px rgba(255,215,0,0.4)',
-              transition: 'all 0.3s',
-              width: '100%',
+              fontSize: '1.1rem',
+              boxShadow: '0 0 20px rgba(0, 82, 255, 0.4)',
               '&:hover': {
-                bgcolor: '#FFC700',
-                boxShadow: '0 8px 24px rgba(255,215,0,0.6)',
-              },
+                bgcolor: '#0041cc',
+                boxShadow: '0 0 30px rgba(0, 82, 255, 0.6)',
+              }
             }}
           >
-            🔗 Connect Wallet
+            Connect Wallet
           </Button>
 
-          {/* Security Note */}
-          <Typography
-            component={motion.p}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            sx={{
-              color: 'rgba(255,255,255,0.5)',
-              fontSize: { xs: '0.55rem', sm: '0.7rem' },
-              textAlign: 'center',
-            }}
-          >
-            🔒 Secure login with Web3Auth
+          <Typography variant="caption" sx={{ display: 'block', mt: 3, textAlign: 'center', color: 'rgba(255,255,255,0.4)' }}>
+            Powered by Web3Auth & Biconomy
+            <br />
+            Secure Social Login (Google, X, etc.)
           </Typography>
         </Box>
+      </Box>
+
+      {/* Footer Branding */}
+      <Box sx={{ position: 'absolute', bottom: 30, textAlign: 'center', width: '100%', opacity: 0.3 }}>
+        <Typography variant="caption" sx={{ letterSpacing: 2 }}>
+          © 2026 ALMANEO ORGANIZATION
+        </Typography>
       </Box>
     </Box>
   );

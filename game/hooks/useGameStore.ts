@@ -1,21 +1,16 @@
 import { create } from 'zustand';
 import { GAME_CONFIG, UPGRADES } from '@/lib/constants';
-import { saveGameState as saveGameStateLocal, loadGameState as loadGameStateLocal, GameState } from '@/lib/storage';
 import { DailyQuest, generateDailyQuests, needsQuestReset } from '@/lib/quests';
-import { Achievement, ACHIEVEMENTS, AchievementStats, checkAchievement, isNightTime, calculateLoginStreak } from '@/lib/achievements';
-import { updateUserRank } from '@/lib/firebaseLeaderboard';
+import { Achievement, ACHIEVEMENTS, AchievementStats, checkAchievement, isNightTime } from '@/lib/achievements';
+import { updateUserRank } from '@/lib/supabaseLeaderboard';
 import {
-  saveGameState as saveGameStateFirestore,
-  loadGameState as loadGameStateFirestore,
+  saveGameState as saveGameStateSupabase,
+  loadGameState as loadGameStateSupabase,
   createUser,
   updateLeaderboard,
-} from '@/lib/firebase-db';
-import { SaveGameInput } from '@/types/firestore';
-import { Timestamp } from 'firebase/firestore';
+  type SaveGameInput,
+} from '@/lib/supabase-db';
 import {
-  getClaimableTokens,
-  canClaimTokens as canClaimTokensLib,
-  getPointsUntilNextClaim as getPointsUntilNextClaimLib,
   getClaimableTokensWithMining,
   canClaimTokensWithMining,
   getPointsUntilNextClaimWithMining,
@@ -26,9 +21,8 @@ import {
   getGlobalMiningStats,
   updateAllMiningStats,
   ensureGlobalStatsExists,
-} from '@/lib/miningFirestore';
-import { Timestamp as FirestoreTimestamp } from 'firebase/firestore';
-import type { ClaimRecord } from '@/types/miningFirestore';
+  type ClaimRecord,
+} from '@/lib/miningSupabase';
 
 // Debounce timer for leaderboard updates
 let leaderboardUpdateTimer: NodeJS.Timeout | null = null;
@@ -542,7 +536,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     try {
       get().setSaveStatus('saving');
 
-      // SaveGameInput 형식으로 변환 (undefined 필드 제외)
+      // SaveGameInput 형식으로 변환
       const gameInput: SaveGameInput = {
         userId: state.userId,
         points: state.points,
@@ -553,26 +547,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
         upgrades: state.upgrades,
         dailyQuests: state.dailyQuests.map(q => ({
           ...q,
-          createdAt: Timestamp.now(),
+          createdAt: new Date().toISOString(),
         })),
         dailyQuestStats: state.dailyQuestStats,
-        achievements: state.achievements.map(a => {
-          // completedAt이 있을 때만 포함
-          const achievement: any = {
-            id: a.id,
-            title: a.title,
-            description: a.description,
-            icon: a.icon,
-            reward: a.reward,
-            category: a.category,
-            target: a.target,
-            completed: a.completed,
-          };
-          if (a.completedAt) {
-            achievement.completedAt = Timestamp.now();
-          }
-          return achievement;
-        }),
+        achievements: state.achievements.map(a => ({
+          id: a.id,
+          title: a.title,
+          description: a.description,
+          icon: a.icon,
+          category: a.category,
+          target: a.target,
+          reward: a.reward,
+          completed: a.completed,
+          completedAt: a.completedAt,
+          hidden: a.hidden,
+        })),
         achievementStats: state.achievementStats,
         lastActiveTime: Date.now(),
         lastClaimedPoints: state.lastClaimedPoints,
@@ -580,8 +569,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         lastClaimTime: state.lastClaimTime,
       };
 
-      // Firestore에 저장
-      await saveGameStateFirestore(gameInput);
+      // Supabase에 저장
+      await saveGameStateSupabase(gameInput);
       
       // 리더보드도 업데이트
       await updateLeaderboard(
@@ -606,8 +595,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Ensure global stats exist (initialize if needed)
       await ensureGlobalStatsExists();
       
-      // Firestore에서 데이터 로드
-      const savedState = await loadGameStateFirestore(userId);
+      // Supabase에서 데이터 로드
+      const savedState = await loadGameStateSupabase(userId);
       
       if (savedState) {
         // Calculate offline earnings
@@ -666,11 +655,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
           lastClaimTime: savedState.lastClaimTime || 0,
         });
 
-        // Load global mining stats from Firestore
+        // Load global mining stats from Supabase
         try {
           const globalStats = await getGlobalMiningStats();
-          set({ globalTotalMined: globalStats.totalMined });
-          console.log('✅ Global mining stats loaded:', globalStats.totalMined);
+          set({ globalTotalMined: globalStats.total_mined });
+          console.log('✅ Global mining stats loaded:', globalStats.total_mined);
         } catch (error) {
           console.error('❌ Failed to load global stats, using 0:', error);
           set({ globalTotalMined: 0 });
@@ -687,7 +676,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         // Check level up based on loaded totalPoints
         get().checkLevelUp();
       } else {
-        // 신규 사용자 - Firestore에 생성
+        // 신규 사용자 - Supabase에 생성
         await createUser(userId);
         
         set({ 
@@ -695,11 +684,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
           isLoading: false,
         });
 
-        // Load global mining stats from Firestore
+        // Load global mining stats from Supabase
         try {
           const globalStats = await getGlobalMiningStats();
-          set({ globalTotalMined: globalStats.totalMined });
-          console.log('✅ Global mining stats loaded (new user):', globalStats.totalMined);
+          set({ globalTotalMined: globalStats.total_mined });
+          console.log('✅ Global mining stats loaded (new user):', globalStats.total_mined);
         } catch (error) {
           console.error('❌ Failed to load global stats, using 0:', error);
           set({ globalTotalMined: 0 });
@@ -777,14 +766,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       transactionHash,
     });
 
-    // Update Firestore stats asynchronously
+    // Update Supabase stats asynchronously
     if (state.userId) {
       try {
         const miningStats = getMiningStats(state.globalTotalMined);
         const claimRecord: ClaimRecord = {
           amount,
           points: state.totalPoints - state.lastClaimedPoints,
-          timestamp: FirestoreTimestamp.now(),
+          timestamp: new Date().toISOString(),
           txHash: transactionHash,
           conversionRate: getCurrentConversionRate(state.globalTotalMined),
           epoch: miningStats.currentEpoch?.epoch ?? 1, // 기본값 1 (Genesis Era)

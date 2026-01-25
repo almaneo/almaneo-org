@@ -78,10 +78,10 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
   const loadTokenBalance = async () => {
     try {
       if (!provider || !address) return;
-      
+
       const { BrowserProvider } = await import('ethers');
       const ethersProvider = new BrowserProvider(provider);
-      
+
       const balance = await getTokenBalance(address, ethersProvider);
       setTokenBalance(balance.formatted);
     } catch (error) {
@@ -127,10 +127,10 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
       if (result.success) {
         setClaimStatus('success');
         setTxHash(result.transactionHash || '');
-        
+
         // Record claim in game store
         recordTokenClaim(claimableTokens, result.transactionHash);
-        
+
         // Reload balance
         await loadTokenBalance();
       } else {
@@ -161,7 +161,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
       title="Claim Mining Rewards"
       icon={
         <Image
-          src="/images/icons/mimig-token.png"
+          src="/images/icons/alman-token.png"
           alt="ALMAN Token"
           width={32}
           height={32}
@@ -169,115 +169,215 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
       }
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: isLandscape ? 1.5 : 2 }}>
-        
+
         {/* Token Balance */}
         <Box
           sx={{
             p: isLandscape ? 1.5 : 2,
-            bgcolor: 'rgba(76, 175, 80, 0.1)',
+            bgcolor: 'rgba(0, 82, 255, 0.05)',
             borderRadius: 2,
-            border: '1px solid rgba(76, 175, 80, 0.3)',
+            border: '1px solid rgba(0, 82, 255, 0.2)',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: '-100%',
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(90deg, transparent, rgba(0, 82, 255, 0.1), transparent)',
+              animation: 'shimmer 3s infinite',
+            },
+            '@keyframes shimmer': {
+              '100%': { left: '100%' },
+            },
           }}
         >
           <Typography variant="caption" sx={{ display: 'block', mb: 0.5, color: 'rgba(255,255,255,0.7)' }}>
-            Your ALMAN Balance
+            Wallet Assets
           </Typography>
-          <Typography variant={isLandscape ? 'h6' : 'h5'} color="primary" sx={{ fontWeight: 'bold' }}>
-            {tokenBalance} ALMAN
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+            <Typography variant={isLandscape ? 'h6' : 'h5'} color="primary" sx={{ fontWeight: 'bold' }}>
+              {tokenBalance}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'primary.light', fontWeight: 'bold' }}>
+              ALMAN
+            </Typography>
+          </Box>
         </Box>
 
         {/* Mining Progress */}
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+        <Box sx={{
+          p: 2,
+          borderRadius: 2,
+          bgcolor: 'rgba(255, 107, 0, 0.05)',
+          border: '1px solid rgba(255, 107, 0, 0.2)',
+          position: 'relative'
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <MiningIcon sx={{ fontSize: isLandscape ? 18 : 20, color: 'warning.main' }} />
-              <Typography variant={isLandscape ? 'body2' : 'body1'} fontWeight="bold">
-                Mining Pool
+              <Box sx={{
+                animation: 'pulse 2s infinite',
+                '@keyframes pulse': {
+                  '0%': { opacity: 1 },
+                  '50%': { opacity: 0.5 },
+                  '100%': { opacity: 1 },
+                }
+              }}>
+                <MiningIcon sx={{ fontSize: isLandscape ? 18 : 20, color: '#FF6B00' }} />
+              </Box>
+              <Typography variant={isLandscape ? 'body2' : 'body1'} fontWeight="bold" sx={{ color: '#FF6B00' }}>
+                Global Mining Pool
               </Typography>
             </Box>
             <Chip
               label={miningStats.currentEpoch?.label || 'Complete'}
               size="small"
-              color={miningStats.isMiningComplete ? 'default' : 'warning'}
-              sx={{ fontSize: isLandscape ? 10 : 11 }}
+              sx={{
+                fontSize: isLandscape ? 10 : 11,
+                bgcolor: 'rgba(255, 107, 0, 0.2)',
+                color: '#FF6B00',
+                border: '1px solid rgba(255, 107, 0, 0.3)',
+                fontWeight: 'bold'
+              }}
             />
           </Box>
-          
-          <LinearProgress
-            variant="determinate"
-            value={miningStats.progress}
-            sx={{
-              height: isLandscape ? 6 : 8,
-              borderRadius: 1,
-              bgcolor: 'rgba(255, 152, 0, 0.1)',
-              '& .MuiLinearProgress-bar': {
-                bgcolor: 'warning.main',
-              },
-            }}
-          />
-          
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 0.5 }}>
-            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-              {formatMiningProgress(miningStats.totalMined)} Mined
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-              {miningStats.remainingPool.toLocaleString()} / 10M Remaining
-            </Typography>
+
+          <Box sx={{ position: 'relative', mb: 1 }}>
+            <LinearProgress
+              variant="determinate"
+              value={miningStats.progress}
+              sx={{
+                height: isLandscape ? 8 : 12,
+                borderRadius: 1,
+                bgcolor: 'rgba(255, 107, 0, 0.1)',
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: '#FF6B00',
+                  backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent)',
+                  backgroundSize: '1rem 1rem',
+                  animation: 'progress-bar-stripes 1s linear infinite',
+                },
+                '@keyframes progress-bar-stripes': {
+                  'from': { backgroundPosition: '1rem 0' },
+                  'to': { backgroundPosition: '0 0' },
+                },
+              }}
+            />
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                Mined
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold' }}>
+                {formatMiningProgress(miningStats.totalMined)}
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                Pool Capacity
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold' }}>
+                10,000,000
+              </Typography>
+            </Box>
           </Box>
         </Box>
 
-        <Divider />
-
-        {/* Current Rate */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <RateIcon sx={{ fontSize: isLandscape ? 20 : 24, color: 'info.main' }} />
-          <Box>
-            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-              Current Conversion Rate
-            </Typography>
-            <Typography variant={isLandscape ? 'body2' : 'body1'} fontWeight="bold" sx={{ color: 'white' }}>
-              {formatConversionRate(currentRate)}
-            </Typography>
+        {/* Current Rate & Halving */}
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          p: 1.5,
+          borderRadius: 2,
+          bgcolor: 'rgba(255, 255, 255, 0.03)',
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <RateIcon sx={{ fontSize: 20, color: 'info.main' }} />
+            <Box>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                Labeling Hashrate
+              </Typography>
+              <Typography variant="body2" fontWeight="bold" sx={{ color: 'white' }}>
+                {formatConversionRate(currentRate)}
+              </Typography>
+            </Box>
           </Box>
+
+          {miningStats.tokensUntilHalving !== null && (
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                Next Epoch In
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'info.main', fontWeight: 'bold' }}>
+                {miningStats.tokensUntilHalving.toLocaleString()} ALMAN
+              </Typography>
+            </Box>
+          )}
         </Box>
 
-        {/* Next Halving Info */}
-        {miningStats.tokensUntilHalving !== null && (
-          <Alert severity="info" sx={{ py: isLandscape ? 0.5 : 1 }}>
-            <Typography variant="caption">
-              Next halving in {miningStats.tokensUntilHalving.toLocaleString()} tokens
-            </Typography>
-          </Alert>
-        )}
-
-        <Divider />
-
-        {/* Claimable Tokens */}
+        {/* Claimable Area */}
         <Box
           sx={{
-            p: isLandscape ? 1.5 : 2,
-            bgcolor: 'rgba(33, 150, 243, 0.1)',
-            borderRadius: 2,
-            border: '1px solid rgba(33, 150, 243, 0.3)',
+            mt: 1,
+            p: 3,
+            bgcolor: 'rgba(0, 82, 255, 0.1)',
+            borderRadius: 3,
+            border: '2px solid rgba(0, 82, 255, 0.3)',
+            textAlign: 'center',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              background: 'radial-gradient(circle at center, rgba(0, 82, 255, 0.15) 0%, transparent 70%)',
+            }
           }}
         >
-          <Typography variant="caption" sx={{ display: 'block', mb: 0.5, color: 'rgba(255,255,255,0.7)' }}>
-            You Can Claim
+          <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'rgba(255,255,255,0.7)', letterSpacing: 2, fontWeight: 'bold' }}>
+            READY TO CLAIM
           </Typography>
-          <Typography variant={isLandscape ? 'h5' : 'h4'} color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
-            {formatTokenAmount(claimableTokens, 4)}
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 1.5, mb: 1 }}>
+            <Typography variant={isLandscape ? 'h4' : 'h3'} color="primary" sx={{ fontWeight: 'black', textShadow: '0 0 20px rgba(0, 82, 255, 0.5)' }}>
+              {formatTokenAmount(claimableTokens, 4)}
+            </Typography>
+            <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', opacity: 0.8 }}>
+              ALMAN
+            </Typography>
+          </Box>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)' }}>
+            Accumulated from {formatGamePoints(totalPoints)} points
           </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-            From {formatGamePoints(totalPoints)} game points
-          </Typography>
+
+          {isClaiming && (
+            <Box sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'rgba(0,0,0,0.7)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 10,
+            }}>
+              <CircularProgress size={40} thickness={2} sx={{ mb: 2 }} />
+              <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold', letterSpacing: 1 }}>
+                MINING TRANSACTION...
+              </Typography>
+            </Box>
+          )}
         </Box>
 
         {/* Status Messages */}
         {claimStatus === 'success' && (
-          <Alert severity="success" icon={<SuccessIcon />}>
-            <Typography variant={isLandscape ? 'caption' : 'body2'}>
-              Successfully claimed {formatTokenAmount(claimableTokens, 2)}!
+          <Alert severity="success" variant="filled" icon={<SuccessIcon />}>
+            <Typography variant="body2" fontWeight="bold">
+              Tokens Successfully Mined!
             </Typography>
             {txHash && (
               <Typography
@@ -286,85 +386,65 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
                 href={getTxExplorerUrl(txHash)}
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{ display: 'block', mt: 0.5, color: 'primary.main', textDecoration: 'underline' }}
+                sx={{ display: 'block', mt: 0.5, color: 'inherit', textDecoration: 'underline' }}
               >
-                View Transaction
+                View on Explorer
               </Typography>
             )}
           </Alert>
         )}
 
         {claimStatus === 'error' && (
-          <Alert severity="error" icon={<ErrorIcon />}>
-            <Typography variant={isLandscape ? 'caption' : 'body2'}>
+          <Alert severity="error" variant="outlined" icon={<ErrorIcon />}>
+            <Typography variant="body2">
               {errorMessage}
             </Typography>
           </Alert>
         )}
 
-        {!isConnected && (
-          <Alert severity="warning">
-            <Typography variant={isLandscape ? 'caption' : 'body2'}>
-              Please connect your wallet to claim rewards
-            </Typography>
-          </Alert>
-        )}
-
-        {miningStats.isMiningComplete && (
-          <Alert severity="info">
-            <Typography variant={isLandscape ? 'caption' : 'body2'}>
-              Mining pool exhausted. No more tokens can be mined.
-            </Typography>
-          </Alert>
-        )}
-
         {/* Action Buttons */}
-        <Box sx={{ display: 'flex', gap: 1.5, mt: isLandscape ? 1 : 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
           <Button
             fullWidth
             variant="outlined"
             onClick={handleClose}
             disabled={isClaiming}
-            sx={{ 
-              py: isLandscape ? 1 : 1.5,
-              fontSize: isLandscape ? 14 : 16,
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              borderWidth: 2,
+              '&:hover': { borderWidth: 2 }
             }}
           >
-            Close
+            Later
           </Button>
-          
+
           <Button
             fullWidth
             variant="contained"
             onClick={handleClaim}
             disabled={!canClaim || isClaiming || !isConnected || miningStats.isMiningComplete}
-            startIcon={
-              isClaiming ? (
-                <CircularProgress size={20} />
-              ) : (
-                <Image
-                  src="/images/icons/mimig-token.png"
-                  alt="Token"
-                  width={20}
-                  height={20}
-                />
-              )
-            }
-            sx={{ 
-              py: isLandscape ? 1 : 1.5,
-              fontSize: isLandscape ? 14 : 16,
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              fontWeight: 'bold',
+              boxShadow: '0 4px 14px 0 rgba(0, 82, 255, 0.39)',
+              '&:hover': {
+                boxShadow: '0 6px 20px rgba(0, 82, 255, 0.23)',
+              }
             }}
           >
-            {isClaiming ? 'Claiming...' : 'Claim Tokens'}
+            {isClaiming ? 'Mining...' : 'Claim Tokens'}
           </Button>
         </Box>
 
-        {/* Help Text */}
-        {!canClaim && !miningStats.isMiningComplete && (
-          <Typography variant="caption" color="text.secondary" textAlign="center">
-            Minimum 0.1 ALMAN required to claim
+        {/* Network Status */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, mt: 1 }}>
+          <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: isConnected ? '#4caf50' : '#f44336' }} />
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)' }}>
+            {isConnected ? `Connected: ${address?.slice(0, 6)}...${address?.slice(-4)}` : 'Not Connected'}
           </Typography>
-        )}
+        </Box>
       </Box>
     </GameModal>
   );

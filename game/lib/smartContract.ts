@@ -1,6 +1,6 @@
 /**
  * Smart Contract Integration
- * AlmaNEO Kindness Game - Token Claim System
+ * AlmaNEO Kindness Game - ALMAN Token Claim System
  */
 
 import { ethers } from 'ethers';
@@ -28,10 +28,10 @@ export interface TokenBalance {
 // ============================================================================
 
 /**
- * Get MiMiGToken contract instance
+ * Get ALMANToken contract instance
  * @param signerOrProvider - Signer or Provider
  */
-export function getMiMiGTokenContract(
+export function getALMANTokenContract(
   signerOrProvider: ethers.Signer | ethers.Provider
 ): ethers.Contract {
   return new ethers.Contract(
@@ -55,12 +55,12 @@ export async function getTokenBalance(
   provider: ethers.Provider
 ): Promise<TokenBalance> {
   try {
-    const contract = getMiMiGTokenContract(provider);
+    const contract = getALMANTokenContract(provider);
     const balance = await contract.balanceOf(address);
     const decimals = await contract.decimals();
-    
+
     const formatted = ethers.formatUnits(balance, decimals);
-    
+
     return {
       balance: balance.toString(),
       formatted,
@@ -76,14 +76,14 @@ export async function getTokenBalance(
  */
 export async function getTokenInfo(provider: ethers.Provider) {
   try {
-    const contract = getMiMiGTokenContract(provider);
-    
+    const contract = getALMANTokenContract(provider);
+
     const [name, symbol, decimals] = await Promise.all([
       contract.name(),
       contract.symbol(),
       contract.decimals(),
     ]);
-    
+
     return { name, symbol, decimals };
   } catch (error) {
     console.error('Error getting token info:', error);
@@ -114,35 +114,35 @@ export async function claimTokenReward(
         error: 'Invalid token amount',
       };
     }
-    
+
     // Get contract with signer
-    const contract = getMiMiGTokenContract(signer);
-    
+    const contract = getALMANTokenContract(signer);
+
     // Get decimals
     const decimals = await contract.decimals();
-    
+
     // Convert amount to wei (token base units)
     const amountWei = ethers.parseUnits(amount.toString(), decimals);
-    
+
     console.log('🎁 Claiming tokens:', {
       amount,
       amountWei: amountWei.toString(),
       recipient: recipientAddress,
     });
-    
+
     // Send transaction (mint tokens)
     // Note: This requires the signer to have MINTER_ROLE
     // For game rewards, a backend service should handle minting
     const tx = await contract.mint(recipientAddress, amountWei);
-    
+
     console.log('📤 Transaction sent:', tx.hash);
-    
+
     // Wait for confirmation
     const receipt = await tx.wait();
-    
+
     if (receipt.status === 1) {
       console.log('✅ Transaction confirmed:', receipt.hash);
-      
+
       return {
         success: true,
         transactionHash: receipt.hash,
@@ -150,7 +150,7 @@ export async function claimTokenReward(
       };
     } else {
       console.error('❌ Transaction failed:', receipt);
-      
+
       return {
         success: false,
         error: 'Transaction failed',
@@ -158,10 +158,10 @@ export async function claimTokenReward(
     }
   } catch (error: any) {
     console.error('❌ Error claiming tokens:', error);
-    
+
     // Parse error message
     let errorMessage = 'Failed to claim tokens';
-    
+
     if (error.code === 'ACTION_REJECTED') {
       errorMessage = 'Transaction rejected by user';
     } else if (error.code === 'INSUFFICIENT_FUNDS') {
@@ -176,7 +176,7 @@ export async function claimTokenReward(
         errorMessage = error.message.substring(0, 100);
       }
     }
-    
+
     return {
       success: false,
       error: errorMessage,
@@ -200,15 +200,15 @@ export async function estimateClaimGas(
   recipientAddress: string
 ): Promise<bigint> {
   try {
-    const contract = getMiMiGTokenContract(signer);
+    const contract = getALMANTokenContract(signer);
     const decimals = await contract.decimals();
     const amountWei = ethers.parseUnits(amount.toString(), decimals);
-    
+
     const gasEstimate = await contract.mint.estimateGas(
       recipientAddress,
       amountWei
     );
-    
+
     return gasEstimate;
   } catch (error) {
     console.error('Error estimating gas:', error);
@@ -261,7 +261,7 @@ export function getTokenAddress(): string {
 // ============================================================================
 
 export default {
-  getMiMiGTokenContract,
+  getALMANTokenContract,
   getTokenBalance,
   getTokenInfo,
   claimTokenReward,

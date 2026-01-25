@@ -17,7 +17,7 @@ export interface EducationContent {
   description: string;
   image: string;
   level: number; // Level at which this content is shown
-  category: 'farming' | 'technology' | 'environment';
+  category: 'core' | 'ai' | 'impact';
 }
 
 // ============================================================================
@@ -26,67 +26,52 @@ export interface EducationContent {
 
 export const educationContents: EducationContent[] = [
   {
-    id: 'awd',
-    title: 'AWD (Alternate Wetting and Drying)',
-    description: `AWD is a revolutionary water management technique that transforms traditional rice farming. Instead of continuously flooding fields, water is alternately applied and drained based on soil moisture levels.
+    id: 'ai-divide',
+    title: 'The AI Divide',
+    description: `As AI becomes the most powerful tool in human history, a "digital divide" is growing into an "AI divide". 90% of AI development and resources are concentrated in just a few countries.
 
-Benefits:
-• Reduces water usage by 30%
-• Cuts methane emissions by 50%
-• Improves rice quality
-• Reduces production costs
-• Easy to implement
+Challenges:
+• High GPU costs prevent local innovation
+• Data bias ignores diverse cultures
+• Linguistic exclusion (English-centric)
+• Economic inequality through automation
 
-This simple change makes a massive environmental impact while helping farmers save money and resources.`,
-    image: '/images/education/awd-diagram.png',
+AlmaNEO exists to ensure AI is a global public good, not a private monopoly.`,
+    image: '/images/education/ai-divide.png',
     level: 10,
-    category: 'farming'
+    category: 'impact'
   },
   {
-    id: 'magnetic-filter',
-    title: 'Magnetic Filter Technology',
-    description: `Our magnetic filtration system is a breakthrough innovation that removes iron and other metallic contaminants from irrigation water.
+    id: 'kindness-protocol',
+    title: 'The Kindness Protocol',
+    description: `Kindness is the fundamental layer of human intelligence. Our Kindness Protocol uses blockchain to reward human data labeling and cultural context sharing.
 
 How it works:
-• Water passes through powerful magnetic fields
-• Iron particles are attracted and captured
-• Clean water flows to rice fields
-• No chemicals or electricity needed
+• Users label cultural and ethical context
+• Data is used to align AI models
+• Human values are "mined" into the model
+• Rewards are distributed via ALMAN tokens
 
-Benefits:
-• Improves rice quality and yield
-• Reduces soil contamination
-• Prevents equipment damage
-• Environmentally friendly
-• Low maintenance cost
-
-This technology helps farmers achieve higher yields while protecting soil health for future generations.`,
-    image: '/images/education/magnetic-filter.png',
+This ensures AI systems share "Cold Code, Warm Soul" values and remain beneficial to humanity.`,
+    image: '/images/education/kindness-protocol.png',
     level: 25,
-    category: 'technology'
+    category: 'core'
   },
   {
-    id: 'carbon-credit',
-    title: 'Carbon Credits & Climate Impact',
-    description: `Carbon credits create economic incentives for environmental protection. When farmers adopt sustainable practices like AWD, they reduce CO2 emissions and can earn carbon credits.
+    id: 'gaii-index',
+    title: 'What is GAII?',
+    description: `The GAII (Global AI Inequality Index) measures the gap in AI infrastructure and usage between nations. High GAII means a country is at risk of falling behind in the AI era.
 
-The MiMiG System:
-• Measure real CO2 reduction
-• Convert to blockchain tokens
-• Trade on global markets
-• Earn passive income
-• Support climate action
+Our Mission:
+• Reduce GAII through open-source data
+• Provide decentralized compute access
+• Empower local communities with AI
+• Reach 8 billion humans by 2026
 
-Impact:
-• 1 ton CO2 reduced = 1 carbon credit
-• Credits can be sold to companies
-• Creates sustainable income stream
-• Rewards environmental stewardship
-
-You're not just playing a game - you're learning about real solutions that help farmers and save our planet!`,
-    image: '/images/education/carbon-credit.png',
+Every tap in this game helps lower the GAII and provides AI access to someone who needs it most.`,
+    image: '/images/education/gaii-index.png',
     level: 50,
-    category: 'environment'
+    category: 'impact'
   }
 ];
 

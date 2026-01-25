@@ -49,7 +49,7 @@ export const UPGRADES = {
 // Level system
 export const LEVEL_SYSTEM = {
   getRequiredPoints: (level: number) => Math.floor(1000 * Math.pow(level, 1.5)),
-  
+
   getLevelReward: (level: number) => {
     const milestones: Record<number, number> = {
       10: 500,
@@ -107,6 +107,6 @@ export const AUTO_SAVE_INTERVAL = 5000; // 5 seconds
 
 // Token conversion
 export const TOKEN_CONVERSION = {
-  POINTS_PER_TOKEN: 10000, // 10,000 points = 1 NEOS token
-  MIN_CLAIM_POINTS: 10000, // Minimum 10,000 points to claim
+  POINTS_PER_TOKEN: 10000, // 10,000 points = 1 ALMAN token
+  MIN_CLAIM_POINTS: 1000, // Minimum 1,000 points to claim (0.1 ALMAN)
 } as const;

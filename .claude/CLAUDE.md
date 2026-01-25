@@ -145,7 +145,7 @@ c:\DEV\ALMANEO\
 │   │   │
 │   │   ├── App.tsx                # Web3AuthProvider 래핑
 │   │   ├── main.tsx               # i18n 초기화 포함
-│   │   ├── firebase.ts            # Firebase + Firestore 초기화
+│   │   ├── supabase.ts            # Supabase 초기화
 │   │   └── index.css              # Tailwind 유틸리티 클래스
 │   │
 │   ├── public/
@@ -175,7 +175,7 @@ c:\DEV\ALMANEO\
 │
 ├── shared/                        # 공유 모듈
 │   ├── auth/web3auth.config.ts
-│   ├── firebase/config.ts, firestore.ts
+│   ├── supabase/config.ts
 │   ├── contracts/addresses.ts
 │   └── types/user.ts, game.ts, contracts.ts
 │
@@ -257,7 +257,7 @@ Semantic:
   "clsx": "^2.1.1",
   "tailwind-merge": "^3.4.0",
   "class-variance-authority": "^0.7.1",
-  "firebase": "^12.8.0",
+  "@supabase/supabase-js": "^2.x",
   "@web3auth/modal": "latest",
   "@web3auth/base": "latest",
   "ethers": "^6.x",
@@ -289,12 +289,12 @@ Semantic:
 ### ✅ Completed (Phase 2-A: 인프라 구축)
 1. shared/ 폴더 구조 생성
    - auth/web3auth.config.ts (Web3Auth 설정)
-   - firebase/config.ts, firestore.ts (Firebase 초기화 및 유틸리티)
+   - supabase/config.ts (Supabase 초기화 및 유틸리티)
    - contracts/addresses.ts (컨트랙트 주소 관리)
    - types/user.ts, game.ts, contracts.ts (공통 타입 정의)
 2. 환경 변수 설정 (.env, .env.example)
    - Web3Auth Client ID 설정 완료
-   - Firebase 프로젝트 연동 완료 (neos-p)
+   - Supabase 프로젝트 연동 완료
    - Polygon Amoy 테스트넷 설정
 3. React Router 설정
    - react-router-dom 설치
@@ -312,8 +312,8 @@ Semantic:
    - 사용자 정보 드롭다운 메뉴
    - 주소 복사, Explorer 링크
 3. 대시보드 실제 데이터 연동
-   - hooks/useUserData.ts (Firebase 연동)
-   - Dashboard.tsx 리팩토링 (Web3Auth + Firebase)
+   - hooks/useUserData.ts (Supabase 연동)
+   - Dashboard.tsx 리팩토링 (Web3Auth + Supabase)
    - 실시간 사용자 데이터 구독
 
 ### ✅ Completed (Phase 2-B: Web 서버 확장 - Part 2)
@@ -565,10 +565,10 @@ npx hardhat run scripts/deploy-nft.js --network amoy # NFT 컨트랙트 배포
 │         └───────────┬─────────────┘                            │
 │                     ▼                                           │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                    Firebase Backend                      │   │
+│  │                    Supabase Backend                     │   │
 │  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐        │   │
-│  │  │   Auth      │ │  Firestore  │ │  Storage    │        │   │
-│  │  │ (사용자)    │ │ (데이터)    │ │ (파일)      │        │   │
+│  │  │   Auth      │ │  Database   │ │  Storage    │        │   │
+│  │  │ (사용자)    │ │ (Postgres)  │ │ (파일)      │        │   │
 │  │  └─────────────┘ └─────────────┘ └─────────────┘        │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                     ▼                                           │
@@ -611,7 +611,7 @@ c:\DEV\ALMANEO\
 │
 ├── shared/                 # 🆕 공유 모듈
 │   ├── auth/               # Web3Auth 통합 설정
-│   ├── firebase/           # Firebase 설정
+│   ├── supabase/           # Supabase 설정
 │   ├── contracts/          # ABI + 주소
 │   └── types/              # 공통 타입
 │
@@ -646,14 +646,14 @@ export const WEB3AUTH_CONFIG = {
 사용자 로그인 플로우:
 1. 어느 서버에서든 Web3Auth 로그인
 2. 동일한 Client ID → 동일한 지갑 주소 생성
-3. Firebase Auth에 Custom Token으로 인증
-4. Firestore에서 사용자 데이터 조회/생성
+3. Supabase Auth에 Custom Token으로 인증
+4. Supabase DB에서 사용자 데이터 조회/생성
 5. 다른 서버 방문 시 → 이미 로그인 상태 (세션 공유)
 ```
 
-### Firebase 컬렉션 구조
+### Supabase 테이블 구조
 ```
-firestore/
+tables/
 ├── users/{walletAddress}/
 │   ├── profile: { nickname, avatar, createdAt }
 │   ├── kindnessScore: number
@@ -746,14 +746,9 @@ firestore/
 # Web3Auth
 VITE_WEB3AUTH_CLIENT_ID=your_client_id
 
-# Firebase
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_FIREBASE_MEASUREMENT_ID=
+# Supabase
+VITE_SUPABASE_URL=your_project_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
 
 # Blockchain (Polygon)
 VITE_CHAIN_ID=137

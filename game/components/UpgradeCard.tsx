@@ -29,20 +29,22 @@ export default function UpgradeCard({
 }: UpgradeCardProps) {
   const isMaxLevel = level >= maxLevel;
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
-  
+
   return (
     <Box
       sx={{
         position: 'relative',
-        background: 'linear-gradient(145deg, rgba(60, 40, 25, 0.8) 0%, rgba(40, 25, 15, 0.8) 100%)',
-        border: '2px solid rgba(139, 69, 19, 0.6)',
-        borderRadius: 2,
+        background: 'rgba(255, 255, 255, 0.03)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 3,
         p: isLandscape ? 1.5 : 2.5,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: '#FFD700',
-          boxShadow: '0 8px 24px rgba(255, 215, 0, 0.3)',
+          borderColor: '#0052FF',
+          boxShadow: '0 8px 32px rgba(0, 82, 255, 0.2)',
+          bgcolor: 'rgba(255, 255, 255, 0.05)',
         },
       }}
     >
@@ -51,7 +53,7 @@ export default function UpgradeCard({
         <Box
           sx={{
             fontSize: isLandscape ? 36 : 48,
-            filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 0 10px rgba(0, 82, 255, 0.3))',
           }}
         >
           {icon}
@@ -60,10 +62,10 @@ export default function UpgradeCard({
           <Typography
             variant="h6"
             sx={{
-              color: '#FFD700',
-              fontWeight: 700,
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-              fontSize: isLandscape ? 16 : undefined,
+              color: 'white',
+              fontWeight: 800,
+              fontSize: isLandscape ? 16 : 18,
+              letterSpacing: -0.5,
             }}
           >
             {name}
@@ -71,8 +73,9 @@ export default function UpgradeCard({
           <Typography
             variant="body2"
             sx={{
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: 'rgba(255, 255, 255, 0.5)',
               fontSize: isLandscape ? 11 : 13,
+              fontWeight: 300,
             }}
           >
             {description}
@@ -82,31 +85,46 @@ export default function UpgradeCard({
 
       {/* 레벨 & 효과 */}
       <Box sx={{ mb: isLandscape ? 1.5 : 2 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            color: '#FFD700',
-            fontWeight: 600,
-            mb: 0.5,
-            fontSize: isLandscape ? 12 : undefined,
-          }}
-        >
-          Level {level} / {maxLevel}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: '#0052FF',
+              fontWeight: 'bold',
+              fontSize: isLandscape ? 10 : 11,
+              letterSpacing: 1,
+            }}
+          >
+            UPGRADE PHASE
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'white',
+              fontWeight: 'bold',
+              bgcolor: 'rgba(255,255,255,0.1)',
+              px: 1,
+              borderRadius: 1,
+            }}
+          >
+            Lvl {level} / {maxLevel}
+          </Typography>
+        </Box>
         <Box
           sx={{
-            background: 'rgba(0, 0, 0, 0.3)',
-            borderRadius: 1,
+            background: 'rgba(0, 0, 0, 0.2)',
+            borderRadius: 2,
             p: isLandscape ? 1 : 1.5,
-            border: '1px solid rgba(255, 215, 0, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
           }}
         >
           <Typography
             variant="body1"
             sx={{
               color: '#4CAF50',
-              fontWeight: 700,
+              fontWeight: 800,
               fontSize: isLandscape ? 15 : 18,
+              textAlign: 'center',
             }}
           >
             {effect}
@@ -116,47 +134,53 @@ export default function UpgradeCard({
 
       {/* 비용 & 버튼 */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography
-          variant="body2"
-          sx={{
-            color: canAfford ? '#FFF' : '#f44336',
-            fontWeight: 600,
-            fontSize: isLandscape ? 12 : undefined,
-          }}
-        >
-          Cost: {formatNumber(cost)} 🌾
-        </Typography>
-        
+        <Box>
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'rgba(255,255,255,0.4)',
+              display: 'block',
+            }}
+          >
+            Requirement
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: canAfford ? 'white' : '#f44336',
+              fontWeight: 700,
+              fontSize: isLandscape ? 14 : 16,
+            }}
+          >
+            💖 {formatNumber(cost)}
+          </Typography>
+        </Box>
+
         <Button
           variant="contained"
           onClick={onUpgrade}
           disabled={!canAfford || isMaxLevel}
           sx={{
             minWidth: isLandscape ? 80 : 100,
-            fontSize: isLandscape ? 12 : undefined,
+            borderRadius: 2,
             background: isMaxLevel
-              ? 'rgba(100, 100, 100, 0.5)'
+              ? 'rgba(100, 100, 100, 0.1)'
               : canAfford
-              ? 'linear-gradient(135deg, #FFD700 0%, #FFA000 100%)'
-              : 'rgba(100, 100, 100, 0.5)',
-            color: isMaxLevel ? 'rgba(255,255,255,0.5)' : '#000',
-            fontWeight: 700,
-            textTransform: 'none',
+                ? '#0052FF'
+                : 'rgba(100, 100, 100, 0.2)',
+            color: isMaxLevel ? 'rgba(255,255,255,0.2)' : 'white',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: 1,
             '&:hover': {
-              background: isMaxLevel
-                ? 'rgba(100, 100, 100, 0.5)'
-                : canAfford
-                ? 'linear-gradient(135deg, #FFA000 0%, #FF6F00 100%)'
-                : 'rgba(100, 100, 100, 0.5)',
-              transform: canAfford && !isMaxLevel ? 'scale(1.05)' : 'none',
-            },
-            '&:disabled': {
-              color: 'rgba(255,255,255,0.3)',
+              bgcolor: '#0041CC',
+              transform: canAfford && !isMaxLevel ? 'translateY(-2px)' : 'none',
+              boxShadow: '0 4px 12px rgba(0, 82, 255, 0.4)',
             },
             transition: 'all 0.2s ease',
           }}
         >
-          {isMaxLevel ? 'MAX' : '⬆️ UPGRADE'}
+          {isMaxLevel ? 'Maxed' : 'Upgrade'}
         </Button>
       </Box>
     </Box>

@@ -2,7 +2,6 @@
 
 import { Box, Typography } from '@mui/material';
 import { MouseEvent } from 'react';
-import Image from 'next/image';
 import AnimatedNumber from './AnimatedNumber';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -12,10 +11,10 @@ interface ResourceCounterProps {
   onClick?: (event: MouseEvent<HTMLElement>) => void;
 }
 
-export default function ResourceCounter({ 
-  value, 
+export default function ResourceCounter({
+  value,
   label,
-  onClick 
+  onClick
 }: ResourceCounterProps) {
   const isMobile = useIsMobile();
 
@@ -33,20 +32,16 @@ export default function ResourceCounter({
         } : {},
       }}
     >
-      <Box sx={{ 
-        width: isMobile ? 28 : 40, 
-        height: isMobile ? 28 : 40, 
-        position: 'relative' 
+      <Box sx={{
+        width: isMobile ? 28 : 40,
+        height: isMobile ? 28 : 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: isMobile ? 24 : 32,
+        filter: 'drop-shadow(0 0 8px rgba(255, 0, 107, 0.4))',
       }}>
-        <Image
-          src="/images/icons/resource-rice.png"
-          alt="Rice"
-          fill
-          style={{ 
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
-          }}
-        />
+        💖
       </Box>
       <Typography
         component="div"
