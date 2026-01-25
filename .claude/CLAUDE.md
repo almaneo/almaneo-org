@@ -2215,22 +2215,36 @@ function updateReputation(node, delta) external onlyCoordinator;
    - 밋업 검증 완료 시 자동으로 AmbassadorSBT 컨트랙트 호출
    - 오프체인 처리 성공 후 온체인 기록 (실패해도 오프체인은 유지)
 
-#### 3. **환경변수 설정 필요**
+#### 3. **Verifier 전용 지갑 생성 (보안 강화)**
+   - 별도 Verifier 지갑 생성하여 역할 분리
+   - `blockchain/scripts/grant-verifier-role.js` 스크립트 작성
+   - VERIFIER_ROLE 부여 완료 (tx: `0x6093c7e7...`, block #32838625)
+
+   **지갑 구조:**
+   | 지갑 | 주소 | 역할 |
+   |------|------|------|
+   | Foundation | `0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE` | DEFAULT_ADMIN, MINTER, UPGRADER |
+   | Verifier | `0x30073c2f47D41539dA6147324bb9257E0638144E` | VERIFIER_ROLE만 |
+
+#### 4. **환경변수 설정**
    ```
-   VERIFIER_PRIVATE_KEY=<Foundation 지갑 개인키>
+   VERIFIER_PRIVATE_KEY=<Verifier 지갑 개인키>
    CHAIN_ID=80002 (Polygon Amoy, 기본값)
    ```
-   - Foundation 지갑: `0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE`
-   - 이 지갑이 AmbassadorSBT 컨트랙트의 VERIFIER_ROLE 보유
 
-#### 4. **빌드 테스트 성공** (39.55초)
+#### 5. **빌드 테스트 성공** (39.55초)
+
+#### 6. **Git 커밋**
+   - 커밋: `d5466ac` - feat(web): Add Ambassador API for on-chain meetup verification
+   - 5개 파일, +408줄 변경
 
 ---
 
 ### 🔲 다음 세션 작업 (Session 30)
 
 #### Vercel 환경변수 설정 (필수)
-- [ ] Vercel에 `VERIFIER_PRIVATE_KEY` 환경변수 추가
+- [ ] Verifier 지갑에 가스비 전송 (~0.5 POL)
+- [ ] Vercel에 `VERIFIER_PRIVATE_KEY` 환경변수 추가 (Verifier 지갑)
 - [ ] Vercel에 `GROQ_API_KEY` 환경변수 추가
 - [ ] Redeploy 후 테스트
 
@@ -2242,7 +2256,6 @@ function updateReputation(node, delta) external onlyCoordinator;
 #### 기타 작업
 - [ ] Grant 프로그램 신청 준비 (Google for Nonprofits, Cloud for Startups)
 - [ ] 메인넷 배포 준비
-- [ ] Git 커밋 & 푸시
 
 ### i18n 핵심 해결 방법 (참고용)
 ```
