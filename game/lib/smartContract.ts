@@ -5,7 +5,7 @@
 
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESSES, NETWORK_CONFIG } from '@/contracts/addresses';
-import ALMANTokenABI from '@/contracts/abis/ALMANToken.json';
+import ALMANTokenABI from '../contracts/abis/ALMANToken.json';
 
 // ============================================================================
 // Types
