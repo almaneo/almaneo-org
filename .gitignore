@@ -46,7 +46,8 @@ blockchain/deployments/localhost/
 # -------------------------------------------
 # Claude Code (Local Only)
 # -------------------------------------------
-.claude/
+.claude/*
+!.claude/CLAUDE.md
 .claudeignore
 
 # -------------------------------------------

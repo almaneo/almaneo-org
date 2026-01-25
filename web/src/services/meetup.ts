@@ -251,6 +251,43 @@ export async function uploadMeetupPhoto(
 }
 
 /**
+ * AmbassadorSBT 컨트랙트에 밋업 기록 (온체인)
+ */
+async function recordMeetupOnChain(
+  meetupId: string,
+  hostAddress: string,
+  attendedAddresses: string[]
+): Promise<{ success: boolean; txHashes?: string[]; error?: string }> {
+  try {
+    const response = await fetch('/api/ambassador', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'recordMeetupVerification',
+        meetupId,
+        hostAddress,
+        attendedAddresses,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      console.error('[Meetup] 온체인 기록 실패:', result.error);
+      return { success: false, error: result.error };
+    }
+
+    console.log('[Meetup] 온체인 기록 완료:', result.txHashes);
+    return { success: true, txHashes: result.txHashes };
+  } catch (error) {
+    console.error('[Meetup] 온체인 기록 에러:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
+/**
  * 밋업 인증 제출 (호스트가 완료 처리)
  */
 export async function submitMeetupVerification(
@@ -315,6 +352,13 @@ export async function submitMeetupVerification(
 
   // 밋업 상태를 완료로 변경
   await updateMeetupStatus(meetupId, 'completed');
+
+  // 온체인에 밋업 기록 (AmbassadorSBT)
+  // 실패해도 오프체인 처리는 완료되었으므로 true 반환
+  const onChainResult = await recordMeetupOnChain(meetupId, hostAddress, attendedAddresses);
+  if (!onChainResult.success) {
+    console.warn('[Meetup] 온체인 기록은 실패했지만 오프체인 처리는 완료됨');
+  }
 
   return true;
 }

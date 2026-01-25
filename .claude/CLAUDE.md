@@ -2200,17 +2200,39 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 29)
+### ✅ 완료된 작업 (2026-01-25 - Session 29: Kindness Protocol 백엔드 연동)
+
+#### 1. **Ambassador API Route 생성**
+   - `web/api/ambassador.ts` - Vercel Serverless Function
+   - AmbassadorSBT 컨트랙트 연동 (ethers.js)
+   - 지원 액션:
+     - `recordMeetupVerification`: 밋업 검증 완료 시 참가자/호스트 기록
+     - `updateKindnessScore`: Kindness Score 업데이트
+     - `recordReferral`: 추천인 기록
+
+#### 2. **meetup.ts 온체인 연동**
+   - `submitMeetupVerification()` 함수에 API 호출 추가
+   - 밋업 검증 완료 시 자동으로 AmbassadorSBT 컨트랙트 호출
+   - 오프체인 처리 성공 후 온체인 기록 (실패해도 오프체인은 유지)
+
+#### 3. **환경변수 설정 필요**
+   ```
+   VERIFIER_PRIVATE_KEY=<Foundation 지갑 개인키>
+   CHAIN_ID=80002 (Polygon Amoy, 기본값)
+   ```
+   - Foundation 지갑: `0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE`
+   - 이 지갑이 AmbassadorSBT 컨트랙트의 VERIFIER_ROLE 보유
+
+#### 4. **빌드 테스트 성공** (39.55초)
+
+---
+
+### 🔲 다음 세션 작업 (Session 30)
 
 #### Vercel 환경변수 설정 (필수)
+- [ ] Vercel에 `VERIFIER_PRIVATE_KEY` 환경변수 추가
 - [ ] Vercel에 `GROQ_API_KEY` 환경변수 추가
-- [ ] Redeploy 후 Llama 3.3 70B 모델 테스트
-
-#### Kindness Protocol 백엔드 연동
-1. **자동 발급 트리거 구현**
-   - [ ] 밋업 검증 완료 시 AmbassadorSBT 컨트랙트 호출 연동
-   - [ ] 백엔드 서비스 (VERIFIER_ROLE 관리)
-   - [ ] Supabase Edge Function 또는 Vercel API Route
+- [ ] Redeploy 후 테스트
 
 #### i18n 번역 확장
 - [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
@@ -2220,6 +2242,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 #### 기타 작업
 - [ ] Grant 프로그램 신청 준비 (Google for Nonprofits, Cloud for Startups)
 - [ ] 메인넷 배포 준비
+- [ ] Git 커밋 & 푸시
 
 ### i18n 핵심 해결 방법 (참고용)
 ```
