@@ -2240,22 +2240,94 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 30)
+### ✅ 완료된 작업 (2026-01-25 - Session 30: 웹사이트 점검 및 작업 정리)
 
-#### Vercel 환경변수 설정 (필수)
-- [ ] Verifier 지갑에 가스비 전송 (~0.5 POL)
-- [ ] Vercel에 `VERIFIER_PRIVATE_KEY` 환경변수 추가 (Verifier 지갑)
-- [ ] Vercel에 `GROQ_API_KEY` 환경변수 추가
-- [ ] Redeploy 후 테스트
+#### 1. **전체 웹사이트 점검 완료**
+   - Landing, GAII, AI Hub, Kindness, Meetup, Whitepaper: ✅ 정상 작동
+   - Dashboard: ⚠️ 토큰 잔액 하드코딩 ('0')
+   - Staking/Governance: ⚠️ 컨트랙트 연동됨, Mock 데이터 혼재
+   - Airdrop: ❌ 컨트랙트 연동 없음 (useAirdrop 훅 필요)
+   - Game 서버: ❌ 미배포 (Firebase 의존성)
 
-#### i18n 번역 확장
-- [ ] 나머지 12개 언어에 `aiHub` 섹션 추가
-- [ ] Kindness/Meetup 페이지 번역 키 생성
-- [ ] 나머지 12개 언어 common.json 업데이트 (`blog` 키)
+#### 2. **Vercel 환경변수 설정 완료** (사용자 수동)
+   - `VERIFIER_PRIVATE_KEY` 설정 완료
+   - `GROQ_API_KEY` 설정 완료
+   - Verifier 지갑에 POL 토큰 전송 완료
 
-#### 기타 작업
-- [ ] Grant 프로그램 신청 준비 (Google for Nonprofits, Cloud for Startups)
-- [ ] 메인넷 배포 준비
+---
+
+### 🔲 다음 세션 작업 (Session 31)
+
+#### 🔴 높은 우선순위 (핵심 기능 완성)
+
+1. **Airdrop 컨트랙트 연동**
+   - `web/src/hooks/useAirdrop.ts` 훅 생성
+   - KindnessAirdrop 컨트랙트 연동 (주소: `0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538`)
+   - Merkle Proof 기반 클레임 기능 구현
+   - `web/src/pages/Airdrop.tsx` 컨트랙트 연동
+
+2. **Dashboard 토큰 잔액 조회**
+   - ALMANToken.balanceOf() 호출 구현
+   - 현재 하드코딩 '0' → 실제 온체인 잔액
+
+3. **Governance 실제 제안 로드**
+   - ProposalCreated 이벤트 조회
+   - Mock 데이터 제거, 온체인 데이터로 교체
+
+#### 🟡 중간 우선순위
+
+4. **Game 서버 배포**
+   - Firebase → Supabase 마이그레이션
+   - `game/vercel.json` 생성
+   - Vercel 배포 설정
+
+5. **i18n 번역 확장**
+   - 나머지 12개 언어에 `aiHub` 섹션 추가
+   - Kindness/Meetup 페이지 번역 키 생성
+   - `blog` 키 추가 (12개 언어)
+
+#### 🟢 낮은 우선순위
+
+6. **Grant 프로그램 신청**
+   - Google for Nonprofits 신청
+   - Polygon Grants 신청
+   - Vercel Pro (오픈소스) 신청
+
+7. **메인넷 배포 준비**
+   - 스마트 컨트랙트 감사 검토
+   - 메인넷 배포 스크립트 준비
+
+---
+
+### 📊 페이지별 상태 요약 (Session 30 기준)
+
+| 페이지 | 상태 | 비고 |
+|--------|------|------|
+| Landing | ✅ | 완료 |
+| GAII Dashboard | ✅ | 세계지도 + 50개국 |
+| GAII Report | ✅ | PDF 다운로드 |
+| AI Hub | ✅ | Gemini + Groq |
+| Kindness | ✅ | Supabase + Ambassador |
+| Meetup | ✅ | 생성/참가/검증 |
+| Whitepaper | ✅ | 15개 언어 |
+| Dashboard | ⚠️ | 토큰 잔액 미구현 |
+| Staking | ⚠️ | 테스트 미진행 |
+| Governance | ⚠️ | Mock 데이터 |
+| Airdrop | ❌ | 컨트랙트 연동 필요 |
+| NFT (외부) | ✅ | nft.almaneo.org |
+| Game (외부) | ❌ | 미배포 |
+
+---
+
+### 🎯 Grant 프로그램 후보
+
+| 프로그램 | 대상 | 혜택 | 상태 |
+|---------|------|------|------|
+| Google for Nonprofits | 비영리 | Cloud $10K/년 | 미신청 |
+| Polygon Grants | Web3 | $5K~$50K | 미신청 |
+| Anthropic Credits | AI | API 크레딧 | 미신청 |
+| Vercel Pro | 오픈소스 | Pro 무료 | 미신청 |
+| Supabase Startups | 스타트업 | 1년 Pro | 미신청 |
 
 ### i18n 핵심 해결 방법 (참고용)
 ```

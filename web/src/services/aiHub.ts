@@ -45,29 +45,30 @@ export async function ensureUserExists(userAddress: string): Promise<void> {
     .eq('wallet_address', userAddress)
     .maybeSingle();
 
+  if (selectError) {
+    console.error('[AI Hub] Failed to check user:', selectError);
+    // 에러가 있어도 계속 진행 (insert 시도)
+  }
+
   if (existingUser) {
     // 이미 존재함
     return;
   }
 
-  // PGRST116: no rows returned - 사용자가 없으므로 생성
-  if (selectError && selectError.code === 'PGRST116') {
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert({
-        wallet_address: userAddress,
-        nickname: `User_${userAddress.slice(0, 6)}`,
-        kindness_score: 0,
-        total_points: 0,
-        level: 1,
-      });
+  // 사용자가 없으므로 생성
+  const { error: insertError } = await supabase
+    .from('users')
+    .insert({
+      wallet_address: userAddress,
+      nickname: `User_${userAddress.slice(0, 6)}`,
+      kindness_score: 0,
+      total_points: 0,
+      level: 1,
+    });
 
-    if (insertError && insertError.code !== '23505') { // 23505: unique violation (이미 존재)
-      console.error('[AI Hub] Failed to create user:', insertError);
-      throw new Error('사용자 정보를 생성하는데 실패했습니다.');
-    }
-  } else if (selectError) {
-    console.error('[AI Hub] Failed to check user:', selectError);
+  if (insertError && insertError.code !== '23505') { // 23505: unique violation (이미 존재)
+    console.error('[AI Hub] Failed to create user:', insertError);
+    throw new Error('사용자 정보를 생성하는데 실패했습니다.');
   }
 }
 export const DEFAULT_MODEL: AIModelId = 'gemini-2.5-flash-lite';
