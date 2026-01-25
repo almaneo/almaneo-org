@@ -161,7 +161,7 @@ export const HeroSection = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
-          <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+          <a href="https://game.almaneo.org" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
             <Button
               size="lg"
               glow
