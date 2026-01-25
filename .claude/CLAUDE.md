@@ -2256,50 +2256,71 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 31)
+### ✅ 완료된 작업 (2026-01-25 - Session 31: Dashboard & Airdrop 컨트랙트 연동)
+
+#### 1. **Dashboard 토큰 잔액 조회 구현**
+   - `web/src/hooks/useTokenBalance.ts` 훅 생성
+   - ALMANToken.balanceOf() 온체인 조회
+   - Dashboard.tsx에서 실제 잔액 표시 (하드코딩 '0' → 온체인 데이터)
+   - NEOS → ALMAN 브랜딩 업데이트
+
+#### 2. **Airdrop 컨트랙트 연동**
+   - `web/src/contracts/abis/KindnessAirdrop.ts` ABI 파일 생성
+   - `web/src/hooks/useAirdrop.ts` 훅 생성
+     - 캠페인 목록 조회 (`getCampaignInfo`)
+     - 사용자 클레임 정보 (`getUserInfo`)
+     - 클레임 여부 확인 (`hasClaimed`)
+     - Merkle Proof 클레임 (`claim`)
+   - `web/src/pages/Airdrop.tsx` 컨트랙트 연동
+     - 온체인 캠페인 목록 표시
+     - 사용자 클레임 통계 (Total Claimed, Daily Claimed, Remaining Limit)
+     - 활성/종료/예정 캠페인 상태 표시
+     - 오프체인 태스크 카테고리 (추후 연동용)
+
+#### 3. **Git 커밋**
+   - 커밋: `8f19ae8` - feat(web): Add token balance and airdrop contract integration
+   - 7개 파일, +799줄, -137줄
+
+---
+
+### 🔲 다음 세션 작업 (Session 32)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
-1. **Airdrop 컨트랙트 연동**
-   - `web/src/hooks/useAirdrop.ts` 훅 생성
-   - KindnessAirdrop 컨트랙트 연동 (주소: `0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538`)
-   - Merkle Proof 기반 클레임 기능 구현
-   - `web/src/pages/Airdrop.tsx` 컨트랙트 연동
-
-2. **Dashboard 토큰 잔액 조회**
-   - ALMANToken.balanceOf() 호출 구현
-   - 현재 하드코딩 '0' → 실제 온체인 잔액
-
-3. **Governance 실제 제안 로드**
+1. **Governance 실제 제안 로드**
    - ProposalCreated 이벤트 조회
    - Mock 데이터 제거, 온체인 데이터로 교체
 
+2. **Staking 페이지 테스트**
+   - 실제 스테이킹 트랜잭션 테스트
+   - UI 오류 수정
+
 #### 🟡 중간 우선순위
 
-4. **Game 서버 배포**
+3. **Game 서버 배포**
    - Firebase → Supabase 마이그레이션
    - `game/vercel.json` 생성
    - Vercel 배포 설정
 
-5. **i18n 번역 확장**
+4. **i18n 번역 확장**
    - 나머지 12개 언어에 `aiHub` 섹션 추가
    - Kindness/Meetup 페이지 번역 키 생성
    - `blog` 키 추가 (12개 언어)
 
 #### 🟢 낮은 우선순위
 
-6. **Grant 프로그램 신청**
+5. **Grant 프로그램 신청**
    - Google for Nonprofits 신청
    - Polygon Grants 신청
    - Vercel Pro (오픈소스) 신청
 
-7. **메인넷 배포 준비**
+6. **메인넷 배포 준비**
    - 스마트 컨트랙트 감사 검토
    - 메인넷 배포 스크립트 준비
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 30 기준)
+### 📊 페이지별 상태 요약 (Session 31 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2310,10 +2331,10 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Kindness | ✅ | Supabase + Ambassador |
 | Meetup | ✅ | 생성/참가/검증 |
 | Whitepaper | ✅ | 15개 언어 |
-| Dashboard | ⚠️ | 토큰 잔액 미구현 |
+| Dashboard | ✅ | 토큰 잔액 온체인 조회 |
 | Staking | ⚠️ | 테스트 미진행 |
 | Governance | ⚠️ | Mock 데이터 |
-| Airdrop | ❌ | 컨트랙트 연동 필요 |
+| Airdrop | ✅ | 컨트랙트 연동 완료 |
 | NFT (외부) | ✅ | nft.almaneo.org |
 | Game (외부) | ❌ | 미배포 |
 
