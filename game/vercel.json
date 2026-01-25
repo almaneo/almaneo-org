@@ -3,10 +3,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --legacy-peer-deps",
   "outputDirectory": ".next",
-  "regions": ["icn1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "NEXT_PUBLIC_WEB3AUTH_CLIENT_ID": "@web3auth_client_id"
-  }
+  "regions": [
+    "icn1"
+  ]
 }
