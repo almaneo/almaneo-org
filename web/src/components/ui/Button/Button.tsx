@@ -12,6 +12,7 @@ const buttonVariants = cva(
         secondary: 'btn-secondary',
         cold: 'btn-cold',
         ghost: 'btn-ghost',
+        outline: 'btn-outline',
       },
       size: {
         sm: 'px-4 py-2 text-sm',
@@ -50,7 +51,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
   loading?: boolean;

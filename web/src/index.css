@@ -162,6 +162,10 @@
     @apply btn bg-transparent hover:bg-white/5;
   }
 
+  .btn-outline {
+    @apply btn bg-transparent border-2 border-slate-600 text-slate-200 hover:border-slate-400 hover:text-white;
+  }
+
   /* =============================================
      Cards
      ============================================= */
