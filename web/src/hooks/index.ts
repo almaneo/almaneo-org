@@ -1,6 +1,8 @@
 export { useUserData, calculateStakingTier, STAKING_TIERS } from './useUserData';
 export type { User, UserProfile, UserSettings } from './useUserData';
 
+export { useTokenBalance } from './useTokenBalance';
+
 export { useStaking } from './useStaking';
 export type { StakeInfo, TierInfo, StakingStats } from './useStaking';
 
@@ -31,3 +33,5 @@ export type {
   NextTierRequirements,
   ContractConstants,
 } from './useAmbassadorSBT';
+
+export { useAirdrop } from './useAirdrop';

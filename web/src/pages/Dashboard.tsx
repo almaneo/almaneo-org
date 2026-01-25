@@ -6,7 +6,7 @@
 import { Link } from 'react-router-dom';
 import { Wallet, Coins, Heart, TrendingUp, Award, ArrowUpRight, RefreshCw, Loader2 } from 'lucide-react';
 import { useWallet } from '../components/wallet';
-import { useUserData, STAKING_TIERS } from '../hooks';
+import { useUserData, STAKING_TIERS, useTokenBalance } from '../hooks';
 
 // 주소 축약 유틸리티
 function shortenAddress(address: string, chars = 6): string {
@@ -24,8 +24,9 @@ const TIER_COLORS = {
 export default function Dashboard() {
   const { address, balance, isConnected, isLoading: authLoading, connect: login } = useWallet();
   const { user, isLoading: userLoading, refreshUser } = useUserData();
+  const { formattedBalance: almanBalance, refresh: refreshToken, isLoading: tokenLoading } = useTokenBalance();
 
-  const isLoading = authLoading || userLoading;
+  const isLoading = authLoading || userLoading || tokenLoading;
 
   // 지갑 미연결 상태
   if (!isConnected) {
@@ -39,7 +40,7 @@ export default function Dashboard() {
             Connect Your Wallet
           </h1>
           <p className="text-slate-400 mb-8">
-            지갑을 연결하여 NEOS 대시보드에 접근하세요.
+            지갑을 연결하여 AlmaNEO 대시보드에 접근하세요.
             토큰 잔액, 스테이킹, Kindness Score를 확인할 수 있습니다.
           </p>
           <button
@@ -76,14 +77,14 @@ export default function Dashboard() {
   // 사용자 데이터 (기본값 포함)
   const userData = {
     walletAddress: address || '0x0000...0000',
-    neosBalance: '0', // TODO: 토큰 컨트랙트 연동 후 업데이트
+    almanBalance: almanBalance,
     polBalance: balance || '0',
     stakedAmount: user?.stakedAmount || 0,
     stakingTier: user?.stakingTier || 'bronze',
     kindnessScore: user?.kindnessScore || 0,
     level: user?.level || 1,
     totalPoints: user?.totalPoints || 0,
-    nickname: user?.profile?.nickname || `NEOS_${address?.slice(0, 6)}`,
+    nickname: user?.profile?.nickname || `ALMAN_${address?.slice(0, 6)}`,
   };
 
   const tierInfo = STAKING_TIERS[userData.stakingTier as keyof typeof STAKING_TIERS];
@@ -103,7 +104,7 @@ export default function Dashboard() {
             </p>
           </div>
           <button
-            onClick={refreshUser}
+            onClick={() => { refreshUser(); refreshToken(); }}
             disabled={isLoading}
             className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
             title="Refresh data"
@@ -122,10 +123,10 @@ export default function Dashboard() {
               </div>
               <ArrowUpRight className="w-5 h-5 text-green-400" />
             </div>
-            <p className="text-slate-400 text-sm mb-1">NEOS Balance</p>
+            <p className="text-slate-400 text-sm mb-1">ALMAN Balance</p>
             <p className="text-2xl font-bold text-white">
-              {userData.neosBalance}
-              <span className="text-sm text-slate-500 ml-2">NEOS</span>
+              {userData.almanBalance}
+              <span className="text-sm text-slate-500 ml-2">ALMAN</span>
             </p>
             <p className="text-xs text-slate-500 mt-2">
               {userData.polBalance} POL
@@ -145,7 +146,7 @@ export default function Dashboard() {
             <p className="text-slate-400 text-sm mb-1">Staked</p>
             <p className="text-2xl font-bold text-white">
               {userData.stakedAmount.toLocaleString()}
-              <span className="text-sm text-slate-500 ml-2">NEOS</span>
+              <span className="text-sm text-slate-500 ml-2">ALMAN</span>
             </p>
             <p className="text-xs text-green-400 mt-2">
               APY: {tierInfo.apy}%
@@ -198,7 +199,7 @@ export default function Dashboard() {
           <Link to="/staking" className="card card-hover p-6 text-center">
             <TrendingUp className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
             <h3 className="text-lg font-semibold text-white mb-2">Staking</h3>
-            <p className="text-slate-400 text-sm">Stake NEOS to earn rewards</p>
+            <p className="text-slate-400 text-sm">Stake ALMAN to earn rewards</p>
           </Link>
 
           <Link to="/governance" className="card card-hover p-6 text-center">
@@ -210,7 +211,7 @@ export default function Dashboard() {
           <Link to="/airdrop" className="card card-hover p-6 text-center">
             <Coins className="w-8 h-8 text-jeong-orange mx-auto mb-3" />
             <h3 className="text-lg font-semibold text-white mb-2">Airdrop</h3>
-            <p className="text-slate-400 text-sm">Claim your NEOS tokens</p>
+            <p className="text-slate-400 text-sm">Claim your ALMAN tokens</p>
           </Link>
         </div>
       </div>
