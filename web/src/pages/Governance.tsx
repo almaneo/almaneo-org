@@ -49,55 +49,26 @@ const getStateStyle = (state: ProposalState | string) => {
   }
 };
 
-// Mock 제안 데이터 (컨트랙트 배포 전 표시용)
-const mockProposals = [
-  {
-    id: '1',
-    title: 'Increase Kindness Mining Rewards',
-    description: 'Proposal to increase the daily mining rewards for Kindness activities by 20%.',
-    proposer: '0x1234...5678',
-    stateName: 'Active',
-    state: ProposalState.Active,
-    forVotes: '125000',
-    againstVotes: '45000',
-    abstainVotes: '10000',
-    deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    hasVoted: false,
-  },
-  {
-    id: '2',
-    title: 'Add Hindi Language Support',
-    description: 'Expand AlmaNEO platform accessibility by adding Hindi language support for Global South.',
-    proposer: '0xabcd...efgh',
-    stateName: 'Succeeded',
-    state: ProposalState.Succeeded,
-    forVotes: '890000',
-    againstVotes: '120000',
-    abstainVotes: '50000',
-    deadline: null,
-    hasVoted: true,
-  },
-  {
-    id: '3',
-    title: 'Partner with AI Education Platform',
-    description: 'Strategic partnership proposal with open-source AI education platform.',
-    proposer: '0x9876...5432',
-    stateName: 'Pending',
-    state: ProposalState.Pending,
-    forVotes: '0',
-    againstVotes: '0',
-    abstainVotes: '0',
-    deadline: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    hasVoted: false,
-  },
-];
+// 제안 제목 추출 (description에서 첫 줄 또는 첫 문장)
+function extractProposalTitle(description: string): string {
+  if (!description) return 'Untitled Proposal';
+  // 첫 줄 추출
+  const firstLine = description.split('\n')[0].trim();
+  // 너무 길면 자르기
+  if (firstLine.length > 80) {
+    return firstLine.substring(0, 77) + '...';
+  }
+  return firstLine || 'Untitled Proposal';
+}
 
 export default function Governance() {
   const { isConnected, connect: login, address } = useWallet();
   const {
+    proposals,
     votingPower,
     governanceStats,
     isLoading,
+    proposalsLoading,
     error,
     isDeployed,
     castVote,
@@ -175,46 +146,13 @@ export default function Governance() {
           </div>
 
           {/* Preview Proposals */}
-          <h2 className="text-xl font-semibold text-white mb-4">Proposals (Preview)</h2>
-          <div className="space-y-4">
-            {mockProposals.map((proposal) => {
-              const style = getStateStyle(proposal.state);
-              const Icon = style.icon;
-              const totalVotes = parseFloat(proposal.forVotes) + parseFloat(proposal.againstVotes);
-              const forPercent = totalVotes > 0 ? (parseFloat(proposal.forVotes) / totalVotes) * 100 : 50;
-
-              return (
-                <div key={proposal.id} className="card p-6 opacity-75">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${style.bg} ${style.text}`}>
-                          <Icon className="w-3 h-3" />
-                          {proposal.stateName}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-semibold text-white mb-2">{proposal.title}</h3>
-                      <p className="text-slate-400 text-sm mb-3">{proposal.description}</p>
-                      <p className="text-slate-500 text-xs">Proposed by {proposal.proposer}</p>
-                    </div>
-                  </div>
-
-                  {/* Vote Progress */}
-                  <div className="mt-4 pt-4 border-t border-slate-700/50">
-                    <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="text-green-400">For: {formatNumber(proposal.forVotes)}</span>
-                      <span className="text-red-400">Against: {formatNumber(proposal.againstVotes)}</span>
-                    </div>
-                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-green-500 to-green-400"
-                        style={{ width: `${forPercent}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <h2 className="text-xl font-semibold text-white mb-4">Proposals</h2>
+          <div className="card p-12 text-center">
+            <Vote className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">Coming Soon</h3>
+            <p className="text-slate-400">
+              Governance proposals will be available once the contract is deployed.
+            </p>
           </div>
         </div>
       </div>
@@ -348,14 +286,24 @@ export default function Governance() {
         </div>
 
         {/* Proposals List */}
-        <h2 className="text-xl font-semibold text-white mb-4">Proposals</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-white">Proposals</h2>
+          {proposalsLoading && (
+            <span className="text-slate-400 text-sm flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Loading proposals...
+            </span>
+          )}
+        </div>
         <div className="space-y-4">
-          {mockProposals.map((proposal) => {
+          {proposals.map((proposal) => {
             const style = getStateStyle(proposal.state);
             const Icon = style.icon;
             const totalVotes = parseFloat(proposal.forVotes) + parseFloat(proposal.againstVotes);
             const forPercent = totalVotes > 0 ? (parseFloat(proposal.forVotes) / totalVotes) * 100 : 50;
             const isVoting = votingProposalId === proposal.id;
+            const proposalTitle = extractProposalTitle(proposal.description);
+            const shortProposer = `${proposal.proposer.slice(0, 6)}...${proposal.proposer.slice(-4)}`;
 
             return (
               <div key={proposal.id} className="card card-hover p-6">
@@ -372,9 +320,9 @@ export default function Governance() {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">{proposal.title}</h3>
-                    <p className="text-slate-400 text-sm mb-3">{proposal.description}</p>
-                    <p className="text-slate-500 text-xs">Proposed by {proposal.proposer}</p>
+                    <h3 className="text-lg font-semibold text-white mb-2">{proposalTitle}</h3>
+                    <p className="text-slate-400 text-sm mb-3 line-clamp-2">{proposal.description}</p>
+                    <p className="text-slate-500 text-xs">Proposed by {shortProposer}</p>
                   </div>
                 </div>
 
@@ -437,7 +385,7 @@ export default function Governance() {
         </div>
 
         {/* Empty State */}
-        {mockProposals.length === 0 && (
+        {!proposalsLoading && proposals.length === 0 && (
           <div className="card p-12 text-center">
             <Vote className="w-16 h-16 text-slate-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No Proposals Yet</h3>

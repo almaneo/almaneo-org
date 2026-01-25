@@ -38,11 +38,12 @@ export interface VotingPower {
 export function useGovernance() {
   const { provider, address, isConnected } = useWallet();
 
-  const [proposals] = useState<Proposal[]>([]);
+  const [proposals, setProposals] = useState<Proposal[]>([]);
   const [votingPower, setVotingPower] = useState<VotingPower | null>(null);
   const [governanceStats, setGovernanceStats] = useState<GovernanceStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [proposalsLoading, setProposalsLoading] = useState(false);
 
   // 컨트랙트 배포 여부
   const isDeployed = isContractDeployed('ALMANGovernor');
@@ -157,6 +158,58 @@ export function useGovernance() {
       return null;
     }
   }, [address, isDeployed, getContracts]);
+
+  // 제안 목록 로드 (ProposalCreated 이벤트 조회)
+  const loadProposals = useCallback(async () => {
+    if (!isDeployed) return;
+
+    const contracts = getContracts();
+    if (!contracts) return;
+
+    try {
+      setProposalsLoading(true);
+
+      // ProposalCreated 이벤트 필터 생성
+      const filter = contracts.governorContract.filters.ProposalCreated();
+
+      // 최근 10000 블록에서 이벤트 조회 (약 5-6시간)
+      // Polygon Amoy는 블록 시간이 약 2초
+      const currentBlock = await contracts.provider.getBlockNumber();
+      const fromBlock = Math.max(0, currentBlock - 100000); // 더 넓은 범위로 조회
+
+      const events = await contracts.governorContract.queryFilter(filter, fromBlock, currentBlock);
+
+      // 이벤트에서 제안 정보 추출 및 상세 정보 로드
+      const proposalPromises = events.map(async (event) => {
+        const args = (event as unknown as { args: [bigint, string, string[], bigint[], string[], string[], bigint, bigint, string] }).args;
+        const [proposalId, , , , , , , , description] = args;
+
+        // 제안 상세 정보 로드
+        const proposal = await loadProposalDetails(proposalId.toString(), description);
+        return proposal;
+      });
+
+      const loadedProposals = await Promise.all(proposalPromises);
+
+      // null 제거 및 최신순 정렬
+      const validProposals = loadedProposals
+        .filter((p): p is Proposal => p !== null)
+        .sort((a, b) => {
+          // deadline이 있으면 deadline 기준, 없으면 id 기준
+          if (a.deadline && b.deadline) {
+            return b.deadline.getTime() - a.deadline.getTime();
+          }
+          return BigInt(b.id) > BigInt(a.id) ? 1 : -1;
+        });
+
+      setProposals(validProposals);
+    } catch (err) {
+      console.error('Failed to load proposals:', err);
+      setError('Failed to load proposals');
+    } finally {
+      setProposalsLoading(false);
+    }
+  }, [isDeployed, getContracts, loadProposalDetails]);
 
   // 투표 실행
   const castVote = useCallback(async (proposalId: string, support: VoteSupport, reason?: string) => {
@@ -352,9 +405,10 @@ export function useGovernance() {
     await Promise.all([
       loadGovernanceStats(),
       loadVotingPower(),
+      loadProposals(),
     ]);
     setIsLoading(false);
-  }, [loadGovernanceStats, loadVotingPower]);
+  }, [loadGovernanceStats, loadVotingPower, loadProposals]);
 
   // 초기 로드
   useEffect(() => {
@@ -369,11 +423,13 @@ export function useGovernance() {
     votingPower,
     governanceStats,
     isLoading,
+    proposalsLoading,
     error,
     isDeployed,
 
     // Actions
     loadProposalDetails,
+    loadProposals,
     castVote,
     delegate,
     selfDelegate,
