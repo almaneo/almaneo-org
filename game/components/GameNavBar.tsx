@@ -1,36 +1,48 @@
 'use client';
 
-import { Box } from '@mui/material';
-import Image from 'next/image';
-import GameIconButton from './GameIconButton';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import { Box, Typography, Badge } from '@mui/material';
+
+interface NavTab {
+  id: string;
+  label: string;
+  icon: string;
+  badge?: number;
+}
 
 interface GameNavBarProps {
   activeTab?: string;
-  onUpgradeClick?: () => void;
+  onHomeClick?: () => void;
+  onTravelClick?: () => void;
   onQuestClick?: () => void;
-  onAchievementClick?: () => void;
-  onLeaderboardClick?: () => void;
-  onShopClick?: () => void;
-  onImpactClick?: () => void;
-  onTokenClick?: () => void;
+  onUpgradeClick?: () => void;
+  onMoreClick?: () => void;
   questBadge?: number;
-  achievementBadge?: number;
 }
 
 export default function GameNavBar({
   activeTab,
-  onUpgradeClick,
+  onHomeClick,
+  onTravelClick,
   onQuestClick,
-  onAchievementClick,
-  onLeaderboardClick,
-  onShopClick,
-  onImpactClick,
-  onTokenClick,
+  onUpgradeClick,
+  onMoreClick,
   questBadge,
-  achievementBadge,
 }: GameNavBarProps) {
-  const isMobile = useIsMobile();
+  const tabs: NavTab[] = [
+    { id: 'home', label: 'Home', icon: '🏠' },
+    { id: 'travel', label: 'Travel', icon: '🌍' },
+    { id: 'quest', label: 'Quest', icon: '📋', badge: questBadge },
+    { id: 'upgrade', label: 'Upgrade', icon: '⬆️' },
+    { id: 'more', label: 'More', icon: '☰' },
+  ];
+
+  const handlers: Record<string, (() => void) | undefined> = {
+    home: onHomeClick,
+    travel: onTravelClick,
+    quest: onQuestClick,
+    upgrade: onUpgradeClick,
+    more: onMoreClick,
+  };
 
   return (
     <Box
@@ -38,96 +50,78 @@ export default function GameNavBar({
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        px: isMobile ? 0.5 : 2,
-        py: isMobile ? 0.5 : 2,
-        pb: isMobile ? 1 : 3,
+        px: 0.5,
+        py: 0.5,
+        pb: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))',
+        background: 'linear-gradient(to top, rgba(10,15,26,0.95), rgba(10,15,26,0.8))',
+        backdropFilter: 'blur(10px)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/nav-upgrade.png"
-            alt="Upgrade"
-            width={72}
-            height={72}
-          />
-        }
-        label="Upgrade"
-        onClick={onUpgradeClick}
-        active={activeTab === 'upgrade'}
-      />
-
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/nav-quest.png"
-            alt="Quest"
-            width={72}
-            height={72}
-          />
-        }
-        label="Quest"
-        onClick={onQuestClick}
-        badge={questBadge}
-        active={activeTab === 'quest'}
-      />
-
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/nav-achievement.png"
-            alt="Achievement"
-            width={72}
-            height={72}
-          />
-        }
-        label="Achievement"
-        onClick={onAchievementClick}
-        badge={achievementBadge}
-        active={activeTab === 'achievement'}
-      />
-
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/nav-leaderboard.png"
-            alt="Leaderboard"
-            width={72}
-            height={72}
-          />
-        }
-        label="Ranking"
-        onClick={onLeaderboardClick}
-        active={activeTab === 'leaderboard'}
-      />
-
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/mimig-token.png"
-            alt="Token"
-            width={72}
-            height={72}
-          />
-        }
-        label="Token"
-        onClick={onTokenClick}
-        active={activeTab === 'token'}
-      />
-
-      <GameIconButton
-        icon={
-          <Image
-            src="/images/icons/nav-impact.png"
-            alt="Impact"
-            width={72}
-            height={72}
-          />
-        }
-        label="Impact"
-        onClick={onImpactClick}
-        active={activeTab === 'impact'}
-      />
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.id;
+        return (
+          <Box
+            key={tab.id}
+            onClick={handlers[tab.id]}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 0.2,
+              cursor: 'pointer',
+              userSelect: 'none',
+              flex: 1,
+              py: 0.5,
+              borderRadius: 1,
+              transition: 'all 0.2s ease',
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+              bgcolor: isActive ? 'rgba(255,255,255,0.08)' : 'transparent',
+              '&:active': {
+                transform: 'scale(0.92)',
+              },
+            }}
+          >
+            <Badge
+              badgeContent={tab.badge}
+              color="error"
+              sx={{
+                '& .MuiBadge-badge': {
+                  fontSize: 10,
+                  fontWeight: 'bold',
+                  minWidth: 18,
+                  height: 18,
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 22,
+                  lineHeight: 1,
+                  filter: isActive
+                    ? 'drop-shadow(0 0 6px rgba(255,215,0,0.6))'
+                    : 'none',
+                }}
+              >
+                {tab.icon}
+              </Typography>
+            </Badge>
+            <Typography
+              sx={{
+                color: isActive ? '#FFD700' : 'rgba(255,255,255,0.5)',
+                fontSize: 10,
+                fontWeight: isActive ? 700 : 500,
+                fontFamily: "'Exo 2', sans-serif",
+                letterSpacing: 0.3,
+                lineHeight: 1,
+              }}
+            >
+              {tab.label}
+            </Typography>
+          </Box>
+        );
+      })}
     </Box>
   );
 }

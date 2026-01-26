@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Orbitron, Exo_2 } from 'next/font/google';
 import './globals.css';
-import OrientationLock from '@/components/OrientationLock';
 import { Web3AuthProvider } from '@/contexts/Web3AuthProvider';
 
 const orbitron = Orbitron({ 
@@ -73,11 +72,9 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className={`${orbitron.variable} ${exo2.variable}`}>
-        <OrientationLock>
-          <Web3AuthProvider>
-            {children}
-          </Web3AuthProvider>
-        </OrientationLock>
+        <Web3AuthProvider>
+          {children}
+        </Web3AuthProvider>
       </body>
     </html>
   );

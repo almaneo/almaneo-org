@@ -1,7 +1,7 @@
 // Achievement System for MiMiG Carbon Farm
 // Provides long-term goals and player progression tracking
 
-export type AchievementCategory = 'tap' | 'points' | 'upgrade' | 'level' | 'special';
+export type AchievementCategory = 'tap' | 'points' | 'upgrade' | 'level' | 'special' | 'travel';
 
 export interface Achievement {
   id: string;
@@ -24,6 +24,11 @@ export interface AchievementStats {
   loginStreak: number;
   lastLoginDate: string;
   firstLoginDate: string;
+  // Travel stats
+  countriesVisited: number;
+  travelQuestsCompleted: number;
+  totalStars: number;
+  perfectCountries: number;
 }
 
 // Achievement Templates
@@ -264,6 +269,120 @@ export const ACHIEVEMENTS: Achievement[] = [
     category: 'special',
     target: 10,
     reward: 1000,
+    completed: false,
+    hidden: false,
+  },
+
+  // ========================================
+  // TRAVEL CATEGORY - World Travel achievements
+  // ========================================
+  {
+    id: 'first_journey',
+    title: 'First Steps',
+    description: 'Visit your first country',
+    icon: '🌍',
+    category: 'travel',
+    target: 1,
+    reward: 100,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'world_explorer',
+    title: 'World Explorer',
+    description: 'Visit 5 different countries',
+    icon: '✈️',
+    category: 'travel',
+    target: 5,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'globe_trotter',
+    title: 'Globe Trotter',
+    description: 'Visit 10 different countries',
+    icon: '🗺️',
+    category: 'travel',
+    target: 10,
+    reward: 1500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'world_citizen',
+    title: 'World Citizen',
+    description: 'Visit all 20 countries',
+    icon: '🌐',
+    category: 'travel',
+    target: 20,
+    reward: 5000,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'first_star',
+    title: 'Rising Star',
+    description: 'Earn your first star in any country',
+    icon: '⭐',
+    category: 'travel',
+    target: 1,
+    reward: 200,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'star_collector',
+    title: 'Star Collector',
+    description: 'Earn 10 stars total',
+    icon: '🌟',
+    category: 'travel',
+    target: 10,
+    reward: 1000,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'constellation',
+    title: 'Constellation',
+    description: 'Earn 30 stars total',
+    icon: '💫',
+    category: 'travel',
+    target: 30,
+    reward: 3000,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'perfect_country',
+    title: 'Cultural Master',
+    description: 'Get 3 stars in any country',
+    icon: '🏅',
+    category: 'travel',
+    target: 1,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'travel_quest_10',
+    title: 'Curious Traveler',
+    description: 'Complete 10 travel quests',
+    icon: '📚',
+    category: 'travel',
+    target: 10,
+    reward: 500,
+    completed: false,
+    hidden: false,
+  },
+  {
+    id: 'travel_quest_50',
+    title: 'Cultural Scholar',
+    description: 'Complete 50 travel quests',
+    icon: '🎓',
+    category: 'travel',
+    target: 50,
+    reward: 3000,
     completed: false,
     hidden: false,
   },

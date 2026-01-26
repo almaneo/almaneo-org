@@ -11,6 +11,7 @@ import {
   Achievement,
   AchievementStats,
   LeaderboardEntry,
+  TravelSaveData,
 } from './supabase';
 
 // ===========================
@@ -33,6 +34,7 @@ export interface SaveGameInput {
   lastClaimedPoints?: number;
   totalClaimedTokens?: number;
   lastClaimTime?: number;
+  travelState?: TravelSaveData | null;
 }
 
 export interface LoadGameOutput {
@@ -53,6 +55,7 @@ export interface LoadGameOutput {
   lastClaimedPoints?: number;
   totalClaimedTokens?: number;
   lastClaimTime?: number;
+  travelState?: TravelSaveData | null;
 }
 
 // ===========================
@@ -95,6 +98,7 @@ export async function createUser(userId: string): Promise<void> {
         tapsToday: 0,
         pointsToday: 0,
         upgradesToday: 0,
+        travelQuestsToday: 0,
       },
       achievements: [],
       achievement_stats: {
@@ -105,11 +109,16 @@ export async function createUser(userId: string): Promise<void> {
         loginStreak: 0,
         lastLoginDate: now.split('T')[0],
         firstLoginDate: now.split('T')[0],
+        countriesVisited: 0,
+        travelQuestsCompleted: 0,
+        totalStars: 0,
+        perfectCountries: 0,
       },
       last_claimed_points: 0,
       total_claimed_tokens: 0,
       last_claim_time: 0,
       last_active_time: now,
+      travel_state: null,
     };
 
     const { error } = await supabase.from('game_states').insert(initialData);
@@ -167,6 +176,7 @@ export async function saveGameState(gameState: SaveGameInput): Promise<void> {
       last_claimed_points: gameState.lastClaimedPoints ?? 0,
       total_claimed_tokens: gameState.totalClaimedTokens ?? 0,
       last_claim_time: gameState.lastClaimTime ?? 0,
+      travel_state: gameState.travelState ?? null,
       updated_at: now,
     };
 
@@ -212,6 +222,7 @@ export async function loadGameState(userId: string): Promise<LoadGameOutput | nu
       lastClaimedPoints: gameState.last_claimed_points,
       totalClaimedTokens: gameState.total_claimed_tokens,
       lastClaimTime: gameState.last_claim_time,
+      travelState: gameState.travel_state ?? null,
     };
 
     console.log('✅ Game state loaded:', userId);
@@ -330,4 +341,5 @@ export type {
   Achievement,
   AchievementStats,
   LeaderboardEntry,
+  TravelSaveData,
 };

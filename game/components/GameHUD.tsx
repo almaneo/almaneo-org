@@ -1,7 +1,6 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
 import { useState, MouseEvent } from 'react';
 import ResourceCounter from './ResourceCounter';
 import EnergyBar from './EnergyBar';
@@ -18,8 +17,6 @@ interface GameHUDProps {
   energy: number;
   maxEnergy: number;
   level: number;
-  onProfileClick?: () => void;
-  onSettingsClick?: () => void;
 }
 
 export default function GameHUD({
@@ -27,8 +24,6 @@ export default function GameHUD({
   energy,
   maxEnergy,
   level,
-  onProfileClick,
-  onSettingsClick,
 }: GameHUDProps) {
   const isMobile = useIsMobile();
   const { totalPoints } = useGameStore();
@@ -58,7 +53,7 @@ export default function GameHUD({
           alignItems: 'center',
           gap: isMobile ? 0.3 : 2,
           px: isMobile ? 1 : 2,
-          py: isMobile ? 1 : 2,
+          py: isMobile ? 0.5 : 1,
         }}
       >
         {/* Kindness Score */}
@@ -75,64 +70,6 @@ export default function GameHUD({
 
         {/* Wallet Button */}
         <WalletButton />
-
-        {/* Profile Button */}
-        <Box
-          onClick={onProfileClick}
-          sx={{
-            width: isMobile ? 44 : 56,
-            height: isMobile ? 44 : 56,
-            position: 'relative',
-            cursor: 'pointer',
-            filter: 'drop-shadow(0 4px 8px rgba(33,150,243,0.5))',
-            transition: 'all 0.2s ease',
-            touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'transparent',
-            '&:hover': {
-              transform: 'translateY(-2px) scale(1.05)',
-              filter: 'drop-shadow(0 6px 12px rgba(33,150,243,0.7))',
-            },
-            '&:active': {
-              transform: 'scale(0.95)',
-            },
-          }}
-        >
-          <Image
-            src="/images/icons/profile-user.png"
-            alt="Profile"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </Box>
-
-        {/* Settings Button */}
-        <Box
-          onClick={onSettingsClick}
-          sx={{
-            width: isMobile ? 44 : 56,
-            height: isMobile ? 44 : 56,
-            position: 'relative',
-            cursor: 'pointer',
-            filter: 'drop-shadow(0 4px 8px rgba(117,117,117,0.5))',
-            transition: 'all 0.2s ease',
-            touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'transparent',
-            '&:hover': {
-              transform: 'translateY(-2px) scale(1.05)',
-              filter: 'drop-shadow(0 6px 12px rgba(117,117,117,0.7))',
-            },
-            '&:active': {
-              transform: 'scale(0.95)',
-            },
-          }}
-        >
-          <Image
-            src="/images/icons/settings-gear.png"
-            alt="Settings"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </Box>
       </Box>
 
       {/* Points Popover */}

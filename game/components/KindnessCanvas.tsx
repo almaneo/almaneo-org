@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playSound, SoundType } from '@/lib/sounds';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { KINDNESS_SCENARIOS, KindnessScenario } from '@/lib/kindnessData';
 
 interface KindnessCanvasProps {
@@ -23,7 +22,6 @@ interface ClickEffect {
 
 export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: KindnessCanvasProps) {
   const [clickEffects, setClickEffects] = useState<ClickEffect[]>([]);
-  const isMobile = useIsMobile();
 
   // Game State
   const [currentScenario, setCurrentScenario] = useState<KindnessScenario | null>(null);
@@ -48,9 +46,10 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
     }
 
     if (!isKind) {
-      // Wrong choice
+      // Wrong choice - show feedback then allow retry
       playSound(SoundType.WARNING);
       setFeedback({ type: 'fail', message: "Not quite... Try again!" });
+      setTimeout(() => setFeedback(null), 1500);
       return;
     }
 
@@ -139,59 +138,31 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
             <Paper
               elevation={6}
               sx={{
-                p: 3,
+                p: 2.5,
                 borderRadius: 4,
                 background: 'rgba(255, 255, 255, 0.1)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,, 255, 255, 0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 textAlign: 'center',
-                color: 'white'
+                color: 'white',
+                position: 'relative',
               }}
             >
               {/* Flag & Culture */}
-              <Typography variant="h2" sx={{ mb: 1 }}>
+              <Typography sx={{ fontSize: 36, mb: 0.5, lineHeight: 1 }}>
                 {currentScenario.flag}
               </Typography>
-              <Typography variant="subtitle2" sx={{ opacity: 0.7, mb: 2 }}>
+              <Typography sx={{ fontSize: 12, opacity: 0.7, mb: 1.5 }}>
                 {currentScenario.culture}
               </Typography>
 
               {/* Situation */}
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 4, minHeight: 60 }}>
-                "{currentScenario.situation}"
+              <Typography sx={{ fontSize: 14, fontWeight: 600, mb: 2.5, lineHeight: 1.5 }}>
+                &ldquo;{currentScenario.situation}&rdquo;
               </Typography>
 
-              {/* Feedback Overlay */}
-              {feedback && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 10,
-                    width: '100%'
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      color: feedback.type === 'success' ? '#4caf50' : '#f44336',
-                      fontWeight: 'bold',
-                      textShadow: '0 0 10px rgba(0,0,0,0.8)',
-                      bgcolor: 'rgba(0,0,0,0.8)',
-                      py: 1
-                    }}
-                  >
-                    {feedback.message}
-                  </Typography>
-                </motion.div>
-              )}
-
               {/* Options */}
-              <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row' }}>
+              <Box sx={{ display: 'flex', gap: 1.5, flexDirection: 'column' }}>
                 <Button
                   variant="contained"
                   fullWidth
@@ -199,9 +170,12 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                   disabled={!canHarvest || feedback !== null}
                   sx={{
                     py: 1.5,
+                    fontSize: 12,
+                    lineHeight: 1.4,
+                    textTransform: 'none',
                     bgcolor: 'rgba(255,255,255,0.1)',
                     '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                    border: '1px solid rgba(255,255,255,0.3)'
+                    border: '1px solid rgba(255,255,255,0.3)',
                   }}
                 >
                   {currentScenario.options.left.text}
@@ -213,9 +187,12 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                   disabled={!canHarvest || feedback !== null}
                   sx={{
                     py: 1.5,
+                    fontSize: 12,
+                    lineHeight: 1.4,
+                    textTransform: 'none',
                     bgcolor: 'rgba(255,255,255,0.1)',
                     '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                    border: '1px solid rgba(255,255,255,0.3)'
+                    border: '1px solid rgba(255,255,255,0.3)',
                   }}
                 >
                   {currentScenario.options.right.text}
@@ -225,6 +202,57 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
           </motion.div>
         </AnimatePresence>
       </Box>
+
+      {/* Feedback Overlay - centered on screen */}
+      <AnimatePresence>
+        {feedback && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 20,
+              width: '80%',
+              maxWidth: 300,
+              pointerEvents: 'none',
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: 'rgba(0,0,0,0.9)',
+                borderRadius: 3,
+                py: 2,
+                px: 3,
+                textAlign: 'center',
+                border: feedback.type === 'success'
+                  ? '2px solid rgba(76,175,80,0.5)'
+                  : '2px solid rgba(244,67,54,0.5)',
+                boxShadow: feedback.type === 'success'
+                  ? '0 0 30px rgba(76,175,80,0.3)'
+                  : '0 0 30px rgba(244,67,54,0.3)',
+              }}
+            >
+              <Typography sx={{ fontSize: 28, mb: 0.5 }}>
+                {feedback.type === 'success' ? '💛' : '💭'}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: feedback.type === 'success' ? '#4caf50' : '#f44336',
+                }}
+              >
+                {feedback.message}
+              </Typography>
+            </Box>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Low Energy Overlay */}
       {!canHarvest && (

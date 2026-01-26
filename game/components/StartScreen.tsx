@@ -2,6 +2,7 @@
 
 import { Box, Button, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface StartScreenProps {
   open: boolean;
@@ -28,31 +29,28 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
         overflow: 'hidden',
       }}
     >
-      {/* 로고 */}
+      {/* Title Image */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
+        style={{ marginBottom: 16 }}
       >
-        <Typography
-          variant="h2"
-          sx={{
-            color: '#0052FF',
-            fontWeight: 'bold',
-            mb: 2,
-            textAlign: 'center',
-            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-            px: 2,
-            background: 'linear-gradient(90deg, #0052FF 0%, #FF6B00 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+        <Image
+          src="/images/almaneo-title.webp"
+          alt="AlmaNEO"
+          width={280}
+          height={280}
+          style={{
+            objectFit: 'contain',
+            maxWidth: '70vw',
+            height: 'auto',
           }}
-        >
-          ALMANEO KINDNESS HUB
-        </Typography>
+          priority
+        />
       </motion.div>
 
-      {/* 부제 */}
+      {/* Tagline */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -62,7 +60,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
           variant="h6"
           sx={{
             color: 'rgba(255,255,255,0.8)',
-            mb: 6,
+            mb: 5,
             textAlign: 'center',
             fontSize: { xs: '1rem', sm: '1.25rem' },
             px: 2,
@@ -74,7 +72,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
         </Typography>
       </motion.div>
 
-      {/* Start 버튼 */}
+      {/* Start Button */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -104,7 +102,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
         </Button>
       </motion.div>
 
-      {/* 안내 텍스트 */}
+      {/* Subtitle */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

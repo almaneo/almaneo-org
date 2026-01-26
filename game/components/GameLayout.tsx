@@ -4,7 +4,6 @@ import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface GameLayoutProps {
-  logo?: ReactNode;
   hud?: ReactNode;
   canvas?: ReactNode;
   navbar?: ReactNode;
@@ -12,7 +11,6 @@ interface GameLayoutProps {
 }
 
 export default function GameLayout({
-  logo,
   hud,
   canvas,
   navbar,
@@ -29,21 +27,6 @@ export default function GameLayout({
         flexDirection: 'column',
       }}
     >
-      {/* 로고 */}
-      {logo && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 8,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 101,
-          }}
-        >
-          {logo}
-        </Box>
-      )}
-
       {/* 상단 HUD */}
       {hud && (
         <Box

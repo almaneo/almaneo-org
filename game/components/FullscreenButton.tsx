@@ -72,27 +72,27 @@ export default function FullscreenButton() {
     <Box
       sx={{
         position: 'fixed',
-        right: 16,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 10000, // DEV 버튼보다 위로
+        right: 12,
+        bottom: 72,
+        zIndex: 1100,
       }}
     >
       <IconButton
         onClick={toggleFullscreen}
         sx={{
-          bgcolor: 'rgba(0,0,0,0.6)',
-          color: 'white',
-          width: 56,
-          height: 56,
+          bgcolor: 'rgba(0,0,0,0.5)',
+          color: 'rgba(255,255,255,0.7)',
+          width: 36,
+          height: 36,
           backdropFilter: 'blur(10px)',
           '&:hover': {
             bgcolor: 'rgba(0,0,0,0.8)',
+            color: 'white',
           },
-          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
         }}
       >
-        {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+        {isFullscreen ? <FullscreenExitIcon fontSize="small" /> : <FullscreenIcon fontSize="small" />}
       </IconButton>
     </Box>
   );

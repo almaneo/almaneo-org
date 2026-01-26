@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { Box, Modal, IconButton, Typography, Fade, Backdrop, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Modal, IconButton, Typography, Fade, Backdrop, useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -22,8 +22,9 @@ export default function GameModal({
   children,
   maxWidth = 600,
 }: GameModalProps) {
-  const theme = useTheme();
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isPortrait = useMediaQuery('(orientation: portrait) and (max-width: 500px)');
+  const isCompact = isLandscape || isPortrait;
 
   return (
     <Modal
@@ -52,7 +53,7 @@ export default function GameModal({
             position: 'relative',
             width: { xs: '95%', sm: '90%' },
             maxWidth: maxWidth,
-            maxHeight: isLandscape ? '95vh' : { xs: '90vh', sm: '85vh' },
+            maxHeight: isCompact ? '95vh' : { xs: '90vh', sm: '85vh' },
             background: 'rgba(20, 15, 10, 0.95)',
             border: '2px solid #FFD700',
             borderRadius: 3,
@@ -74,19 +75,19 @@ export default function GameModal({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              p: isLandscape ? 1 : { xs: 2, sm: 2.5 },
+              p: isCompact ? 1 : { xs: 2, sm: 2.5 },
               borderBottom: '1px solid rgba(255, 215, 0, 0.3)',
               background: 'linear-gradient(180deg, rgba(255,215,0,0.1) 0%, transparent 100%)',
             }}
           >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 1 : 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: isCompact ? 1 : 1.5 }}>
             {icon && (
-              <Box sx={{ fontSize: isLandscape ? 20 : 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+              <Box sx={{ fontSize: isCompact ? 20 : 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
                 {icon}
               </Box>
             )}
             <Typography
-              variant={isLandscape ? 'h6' : 'h5'}
+              variant={isCompact ? 'h6' : 'h5'}
               sx={{
                 color: '#FFD700',
                 fontWeight: 700,
@@ -100,7 +101,7 @@ export default function GameModal({
 
           <IconButton
             onClick={onClose}
-            size={isLandscape ? 'small' : 'medium'}
+            size={isCompact ? 'small' : 'medium'}
             sx={{
               color: '#FFD700',
               '&:hover': {
@@ -111,7 +112,7 @@ export default function GameModal({
               transition: 'all 0.3s ease',
             }}
           >
-            <CloseIcon fontSize={isLandscape ? 'small' : 'medium'} />
+            <CloseIcon fontSize={isCompact ? 'small' : 'medium'} />
           </IconButton>
         </Box>
         </motion.div>
@@ -125,10 +126,10 @@ export default function GameModal({
         >
           <Box
           sx={{
-            p: isLandscape ? 1.5 : { xs: 2, sm: 3 },
+            p: isCompact ? 1.5 : { xs: 2, sm: 3 },
             color: '#FFF',
             '&::-webkit-scrollbar': {
-              width: isLandscape ? 4 : 8,
+              width: isCompact ? 4 : 8,
             },
             '&::-webkit-scrollbar-track': {
               background: 'rgba(0,0,0,0.2)',

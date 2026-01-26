@@ -101,7 +101,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             }}
           >
             <Image
-              src="/images/almaneo-logo.png"
+              src="/logo.png"
               alt="AlmaNEO"
               width={350}
               height={100}

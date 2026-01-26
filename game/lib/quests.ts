@@ -4,7 +4,7 @@
  * 매일 3개의 퀘스트를 제공하여 플레이어에게 목표를 제공하고 DAU를 증가시킵니다.
  */
 
-export type QuestType = 'tap' | 'points' | 'upgrade';
+export type QuestType = 'tap' | 'points' | 'upgrade' | 'travel';
 
 export interface DailyQuest {
   id: string;
@@ -107,6 +107,36 @@ const QUEST_TEMPLATES = {
       icon: '⬆️',
     },
   ],
+  travel: [
+    {
+      target: 1,
+      title: '🌍 Quick Visit',
+      description: 'Complete 1 travel quest',
+      reward: 150,
+      icon: '✈️',
+    },
+    {
+      target: 2,
+      title: '🌍 Culture Explorer',
+      description: 'Complete 2 travel quests',
+      reward: 300,
+      icon: '✈️',
+    },
+    {
+      target: 3,
+      title: '🌍 World Traveler',
+      description: 'Complete 3 travel quests',
+      reward: 600,
+      icon: '✈️',
+    },
+    {
+      target: 5,
+      title: '🌍 Global Ambassador',
+      description: 'Complete 5 travel quests',
+      reward: 1200,
+      icon: '✈️',
+    },
+  ],
 };
 
 /**
@@ -185,7 +215,7 @@ export function generateDailyQuests(date: Date = new Date()): DailyQuest[] {
   const difficultyIndex = DIFFICULTY_INDEX[difficulty];
 
   const quests: DailyQuest[] = [];
-  const types: QuestType[] = ['tap', 'points', 'upgrade'];
+  const types: QuestType[] = ['tap', 'points', 'upgrade', 'travel'];
 
   types.forEach((type, index) => {
     const templates = QUEST_TEMPLATES[type];
@@ -242,6 +272,6 @@ export function isTodayQuest(quest: DailyQuest): boolean {
  */
 export function needsQuestReset(quests: DailyQuest[]): boolean {
   if (quests.length === 0) return true;
-  if (quests.length !== 3) return true;
+  if (quests.length < 3) return true;
   return !isTodayQuest(quests[0]);
 }

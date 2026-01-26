@@ -1,5 +1,8 @@
 # AlmaNEO Project - Claude Memory
 
+> **게임 업데이트 작업은 `.claude/GAME_UPDATE.md`에서 별도 관리합니다.**
+> 게임 관련 작업 시 GAME_UPDATE.md를 참조하세요. 완료 후 이 파일에 요약 기록합니다.
+
 ## Project Overview
 - **Name**: AlmaNEO (이전: NEO-SAPIENS)
 - **Token**: ALMAN (이전: NEOS)

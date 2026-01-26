@@ -23,6 +23,7 @@ import {
   ensureGlobalStatsExists,
   type ClaimRecord,
 } from '@/lib/miningSupabase';
+import { useTravelStore } from './useTravelStore';
 
 // Debounce timer for leaderboard updates
 let leaderboardUpdateTimer: NodeJS.Timeout | null = null;
@@ -69,6 +70,7 @@ interface GameStore {
     tapsToday: number;
     pointsToday: number;
     upgradesToday: number;
+    travelQuestsToday: number;
   };
 
   // Achievements
@@ -86,13 +88,13 @@ interface GameStore {
   setSaveStatus: (status: 'idle' | 'saving' | 'success' | 'error', error?: string | null) => void;
   dismissOfflineModal: () => void;
   initializeDailyQuests: () => void;
-  updateQuestProgress: (type: 'tap' | 'points' | 'upgrade', amount?: number) => void;
+  updateQuestProgress: (type: 'tap' | 'points' | 'upgrade' | 'travel', amount?: number) => void;
   claimQuestReward: (questId: string) => void;
   checkQuestReset: () => void;
   initializeAchievements: () => void;
   checkAchievements: () => void;
   completeAchievement: (id: string) => void;
-  updateAchievementStats: (type: 'tap' | 'points' | 'upgrade' | 'quest' | 'playTime', amount?: number) => void;
+  updateAchievementStats: (type: 'tap' | 'points' | 'upgrade' | 'quest' | 'playTime' | 'travel', amount?: number) => void;
   getClaimableTokenAmount: () => number;
   canClaimTokens: () => boolean;
   getPointsUntilNextClaim: () => number;
@@ -147,6 +149,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     tapsToday: 0,
     pointsToday: 0,
     upgradesToday: 0,
+    travelQuestsToday: 0,
   },
 
   // Achievements
@@ -159,6 +162,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     loginStreak: 0,
     lastLoginDate: '',
     firstLoginDate: '',
+    countriesVisited: 0,
+    travelQuestsCompleted: 0,
+    totalStars: 0,
+    perfectCountries: 0,
   },
 
   // Set user ID
@@ -330,6 +337,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         tapsToday: 0,
         pointsToday: 0,
         upgradesToday: 0,
+        travelQuestsToday: 0,
       },
     });
   },
@@ -342,6 +350,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (type === 'tap') newStats.tapsToday += amount;
       if (type === 'points') newStats.pointsToday += amount;
       if (type === 'upgrade') newStats.upgradesToday += amount;
+      if (type === 'travel') newStats.travelQuestsToday += amount;
 
       // Update quests
       const updatedQuests = state.dailyQuests.map((quest) => {
@@ -352,6 +361,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (type === 'tap') newCurrent = newStats.tapsToday;
         if (type === 'points') newCurrent = newStats.pointsToday;
         if (type === 'upgrade') newCurrent = newStats.upgradesToday;
+        if (type === 'travel') newCurrent = newStats.travelQuestsToday;
 
         return {
           ...quest,
@@ -463,6 +473,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
           case 'quest_master':
             currentValue = achievementStats.totalQuests;
             break;
+          // Travel achievements
+          case 'first_journey':
+          case 'world_explorer':
+          case 'globe_trotter':
+          case 'world_citizen':
+            currentValue = achievementStats.countriesVisited ?? 0;
+            break;
+          case 'first_star':
+          case 'star_collector':
+          case 'constellation':
+            currentValue = achievementStats.totalStars ?? 0;
+            break;
+          case 'perfect_country':
+            currentValue = achievementStats.perfectCountries ?? 0;
+            break;
+          case 'travel_quest_10':
+          case 'travel_quest_50':
+            currentValue = achievementStats.travelQuestsCompleted ?? 0;
+            break;
           default:
             currentValue = 0;
         }
@@ -519,6 +548,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         case 'playTime':
           newStats.playTime += amount;
           break;
+        case 'travel':
+          newStats.travelQuestsCompleted = (newStats.travelQuestsCompleted ?? 0) + amount;
+          break;
       }
 
       return { achievementStats: newStats };
@@ -535,6 +567,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     try {
       get().setSaveStatus('saving');
+
+      // Export travel state from travel store
+      const travelExport = useTravelStore.getState().exportTravelState();
+      const travelState = {
+        countryProgress: travelExport.countryProgress || {},
+        startingRegion: travelExport.startingRegion || 'east_asia',
+        totalStars: useTravelStore.getState().totalStars,
+      };
 
       // SaveGameInput 형식으로 변환
       const gameInput: SaveGameInput = {
@@ -567,6 +607,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         lastClaimedPoints: state.lastClaimedPoints,
         totalClaimedTokens: state.totalClaimedTokens,
         lastClaimTime: state.lastClaimTime,
+        travelState,
       };
 
       // Supabase에 저장
@@ -665,14 +706,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
           set({ globalTotalMined: 0 });
         }
 
+        // Load travel state if available
+        if (savedState.travelState) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          useTravelStore.getState().loadTravelState(savedState.travelState as any);
+        } else {
+          useTravelStore.getState().initialize();
+        }
+
         // Initialize or reset daily quests
         get().initializeDailyQuests();
         get().checkQuestReset();
-        
+
         // Initialize achievements
         get().initializeAchievements();
         get().checkAchievements();
-        
+
         // Check level up based on loaded totalPoints
         get().checkLevelUp();
       } else {

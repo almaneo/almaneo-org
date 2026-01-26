@@ -1,25 +1,16 @@
 /**
- * Story Introduction Component - Optimized Version
- * 
- * Movie-like storytelling with:
- * - CSS background image (no flicker)
- * - Subtitle-style text at bottom
- * - Typing animation effect (30ms/char)
- * - Buttons appear after typing complete
- * - Sound effects only (BGM in StartScreen)
+ * Story Introduction Component - Card-Style Modal
+ *
+ * Card modal with:
+ * - Square image (1:1 aspect ratio)
+ * - Subtitle text below image
+ * - Typing animation (30ms/char)
+ * - Progress dots + nav arrows
+ * - Sound effects (page-turn, typing)
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { 
-  Dialog, 
-  DialogContent, 
-  Button, 
-  Box, 
-  Typography,
-  IconButton
-} from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import CloseIcon from '@mui/icons-material/Close';
 import { openingStory, getTotalScenes } from '@/lib/storyContent';
 import { Howl } from 'howler';
 
@@ -41,31 +32,36 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
   const [currentScene, setCurrentScene] = useState(0);
   const totalScenes = getTotalScenes();
   const scene = openingStory[currentScene];
-  
+
   // Typing animation
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const skipTypingRef = useRef(false);
-  const [showSubtitle, setShowSubtitle] = useState(false);
-  
-  // Sound effects (useRef로 관리)
+  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Sound effects
   const soundsRef = useRef<{
     pageturn: Howl | null;
     typing: Howl | null;
+    bgm: Howl | null;
   }>({
     pageturn: null,
-    typing: null
+    typing: null,
+    bgm: null
   });
-  
-  // 초기화 플래그
   const initializedRef = useRef(false);
 
-  // Initialize sounds when modal opens (한 번만 실행)
+  // Initialize sounds when modal opens
   useEffect(() => {
     if (!open) {
-      // 모달이 닫힐 때만 cleanup
       if (initializedRef.current) {
-        console.log('🔇 Stopping sound effects...');
+        if (soundsRef.current.bgm) {
+          const bgmRef = soundsRef.current.bgm;
+          bgmRef.fade(bgmRef.volume(), 0, 500);
+          setTimeout(() => {
+            bgmRef.stop();
+            bgmRef.unload();
+          }, 500);
+        }
         if (soundsRef.current.pageturn) {
           soundsRef.current.pageturn.stop();
           soundsRef.current.pageturn.unload();
@@ -74,18 +70,23 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
           soundsRef.current.typing.stop();
           soundsRef.current.typing.unload();
         }
-        soundsRef.current = { pageturn: null, typing: null };
+        soundsRef.current = { pageturn: null, typing: null, bgm: null };
         initializedRef.current = false;
       }
       return;
     }
-    
-    // 이미 초기화되었으면 스킵
+
     if (initializedRef.current) return;
-    
-    // 첫 open 시에만 초기화 (배경음악은 StartScreen에서)
+
     if (typeof window !== 'undefined') {
-      console.log('🎵 Initializing sound effects...');
+      const bgm = new Howl({
+        src: ['/sounds/story-bgm.mp3'],
+        volume: 0.3,
+        loop: true,
+        html5: true
+      });
+      bgm.play();
+
       soundsRef.current = {
         pageturn: new Howl({
           src: ['/sounds/page-turn.mp3'],
@@ -96,78 +97,70 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
           src: ['/sounds/typing.mp3'],
           volume: 0.4,
           html5: true
-        })
+        }),
+        bgm
       };
-      
       initializedRef.current = true;
     }
   }, [open]);
 
   // Typing animation effect
   useEffect(() => {
-    if (!scene) return;
-    
+    if (!scene || !open) return;
+
     // Reset for new scene
     setDisplayedText('');
     setIsTypingComplete(false);
-    skipTypingRef.current = false;
-    setShowSubtitle(false);
-    
-    // 첫 페이지는 사운드 초기화 완료까지 대기
-    const checkSoundReady = () => {
-      if (currentScene === 0 && !initializedRef.current) {
-        // 사운드 아직 초기화 안 됨, 100ms 후 재시도
-        setTimeout(checkSoundReady, 100);
-        return;
+
+    // Clear previous typing interval
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+    }
+
+    const delay = currentScene === 0 ? 800 : 500;
+
+    const startTimer = setTimeout(() => {
+      // Play typing sound
+      if (soundsRef.current.typing) {
+        soundsRef.current.typing.stop();
+        soundsRef.current.typing.play();
       }
-      
-      // 사운드 준비 완료 또는 첫 페이지 아님
-      const delay = currentScene === 0 ? 1200 : 1000;
-      
-      // Show image for delay time, then start subtitle + typing
-      const showSubtitleTimer = setTimeout(() => {
-        setShowSubtitle(true);
-        
-        // Play typing sound when subtitle appears
-        if (soundsRef.current.typing) {
-          soundsRef.current.typing.stop();
-          console.log('⌨️ Playing typing sound (scene:', currentScene, ')');
-          soundsRef.current.typing.play();
-        }
-        
-        const fullText = scene.text;
-        let index = 0;
-        
-        const typingInterval = setInterval(() => {
-          if (skipTypingRef.current) {
-            // Skip to end
-            setDisplayedText(fullText);
-            setIsTypingComplete(true);
-            clearInterval(typingInterval);
-          } else if (index < fullText.length) {
-            setDisplayedText(fullText.slice(0, index + 1));
-            index++;
-          } else {
-            setIsTypingComplete(true);
-            clearInterval(typingInterval);
+
+      const fullText = scene.text;
+      let index = 0;
+
+      typingIntervalRef.current = setInterval(() => {
+        if (index < fullText.length) {
+          setDisplayedText(fullText.slice(0, index + 1));
+          index++;
+        } else {
+          setIsTypingComplete(true);
+          if (typingIntervalRef.current) {
+            clearInterval(typingIntervalRef.current);
+            typingIntervalRef.current = null;
           }
-        }, 30); // 30ms per character
-        
-        return () => clearInterval(typingInterval);
-      }, delay);
-      
-      return () => clearTimeout(showSubtitleTimer);
+          // Stop typing sound
+          if (soundsRef.current.typing) {
+            soundsRef.current.typing.stop();
+          }
+        }
+      }, 30);
+    }, delay);
+
+    return () => {
+      clearTimeout(startTimer);
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+        typingIntervalRef.current = null;
+      }
     };
-    
-    checkSoundReady();
-  }, [currentScene, scene]);
+  }, [currentScene, scene, open]);
 
   // Navigation handlers
   const handleNext = () => {
     if (currentScene < totalScenes - 1) {
-      // Play page turn sound
       if (soundsRef.current.pageturn) {
-        console.log('📄 Playing page turn sound...');
         soundsRef.current.pageturn.play();
       }
       setCurrentScene(currentScene + 1);
@@ -175,24 +168,41 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
       handleComplete();
     }
   };
-  
+
+  const handlePrev = () => {
+    if (currentScene > 0) {
+      if (soundsRef.current.pageturn) {
+        soundsRef.current.pageturn.play();
+      }
+      setCurrentScene(currentScene - 1);
+    }
+  };
+
   const handleComplete = () => {
     localStorage.setItem('storyViewed', 'true');
     setCurrentScene(0);
     onClose();
   };
-  
-  const handleSkip = () => {
-    handleComplete();
-  };
-  
-  // Click subtitle to skip typing
-  const handleSubtitleClick = () => {
+
+  // Click on image area: skip typing or advance
+  const handleImageClick = () => {
     if (!isTypingComplete) {
-      skipTypingRef.current = true;
+      // Skip typing - show full text
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+        typingIntervalRef.current = null;
+      }
+      setDisplayedText(scene.text);
+      setIsTypingComplete(true);
+      if (soundsRef.current.typing) {
+        soundsRef.current.typing.stop();
+      }
+    } else {
+      // Advance to next scene
+      handleNext();
     }
   };
-  
+
   // Progress dot click
   const handleDotClick = (index: number) => {
     if (soundsRef.current.pageturn) {
@@ -201,244 +211,121 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
     setCurrentScene(index);
   };
 
-  if (!scene) return null;
-  
+  // Reset on close
+  useEffect(() => {
+    if (!open) {
+      setCurrentScene(0);
+      setDisplayedText('');
+      setIsTypingComplete(false);
+    }
+  }, [open]);
+
+  if (!open || !scene) return null;
+
   return (
-    <Dialog 
-      open={open} 
-      fullScreen
-      PaperProps={{
-        sx: {
-          bgcolor: '#000',
-          overflow: 'hidden',
-          position: 'fixed',
-          inset: 0,
-          margin: 0,
-          maxHeight: '100%',
-          height: '100vh',
-          minHeight: '-webkit-fill-available',
-        }
-      }}
-    >
-      <DialogContent 
-        sx={{ 
-          p: 0,
-          position: 'fixed',
-          inset: 0,
-          width: '100%',
-          height: '100vh',
-          minHeight: '-webkit-fill-available',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        }}
+    <AnimatePresence>
+      <motion.div
+        className="story-modal-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={handleComplete}
       >
-        {/* Skip Button (Always visible) */}
-        <IconButton
-          onClick={handleSkip}
-          sx={{
-            position: 'absolute',
-            top: 16,
-            right: 16,
-            color: 'white',
-            bgcolor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(10px)',
-            zIndex: 100,
-            '&:hover': {
-              bgcolor: 'rgba(0, 0, 0, 0.8)'
-            }
-          }}
+        <motion.div
+          className="story-modal-content"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <CloseIcon />
-        </IconButton>
-        
-        {/* Background Image (CSS - No Flicker!) */}
-        <Box
-          sx={{
-            position: 'fixed',
-            inset: 0,
-            width: '100%',
-            height: '100vh',
-            minHeight: '-webkit-fill-available',
-            backgroundImage: `url(${scene.image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            transition: 'opacity 0.5s ease-in-out',
-            opacity: 1,
-          }}
-        />
-        
-        {/* Subtitle Box (Bottom) - Appears after 1 second */}
-        {showSubtitle && (
-          <Box
-            onClick={handleSubtitleClick}
-            sx={{
-              position: 'absolute',
-              bottom: 100,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: { xs: '85%', sm: '75%', md: '70%' },
-              maxWidth: 800,
-              bgcolor: 'rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(12px)',
-              borderRadius: 2,
-              p: { xs: 2, sm: 2.5 },
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-              cursor: isTypingComplete ? 'default' : 'pointer',
-              zIndex: 10,
-              opacity: 1,
-              transition: 'opacity 0.5s ease-in-out',
-            }}
-          >
-                <Typography sx={{
-                  color: 'white',
-                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                  lineHeight: 1.6,
-                  fontFamily: '"Noto Sans KR", -apple-system, sans-serif',
-                  textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-                  wordBreak: 'keep-all',
-                  whiteSpace: 'pre-wrap',
-                }}>
-                  {displayedText}
-                  {!isTypingComplete && (
-                    <Box
-                      component="span"
-                      sx={{
-                        display: 'inline-block',
-                        width: 2,
-                        height: '1em',
-                        bgcolor: 'white',
-                        ml: 0.3,
-                        animation: 'blink 1s infinite',
-                        '@keyframes blink': {
-                          '0%, 49%': { opacity: 1 },
-                          '50%, 100%': { opacity: 0 }
-                        }
-                      }}
-                    />
-                  )}
-                </Typography>
-              </Box>
-        )}
-        
-        {/* Navigation Buttons (Appear after typing complete) */}
-        <AnimatePresence>
-          {showSubtitle && isTypingComplete && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5 }}
-              style={{
-                position: 'absolute',
-                bottom: 30,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                gap: 16,
-                zIndex: 20,
+          {/* Close button */}
+          <button className="story-close-btn" onClick={handleComplete}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Scene container - square aspect ratio */}
+          <div className="story-scene-container" onClick={handleImageClick}>
+            {/* Progress dots */}
+            <div className="story-progress">
+              {openingStory.map((_, index) => (
+                <div
+                  key={index}
+                  className={`story-progress-dot ${index === currentScene ? 'active' : ''} ${index < currentScene ? 'completed' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDotClick(index);
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Scene image with transition */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentScene}
+                className="story-image-wrapper"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.4 }}
+              >
+                <img
+                  src={scene.image}
+                  alt={`Scene ${currentScene + 1}`}
+                  className="story-image"
+                  draggable={false}
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation arrows */}
+            <button
+              className="story-nav-btn story-nav-prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePrev();
+              }}
+              disabled={currentScene === 0}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              className="story-nav-btn story-nav-next"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNext();
               }}
             >
-              <Button 
-                variant="outlined" 
-                onClick={handleSkip}
-                sx={{ 
-                  color: 'white',
-                  borderColor: 'rgba(255, 255, 255, 0.4)',
-                  bgcolor: 'rgba(0, 0, 0, 0.6)',
-                  backdropFilter: 'blur(10px)',
-                  '&:hover': {
-                    borderColor: 'white',
-                    bgcolor: 'rgba(0, 0, 0, 0.8)'
-                  },
-                  px: 3,
-                  py: 1,
-                  fontSize: { xs: '0.9rem', sm: '1rem' }
-                }}
-              >
-                Skip Story
-              </Button>
-              <Button 
-                variant="contained" 
-                onClick={handleNext}
-                sx={{
-                  bgcolor: '#4CAF50',
-                  color: 'white',
-                  '&:hover': {
-                    bgcolor: '#45a049'
-                  },
-                  px: 4,
-                  py: 1,
-                  fontSize: { xs: '0.9rem', sm: '1rem' },
-                  boxShadow: '0 4px 16px rgba(76, 175, 80, 0.4)'
-                }}
-              >
-                {currentScene < totalScenes - 1 ? 'Next →' : 'Start Game! 🎮'}
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {/* Progress Dots */}
-        {showSubtitle && (
-          <Box 
-            sx={{ 
-              position: 'absolute',
-              bottom: 70,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex', 
-              gap: 1,
-              alignItems: 'center',
-              zIndex: 15,
-              opacity: 1,
-              transition: 'opacity 0.5s ease-in-out',
-            }}
-          >
-          {openingStory.map((_, index) => (
-            <Box
-              key={index}
-              sx={{
-                width: index === currentScene ? 12 : 8,
-                height: index === currentScene ? 12 : 8,
-                borderRadius: '50%',
-                bgcolor: index === currentScene 
-                  ? '#4CAF50' 
-                  : 'rgba(255, 255, 255, 0.4)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                boxShadow: index === currentScene 
-                  ? '0 0 8px rgba(76, 175, 80, 0.8)'
-                  : 'none',
-              }}
-              onClick={() => handleDotClick(index)}
-            />
-          ))}
-          </Box>
-        )}
-        
-        {/* Scene Counter */}
-        {showSubtitle && (
-          <Typography
-            variant="caption"
-            sx={{
-              position: 'absolute',
-              bottom: { xs: 50, sm: 55 },
-              left: '50%',
-              transform: 'translateX(-50%)',
-              color: 'rgba(255, 255, 255, 0.6)',
-              fontSize: { xs: '0.7rem', sm: '0.75rem' },
-              zIndex: 15,
-              textShadow: '0 2px 4px rgba(0,0,0,0.8)'
-            }}
-          >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Subtitle area - below image */}
+          <div className="story-subtitle-container">
+            <p className="story-subtitle">
+              {displayedText}
+              {!isTypingComplete && <span className="typing-cursor">|</span>}
+            </p>
+          </div>
+
+          {/* Scene counter */}
+          <div className="story-scene-counter">
             {currentScene + 1} / {totalScenes}
-          </Typography>
-        )}
-      </DialogContent>
-    </Dialog>
+          </div>
+
+          {/* Tap hint */}
+          <p className="story-tap-hint">
+            {isTypingComplete ? 'Tap image to continue' : 'Tap to skip'}
+          </p>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

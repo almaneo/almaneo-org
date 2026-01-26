@@ -1,0 +1,248 @@
+import { create } from 'zustand';
+import type {
+  TravelState,
+  RegionId,
+  CountryId,
+  CountryProgress,
+  RegionProgress,
+  StarRating,
+  Country,
+} from '@/lib/worldTravel/types';
+import { getRegionForLocale, calculateStars } from '@/lib/worldTravel/types';
+import { REGIONS } from '@/lib/worldTravel/regions';
+import { ALL_COUNTRIES } from '@/lib/worldTravel/countries';
+import {
+  getUnlockedRegions,
+  calculateTravelStats,
+  createEmptyCountryProgress,
+  recordQuestResult,
+  QUEST_POINTS,
+} from '@/lib/worldTravel/progression';
+
+interface TravelStore extends TravelState {
+  // Navigation
+  openWorldMap: () => void;
+  selectCountry: (countryId: CountryId) => void;
+  selectQuest: (questId: string) => void;
+  goBack: () => void;
+
+  // Quest completion
+  completeQuest: (questId: string, correct: boolean) => number; // returns points earned
+
+  // Data access
+  getCountry: (countryId: CountryId) => Country | undefined;
+  getCountryProgress: (countryId: CountryId) => CountryProgress;
+  isRegionUnlocked: (regionId: RegionId) => boolean;
+  getCountryStars: (countryId: CountryId) => StarRating;
+
+  // Persistence
+  loadTravelState: (saved: Partial<TravelState>) => void;
+  exportTravelState: () => Partial<TravelState>;
+
+  // Init
+  initialize: () => void;
+}
+
+function detectStartingRegion(): RegionId {
+  if (typeof navigator !== 'undefined') {
+    const locale = navigator.language || 'en';
+    return getRegionForLocale(locale);
+  }
+  return 'east_asia';
+}
+
+function buildRegionProgress(
+  countryProgress: Record<CountryId, CountryProgress>,
+  startingRegion: RegionId
+): Record<RegionId, RegionProgress> {
+  const totalStars = Object.values(countryProgress).reduce(
+    (sum, cp) => sum + cp.stars,
+    0
+  );
+  const unlocked = getUnlockedRegions(totalStars, startingRegion);
+
+  const result: Record<string, RegionProgress> = {};
+  for (const region of REGIONS) {
+    const regionCountryStars = region.countries.reduce((sum, cId) => {
+      return sum + (countryProgress[cId]?.stars || 0);
+    }, 0);
+
+    result[region.id] = {
+      regionId: region.id as RegionId,
+      unlocked: unlocked[region.id as RegionId],
+      totalStars: regionCountryStars,
+    };
+  }
+
+  return result as Record<RegionId, RegionProgress>;
+}
+
+export const useTravelStore = create<TravelStore>((set, get) => ({
+  // Initial state
+  currentView: 'world_map',
+  selectedCountryId: null,
+  selectedQuestId: null,
+  countryProgress: {},
+  regionProgress: {} as Record<RegionId, RegionProgress>,
+  totalStars: 0,
+  totalQuestsCompleted: 0,
+  countriesVisited: 0,
+  perfectCountries: 0,
+  startingRegion: 'east_asia',
+
+  // --- Navigation ---
+
+  openWorldMap: () => {
+    set({
+      currentView: 'world_map',
+      selectedCountryId: null,
+      selectedQuestId: null,
+    });
+  },
+
+  selectCountry: (countryId: CountryId) => {
+    const state = get();
+    // Ensure country progress exists
+    if (!state.countryProgress[countryId]) {
+      const updated = {
+        ...state.countryProgress,
+        [countryId]: createEmptyCountryProgress(countryId),
+      };
+      const stats = calculateTravelStats(updated);
+      set({
+        currentView: 'country',
+        selectedCountryId: countryId,
+        selectedQuestId: null,
+        countryProgress: updated,
+        ...stats,
+        regionProgress: buildRegionProgress(updated, state.startingRegion),
+      });
+    } else {
+      set({
+        currentView: 'country',
+        selectedCountryId: countryId,
+        selectedQuestId: null,
+      });
+    }
+  },
+
+  selectQuest: (questId: string) => {
+    set({
+      currentView: 'quest',
+      selectedQuestId: questId,
+    });
+  },
+
+  goBack: () => {
+    const { currentView } = get();
+    if (currentView === 'quest') {
+      set({ currentView: 'country', selectedQuestId: null });
+    } else if (currentView === 'country') {
+      set({ currentView: 'world_map', selectedCountryId: null });
+    }
+  },
+
+  // --- Quest Completion ---
+
+  completeQuest: (questId: string, correct: boolean): number => {
+    const state = get();
+    const { selectedCountryId, countryProgress } = state;
+    if (!selectedCountryId) return 0;
+
+    const country = ALL_COUNTRIES.find(c => c.id === selectedCountryId);
+    if (!country) return 0;
+
+    const progress =
+      countryProgress[selectedCountryId] ||
+      createEmptyCountryProgress(selectedCountryId);
+
+    const result = recordQuestResult(country, progress, questId, correct);
+
+    const updatedCountryProgress = {
+      ...countryProgress,
+      [selectedCountryId]: result.updatedProgress,
+    };
+
+    const stats = calculateTravelStats(updatedCountryProgress);
+
+    set({
+      countryProgress: updatedCountryProgress,
+      ...stats,
+      regionProgress: buildRegionProgress(
+        updatedCountryProgress,
+        state.startingRegion
+      ),
+    });
+
+    return result.pointsEarned;
+  },
+
+  // --- Data Access ---
+
+  getCountry: (countryId: CountryId) => {
+    return ALL_COUNTRIES.find(c => c.id === countryId);
+  },
+
+  getCountryProgress: (countryId: CountryId) => {
+    return (
+      get().countryProgress[countryId] || {
+        countryId,
+        questResults: {},
+        stars: 0 as StarRating,
+      }
+    );
+  },
+
+  isRegionUnlocked: (regionId: RegionId) => {
+    const { regionProgress } = get();
+    return regionProgress[regionId]?.unlocked ?? false;
+  },
+
+  getCountryStars: (countryId: CountryId): StarRating => {
+    return (get().countryProgress[countryId]?.stars || 0) as StarRating;
+  },
+
+  // --- Persistence ---
+
+  loadTravelState: (saved: Partial<TravelState>) => {
+    const startingRegion = saved.startingRegion || detectStartingRegion();
+    const countryProgress = saved.countryProgress || {};
+    const stats = calculateTravelStats(countryProgress);
+
+    set({
+      countryProgress,
+      startingRegion,
+      ...stats,
+      regionProgress: buildRegionProgress(countryProgress, startingRegion),
+      // Reset navigation
+      currentView: 'world_map',
+      selectedCountryId: null,
+      selectedQuestId: null,
+    });
+  },
+
+  exportTravelState: () => {
+    const { countryProgress, startingRegion } = get();
+    return { countryProgress, startingRegion };
+  },
+
+  // --- Init ---
+
+  initialize: () => {
+    const startingRegion = detectStartingRegion();
+    const regionProgress = buildRegionProgress({}, startingRegion);
+
+    set({
+      startingRegion,
+      regionProgress,
+      currentView: 'world_map',
+      selectedCountryId: null,
+      selectedQuestId: null,
+      countryProgress: {},
+      totalStars: 0,
+      totalQuestsCompleted: 0,
+      countriesVisited: 0,
+      perfectCountries: 0,
+    });
+  },
+}));

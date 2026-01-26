@@ -72,6 +72,8 @@ export interface GameState {
   last_active_time: string;
   created_at: string;
   updated_at: string;
+  // World Travel state
+  travel_state?: TravelSaveData | null;
 }
 
 export interface UserUpgrades {
@@ -85,11 +87,12 @@ export interface DailyQuestStats {
   tapsToday: number;
   pointsToday: number;
   upgradesToday: number;
+  travelQuestsToday: number;
 }
 
 export interface DailyQuest {
   id: string;
-  type: 'tap' | 'points' | 'upgrade';
+  type: 'tap' | 'points' | 'upgrade' | 'travel';
   title: string;
   description: string;
   target: number;
@@ -107,6 +110,11 @@ export interface AchievementStats {
   loginStreak: number;
   lastLoginDate: string;
   firstLoginDate: string;
+  // Travel stats
+  countriesVisited: number;
+  travelQuestsCompleted: number;
+  totalStars: number;
+  perfectCountries: number;
 }
 
 export interface Achievement {
@@ -114,12 +122,32 @@ export interface Achievement {
   title: string;
   description: string;
   icon: string;
-  category: 'tap' | 'points' | 'upgrade' | 'level' | 'special';
+  category: 'tap' | 'points' | 'upgrade' | 'level' | 'special' | 'travel';
   target: number;
   reward: number;
   completed: boolean;
   completedAt?: Date;
   hidden: boolean;
+}
+
+// Travel system save data (stored as JSONB in game_states)
+// Uses plain strings for JSON serialization compatibility
+export interface TravelSaveData {
+  countryProgress: Record<string, {
+    countryId: string;
+    questResults: Record<string, {
+      questId: string;
+      completed: boolean;
+      correct: boolean;
+      completedAt?: string;
+      attempts: number;
+    }>;
+    stars: number;
+    firstVisitedAt?: string;
+    completedAt?: string;
+  }>;
+  startingRegion: string;
+  totalStars: number;
 }
 
 export interface LeaderboardEntry {

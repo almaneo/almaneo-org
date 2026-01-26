@@ -10,8 +10,8 @@ interface LoadingScreenProps {
   message?: string;
 }
 
-export default function LoadingScreen({ 
-  message = 'Loading your farm...' 
+export default function LoadingScreen({
+  message = 'Loading your journey...'
 }: LoadingScreenProps) {
   return (
     <Box
@@ -27,28 +27,21 @@ export default function LoadingScreen({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #0A0F1A 0%, #1e293b 50%, #0A0F1A 100%)',
         zIndex: 9999,
       }}
     >
-      {/* Logo */}
-      <Box
-        sx={{
-          height: 120,
-          position: 'relative',
-          mb: 4,
-          filter: 'drop-shadow(0 4px 8px rgba(255,215,0,0.6))',
-        }}
-      >
+      {/* Title Image */}
+      <Box sx={{ mb: 3, textAlign: 'center' }}>
         <Image
-          src="/images/mimig-farm-logo.png"
-          alt="MiMiG Farm"
-          height={120}
-          width={400}
+          src="/images/almaneo-title.webp"
+          alt="AlmaNEO"
+          width={200}
+          height={200}
           style={{
-            height: '100%',
-            width: 'auto',
             objectFit: 'contain',
+            maxWidth: '50vw',
+            height: 'auto',
           }}
           priority
         />
@@ -65,10 +58,10 @@ export default function LoadingScreen({
         }}
       >
         <CircularProgress
-          size={60}
+          size={48}
           thickness={4}
           sx={{
-            color: '#FFD700',
+            color: '#0052FF',
             animationDuration: '1s',
           }}
         />
@@ -82,6 +75,7 @@ export default function LoadingScreen({
           fontWeight: 500,
           textAlign: 'center',
           px: 2,
+          fontSize: { xs: '1rem', sm: '1.25rem' },
         }}
       >
         {message}
@@ -91,13 +85,13 @@ export default function LoadingScreen({
       <Typography
         variant="body2"
         sx={{
-          color: 'rgba(255,255,255,0.7)',
+          color: 'rgba(255,255,255,0.5)',
           textAlign: 'center',
           mt: 1,
           px: 2,
         }}
       >
-        Preparing your sustainable farm...
+        Explore cultures, spread kindness
       </Typography>
     </Box>
   );
