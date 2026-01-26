@@ -30,3 +30,9 @@ Thumbs.db
 # PWA
 public/sw.js
 public/workbox-*.js
+
+.vercel
+
+# Project docs (internal)
+demo_script.md
+sprint_plan.md
