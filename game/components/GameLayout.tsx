@@ -20,37 +20,22 @@ export default function GameLayout({
     <Box
       sx={{
         width: '100vw',
-        height: '100vh',
+        height: '100dvh',
         overflow: 'hidden',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        '@supports not (height: 100dvh)': {
+          height: '100vh',
+        },
       }}
     >
-      {/* 상단 HUD */}
-      {hud && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 100,
-          }}
-        >
-          {hud}
-        </Box>
-      )}
-
-      {/* 중앙 캔버스 - 전체 화면 배경 */}
+      {/* 캔버스 - 전체 화면 배경 (absolute) */}
       {canvas && (
         <Box
           sx={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            inset: 0,
             zIndex: 0,
           }}
         >
@@ -58,15 +43,29 @@ export default function GameLayout({
         </Box>
       )}
 
-      {/* 하단 네비게이션 바 */}
+      {/* 상단 HUD (flex item, overlays canvas via z-index) */}
+      {hud && (
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 100,
+            flexShrink: 0,
+          }}
+        >
+          {hud}
+        </Box>
+      )}
+
+      {/* 중앙 공간 (canvas가 배경으로 보임) */}
+      <Box sx={{ flex: 1 }} />
+
+      {/* 하단 네비게이션 바 (flex item, always visible) */}
       {navbar && (
         <Box
           sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
+            position: 'relative',
             zIndex: 100,
+            flexShrink: 0,
           }}
         >
           {navbar}

@@ -66,6 +66,7 @@ export default function RootLayout({
             overflow: hidden;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             position: fixed;
             overscroll-behavior: none;
           }
