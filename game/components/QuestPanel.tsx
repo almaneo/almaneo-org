@@ -13,6 +13,7 @@ export default function QuestPanel() {
   const { dailyQuests, claimQuestReward } = useGameStore();
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   // 리셋까지 남은 시간 계산
   useEffect(() => {
@@ -57,8 +58,8 @@ export default function QuestPanel() {
       {/* Header */}
       <Box
         sx={{
-          p: isLandscape ? 1.5 : 2.5,
-          mb: isLandscape ? 1.5 : 2,
+          p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
+          mb: isLandscape ? 1 : isMobile ? 1 : 2,
           background: 'rgba(255, 255, 255, 0.03)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 215, 0, 0.3)',
@@ -75,18 +76,18 @@ export default function QuestPanel() {
           }}
         >
           <Box>
-            <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: 'white', fontWeight: 900, mb: 0.5 }}>
+            <Typography variant={isLandscape ? 'h6' : isMobile ? 'body1' : 'h5'} sx={{ color: 'white', fontWeight: 900, fontSize: isMobile ? 15 : undefined, mb: 0.25 }}>
               📋 Mission Log
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFD700', fontWeight: 'bold' }}>
+            <Typography variant="caption" sx={{ color: '#FFD700', fontWeight: 'bold', fontSize: isMobile ? 11 : undefined }}>
               RECONSTRUCTION: {completedCount} / {dailyQuests.length}
             </Typography>
           </Box>
           <Box sx={{ textAlign: 'right' }}>
-            <Typography variant="caption" display="block" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: isLandscape ? 10 : undefined }}>
+            <Typography variant="caption" display="block" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: isLandscape ? 10 : isMobile ? 10 : undefined }}>
               NEXT REFRESH
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'white', fontWeight: 'bold' }}>
+            <Typography variant="caption" sx={{ color: 'white', fontWeight: 'bold', fontSize: isMobile ? 11 : undefined }}>
               ⏰ {timeUntilReset}
             </Typography>
           </Box>
@@ -101,7 +102,7 @@ export default function QuestPanel() {
               borderTop: '1px solid rgba(255, 215, 0, 0.2)',
             }}
           >
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#4CAF50', fontWeight: 800 }}>
+            <Typography variant="caption" sx={{ color: '#4CAF50', fontWeight: 800, fontSize: isMobile ? 11 : undefined }}>
               REWARDS EARNED: <strong style={{ textDecoration: 'underline' }}>+{totalRewards} 💖</strong>
             </Typography>
           </Box>
@@ -113,7 +114,7 @@ export default function QuestPanel() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: isLandscape ? 1.5 : 2,
+          gap: isLandscape ? 1 : isMobile ? 1 : 2,
         }}
       >
         {dailyQuests.map((quest) => (
@@ -129,18 +130,18 @@ export default function QuestPanel() {
       {completedCount === dailyQuests.length && (
         <Box
           sx={{
-            mt: isLandscape ? 1.5 : 2,
-            p: isLandscape ? 1.5 : 2.5,
+            mt: isLandscape ? 1 : isMobile ? 1 : 2,
+            p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
             background: 'linear-gradient(145deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.3))',
             border: '2px solid #4CAF50',
             borderRadius: 2,
             textAlign: 'center',
           }}
         >
-          <Typography variant={isLandscape ? 'body1' : 'h6'} sx={{ color: '#4CAF50', fontWeight: 700 }}>
+          <Typography variant={isLandscape ? 'body2' : isMobile ? 'body2' : 'h6'} sx={{ color: '#4CAF50', fontWeight: 700, fontSize: isMobile ? 13 : undefined }}>
             🎉 All daily quests completed!
           </Typography>
-          <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ mt: 0.5, color: 'rgba(255, 255, 255, 0.8)' }}>
+          <Typography variant="caption" sx={{ mt: 0.5, color: 'rgba(255, 255, 255, 0.8)', fontSize: isMobile ? 11 : undefined }}>
             Come back tomorrow!
           </Typography>
         </Box>

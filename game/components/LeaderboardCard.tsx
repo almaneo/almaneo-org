@@ -27,6 +27,7 @@ export default function LeaderboardCard({
 }: LeaderboardCardProps) {
   // Landscape 모드 감지
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   const { rank, username, level, totalPoints, rankChange } = entry;
 
@@ -40,7 +41,7 @@ export default function LeaderboardCard({
   return (
     <Box
       sx={{
-        p: isLandscape ? 1.5 : 2,
+        p: isLandscape ? 1 : isMobile ? 1.25 : 2,
         background: isCurrentUser
           ? 'rgba(255, 215, 0, 0.1)'
           : isTopThree
@@ -65,22 +66,22 @@ export default function LeaderboardCard({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: isLandscape ? 1.5 : 2,
+          gap: isLandscape ? 1 : isMobile ? 1.25 : 2,
         }}
       >
         {/* 순위 표시 */}
         <Box
           sx={{
-            minWidth: isLandscape ? 50 : 60,
+            minWidth: isLandscape ? 40 : isMobile ? 36 : 60,
             textAlign: 'center',
           }}
         >
           {medal ? (
             <Typography
-              variant={isLandscape ? 'h5' : 'h4'}
+              variant={isLandscape ? 'h6' : isMobile ? 'h6' : 'h4'}
               component="span"
               sx={{
-                fontSize: isLandscape ? 32 : 40,
+                fontSize: isLandscape ? 28 : isMobile ? 24 : 40,
                 filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))',
               }}
             >
@@ -93,7 +94,7 @@ export default function LeaderboardCard({
               sx={{
                 fontWeight: 900,
                 color: isTopThree ? 'white' : 'rgba(255, 255, 255, 0.4)',
-                fontSize: isLandscape ? 16 : 20,
+                fontSize: isLandscape ? 14 : isMobile ? 13 : 20,
               }}
             >
               #{formatRank(rank)}
@@ -104,12 +105,12 @@ export default function LeaderboardCard({
         {/* 유저 아바타 */}
         <Avatar
           sx={{
-            width: isLandscape ? 36 : 48,
-            height: isLandscape ? 36 : 48,
+            width: isLandscape ? 32 : isMobile ? 32 : 48,
+            height: isLandscape ? 32 : isMobile ? 32 : 48,
             bgcolor: isCurrentUser ? '#FFD700' : 'rgba(255,255,255,0.1)',
             fontWeight: 'bold',
             border: isTopThree ? '2px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.05)',
-            fontSize: isLandscape ? 16 : 20,
+            fontSize: isLandscape ? 14 : isMobile ? 13 : 20,
           }}
         >
           {username.charAt(0).toUpperCase()}
@@ -117,13 +118,13 @@ export default function LeaderboardCard({
 
         {/* 유저 정보 */}
         <Box sx={{ flex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: isMobile ? 0.25 : 0.5 }}>
             <Typography
-              variant={isLandscape ? 'body1' : 'h6'}
+              variant={isLandscape ? 'body2' : isMobile ? 'body2' : 'h6'}
               sx={{
                 fontWeight: 800,
                 color: 'white',
-                fontSize: isLandscape ? 16 : 18,
+                fontSize: isLandscape ? 14 : isMobile ? 13 : 18,
                 letterSpacing: -0.5,
               }}
             >
@@ -137,8 +138,8 @@ export default function LeaderboardCard({
                   bgcolor: '#FFD700',
                   color: '#0A0F1A',
                   fontWeight: 900,
-                  height: 18,
-                  fontSize: 9,
+                  height: isMobile ? 16 : 18,
+                  fontSize: isMobile ? 8 : 9,
                   letterSpacing: 1,
                 }}
               />
@@ -149,9 +150,9 @@ export default function LeaderboardCard({
             variant="caption"
             sx={{
               color: 'rgba(255, 255, 255, 0.5)',
-              fontSize: 11,
+              fontSize: isMobile ? 10 : 11,
               fontWeight: 'bold',
-              letterSpacing: 1,
+              letterSpacing: isMobile ? 0.5 : 1,
             }}
           >
             PHASE {level}
@@ -161,11 +162,11 @@ export default function LeaderboardCard({
         {/* 포인트 & 순위 변동 */}
         <Box sx={{ textAlign: 'right' }}>
           <Typography
-            variant={isLandscape ? 'body1' : 'h6'}
+            variant={isLandscape ? 'body2' : isMobile ? 'body2' : 'h6'}
             sx={{
               fontWeight: 900,
               color: 'white',
-              fontSize: isLandscape ? 16 : 18,
+              fontSize: isLandscape ? 14 : isMobile ? 13 : 18,
             }}
           >
             💖 {formatPoints(totalPoints)}
@@ -177,7 +178,7 @@ export default function LeaderboardCard({
               sx={{
                 color: changeColor,
                 fontWeight: 800,
-                fontSize: 10,
+                fontSize: isMobile ? 9 : 10,
                 letterSpacing: 0.5,
               }}
             >

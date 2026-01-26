@@ -9,6 +9,7 @@ import UpgradeCard from './UpgradeCard';
 export default function UpgradePanel() {
   const { points, upgrades, upgrade } = useGameStore();
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   // Calculate upgrade data
   const upgradeData = [
@@ -66,7 +67,7 @@ export default function UpgradePanel() {
               xs: '1fr',
               sm: 'repeat(2, 1fr)',
             },
-          gap: isLandscape ? 1.5 : 2,
+          gap: isLandscape ? 1 : isMobile ? 1.25 : 2,
         }}
       >
         {upgradeData.map((data) => (

@@ -11,6 +11,7 @@ interface AchievementCardProps {
 export default function AchievementCard({ achievement, current, onClaim }: AchievementCardProps) {
   const { id, title, description, icon, target, reward, completed, completedAt, hidden } = achievement;
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   // Calculate progress
   const progress = Math.min((current / target) * 100, 100);
@@ -30,7 +31,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
   return (
     <Box
       sx={{
-        p: isLandscape ? 1.5 : 2.5,
+        p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
         flex: '0 0 auto', // flex-shrink 방지
         minHeight: 'fit-content', // 콘텐츠에 맞는 최소 높이
         position: 'relative',
@@ -57,15 +58,15 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         <Box
           sx={{
             position: 'absolute',
-            top: isLandscape ? 8 : 12,
-            right: isLandscape ? 8 : 12,
+            top: isLandscape ? 8 : isMobile ? 8 : 12,
+            right: isLandscape ? 8 : isMobile ? 8 : 12,
             bgcolor: '#FFD700',
             color: '#0A0F1A',
-            px: isLandscape ? 1 : 1.5,
-            py: 0.5,
+            px: isLandscape ? 1 : isMobile ? 1 : 1.5,
+            py: 0.25,
             borderRadius: 1,
             fontWeight: 900,
-            fontSize: isLandscape ? 8 : 10,
+            fontSize: isLandscape ? 8 : isMobile ? 8 : 10,
             letterSpacing: 1,
             boxShadow: '0 2px 8px rgba(255, 215, 0, 0.5)',
           }}
@@ -75,13 +76,13 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
       )}
 
       {/* Icon and Title Row */}
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: isLandscape ? 1.5 : 2, mb: isLandscape ? 1 : 1.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: isLandscape ? 1 : isMobile ? 1.25 : 2, mb: isLandscape ? 1 : isMobile ? 1 : 1.5 }}>
         {/* Icon */}
         <Box
           sx={{
-            fontSize: isLandscape ? 36 : 48,
+            fontSize: isLandscape ? 32 : isMobile ? 28 : 48,
             lineHeight: 1,
-            minWidth: isLandscape ? 36 : 48,
+            minWidth: isLandscape ? 32 : isMobile ? 28 : 48,
             filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))',
           }}
         >
@@ -91,12 +92,12 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         {/* Title and Description */}
         <Box sx={{ flex: 1 }}>
           <Typography
-            variant="h6"
+            variant={isMobile ? 'body2' : 'h6'}
             sx={{
               fontWeight: 800,
               color: 'white',
-              mb: 0.5,
-              fontSize: isLandscape ? 16 : 18,
+              mb: 0.25,
+              fontSize: isLandscape ? 14 : isMobile ? 13 : 18,
               letterSpacing: -0.5,
             }}
           >
@@ -104,11 +105,11 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
           </Typography>
 
           <Typography
-            variant="body2"
+            variant="caption"
             sx={{
               color: 'rgba(255, 255, 255, 0.5)',
-              lineHeight: 1.5,
-              fontSize: isLandscape ? 11 : 13,
+              lineHeight: 1.4,
+              fontSize: isLandscape ? 10 : isMobile ? 11 : 13,
               fontWeight: 300,
             }}
           >
@@ -120,12 +121,12 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
       {/* Progress Section */}
       {!isHidden && (
         <>
-          <Box sx={{ mb: isLandscape ? 1 : 1.5 }}>
+          <Box sx={{ mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5 }}>
             <LinearProgress
               variant="determinate"
               value={progress}
               sx={{
-                height: isLandscape ? 6 : 8,
+                height: isLandscape ? 5 : isMobile ? 5 : 8,
                 borderRadius: 1,
                 backgroundColor: 'rgba(0, 0, 0, 0.2)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -145,10 +146,10 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
               alignItems: 'center',
             }}
           >
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: isMobile ? 10 : undefined }}>
               SYNC: {current} / {target}
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800 }}>
+            <Typography variant="caption" sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800, fontSize: isMobile ? 10 : undefined }}>
               {progress.toFixed(0)}%
             </Typography>
           </Box>
@@ -158,8 +159,8 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
       {/* Reward */}
       <Box
         sx={{
-          mt: isLandscape ? 1.5 : 2,
-          pt: isLandscape ? 1.5 : 2,
+          mt: isLandscape ? 1 : isMobile ? 1 : 2,
+          pt: isLandscape ? 1 : isMobile ? 1 : 2,
           borderTop: '1px solid rgba(255, 255, 255, 0.05)',
           display: 'flex',
           justifyContent: 'space-between',
@@ -167,13 +168,13 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         }}
       >
         <Box>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: 10 }}>UNLOCKED REWARD</Typography>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>UNLOCKED REWARD</Typography>
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               color: isCompleted ? '#4CAF50' : 'white',
               fontWeight: 800,
-              fontSize: isLandscape ? 14 : 16,
+              fontSize: isLandscape ? 13 : isMobile ? 13 : 16,
             }}
           >
             💖 +{reward}
@@ -185,7 +186,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             variant="caption"
             sx={{
               color: 'rgba(255, 255, 255, 0.3)',
-              fontSize: isLandscape ? 10 : 11,
+              fontSize: isLandscape ? 9 : isMobile ? 9 : 11,
             }}
           >
             {formatDate(completedAt)}

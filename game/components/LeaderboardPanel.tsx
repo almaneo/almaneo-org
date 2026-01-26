@@ -38,6 +38,7 @@ import { useGameStore } from '@/hooks/useGameStore';
 export default function LeaderboardPanel() {
   // Landscape 모드 감지
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   const [activeTab, setActiveTab] = useState<LeaderboardType>('global');
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -190,16 +191,16 @@ export default function LeaderboardPanel() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          mb: isLandscape ? 1.5 : 2,
+          mb: isLandscape ? 1 : isMobile ? 1 : 2,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 1.5 : 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 1 : isMobile ? 1 : 2 }}>
           <Typography
-            variant={isLandscape ? 'h6' : 'h5'}
+            variant={isLandscape ? 'h6' : isMobile ? 'body1' : 'h5'}
             sx={{
               color: 'white',
               fontWeight: 900,
-              fontSize: isLandscape ? 20 : undefined,
+              fontSize: isLandscape ? 20 : isMobile ? 15 : undefined,
               letterSpacing: -0.5,
             }}
           >
@@ -213,13 +214,14 @@ export default function LeaderboardPanel() {
               color: '#FFD700',
               border: '1px solid rgba(255, 215, 0, 0.3)',
               fontWeight: 900,
-              fontSize: isLandscape ? 10 : 11,
+              fontSize: isLandscape ? 10 : isMobile ? 9 : 11,
+              height: isMobile ? 22 : undefined,
             }}
           />
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontWeight: 'bold' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontWeight: 'bold', fontSize: isMobile ? 10 : undefined }}>
             {getLastUpdatedText(lastUpdate).toUpperCase()}
           </Typography>
           <IconButton
@@ -228,15 +230,16 @@ export default function LeaderboardPanel() {
             size="small"
             sx={{
               color: '#FFD700',
+              p: isMobile ? 0.5 : undefined,
               '&:hover': {
                 bgcolor: 'rgba(255, 215, 0, 0.1)',
               },
             }}
           >
             {loading ? (
-              <CircularProgress size={20} sx={{ color: '#FFD700' }} />
+              <CircularProgress size={isMobile ? 16 : 20} sx={{ color: '#FFD700' }} />
             ) : (
-              <RefreshIcon />
+              <RefreshIcon sx={{ fontSize: isMobile ? 18 : undefined }} />
             )}
           </IconButton>
         </Box>
@@ -249,23 +252,25 @@ export default function LeaderboardPanel() {
         variant="scrollable"
         scrollButtons="auto"
         sx={{
-          mb: isLandscape ? 1.5 : 2,
-          minHeight: isLandscape ? 40 : 48,
+          mb: isLandscape ? 1 : isMobile ? 1 : 2,
+          minHeight: isLandscape ? 36 : isMobile ? 32 : 48,
           '& .MuiTab-root': {
             color: 'rgba(255, 255, 255, 0.3)',
             fontWeight: 800,
             textTransform: 'uppercase',
-            letterSpacing: 1,
-            fontSize: isLandscape ? 12 : 13,
-            minHeight: isLandscape ? 40 : 48,
+            letterSpacing: isMobile ? 0.5 : 1,
+            fontSize: isLandscape ? 12 : isMobile ? 11 : 13,
+            minHeight: isLandscape ? 36 : isMobile ? 32 : 48,
+            minWidth: isMobile ? 60 : undefined,
+            px: isMobile ? 1 : undefined,
             '&.Mui-selected': {
               color: '#FFD700',
             },
           },
           '& .MuiTabs-indicator': {
             backgroundColor: '#FFD700',
-            height: 3,
-            borderRadius: '3px 3px 0 0',
+            height: 2,
+            borderRadius: '2px 2px 0 0',
           },
         }}
       >
@@ -274,7 +279,7 @@ export default function LeaderboardPanel() {
         <Tab label="Monthly" value="monthly" />
       </Tabs>
 
-      <Divider sx={{ mb: 2, borderColor: 'rgba(255, 255, 255, 0.05)' }} />
+      <Divider sx={{ mb: isMobile ? 1 : 2, borderColor: 'rgba(255, 255, 255, 0.05)' }} />
 
       {loading ? (
         <Box
@@ -290,14 +295,14 @@ export default function LeaderboardPanel() {
       ) : (
         <Box
           sx={{
-            maxHeight: isLandscape ? 400 : 600,
+            maxHeight: isLandscape ? 400 : isMobile ? 'calc(60dvh - 80px)' : 600,
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: isLandscape ? 1.5 : 2,
-            pr: 1,
+            gap: isLandscape ? 1 : isMobile ? 1 : 2,
+            pr: 0.5,
             '&::-webkit-scrollbar': {
-              width: isLandscape ? 4 : 8,
+              width: isLandscape ? 4 : isMobile ? 4 : 8,
             },
             '&::-webkit-scrollbar-track': {
               background: 'rgba(0,0,0,0.2)',

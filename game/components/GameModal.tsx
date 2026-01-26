@@ -24,6 +24,7 @@ export default function GameModal({
 }: GameModalProps) {
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isPortrait = useMediaQuery('(orientation: portrait) and (max-width: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
   const isCompact = isLandscape || isPortrait;
 
   return (
@@ -75,24 +76,25 @@ export default function GameModal({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              p: isCompact ? 1 : { xs: 2, sm: 2.5 },
+              p: isCompact ? 1 : isMobile ? 1.5 : { xs: 2, sm: 2.5 },
               borderBottom: '1px solid rgba(255, 215, 0, 0.3)',
               background: 'linear-gradient(180deg, rgba(255,215,0,0.1) 0%, transparent 100%)',
             }}
           >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: isCompact ? 1 : 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: isCompact ? 1 : isMobile ? 1 : 1.5 }}>
             {icon && (
-              <Box sx={{ fontSize: isCompact ? 20 : 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+              <Box sx={{ fontSize: isCompact ? 20 : isMobile ? 22 : 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
                 {icon}
               </Box>
             )}
             <Typography
-              variant={isCompact ? 'h6' : 'h5'}
+              variant={isCompact ? 'h6' : isMobile ? 'h6' : 'h5'}
               sx={{
                 color: '#FFD700',
                 fontWeight: 700,
+                fontSize: isMobile ? 16 : undefined,
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(255,215,0,0.3)',
-                letterSpacing: 1,
+                letterSpacing: isMobile ? 0.5 : 1,
               }}
             >
               {title}
@@ -126,7 +128,7 @@ export default function GameModal({
         >
           <Box
           sx={{
-            p: isCompact ? 1.5 : { xs: 2, sm: 3 },
+            p: isCompact ? 1.5 : isMobile ? 1.5 : { xs: 2, sm: 3 },
             color: '#FFF',
             '&::-webkit-scrollbar': {
               width: isCompact ? 4 : 8,

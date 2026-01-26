@@ -18,6 +18,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
   const isCompleted = quest.completed;
   const canClaim = progress >= 100 && !isCompleted;
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   return (
     <Box
@@ -29,7 +30,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         backdropFilter: 'blur(10px)',
         border: isCompleted ? '2px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: 3,
-        p: isLandscape ? 1.5 : 2.5,
+        p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
@@ -45,20 +46,20 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: isLandscape ? 1 : 1.5,
-          mb: isLandscape ? 1 : 1.5,
+          gap: isLandscape ? 1 : isMobile ? 1 : 1.5,
+          mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5,
         }}
       >
-        <Box sx={{ fontSize: isLandscape ? 28 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
+        <Box sx={{ fontSize: isLandscape ? 24 : isMobile ? 24 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
           {quest.icon}
         </Box>
         <Box sx={{ flex: 1 }}>
           <Typography
-            variant="h6"
+            variant={isMobile ? 'body2' : 'h6'}
             sx={{
               color: 'white',
               fontWeight: 800,
-              fontSize: isLandscape ? 16 : 18,
+              fontSize: isLandscape ? 14 : isMobile ? 13 : 18,
               letterSpacing: -0.5,
             }}
           >
@@ -72,8 +73,8 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         variant="body2"
         sx={{
           color: 'rgba(255, 255, 255, 0.5)',
-          mb: isLandscape ? 1 : 2,
-          fontSize: isLandscape ? 11 : 13,
+          mb: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
+          fontSize: isLandscape ? 10 : isMobile ? 11 : 13,
           fontWeight: 300,
         }}
       >
@@ -81,12 +82,12 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
       </Typography>
 
       {/* Progress Bar */}
-      <Box sx={{ mb: isLandscape ? 1 : 1.5 }}>
+      <Box sx={{ mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5 }}>
         <LinearProgress
           variant="determinate"
           value={progress}
           sx={{
-            height: isLandscape ? 6 : 8,
+            height: isLandscape ? 5 : isMobile ? 5 : 8,
             borderRadius: 1,
             backgroundColor: 'rgba(0, 0, 0, 0.2)',
             border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -105,13 +106,13 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mb: isLandscape ? 1.5 : 2,
+          mb: isLandscape ? 1 : isMobile ? 1 : 2,
         }}
       >
-        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'white', opacity: 0.8, fontWeight: 600 }}>
+        <Typography variant="caption" sx={{ color: 'white', opacity: 0.8, fontWeight: 600, fontSize: isMobile ? 10 : undefined }}>
           {formatNumber(quest.current)} / {formatNumber(quest.target)}
         </Typography>
-        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800 }}>
+        <Typography variant="caption" sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800, fontSize: isMobile ? 10 : undefined }}>
           {progress.toFixed(0)}%
         </Typography>
       </Box>
@@ -125,13 +126,13 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         }}
       >
         <Box>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: 10 }}>REWARD</Typography>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>REWARD</Typography>
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               color: '#4CAF50',
               fontWeight: 800,
-              fontSize: isLandscape ? 14 : 16,
+              fontSize: isLandscape ? 13 : isMobile ? 13 : 16,
             }}
           >
             💖 +{formatNumber(quest.reward)}
@@ -143,8 +144,9 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           onClick={() => onClaim(quest.id)}
           disabled={!canClaim}
           sx={{
-            minWidth: isLandscape ? 80 : 100,
-            fontSize: isLandscape ? 12 : undefined,
+            minWidth: isLandscape ? 72 : isMobile ? 72 : 100,
+            fontSize: isLandscape ? 11 : isMobile ? 11 : undefined,
+            py: isMobile ? 0.75 : undefined,
             borderRadius: 2,
             background: canClaim
               ? '#FFD700'

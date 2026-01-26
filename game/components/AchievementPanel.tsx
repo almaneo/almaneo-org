@@ -23,6 +23,7 @@ interface AchievementPanelProps {
 export default function AchievementPanel({ achievements, stats, onClaim }: AchievementPanelProps) {
   const [selectedCategory, setSelectedCategory] = useState<'all' | AchievementCategory>('all');
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
+  const isMobile = useMediaQuery('(max-width: 480px)');
 
   // Calculate completion rate
   const completedCount = achievements.filter(a => a.completed).length;
@@ -98,14 +99,14 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
   return (
     <Box>
       {/* Header */}
-      <Box sx={{ mb: isLandscape ? 2 : 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: isLandscape ? 1.5 : 2 }}>
-          <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: 'white', fontWeight: 900, display: 'flex', alignItems: 'center', gap: 1 }}>
-            🏆 Mission Accomplishments
+      <Box sx={{ mb: isLandscape ? 1.5 : isMobile ? 1.5 : 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: isLandscape ? 1 : isMobile ? 1 : 2 }}>
+          <Typography variant={isLandscape ? 'h6' : isMobile ? 'body1' : 'h5'} sx={{ color: 'white', fontWeight: 900, fontSize: isMobile ? 15 : undefined, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            🏆 Accomplishments
           </Typography>
 
           {/* Completion Rate */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <Chip
               label={`${completedCount} / ${totalCount}`}
               size="small"
@@ -114,10 +115,11 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
                 color: '#FFD700',
                 border: '1px solid rgba(255, 215, 0, 0.3)',
                 fontWeight: 900,
-                fontSize: isLandscape ? 10 : 11,
+                fontSize: isLandscape ? 10 : isMobile ? 9 : 11,
+                height: isMobile ? 22 : undefined,
               }}
             />
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold' }}>
+            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', fontSize: isMobile ? 10 : undefined }}>
               {completionRate}% SYNCED
             </Typography>
           </Box>
@@ -131,11 +133,13 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
           scrollButtons="auto"
           sx={{
             '& .MuiTab-root': {
-              minHeight: isLandscape ? 40 : 48,
+              minHeight: isLandscape ? 36 : isMobile ? 32 : 48,
               textTransform: 'uppercase',
               fontWeight: 800,
-              letterSpacing: 1,
-              fontSize: isLandscape ? 12 : 13,
+              letterSpacing: isMobile ? 0.5 : 1,
+              fontSize: isLandscape ? 12 : isMobile ? 10 : 13,
+              minWidth: isMobile ? 48 : undefined,
+              px: isMobile ? 0.75 : undefined,
               color: 'rgba(255, 255, 255, 0.3)',
               '&.Mui-selected': {
                 color: '#FFD700',
@@ -143,8 +147,8 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
             },
             '& .MuiTabs-indicator': {
               backgroundColor: '#FFD700',
-              height: 3,
-              borderRadius: '3px 3px 0 0',
+              height: 2,
+              borderRadius: '2px 2px 0 0',
             },
           }}
         >
@@ -168,7 +172,7 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: isLandscape ? 1.5 : 2,
+          gap: isLandscape ? 1 : isMobile ? 1 : 2,
         }}
       >
         {filteredAchievements.length === 0 ? (
