@@ -42,12 +42,12 @@ export default function LeaderboardCard({
       sx={{
         p: isLandscape ? 1.5 : 2,
         background: isCurrentUser
-          ? 'rgba(0, 82, 255, 0.15)'
+          ? 'rgba(255, 215, 0, 0.1)'
           : isTopThree
             ? 'rgba(255, 255, 255, 0.05)'
             : 'rgba(255, 255, 255, 0.02)',
         border: isCurrentUser
-          ? '2px solid #0052FF'
+          ? '2px solid #FFD700'
           : isTopThree
             ? '1px solid rgba(255, 255, 255, 0.2)'
             : '1px solid rgba(255, 255, 255, 0.05)',
@@ -55,7 +55,7 @@ export default function LeaderboardCard({
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          borderColor: isCurrentUser ? '#0052FF' : isTopThree ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.15)',
+          borderColor: isCurrentUser ? '#FFD700' : isTopThree ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.15)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
           bgcolor: 'rgba(255, 255, 255, 0.08)',
         },
@@ -106,7 +106,7 @@ export default function LeaderboardCard({
           sx={{
             width: isLandscape ? 36 : 48,
             height: isLandscape ? 36 : 48,
-            bgcolor: isCurrentUser ? '#0052FF' : 'rgba(255,255,255,0.1)',
+            bgcolor: isCurrentUser ? '#FFD700' : 'rgba(255,255,255,0.1)',
             fontWeight: 'bold',
             border: isTopThree ? '2px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.05)',
             fontSize: isLandscape ? 16 : 20,
@@ -134,8 +134,8 @@ export default function LeaderboardCard({
                 label="YOU"
                 size="small"
                 sx={{
-                  bgcolor: '#0052FF',
-                  color: 'white',
+                  bgcolor: '#FFD700',
+                  color: '#0A0F1A',
                   fontWeight: 900,
                   height: 18,
                   fontSize: 9,

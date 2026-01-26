@@ -16,12 +16,13 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
         height: '100vh',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         background: 'radial-gradient(circle at center, #0a192f 0%, #000000 100%)',
         color: 'white',
-        padding: { xs: 2, sm: 4 },
+        padding: { xs: 1.5, sm: 4 },
         overflow: 'auto',
         position: 'relative',
+        flexDirection: 'column',
       }}
     >
       {/* Background Particles Pattern */}
@@ -77,26 +78,26 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           width: '100%',
           maxWidth: 1000,
           display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          gap: { xs: 4, md: 8 },
+          flexDirection: 'column',
+          gap: { xs: 1.5, sm: 3, md: 8 },
           alignItems: 'center',
           justifyContent: 'center',
+          my: 'auto',
         }}
       >
-        {/* Left Side: Branding */}
+        {/* Branding Section */}
         <Box
           sx={{
-            flex: 1.2,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: { xs: 'center', md: 'flex-start' },
-            textAlign: { xs: 'center', md: 'left' },
+            alignItems: 'center',
+            textAlign: 'center',
           }}
         >
           {/* Logo */}
           <Box
             sx={{
-              mb: 4,
+              mb: { xs: 1, sm: 3 },
               filter: 'drop-shadow(0 0 20px rgba(0, 82, 255, 0.4))',
             }}
           >
@@ -107,7 +108,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               height={100}
               priority
               style={{
-                maxWidth: '100%',
+                maxWidth: '60vw',
                 height: 'auto',
               }}
             />
@@ -118,25 +119,26 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             variant="h3"
             sx={{
               fontWeight: 900,
-              mb: 2,
+              mb: { xs: 0.5, sm: 2 },
               letterSpacing: -1,
               background: 'linear-gradient(90deg, #fff 0%, #0052ff 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              fontSize: { xs: '2rem', sm: '3rem' },
+              fontSize: { xs: '1.4rem', sm: '2rem', md: '3rem' },
             }}
           >
             Cold Code, Warm Soul.
           </Typography>
 
           <Typography
-            variant="h6"
             sx={{
               color: 'rgba(255,255,255,0.7)',
-              mb: 4,
+              mb: { xs: 1, sm: 3 },
               fontWeight: 300,
-              lineHeight: 1.6,
+              lineHeight: 1.5,
               maxWidth: 500,
+              fontSize: { xs: '0.8rem', sm: '1rem' },
+              px: 1,
             }}
           >
             Democratizing AI through the power of human kindness.
@@ -144,37 +146,36 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </Typography>
 
           {/* Stats Preview */}
-          <Box sx={{ display: 'flex', gap: 4 }}>
+          <Box sx={{ display: 'flex', gap: { xs: 3, sm: 4 } }}>
             <Box>
-              <Typography sx={{ color: '#0052ff', fontWeight: 'bold' }}>8B+</Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>HUMANS TARGETED</Typography>
+              <Typography sx={{ color: '#0052ff', fontWeight: 'bold', fontSize: { xs: '0.9rem', sm: '1rem' } }}>8B+</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>HUMANS TARGETED</Typography>
             </Box>
             <Box>
-              <Typography sx={{ color: '#FF6B00', fontWeight: 'bold' }}>100%</Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>OPEN ACCESS</Typography>
+              <Typography sx={{ color: '#FF6B00', fontWeight: 'bold', fontSize: { xs: '0.9rem', sm: '1rem' } }}>100%</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>OPEN ACCESS</Typography>
             </Box>
           </Box>
         </Box>
 
-        {/* Right Side: Login Card */}
+        {/* Login Card */}
         <Box
           sx={{
-            flex: 0.8,
             width: '100%',
-            maxWidth: 400,
-            p: 4,
+            maxWidth: 360,
+            p: { xs: 2.5, sm: 4 },
             bgcolor: 'rgba(255, 255, 255, 0.03)',
             backdropFilter: 'blur(20px)',
-            borderRadius: 4,
+            borderRadius: 3,
             border: '1px solid rgba(255, 255, 255, 0.1)',
             boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
           }}
         >
-          <Typography variant="h5" sx={{ mb: 4, fontWeight: 'bold', textAlign: 'center' }}>
+          <Typography sx={{ mb: { xs: 2, sm: 3 }, fontWeight: 'bold', textAlign: 'center', fontSize: { xs: '1.1rem', sm: '1.3rem' } }}>
             Welcome to AI Hub
           </Typography>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: { xs: 2, sm: 3 } }}>
             {[
               { icon: '🧠', text: 'Label Culture Context' },
               { icon: '💖', text: 'Earn Kindness Points' },
@@ -185,15 +186,15 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 2,
-                  p: 1.5,
+                  gap: 1.5,
+                  p: { xs: 1, sm: 1.5 },
                   borderRadius: 2,
                   bgcolor: 'rgba(255,255,255,0.05)',
                   border: '1px solid rgba(255,255,255,0.02)',
                 }}
               >
-                <Typography sx={{ fontSize: '1.5rem' }}>{feature.icon}</Typography>
-                <Typography sx={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
+                <Typography sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>{feature.icon}</Typography>
+                <Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem' }, color: 'rgba(255,255,255,0.8)' }}>
                   {feature.text}
                 </Typography>
               </Box>
@@ -205,11 +206,11 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             fullWidth
             variant="contained"
             sx={{
-              py: 2,
+              py: { xs: 1.2, sm: 2 },
               borderRadius: 2,
               bgcolor: '#0052ff',
               fontWeight: 'bold',
-              fontSize: '1.1rem',
+              fontSize: { xs: '0.95rem', sm: '1.1rem' },
               boxShadow: '0 0 20px rgba(0, 82, 255, 0.4)',
               '&:hover': {
                 bgcolor: '#0041cc',
@@ -220,7 +221,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             Connect Wallet
           </Button>
 
-          <Typography variant="caption" sx={{ display: 'block', mt: 3, textAlign: 'center', color: 'rgba(255,255,255,0.4)' }}>
+          <Typography variant="caption" sx={{ display: 'block', mt: { xs: 1.5, sm: 3 }, textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>
             Powered by Web3Auth & Biconomy
             <br />
             Secure Social Login (Google, X, etc.)
@@ -229,8 +230,8 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
       </Box>
 
       {/* Footer Branding */}
-      <Box sx={{ position: 'absolute', bottom: 30, textAlign: 'center', width: '100%', opacity: 0.3 }}>
-        <Typography variant="caption" sx={{ letterSpacing: 2 }}>
+      <Box sx={{ textAlign: 'center', width: '100%', opacity: 0.3, py: { xs: 1, sm: 2 }, mt: 'auto' }}>
+        <Typography variant="caption" sx={{ letterSpacing: 2, fontSize: { xs: '0.55rem', sm: '0.75rem' } }}>
           © 2026 ALMANEO ORGANIZATION
         </Typography>
       </Box>

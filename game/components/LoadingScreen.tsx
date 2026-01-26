@@ -27,34 +27,43 @@ export default function LoadingScreen({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0A0F1A 0%, #1e293b 50%, #0A0F1A 100%)',
         zIndex: 9999,
+        overflow: 'hidden',
       }}
     >
-      {/* Title Image */}
-      <Box sx={{ mb: 3, textAlign: 'center' }}>
-        <Image
-          src="/images/almaneo-title.webp"
-          alt="AlmaNEO"
-          width={200}
-          height={200}
-          style={{
-            objectFit: 'contain',
-            maxWidth: '50vw',
-            height: 'auto',
-          }}
-          priority
-        />
-      </Box>
+      {/* Full Background Image */}
+      <Image
+        src="/images/almaneo-title.webp"
+        alt="AlmaNEO"
+        fill
+        style={{
+          objectFit: 'cover',
+          objectPosition: 'center',
+        }}
+        priority
+      />
 
-      {/* Loading Spinner */}
+      {/* Dark Overlay for readability */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at center, rgba(10,15,26,0.4) 0%, rgba(10,15,26,0.85) 100%)',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Content */}
       <Box
         sx={{
           position: 'relative',
+          zIndex: 2,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          mb: 3,
         }}
       >
         <CircularProgress
@@ -63,36 +72,37 @@ export default function LoadingScreen({
           sx={{
             color: '#0052FF',
             animationDuration: '1s',
+            mb: 3,
           }}
         />
+
+        <Typography
+          variant="h6"
+          sx={{
+            color: 'white',
+            fontWeight: 500,
+            textAlign: 'center',
+            px: 2,
+            fontSize: { xs: '1rem', sm: '1.25rem' },
+            textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+          }}
+        >
+          {message}
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'rgba(255,255,255,0.6)',
+            textAlign: 'center',
+            mt: 1,
+            px: 2,
+            textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+          }}
+        >
+          Explore cultures, spread kindness
+        </Typography>
       </Box>
-
-      {/* Loading Message */}
-      <Typography
-        variant="h6"
-        sx={{
-          color: 'white',
-          fontWeight: 500,
-          textAlign: 'center',
-          px: 2,
-          fontSize: { xs: '1rem', sm: '1.25rem' },
-        }}
-      >
-        {message}
-      </Typography>
-
-      {/* Subtitle */}
-      <Typography
-        variant="body2"
-        sx={{
-          color: 'rgba(255,255,255,0.5)',
-          textAlign: 'center',
-          mt: 1,
-          px: 2,
-        }}
-      >
-        Explore cultures, spread kindness
-      </Typography>
     </Box>
   );
 }

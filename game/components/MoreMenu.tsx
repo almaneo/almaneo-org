@@ -37,7 +37,7 @@ export default function MoreMenu({
   const mainItems: MoreMenuItem[] = [
     { id: 'achievement', icon: '🏆', label: 'Achievement', onClick: onAchievementClick },
     { id: 'ranking', icon: '📊', label: 'Ranking', onClick: onLeaderboardClick },
-    { id: 'token', icon: '🪙', label: 'Token Mining', onClick: onTokenClick },
+    { id: 'token', icon: '⛏️', label: 'Token Mining', onClick: onTokenClick },
   ];
 
   const secondaryItems: MoreMenuItem[] = [

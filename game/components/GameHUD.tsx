@@ -51,8 +51,8 @@ export default function GameHUD({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: isMobile ? 0.3 : 2,
-          px: isMobile ? 1 : 2,
+          gap: isMobile ? 0.5 : 2,
+          px: isMobile ? 0.5 : 2,
           py: isMobile ? 0.5 : 1,
         }}
       >

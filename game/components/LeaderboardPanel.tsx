@@ -209,9 +209,9 @@ export default function LeaderboardPanel() {
             label={`${stats.totalPlayers} AGENTS`}
             size="small"
             sx={{
-              bgcolor: 'rgba(0, 82, 255, 0.2)',
-              color: '#0052FF',
-              border: '1px solid rgba(0, 82, 255, 0.4)',
+              bgcolor: 'rgba(255, 215, 0, 0.15)',
+              color: '#FFD700',
+              border: '1px solid rgba(255, 215, 0, 0.3)',
               fontWeight: 900,
               fontSize: isLandscape ? 10 : 11,
             }}
@@ -227,14 +227,14 @@ export default function LeaderboardPanel() {
             disabled={loading}
             size="small"
             sx={{
-              color: '#0052FF',
+              color: '#FFD700',
               '&:hover': {
-                bgcolor: 'rgba(0, 82, 255, 0.1)',
+                bgcolor: 'rgba(255, 215, 0, 0.1)',
               },
             }}
           >
             {loading ? (
-              <CircularProgress size={20} sx={{ color: '#0052FF' }} />
+              <CircularProgress size={20} sx={{ color: '#FFD700' }} />
             ) : (
               <RefreshIcon />
             )}
@@ -259,11 +259,11 @@ export default function LeaderboardPanel() {
             fontSize: isLandscape ? 12 : 13,
             minHeight: isLandscape ? 40 : 48,
             '&.Mui-selected': {
-              color: '#0052FF',
+              color: '#FFD700',
             },
           },
           '& .MuiTabs-indicator': {
-            backgroundColor: '#0052FF',
+            backgroundColor: '#FFD700',
             height: 3,
             borderRadius: '3px 3px 0 0',
           },
@@ -304,10 +304,10 @@ export default function LeaderboardPanel() {
               borderRadius: 4,
             },
             '&::-webkit-scrollbar-thumb': {
-              background: 'rgba(0, 82, 255, 0.3)',
+              background: 'rgba(255, 215, 0, 0.3)',
               borderRadius: 4,
               '&:hover': {
-                background: 'rgba(0, 82, 255, 0.5)',
+                background: 'rgba(255, 215, 0, 0.5)',
               },
             },
           }}

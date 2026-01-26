@@ -100,7 +100,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        background: 'radial-gradient(circle at center, #1a237e 0%, #000000 100%)',
+        background: 'linear-gradient(180deg, #0A0F1A 0%, #111827 100%)',
       }}
     >
       {/* Background Grid */}
@@ -109,7 +109,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
           position: 'absolute',
           inset: 0,
           opacity: 0.2,
-          backgroundImage: 'radial-gradient(#4fc3f7 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(#FFD700 1px, transparent 1px)',
           backgroundSize: '30px 30px',
         }}
       />
@@ -142,7 +142,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                 borderRadius: 4,
                 background: 'rgba(255, 255, 255, 0.1)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                border: '1px solid rgba(255, 215, 0, 0.2)',
                 textAlign: 'center',
                 color: 'white',
                 position: 'relative',
@@ -173,9 +173,9 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                     fontSize: 12,
                     lineHeight: 1.4,
                     textTransform: 'none',
-                    bgcolor: 'rgba(255,255,255,0.1)',
-                    '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                    border: '1px solid rgba(255,255,255,0.3)',
+                    bgcolor: 'rgba(255,215,0,0.08)',
+                    '&:hover': { bgcolor: 'rgba(255,215,0,0.15)' },
+                    border: '1px solid rgba(255,215,0,0.3)',
                   }}
                 >
                   {currentScenario.options.left.text}
@@ -190,9 +190,9 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                     fontSize: 12,
                     lineHeight: 1.4,
                     textTransform: 'none',
-                    bgcolor: 'rgba(255,255,255,0.1)',
-                    '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                    border: '1px solid rgba(255,255,255,0.3)',
+                    bgcolor: 'rgba(255,215,0,0.08)',
+                    '&:hover': { bgcolor: 'rgba(255,215,0,0.15)' },
+                    border: '1px solid rgba(255,215,0,0.3)',
                   }}
                 >
                   {currentScenario.options.right.text}

@@ -33,12 +33,12 @@ export default function ResourceCounter({
       }}
     >
       <Box sx={{
-        width: isMobile ? 28 : 40,
-        height: isMobile ? 28 : 40,
+        width: isMobile ? 20 : 40,
+        height: isMobile ? 20 : 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: isMobile ? 24 : 32,
+        fontSize: isMobile ? 16 : 32,
         filter: 'drop-shadow(0 0 8px rgba(255, 0, 107, 0.4))',
       }}>
         💖
@@ -48,7 +48,7 @@ export default function ResourceCounter({
         sx={{
           color: '#FFF',
           fontWeight: 'bold',
-          fontSize: isMobile ? 16 : 22,
+          fontSize: isMobile ? 12 : 22,
           fontFamily: "'Exo 2', sans-serif",
           textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6)',
           lineHeight: 1,

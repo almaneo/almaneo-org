@@ -61,7 +61,7 @@ export default function QuestPanel() {
           mb: isLandscape ? 1.5 : 2,
           background: 'rgba(255, 255, 255, 0.03)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(0, 82, 255, 0.3)',
+          border: '1px solid rgba(255, 215, 0, 0.3)',
           borderRadius: 3,
         }}
       >
@@ -78,7 +78,7 @@ export default function QuestPanel() {
             <Typography variant={isLandscape ? 'h6' : 'h5'} sx={{ color: 'white', fontWeight: 900, mb: 0.5 }}>
               📋 Mission Log
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#0052FF', fontWeight: 'bold' }}>
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#FFD700', fontWeight: 'bold' }}>
               RECONSTRUCTION: {completedCount} / {dailyQuests.length}
             </Typography>
           </Box>
@@ -98,7 +98,7 @@ export default function QuestPanel() {
             sx={{
               mt: isLandscape ? 1 : 1.5,
               pt: isLandscape ? 1 : 1.5,
-              borderTop: '1px solid rgba(0, 82, 255, 0.2)',
+              borderTop: '1px solid rgba(255, 215, 0, 0.2)',
             }}
           >
             <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: '#4CAF50', fontWeight: 800 }}>

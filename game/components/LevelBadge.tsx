@@ -2,7 +2,6 @@
 
 import { Box, Typography } from '@mui/material';
 import { MouseEvent } from 'react';
-import Image from 'next/image';
 import AnimatedNumber from './AnimatedNumber';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -28,33 +27,29 @@ export default function LevelBadge({ level, onClick }: LevelBadgeProps) {
         } : {},
       }}
     >
-      <Box sx={{ 
-        width: isMobile ? 28 : 36, 
-        height: isMobile ? 28 : 36, 
-        position: 'relative' 
+      <Box sx={{
+        width: isMobile ? 18 : 36,
+        height: isMobile ? 18 : 36,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: isMobile ? 14 : 28,
+        filter: 'drop-shadow(0 4px 8px rgba(255,215,0,0.5))',
       }}>
-        <Image
-          src="/images/icons/level-star.png"
-          alt="Level"
-          fill
-          style={{ 
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 4px 8px rgba(255,215,0,0.5))',
-          }}
-        />
+        🏆
       </Box>
       <Typography
         component="div"
         sx={{
           color: '#FFF',
           fontWeight: 'bold',
-          fontSize: isMobile ? 16 : 22,
-          fontFamily: "'Orbitron', sans-serif",
+          fontSize: isMobile ? 12 : 22,
+          fontFamily: isMobile ? "'Exo 2', sans-serif" : "'Orbitron', sans-serif",
           textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6)',
           lineHeight: 1,
         }}
       >
-        Level{' '}
+        {isMobile ? 'Lv.' : 'Level '}
         <Box component="span" sx={{ fontFamily: "'Exo 2', sans-serif" }}>
           <AnimatedNumber value={level} duration={0.5} />
         </Box>

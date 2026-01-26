@@ -1,11 +1,13 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { Box, Typography, Badge } from '@mui/material';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 interface NavTab {
   id: string;
   label: string;
-  icon: string;
+  icon: ReactNode;
   badge?: number;
 }
 
@@ -33,7 +35,7 @@ export default function GameNavBar({
     { id: 'travel', label: 'Travel', icon: '🌍' },
     { id: 'quest', label: 'Quest', icon: '📋', badge: questBadge },
     { id: 'upgrade', label: 'Upgrade', icon: '⬆️' },
-    { id: 'more', label: 'More', icon: '☰' },
+    { id: 'more', label: 'More', icon: <MoreHorizIcon sx={{ fontSize: 22 }} /> },
   ];
 
   const handlers: Record<string, (() => void) | undefined> = {
@@ -95,17 +97,21 @@ export default function GameNavBar({
                 },
               }}
             >
-              <Typography
+              <Box
                 sx={{
                   fontSize: 22,
                   lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isActive ? '#FFD700' : 'rgba(255,255,255,0.6)',
                   filter: isActive
                     ? 'drop-shadow(0 0 6px rgba(255,215,0,0.6))'
                     : 'none',
                 }}
               >
                 {tab.icon}
-              </Typography>
+              </Box>
             </Badge>
             <Typography
               sx={{

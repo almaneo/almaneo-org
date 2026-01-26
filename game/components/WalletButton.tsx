@@ -51,18 +51,17 @@ export default function WalletButton() {
         variant="contained"
         disabled
         sx={{
-          border: '3px solid #FFF',
-          bgcolor: 'rgba(76, 175, 80, 0.9)',
+          bgcolor: '#0052FF',
           color: '#FFF',
-          fontSize: '0.75rem',
-          padding: '6px 16px',
-          borderRadius: '50px',
+          fontSize: '0.7rem',
+          padding: '4px 12px',
+          borderRadius: '8px',
           minWidth: 'auto',
           fontWeight: 600,
-          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(0,82,255,0.3)',
         }}
       >
-        Loading...
+        ...
       </Button>
     );
   }
@@ -72,27 +71,26 @@ export default function WalletButton() {
       <Button
         variant="contained"
         onClick={handleClick}
-        startIcon={<AccountBalanceWalletIcon sx={{ fontSize: '1.1rem' }} />}
+        startIcon={<AccountBalanceWalletIcon sx={{ fontSize: '0.9rem !important' }} />}
         sx={{
-          border: '3px solid #FFF',
-          bgcolor: isConnected ? 'rgba(76, 175, 80, 0.9)' : 'rgba(33, 150, 243, 0.9)',
+          bgcolor: isConnected ? 'rgba(26,31,46,0.9)' : '#0052FF',
           color: '#FFF',
-          fontSize: '0.75rem',
-          padding: '6px 16px',
-          borderRadius: '50px',
+          fontSize: '0.7rem',
+          padding: '4px 12px',
+          borderRadius: '8px',
           minWidth: 'auto',
           fontWeight: 600,
-          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+          border: isConnected ? '1px solid #2d3748' : '1px solid rgba(0,82,255,0.3)',
+          boxShadow: 'none',
           textTransform: 'none',
           transition: 'all 0.2s ease',
           '&:hover': {
-            border: '3px solid #FFF',
-            bgcolor: isConnected ? 'rgba(76, 175, 80, 1)' : 'rgba(33, 150, 243, 1)',
-            transform: 'translateY(-2px)',
-            boxShadow: '0 6px 12px rgba(0,0,0,0.4)',
+            bgcolor: isConnected ? 'rgba(37,43,61,0.95)' : '#0047e0',
+            borderColor: isConnected ? '#0052FF' : 'rgba(0,82,255,0.5)',
+            boxShadow: 'none',
           },
           '&:active': {
-            transform: 'scale(0.95)',
+            transform: 'scale(0.97)',
           },
         }}
       >
@@ -105,49 +103,49 @@ export default function WalletButton() {
         onClose={handleClose}
         sx={{
           '& .MuiPaper-root': {
-            bgcolor: 'rgba(20, 15, 10, 0.95)',
-            border: '2px solid #FFD700',
-            borderRadius: 3,
-            boxShadow: '0 20px 60px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,215,0,0.2)',
+            bgcolor: 'rgba(26,31,46,0.98)',
+            border: '1px solid #2d3748',
+            borderRadius: 2,
+            boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
             mt: 1,
-            minWidth: 200,
+            minWidth: 180,
           },
         }}
       >
-        <MenuItem 
+        <MenuItem
           onClick={handleCopy}
           sx={{
-            color: '#FFD700',
-            fontSize: '0.875rem',
-            py: 1.5,
+            color: 'rgba(255,255,255,0.8)',
+            fontSize: '0.8rem',
+            py: 1.2,
             px: 2,
             '&:hover': {
-              bgcolor: 'rgba(255, 215, 0, 0.1)',
+              bgcolor: 'rgba(0,82,255,0.1)',
               color: '#FFF',
             },
           }}
         >
-          <ContentCopyIcon sx={{ mr: 1.5, fontSize: '1.1rem', color: '#FFD700' }} />
-          <Typography sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500 }}>
+          <ContentCopyIcon sx={{ mr: 1.5, fontSize: '0.95rem', color: 'rgba(255,255,255,0.5)' }} />
+          <Typography sx={{ color: 'inherit', fontSize: '0.8rem', fontWeight: 500 }}>
             {copySuccess ? '✓ Copied!' : 'Copy Address'}
           </Typography>
         </MenuItem>
-        <MenuItem 
+        <MenuItem
           onClick={handleDisconnect}
           sx={{
-            color: '#FFD700',
-            fontSize: '0.875rem',
-            py: 1.5,
+            color: 'rgba(255,255,255,0.8)',
+            fontSize: '0.8rem',
+            py: 1.2,
             px: 2,
-            borderTop: '1px solid rgba(255, 215, 0, 0.2)',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
             '&:hover': {
-              bgcolor: 'rgba(255, 215, 0, 0.1)',
-              color: '#FFF',
+              bgcolor: 'rgba(248,113,113,0.1)',
+              color: '#f87171',
             },
           }}
         >
-          <LogoutIcon sx={{ mr: 1.5, fontSize: '1.1rem', color: '#FFD700' }} />
-          <Typography sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500 }}>
+          <LogoutIcon sx={{ mr: 1.5, fontSize: '0.95rem', color: 'rgba(255,255,255,0.5)' }} />
+          <Typography sx={{ color: 'inherit', fontSize: '0.8rem', fontWeight: 500 }}>
             Disconnect
           </Typography>
         </MenuItem>

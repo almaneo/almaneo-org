@@ -1,7 +1,6 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useEffect, useState, MouseEvent } from 'react';
 import AnimatedNumber from './AnimatedNumber';
@@ -77,20 +76,16 @@ export default function EnergyBar({ current, max, onClick }: EnergyBarProps) {
             : {}
         }
       >
-        <Box sx={{ 
-          width: isMobile ? 28 : 36, 
-          height: isMobile ? 28 : 36, 
-          position: 'relative' 
+        <Box sx={{
+          width: isMobile ? 18 : 36,
+          height: isMobile ? 18 : 36,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: isMobile ? 14 : 28,
+          filter: 'drop-shadow(0 4px 8px rgba(255,193,7,0.5))',
         }}>
-          <Image
-            src="/images/icons/energy-bolt.png"
-            alt="Energy"
-            fill
-            style={{ 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 4px 8px rgba(255,193,7,0.5))',
-            }}
-          />
+          ⚡
         </Box>
       </motion.div>
 
@@ -115,7 +110,7 @@ export default function EnergyBar({ current, max, onClick }: EnergyBarProps) {
           sx={{
             color: isLow ? '#FF5722' : '#FFF',
             fontWeight: 'bold',
-            fontSize: isMobile ? 16 : 22,
+            fontSize: isMobile ? 12 : 22,
             fontFamily: "'Exo 2', sans-serif",
             textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6)',
             lineHeight: 1,

@@ -37,17 +37,17 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         overflow: 'hidden',
         transition: 'all 0.3s ease',
         background: isCompleted
-          ? 'rgba(0, 82, 255, 0.1)'
+          ? 'rgba(255, 215, 0, 0.08)'
           : 'rgba(255, 255, 255, 0.03)',
-        border: isCompleted ? '2px solid #0052FF' : '1px solid rgba(255, 255, 255, 0.1)',
+        border: isCompleted ? '2px solid #FFD700' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: 3,
         filter: isHidden ? 'blur(3px)' : 'none',
         opacity: isHidden ? 0.6 : 1,
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: isCompleted ? '#0052FF' : 'rgba(255, 255, 255, 0.2)',
+          borderColor: isCompleted ? '#FFD700' : 'rgba(255, 255, 255, 0.2)',
           boxShadow: isCompleted
-            ? '0 8px 32px rgba(0, 82, 255, 0.2)'
+            ? '0 8px 32px rgba(255, 215, 0, 0.2)'
             : '0 8px 24px rgba(0, 0, 0, 0.3)',
         },
       }}
@@ -59,15 +59,15 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             position: 'absolute',
             top: isLandscape ? 8 : 12,
             right: isLandscape ? 8 : 12,
-            bgcolor: '#0052FF',
-            color: 'white',
+            bgcolor: '#FFD700',
+            color: '#0A0F1A',
             px: isLandscape ? 1 : 1.5,
             py: 0.5,
             borderRadius: 1,
             fontWeight: 900,
             fontSize: isLandscape ? 8 : 10,
             letterSpacing: 1,
-            boxShadow: '0 2px 8px rgba(0, 82, 255, 0.5)',
+            boxShadow: '0 2px 8px rgba(255, 215, 0, 0.5)',
           }}
         >
           EARNED
@@ -132,7 +132,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
                 '& .MuiLinearProgress-bar': {
                   background: isCompleted
                     ? 'linear-gradient(90deg, #4CAF50 0%, #81C784 100%)'
-                    : 'linear-gradient(90deg, #0052FF 0%, #00C2FF 100%)',
+                    : 'linear-gradient(90deg, #FFD700 0%, #FF6B00 100%)',
                 },
               }}
             />
@@ -148,7 +148,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
               SYNC: {current} / {target}
             </Typography>
-            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#0052FF', fontWeight: 800 }}>
+            <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800 }}>
               {progress.toFixed(0)}%
             </Typography>
           </Box>

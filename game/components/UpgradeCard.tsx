@@ -42,8 +42,8 @@ export default function UpgradeCard({
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: '#0052FF',
-          boxShadow: '0 8px 32px rgba(0, 82, 255, 0.2)',
+          borderColor: '#FFD700',
+          boxShadow: '0 8px 32px rgba(255, 215, 0, 0.2)',
           bgcolor: 'rgba(255, 255, 255, 0.05)',
         },
       }}
@@ -53,7 +53,7 @@ export default function UpgradeCard({
         <Box
           sx={{
             fontSize: isLandscape ? 36 : 48,
-            filter: 'drop-shadow(0 0 10px rgba(0, 82, 255, 0.3))',
+            filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))',
           }}
         >
           {icon}
@@ -89,7 +89,7 @@ export default function UpgradeCard({
           <Typography
             variant="caption"
             sx={{
-              color: '#0052FF',
+              color: '#FFD700',
               fontWeight: 'bold',
               fontSize: isLandscape ? 10 : 11,
               letterSpacing: 1,
@@ -166,16 +166,16 @@ export default function UpgradeCard({
             background: isMaxLevel
               ? 'rgba(100, 100, 100, 0.1)'
               : canAfford
-                ? '#0052FF'
+                ? '#FFD700'
                 : 'rgba(100, 100, 100, 0.2)',
-            color: isMaxLevel ? 'rgba(255,255,255,0.2)' : 'white',
+            color: isMaxLevel ? 'rgba(255,255,255,0.2)' : canAfford ? '#0A0F1A' : 'white',
             fontWeight: 'bold',
             textTransform: 'uppercase',
             letterSpacing: 1,
             '&:hover': {
-              bgcolor: '#0041CC',
+              bgcolor: '#e6c200',
               transform: canAfford && !isMaxLevel ? 'translateY(-2px)' : 'none',
-              boxShadow: '0 4px 12px rgba(0, 82, 255, 0.4)',
+              boxShadow: '0 4px 12px rgba(255, 215, 0, 0.4)',
             },
             transition: 'all 0.2s ease',
           }}

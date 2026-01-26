@@ -19,10 +19,6 @@ export default function CulturalPracticeQuest({
   const [completed, setCompleted] = useState(false);
 
   const progress = (taps / data.tapsRequired) * 100;
-  const stepProgress = Math.min(
-    Math.floor((taps / data.tapsRequired) * data.steps.length),
-    data.steps.length - 1
-  );
 
   const handleTap = useCallback(() => {
     if (completed) return;
@@ -138,8 +134,8 @@ export default function CulturalPracticeQuest({
         />
       </Box>
 
-      {/* Tap Area or Completion */}
-      {!completed ? (
+      {/* Tap Area */}
+      {!completed && (
         <motion.div whileTap={{ scale: 0.95 }}>
           <Box
             onClick={handleTap}
@@ -169,52 +165,76 @@ export default function CulturalPracticeQuest({
             </Typography>
           </Box>
         </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-        >
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              background: 'rgba(74,222,128,0.1)',
-              border: '1px solid rgba(74,222,128,0.3)',
-              textAlign: 'center',
-              mb: 1,
-            }}
-          >
-            <Typography sx={{ fontSize: 24, mb: 1 }}>✨</Typography>
-            <Typography
-              sx={{ fontSize: 16, fontWeight: 700, color: '#4ade80', mb: 0.5 }}
-            >
-              Well Done!
-            </Typography>
-            <Typography
-              sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
-            >
-              {data.completionMessage}
-            </Typography>
-          </Box>
-
-          <Box
-            onClick={() => onComplete(true)}
-            sx={{
-              p: 1.5,
-              borderRadius: 2,
-              textAlign: 'center',
-              cursor: 'pointer',
-              background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
-              '&:hover': { opacity: 0.9 },
-            }}
-          >
-            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-              Continue
-            </Typography>
-          </Box>
-        </motion.div>
       )}
+
+      {/* Completion Overlay - centered on screen */}
+      <AnimatePresence>
+        {completed && (
+          <Box
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 50,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'rgba(0,0,0,0.7)',
+              p: 2,
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.3 }}
+              style={{ width: '100%', maxWidth: 320 }}
+            >
+              <Box
+                sx={{
+                  p: 2.5,
+                  borderRadius: 3,
+                  background: 'rgba(10,20,15,0.98)',
+                  border: '1px solid rgba(74,222,128,0.3)',
+                  textAlign: 'center',
+                  mb: 1.5,
+                }}
+              >
+                <Typography sx={{ fontSize: 28, mb: 1 }}>✨</Typography>
+                <Typography
+                  sx={{ fontSize: 18, fontWeight: 700, color: '#4ade80', mb: 1 }}
+                >
+                  Well Done!
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
+                >
+                  {data.completionMessage}
+                </Typography>
+              </Box>
+
+              <Box
+                onClick={() => onComplete(true)}
+                sx={{
+                  p: 1.5,
+                  borderRadius: 2,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
+                  '&:hover': { opacity: 0.9 },
+                  '&:active': { transform: 'scale(0.97)' },
+                }}
+              >
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
+                  Continue
+                </Typography>
+              </Box>
+            </motion.div>
+          </Box>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }

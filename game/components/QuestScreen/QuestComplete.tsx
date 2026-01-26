@@ -23,9 +23,9 @@ export default function QuestComplete({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 2,
-        p: 3,
-        minHeight: 300,
+        gap: 1.5,
+        p: { xs: 2, sm: 3 },
+        minHeight: { xs: 240, sm: 300 },
       }}
     >
       <motion.div
@@ -33,7 +33,7 @@ export default function QuestComplete({
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 15 }}
       >
-        <Typography sx={{ fontSize: 64, textAlign: 'center' }}>
+        <Typography sx={{ fontSize: { xs: 48, sm: 64 }, textAlign: 'center' }}>
           {correct ? '🌟' : '📚'}
         </Typography>
       </motion.div>
@@ -45,7 +45,7 @@ export default function QuestComplete({
       >
         <Typography
           sx={{
-            fontSize: 20,
+            fontSize: { xs: 16, sm: 20 },
             fontWeight: 700,
             color: correct ? '#FFD700' : '#fff',
             textAlign: 'center',
@@ -89,7 +89,7 @@ export default function QuestComplete({
         >
           <Typography
             sx={{
-              fontSize: 24,
+              fontSize: { xs: 20, sm: 24 },
               fontWeight: 800,
               color: '#FFD700',
               textAlign: 'center',
@@ -126,11 +126,11 @@ export default function QuestComplete({
             borderRadius: 2,
             textAlign: 'center',
             cursor: 'pointer',
-            background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
-            '&:hover': { opacity: 0.9 },
+            background: '#FFD700',
+            '&:hover': { background: '#e6c200' },
           }}
         >
-          <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
+          <Typography sx={{ color: '#0A0F1A', fontWeight: 700, fontSize: 14 }}>
             Back to Country
           </Typography>
         </Box>

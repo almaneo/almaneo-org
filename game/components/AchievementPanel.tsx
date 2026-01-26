@@ -110,9 +110,9 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
               label={`${completedCount} / ${totalCount}`}
               size="small"
               sx={{
-                bgcolor: 'rgba(0, 82, 255, 0.2)',
-                color: '#0052FF',
-                border: '1px solid rgba(0, 82, 255, 0.4)',
+                bgcolor: 'rgba(255, 215, 0, 0.15)',
+                color: '#FFD700',
+                border: '1px solid rgba(255, 215, 0, 0.3)',
                 fontWeight: 900,
                 fontSize: isLandscape ? 10 : 11,
               }}
@@ -138,11 +138,11 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
               fontSize: isLandscape ? 12 : 13,
               color: 'rgba(255, 255, 255, 0.3)',
               '&.Mui-selected': {
-                color: '#0052FF',
+                color: '#FFD700',
               },
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#0052FF',
+              backgroundColor: '#FFD700',
               height: 3,
               borderRadius: '3px 3px 0 0',
             },

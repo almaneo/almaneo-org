@@ -82,7 +82,7 @@ export default function WorldMap({ onClose }: WorldMapProps) {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <PublicIcon sx={{ color: '#0052FF', fontSize: 20 }} />
+          <PublicIcon sx={{ color: '#FFD700', fontSize: 20 }} />
           <Typography
             sx={{
               fontFamily: "'Orbitron', sans-serif",

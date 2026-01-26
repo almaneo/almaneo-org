@@ -181,86 +181,111 @@ export default function HistoryLessonQuest({
           </motion.div>
         )}
 
-        {/* Result Phase */}
+      </AnimatePresence>
+
+      {/* Result Overlay - centered on screen */}
+      <AnimatePresence>
         {phase === 'result' && (
-          <motion.div
-            key="result"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <Box
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 50,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'rgba(0,0,0,0.7)',
+              p: 2,
+            }}
           >
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                background: isCorrect
-                  ? 'rgba(74,222,128,0.1)'
-                  : 'rgba(248,113,113,0.1)',
-                border: isCorrect
-                  ? '1px solid rgba(74,222,128,0.3)'
-                  : '1px solid rgba(248,113,113,0.3)',
-                textAlign: 'center',
-                mb: 1.5,
-              }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.3 }}
+              style={{ width: '100%', maxWidth: 320 }}
             >
-              <Typography
+              <Box
                 sx={{
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: isCorrect ? '#4ade80' : '#f87171',
-                  mb: 0.5,
+                  p: 2.5,
+                  borderRadius: 3,
+                  background: isCorrect
+                    ? 'rgba(10,20,15,0.98)'
+                    : 'rgba(20,10,10,0.98)',
+                  border: isCorrect
+                    ? '1px solid rgba(74,222,128,0.3)'
+                    : '1px solid rgba(248,113,113,0.3)',
+                  textAlign: 'center',
+                  mb: 1.5,
                 }}
               >
-                {isCorrect ? 'Correct! 🎓' : 'Not quite! 📖'}
-              </Typography>
-              <Typography
+                <Typography sx={{ fontSize: 28, mb: 1 }}>
+                  {isCorrect ? '🎓' : '📖'}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: isCorrect ? '#4ade80' : '#f87171',
+                    mb: 1,
+                  }}
+                >
+                  {isCorrect ? 'Correct!' : 'Not quite!'}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: 'rgba(255,255,255,0.7)',
+                    mb: 1.5,
+                  }}
+                >
+                  The answer was: <b>{data.choices[data.correctIndex]}</b>
+                </Typography>
+
+                {/* Fun Fact */}
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    background: 'rgba(255,215,0,0.06)',
+                    border: '1px solid rgba(255,215,0,0.15)',
+                    textAlign: 'left',
+                  }}
+                >
+                  <Typography
+                    sx={{ fontSize: 11, color: '#FFD700', fontWeight: 600, mb: 0.5 }}
+                  >
+                    💡 Fun Fact
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
+                  >
+                    {data.funFact}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box
+                onClick={() => onComplete(isCorrect)}
                 sx={{
-                  fontSize: 13,
-                  color: 'rgba(255,255,255,0.7)',
-                  mb: 0.5,
+                  p: 1.5,
+                  borderRadius: 2,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
+                  '&:hover': { opacity: 0.9 },
+                  '&:active': { transform: 'scale(0.97)' },
                 }}
               >
-                The answer was: <b>{data.choices[data.correctIndex]}</b>
-              </Typography>
-            </Box>
-
-            {/* Fun Fact */}
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                background: 'rgba(255,215,0,0.06)',
-                border: '1px solid rgba(255,215,0,0.15)',
-                mb: 1.5,
-              }}
-            >
-              <Typography
-                sx={{ fontSize: 12, color: '#FFD700', fontWeight: 600, mb: 0.5 }}
-              >
-                💡 Fun Fact
-              </Typography>
-              <Typography
-                sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
-              >
-                {data.funFact}
-              </Typography>
-            </Box>
-
-            <Box
-              onClick={() => onComplete(isCorrect)}
-              sx={{
-                p: 1.5,
-                borderRadius: 2,
-                textAlign: 'center',
-                cursor: 'pointer',
-                background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
-                '&:hover': { opacity: 0.9 },
-              }}
-            >
-              <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                Continue
-              </Typography>
-            </Box>
-          </motion.div>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
+                  Continue
+                </Typography>
+              </Box>
+            </motion.div>
+          </Box>
         )}
       </AnimatePresence>
     </Box>

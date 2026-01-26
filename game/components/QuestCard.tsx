@@ -33,9 +33,9 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
-          borderColor: canClaim ? '#0052FF' : isCompleted ? '#4CAF50' : 'rgba(255, 255, 255, 0.2)',
+          borderColor: canClaim ? '#FFD700' : isCompleted ? '#4CAF50' : 'rgba(255, 255, 255, 0.2)',
           boxShadow: canClaim
-            ? '0 8px 32px rgba(0, 82, 255, 0.2)'
+            ? '0 8px 32px rgba(255, 215, 0, 0.2)'
             : '0 8px 32px rgba(0, 0, 0, 0.3)',
         },
       }}
@@ -93,7 +93,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
             '& .MuiLinearProgress-bar': {
               background: isCompleted
                 ? 'linear-gradient(90deg, #4CAF50 0%, #81C784 100%)'
-                : 'linear-gradient(90deg, #0052FF 0%, #00C2FF 100%)',
+                : 'linear-gradient(90deg, #FFD700 0%, #FF6B00 100%)',
             },
           }}
         />
@@ -111,7 +111,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: 'white', opacity: 0.8, fontWeight: 600 }}>
           {formatNumber(quest.current)} / {formatNumber(quest.target)}
         </Typography>
-        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#0052FF', fontWeight: 800 }}>
+        <Typography variant={isLandscape ? 'caption' : 'body2'} sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800 }}>
           {progress.toFixed(0)}%
         </Typography>
       </Box>
@@ -147,16 +147,16 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
             fontSize: isLandscape ? 12 : undefined,
             borderRadius: 2,
             background: canClaim
-              ? '#0052FF'
+              ? '#FFD700'
               : isCompleted
                 ? 'rgba(76, 175, 80, 0.2)'
                 : 'rgba(100, 100, 100, 0.1)',
-            color: canClaim ? 'white' : 'rgba(255,255,255,0.3)',
+            color: canClaim ? '#0A0F1A' : 'rgba(255,255,255,0.3)',
             fontWeight: 'bold',
             textTransform: 'uppercase',
             letterSpacing: 1,
             '&:hover': {
-              bgcolor: canClaim ? '#0041CC' : undefined,
+              bgcolor: canClaim ? '#e6c200' : undefined,
               transform: canClaim ? 'translateY(-2px)' : 'none',
             },
             transition: 'all 0.2s ease',
