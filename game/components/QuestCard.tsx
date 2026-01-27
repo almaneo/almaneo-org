@@ -32,7 +32,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         backdropFilter: 'blur(10px)',
         border: isCompleted ? '2px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: 3,
-        p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
+        p: isLandscape ? 1 : isMobile ? 1 : 2.5,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-4px)',
@@ -48,8 +48,8 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: isLandscape ? 1 : isMobile ? 1 : 1.5,
-          mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5,
+          gap: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5,
+          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 1.5,
         }}
       >
         <Box sx={{ fontSize: isLandscape ? 24 : isMobile ? 24 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
@@ -75,7 +75,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         variant="body2"
         sx={{
           color: 'rgba(255, 255, 255, 0.5)',
-          mb: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
+          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 2,
           fontSize: isLandscape ? 10 : isMobile ? 11 : 13,
           fontWeight: 300,
         }}
@@ -84,7 +84,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
       </Typography>
 
       {/* Progress Bar */}
-      <Box sx={{ mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5 }}>
+      <Box sx={{ mb: isLandscape ? 0.5 : isMobile ? 0.5 : 1.5 }}>
         <LinearProgress
           variant="determinate"
           value={progress}
@@ -108,7 +108,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mb: isLandscape ? 1 : isMobile ? 1 : 2,
+          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 2,
         }}
       >
         <Typography variant="caption" sx={{ color: 'white', opacity: 0.8, fontWeight: 600, fontSize: isMobile ? 10 : undefined }}>

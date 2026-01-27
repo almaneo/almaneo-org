@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import { useGameStore } from '@/hooks/useGameStore';
 import { UPGRADES } from '@/lib/constants';
 import UpgradeCard from './UpgradeCard';
@@ -69,7 +69,7 @@ export default function UpgradePanel() {
               xs: '1fr',
               sm: 'repeat(2, 1fr)',
             },
-          gap: isLandscape ? 1 : isMobile ? 1.25 : 2,
+          gap: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
         }}
       >
         {upgradeData.map((data) => (

@@ -76,7 +76,7 @@ export default function GameModal({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              p: isCompact ? 1 : isMobile ? 1.5 : { xs: 2, sm: 2.5 },
+              p: isCompact ? 0.75 : isMobile ? 1 : { xs: 2, sm: 2.5 },
               borderBottom: '1px solid rgba(255, 215, 0, 0.3)',
               background: 'linear-gradient(180deg, rgba(255,215,0,0.1) 0%, transparent 100%)',
             }}
@@ -128,7 +128,7 @@ export default function GameModal({
         >
           <Box
           sx={{
-            p: isCompact ? 1.5 : isMobile ? 1.5 : { xs: 2, sm: 3 },
+            p: isCompact ? 1 : isMobile ? 1 : { xs: 2, sm: 3 },
             color: '#FFF',
             '&::-webkit-scrollbar': {
               width: isCompact ? 4 : 8,

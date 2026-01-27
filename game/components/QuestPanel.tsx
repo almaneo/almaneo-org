@@ -60,8 +60,8 @@ export default function QuestPanel() {
       {/* Header */}
       <Box
         sx={{
-          p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
-          mb: isLandscape ? 1 : isMobile ? 1 : 2,
+          p: isLandscape ? 1 : isMobile ? 1 : 2.5,
+          mb: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
           background: 'rgba(255, 255, 255, 0.03)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 215, 0, 0.3)',
@@ -116,7 +116,7 @@ export default function QuestPanel() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: isLandscape ? 1 : isMobile ? 1 : 2,
+          gap: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
         }}
       >
         {dailyQuests.map((quest) => (
@@ -132,8 +132,8 @@ export default function QuestPanel() {
       {completedCount === dailyQuests.length && (
         <Box
           sx={{
-            mt: isLandscape ? 1 : isMobile ? 1 : 2,
-            p: isLandscape ? 1.5 : isMobile ? 1.5 : 2.5,
+            mt: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
+            p: isLandscape ? 1 : isMobile ? 1 : 2.5,
             background: 'linear-gradient(145deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.3))',
             border: '2px solid #4CAF50',
             borderRadius: 2,

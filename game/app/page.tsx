@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { Box, Typography, Snackbar, Alert } from '@mui/material';
-import { motion } from 'framer-motion';
+import { Box, Typography, Snackbar, Alert, Dialog, Fade } from '@mui/material';
 import { useGameStore } from '@/hooks/useGameStore';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
 import { useTranslation } from 'react-i18next';
@@ -462,29 +461,38 @@ export default function HomePage() {
         </Box>
       )}
 
-      {/* Quest Result Overlay - rendered at page level (outside travel overlay) to avoid CSS containment issues */}
-      {questResultData && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1300,
-            display: 'flex',
+      {/* Quest Result Dialog - uses MUI Dialog (renders via Portal to document.body, bypasses all CSS containment) */}
+      <Dialog
+        open={!!questResultData}
+        onClose={() => {}}
+        disableEscapeKeyDown
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 300 }}
+        slotProps={{
+          backdrop: {
+            sx: { backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' },
+          },
+        }}
+        PaperProps={{
+          sx: {
+            background: 'transparent',
+            boxShadow: 'none',
+            maxWidth: 320,
+            width: '90%',
+            m: 2,
+            overflow: 'visible',
+          },
+        }}
+        sx={{
+          zIndex: 1400,
+          '& .MuiDialog-container': {
             alignItems: 'center',
             justifyContent: 'center',
-            bgcolor: 'rgba(0,0,0,0.7)',
-            p: 2,
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            style={{ width: '100%', maxWidth: 320 }}
-          >
+          },
+        }}
+      >
+        {questResultData && (
+          <>
             {/* Result Card */}
             <Box
               sx={{
@@ -587,9 +595,9 @@ export default function HomePage() {
             >
               {t('travel.continue')}
             </Box>
-          </motion.div>
-        </Box>
-      )}
+          </>
+        )}
+      </Dialog>
 
       {/* Appeals History Overlay */}
       {showAppeals && (
