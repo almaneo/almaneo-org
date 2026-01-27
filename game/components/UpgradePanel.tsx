@@ -69,7 +69,7 @@ export default function UpgradePanel() {
               xs: '1fr',
               sm: 'repeat(2, 1fr)',
             },
-          gap: isLandscape ? 0.75 : isMobile ? 0.75 : 2,
+          gap: isLandscape ? 1 : isMobile ? 1 : 2,
         }}
       >
         {upgradeData.map((data) => (

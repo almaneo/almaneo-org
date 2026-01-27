@@ -461,38 +461,29 @@ export default function HomePage() {
         </Box>
       )}
 
-      {/* Quest Result Dialog - uses MUI Dialog (renders via Portal to document.body, bypasses all CSS containment) */}
+      {/* Quest Result Dialog - fullScreen Dialog to guarantee viewport centering */}
       <Dialog
+        fullScreen
         open={!!questResultData}
         onClose={() => {}}
         disableEscapeKeyDown
         TransitionComponent={Fade}
         TransitionProps={{ timeout: 300 }}
-        slotProps={{
-          backdrop: {
-            sx: { backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' },
-          },
-        }}
+        hideBackdrop
         PaperProps={{
           sx: {
-            background: 'transparent',
-            boxShadow: 'none',
-            maxWidth: 320,
-            width: '90%',
-            m: 2,
-            overflow: 'visible',
-          },
-        }}
-        sx={{
-          zIndex: 1400,
-          '& .MuiDialog-container': {
+            background: 'rgba(0,0,0,0.75)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            boxShadow: 'none',
           },
         }}
+        sx={{ zIndex: 1400 }}
       >
         {questResultData && (
-          <>
+          <Box sx={{ maxWidth: 320, width: '90%' }}>
             {/* Result Card */}
             <Box
               sx={{
@@ -595,7 +586,7 @@ export default function HomePage() {
             >
               {t('travel.continue')}
             </Box>
-          </>
+          </Box>
         )}
       </Dialog>
 

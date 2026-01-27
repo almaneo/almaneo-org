@@ -28,18 +28,17 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         position: 'relative',
         background: isCompleted
           ? 'rgba(76, 175, 80, 0.05)'
-          : 'rgba(255, 255, 255, 0.03)',
+          : 'rgba(255, 255, 255, 0.02)',
         backdropFilter: 'blur(10px)',
-        border: isCompleted ? '2px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)',
+        border: isCompleted ? '2px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(255, 255, 255, 0.05)',
         borderRadius: 3,
-        p: isLandscape ? 1 : isMobile ? 1 : 2.5,
+        p: isLandscape ? 1 : isMobile ? 1.25 : 2,
         transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-4px)',
-          borderColor: canClaim ? '#FFD700' : isCompleted ? '#4CAF50' : 'rgba(255, 255, 255, 0.2)',
-          boxShadow: canClaim
-            ? '0 8px 32px rgba(255, 215, 0, 0.2)'
-            : '0 8px 32px rgba(0, 0, 0, 0.3)',
+          transform: 'translateY(-2px)',
+          borderColor: canClaim ? '#FFD700' : isCompleted ? '#4CAF50' : 'rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          bgcolor: 'rgba(255, 255, 255, 0.08)',
         },
       }}
     >
@@ -52,7 +51,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           mb: isLandscape ? 0.5 : isMobile ? 0.5 : 1.5,
         }}
       >
-        <Box sx={{ fontSize: isLandscape ? 24 : isMobile ? 24 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
+        <Box sx={{ fontSize: isLandscape ? 24 : isMobile ? 20 : 36, filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.1))' }}>
           {quest.icon}
         </Box>
         <Box sx={{ flex: 1 }}>
@@ -75,8 +74,8 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         variant="body2"
         sx={{
           color: 'rgba(255, 255, 255, 0.5)',
-          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 2,
-          fontSize: isLandscape ? 10 : isMobile ? 11 : 13,
+          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 1.5,
+          fontSize: isLandscape ? 10 : isMobile ? 10 : 13,
           fontWeight: 300,
         }}
       >
@@ -89,7 +88,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           variant="determinate"
           value={progress}
           sx={{
-            height: isLandscape ? 5 : isMobile ? 5 : 8,
+            height: isLandscape ? 4 : isMobile ? 4 : 8,
             borderRadius: 1,
             backgroundColor: 'rgba(0, 0, 0, 0.2)',
             border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -108,7 +107,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 2,
+          mb: isLandscape ? 0.5 : isMobile ? 0.5 : 1.5,
         }}
       >
         <Typography variant="caption" sx={{ color: 'white', opacity: 0.8, fontWeight: 600, fontSize: isMobile ? 10 : undefined }}>
@@ -128,7 +127,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         }}
       >
         <Box>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>{t('quest.reward')}</Typography>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10, fontWeight: 'bold', letterSpacing: 0.5 }}>{t('quest.reward')}</Typography>
           <Typography
             variant="body2"
             sx={{

@@ -37,25 +37,25 @@ export default function UpgradeCard({
     <Box
       sx={{
         position: 'relative',
-        background: 'rgba(255, 255, 255, 0.03)',
+        background: 'rgba(255, 255, 255, 0.02)',
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
         borderRadius: 3,
-        p: isLandscape ? 1 : isMobile ? 1 : 2.5,
+        p: isLandscape ? 1 : isMobile ? 1.25 : 2,
         transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-4px)',
+          transform: 'translateY(-2px)',
           borderColor: '#FFD700',
-          boxShadow: '0 8px 32px rgba(255, 215, 0, 0.2)',
-          bgcolor: 'rgba(255, 255, 255, 0.05)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          bgcolor: 'rgba(255, 255, 255, 0.08)',
         },
       }}
     >
       {/* 아이콘 + 이름 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 0.75 : isMobile ? 1 : 2, mb: isLandscape ? 0.75 : isMobile ? 0.75 : 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: isLandscape ? 0.75 : isMobile ? 1 : 2, mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5 }}>
         <Box
           sx={{
-            fontSize: isLandscape ? 28 : isMobile ? 24 : 48,
+            fontSize: isLandscape ? 24 : isMobile ? 20 : 40,
             filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))',
           }}
         >
@@ -87,7 +87,7 @@ export default function UpgradeCard({
       </Box>
 
       {/* 레벨 & 효과 */}
-      <Box sx={{ mb: isLandscape ? 0.75 : isMobile ? 0.75 : 2 }}>
+      <Box sx={{ mb: isLandscape ? 0.75 : isMobile ? 0.75 : 1.5 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
           <Typography
             variant="caption"
@@ -143,6 +143,8 @@ export default function UpgradeCard({
             sx={{
               color: 'rgba(255,255,255,0.4)',
               display: 'block',
+              fontWeight: 'bold',
+              letterSpacing: 0.5,
             }}
           >
             {t('upgrades.panel.costLabel')}
