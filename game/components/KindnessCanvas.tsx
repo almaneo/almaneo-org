@@ -99,12 +99,12 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
     <Box
       sx={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
+        inset: 0,
         overflow: 'hidden',
         background: 'linear-gradient(180deg, #0A0F1A 0%, #111827 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       {/* Background Grid */}
@@ -115,20 +115,17 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
           opacity: 0.2,
           backgroundImage: 'radial-gradient(#FFD700 1px, transparent 1px)',
           backgroundSize: '30px 30px',
+          pointerEvents: 'none',
         }}
       />
 
       {/* Scenario Card */}
       <Box
         sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
           width: '90%',
           maxWidth: 400,
-          perspective: '1000px',
-          zIndex: 5
+          zIndex: 5,
+          position: 'relative',
         }}
       >
         <AnimatePresence mode='wait'>
@@ -138,6 +135,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
             animate={{ opacity: 1, rotateY: 0 }}
             exit={{ opacity: 0, rotateY: -90 }}
             transition={{ duration: 0.4 }}
+            style={{ perspective: '1000px' }}
           >
             <Paper
               elevation={6}
@@ -221,20 +219,25 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
       {/* Feedback Overlay - centered on screen */}
       <AnimatePresence>
         {feedback && (
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 20,
+              pointerEvents: 'none',
+            }}
+          >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.3 }}
             style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 20,
               width: '80%',
               maxWidth: 300,
-              pointerEvents: 'none',
             }}
           >
             <Box
@@ -266,6 +269,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
               </Typography>
             </Box>
           </motion.div>
+          </Box>
         )}
       </AnimatePresence>
 

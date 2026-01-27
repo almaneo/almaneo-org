@@ -156,13 +156,7 @@ a {
   }
 }
 
-/* iOS Safe Area Support - horizontal only (navbar handles bottom internally) */
-@supports (padding: env(safe-area-inset-left)) {
-  body {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-}
+/* iOS Safe Area: handled per-component, not on body (body padding shifts absolute elements) */
 
 /* Prevent bounce scroll on mobile */
 body {

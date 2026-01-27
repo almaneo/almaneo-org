@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Box, Typography, Snackbar, Alert } from '@mui/material';
 import { useGameStore } from '@/hooks/useGameStore';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
@@ -28,7 +28,6 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { WorldMap } from '@/components/WorldMap';
 import { CountryScreen } from '@/components/CountryScreen';
 import { QuestScreen } from '@/components/QuestScreen';
-import type { QuestResultData, QuestScreenHandle } from '@/components/QuestScreen';
 import { useTravelStore } from '@/hooks/useTravelStore';
 import LoginScreen from '@/components/LoginScreen';
 import AppealHistory from '@/components/AppealHistory';
@@ -92,12 +91,6 @@ export default function HomePage() {
 
   // Travel system
   const [showTravel, setShowTravel] = useState(false);
-  // Quest result overlay (rendered at page level to avoid CSS containment issues)
-  const [questResultData, setQuestResultData] = useState<QuestResultData | null>(null);
-  const questScreenRef = useRef<QuestScreenHandle>(null);
-  const handleQuestResultChange = useCallback((data: QuestResultData | null) => {
-    setQuestResultData(data);
-  }, []);
   // Appeals
   const [showAppeals, setShowAppeals] = useState(false);
   const travelStore = useTravelStore();
@@ -453,137 +446,8 @@ export default function HomePage() {
           )}
           {travelStore.currentView === 'quest' && (
             <QuestScreen
-              ref={questScreenRef}
               onBack={() => travelStore.goBack()}
-              onResultChange={handleQuestResultChange}
             />
-          )}
-
-          {/* Quest Result Popup - absolute inside the fixed travel overlay to avoid viewport/body CSS issues */}
-          {questResultData && (
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 50,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(0,0,0,0.75)',
-                backdropFilter: 'blur(4px)',
-                margin: 0,
-                padding: 0,
-                boxSizing: 'border-box',
-              }}
-            >
-              <Box sx={{ maxWidth: 320, width: '90%' }}>
-                {/* Result Card */}
-                <Box
-                  sx={{
-                    p: 2.5,
-                    borderRadius: 3,
-                    background: questResultData.correct
-                      ? 'rgba(10,20,15,0.98)'
-                      : 'rgba(20,10,10,0.98)',
-                    border: questResultData.correct
-                      ? '1px solid rgba(74,222,128,0.3)'
-                      : '1px solid rgba(248,113,113,0.3)',
-                    textAlign: 'center',
-                    mb: 1.5,
-                  }}
-                >
-                  <Typography sx={{ fontSize: 28, mb: 1 }}>{questResultData.emoji}</Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: questResultData.correct ? '#4ade80' : '#f87171',
-                      mb: 1,
-                    }}
-                  >
-                    {questResultData.title}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      color: 'rgba(255,255,255,0.7)',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {questResultData.explanation}
-                  </Typography>
-
-                  {/* Answer text (for history lesson) */}
-                  {questResultData.answerText && (
-                    <Typography
-                      sx={{
-                        fontSize: 13,
-                        color: 'rgba(255,255,255,0.7)',
-                        mt: 1,
-                        mb: 1.5,
-                      }}
-                    >
-                      {questResultData.answerText}
-                    </Typography>
-                  )}
-
-                  {/* Fun Fact (for history lesson) */}
-                  {questResultData.funFact && (
-                    <Box
-                      sx={{
-                        mt: 1.5,
-                        p: 1.5,
-                        borderRadius: 2,
-                        background: 'rgba(255,215,0,0.06)',
-                        border: '1px solid rgba(255,215,0,0.15)',
-                        textAlign: 'left',
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 11,
-                          color: '#FFD700',
-                          fontWeight: 600,
-                          mb: 0.5,
-                        }}
-                      >
-                        💡 {questResultData.funFact.label}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 12,
-                          color: 'rgba(255,255,255,0.7)',
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        {questResultData.funFact.text}
-                      </Typography>
-                    </Box>
-                  )}
-                </Box>
-
-                {/* Continue Button */}
-                <Box
-                  onClick={() => questScreenRef.current?.handleResultContinue()}
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    background: '#FFD700',
-                    color: '#0A0F1A',
-                    fontWeight: 700,
-                    fontSize: 14,
-                    '&:active': { opacity: 0.9 },
-                  }}
-                >
-                  {t('travel.continue')}
-                </Box>
-              </Box>
-            </div>
           )}
         </Box>
       )}
