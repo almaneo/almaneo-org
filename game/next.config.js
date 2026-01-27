@@ -12,8 +12,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  trailingSlash: false, // ✅ 수정: Firebase Hosting 호환
-  distDir: 'out',
+  trailingSlash: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
