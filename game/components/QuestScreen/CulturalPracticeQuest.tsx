@@ -1,20 +1,20 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CulturalPracticeData } from '@/lib/worldTravel/types';
+import type { QuestResultData } from './QuestScreen';
 import { useTranslation } from 'react-i18next';
 
 interface CulturalPracticeQuestProps {
   data: CulturalPracticeData;
-  onComplete: (correct: boolean) => void;
+  onShowResult: (data: QuestResultData) => void;
 }
 
 export default function CulturalPracticeQuest({
   data,
-  onComplete,
+  onShowResult,
 }: CulturalPracticeQuestProps) {
   const { t } = useTranslation('game');
   const [taps, setTaps] = useState(0);
@@ -39,8 +39,14 @@ export default function CulturalPracticeQuest({
 
     if (newTaps >= data.tapsRequired) {
       setCompleted(true);
+      onShowResult({
+        correct: true,
+        emoji: '✨',
+        title: t('travel.wellDone'),
+        explanation: data.completionMessage,
+      });
     }
-  }, [taps, completed, currentStep, data]);
+  }, [taps, completed, currentStep, data, onShowResult, t]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
@@ -80,8 +86,8 @@ export default function CulturalPracticeQuest({
             sx={{
               p: 2,
               borderRadius: 2,
-              background: 'rgba(0,82,255,0.08)',
-              border: '1px solid rgba(0,82,255,0.2)',
+              background: 'rgba(255,215,0,0.08)',
+              border: '1px solid rgba(255,215,0,0.2)',
               textAlign: 'center',
             }}
           >
@@ -131,7 +137,7 @@ export default function CulturalPracticeQuest({
               borderRadius: 3,
               background: completed
                 ? 'linear-gradient(90deg, #FFD700, #FF6B00)'
-                : 'linear-gradient(90deg, #0052FF, #06b6d4)',
+                : 'linear-gradient(90deg, #FFD700, #FFA500)',
             },
           }}
         />
@@ -147,12 +153,12 @@ export default function CulturalPracticeQuest({
               borderRadius: 3,
               textAlign: 'center',
               cursor: 'pointer',
-              background: 'linear-gradient(135deg, rgba(0,82,255,0.2), rgba(6,182,212,0.2))',
-              border: '2px solid rgba(0,82,255,0.3)',
+              background: 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,107,0,0.15))',
+              border: '2px solid rgba(255,215,0,0.3)',
               userSelect: 'none',
               touchAction: 'manipulation',
               '&:active': {
-                background: 'linear-gradient(135deg, rgba(0,82,255,0.3), rgba(6,182,212,0.3))',
+                background: 'linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,107,0,0.25))',
               },
             }}
           >
@@ -168,73 +174,6 @@ export default function CulturalPracticeQuest({
             </Typography>
           </Box>
         </motion.div>
-      )}
-
-      {/* Completion Overlay - portaled to body for proper centering */}
-      {completed && createPortal(
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: 'rgba(0,0,0,0.7)',
-            p: 2,
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            style={{ width: '100%', maxWidth: 320 }}
-          >
-            <Box
-              sx={{
-                p: 2.5,
-                borderRadius: 3,
-                background: 'rgba(10,20,15,0.98)',
-                border: '1px solid rgba(74,222,128,0.3)',
-                textAlign: 'center',
-                mb: 1.5,
-              }}
-            >
-              <Typography sx={{ fontSize: 28, mb: 1 }}>✨</Typography>
-              <Typography
-                sx={{ fontSize: 18, fontWeight: 700, color: '#4ade80', mb: 1 }}
-              >
-                {t('travel.wellDone')}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
-              >
-                {data.completionMessage}
-              </Typography>
-            </Box>
-
-            <Box
-              onClick={() => onComplete(true)}
-              sx={{
-                p: 1.5,
-                borderRadius: 2,
-                textAlign: 'center',
-                cursor: 'pointer',
-                background: 'linear-gradient(135deg, #0052FF, #06b6d4)',
-                '&:hover': { opacity: 0.9 },
-                '&:active': { transform: 'scale(0.97)' },
-              }}
-            >
-              <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                {t('travel.continue')}
-              </Typography>
-            </Box>
-          </motion.div>
-        </Box>,
-        document.body
       )}
     </Box>
   );

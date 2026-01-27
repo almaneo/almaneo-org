@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { motion } from 'framer-motion';
 import { useTravelStore } from '@/hooks/useTravelStore';
 import { useGameStore } from '@/hooks/useGameStore';
 import type {
@@ -17,6 +18,15 @@ import CulturalPracticeQuest from './CulturalPracticeQuest';
 import HistoryLessonQuest from './HistoryLessonQuest';
 import QuestComplete from './QuestComplete';
 import { useTranslation } from 'react-i18next';
+
+export interface QuestResultData {
+  correct: boolean;
+  emoji: string;
+  title: string;
+  explanation: string;
+  answerText?: string;
+  funFact?: { label: string; text: string };
+}
 
 interface QuestScreenProps {
   onBack: () => void;
@@ -39,9 +49,14 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
   const [questDone, setQuestDone] = useState(false);
   const [pointsEarned, setPointsEarned] = useState(0);
   const [wasCorrect, setWasCorrect] = useState(false);
+  const [resultData, setResultData] = useState<QuestResultData | null>(null);
 
   const country = selectedCountryId ? getCountry(selectedCountryId) : null;
   const quest = country?.quests.find(q => q.id === selectedQuestId);
+
+  const handleShowResult = useCallback((data: QuestResultData) => {
+    setResultData(data);
+  }, []);
 
   const handleQuestComplete = useCallback(
     (correct: boolean) => {
@@ -75,6 +90,13 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
     },
     [selectedQuestId, completeQuest, addPoints, updateQuestProgress, updateAchievementStats]
   );
+
+  const handleResultContinue = () => {
+    if (resultData) {
+      handleQuestComplete(resultData.correct);
+      setResultData(null);
+    }
+  };
 
   const handleContinue = () => {
     setQuestDone(false);
@@ -112,10 +134,13 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
   return (
     <Box
       sx={{
+        width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         background: 'linear-gradient(180deg, #0A0F1A 0%, #111827 100%)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Header */}
@@ -178,28 +203,157 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
         {quest.data.type === 'cultural_scenario' && (
           <CulturalScenarioQuest
             data={quest.data as CulturalScenarioData}
-            onComplete={handleQuestComplete}
+            onShowResult={handleShowResult}
           />
         )}
         {quest.data.type === 'trivia_quiz' && (
           <TriviaQuizQuest
             data={quest.data as TriviaQuizData}
-            onComplete={handleQuestComplete}
+            onShowResult={handleShowResult}
           />
         )}
         {quest.data.type === 'cultural_practice' && (
           <CulturalPracticeQuest
             data={quest.data as CulturalPracticeData}
-            onComplete={handleQuestComplete}
+            onShowResult={handleShowResult}
           />
         )}
         {quest.data.type === 'history_lesson' && (
           <HistoryLessonQuest
             data={quest.data as HistoryLessonData}
-            onComplete={handleQuestComplete}
+            onShowResult={handleShowResult}
           />
         )}
       </Box>
+
+      {/* Result Overlay - rendered inside QuestScreen (no portal needed) */}
+      {resultData && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: 'rgba(0,0,0,0.7)',
+            p: 2,
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{ width: '100%', maxWidth: 320 }}
+          >
+            {/* Result Card */}
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 3,
+                background: resultData.correct
+                  ? 'rgba(10,20,15,0.98)'
+                  : 'rgba(20,10,10,0.98)',
+                border: resultData.correct
+                  ? '1px solid rgba(74,222,128,0.3)'
+                  : '1px solid rgba(248,113,113,0.3)',
+                textAlign: 'center',
+                mb: 1.5,
+              }}
+            >
+              <Typography sx={{ fontSize: 28, mb: 1 }}>{resultData.emoji}</Typography>
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: resultData.correct ? '#4ade80' : '#f87171',
+                  mb: 1,
+                }}
+              >
+                {resultData.title}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.7)',
+                  lineHeight: 1.5,
+                }}
+              >
+                {resultData.explanation}
+              </Typography>
+
+              {/* Answer text (for history lesson) */}
+              {resultData.answerText && (
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: 'rgba(255,255,255,0.7)',
+                    mt: 1,
+                    mb: 1.5,
+                  }}
+                >
+                  {resultData.answerText}
+                </Typography>
+              )}
+
+              {/* Fun Fact (for history lesson) */}
+              {resultData.funFact && (
+                <Box
+                  sx={{
+                    mt: 1.5,
+                    p: 1.5,
+                    borderRadius: 2,
+                    background: 'rgba(255,215,0,0.06)',
+                    border: '1px solid rgba(255,215,0,0.15)',
+                    textAlign: 'left',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      color: '#FFD700',
+                      fontWeight: 600,
+                      mb: 0.5,
+                    }}
+                  >
+                    💡 {resultData.funFact.label}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      color: 'rgba(255,255,255,0.7)',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {resultData.funFact.text}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* Continue Button */}
+            <Box
+              onClick={handleResultContinue}
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                textAlign: 'center',
+                cursor: 'pointer',
+                background: '#FFD700',
+                color: '#0A0F1A',
+                fontWeight: 700,
+                fontSize: 14,
+                '&:active': { opacity: 0.9 },
+              }}
+            >
+              {t('travel.continue')}
+            </Box>
+          </motion.div>
+        </Box>
+      )}
     </Box>
   );
 }

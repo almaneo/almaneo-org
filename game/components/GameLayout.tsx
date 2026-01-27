@@ -19,15 +19,12 @@ export default function GameLayout({
   return (
     <Box
       sx={{
-        width: '100vw',
-        height: '100dvh',
+        width: '100%',
+        height: '100%',
         overflow: 'hidden',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        '@supports not (height: 100dvh)': {
-          height: '100vh',
-        },
       }}
     >
       {/* 캔버스 - 전체 화면 배경 (absolute) */}

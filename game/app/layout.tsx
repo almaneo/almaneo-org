@@ -64,11 +64,10 @@ export default function RootLayout({
           html, body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             height: 100dvh;
-            position: fixed;
+            overflow: hidden;
             overscroll-behavior: none;
           }
         `}</style>
