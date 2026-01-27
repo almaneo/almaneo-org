@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Box, Typography, Snackbar, Alert } from '@mui/material';
+import { motion } from 'framer-motion';
 import { useGameStore } from '@/hooks/useGameStore';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +29,7 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { WorldMap } from '@/components/WorldMap';
 import { CountryScreen } from '@/components/CountryScreen';
 import { QuestScreen } from '@/components/QuestScreen';
+import type { QuestResultData, QuestScreenHandle } from '@/components/QuestScreen';
 import { useTravelStore } from '@/hooks/useTravelStore';
 import LoginScreen from '@/components/LoginScreen';
 import AppealHistory from '@/components/AppealHistory';
@@ -56,7 +58,7 @@ export default function HomePage() {
     isLoading
   } = useGameStore();
 
-  const { t } = useTranslation('game');
+  const { t, i18n } = useTranslation('game');
 
   // Web3Auth 지갑 연결
   const { address, isConnected, isLoading: web3Loading, login } = useWeb3Auth();
@@ -91,6 +93,12 @@ export default function HomePage() {
 
   // Travel system
   const [showTravel, setShowTravel] = useState(false);
+  // Quest result overlay (rendered at page level to avoid CSS containment issues)
+  const [questResultData, setQuestResultData] = useState<QuestResultData | null>(null);
+  const questScreenRef = useRef<QuestScreenHandle>(null);
+  const handleQuestResultChange = useCallback((data: QuestResultData | null) => {
+    setQuestResultData(data);
+  }, []);
   // Appeals
   const [showAppeals, setShowAppeals] = useState(false);
   const travelStore = useTravelStore();
@@ -132,12 +140,11 @@ export default function HomePage() {
   }, [saveGame]);
 
   // Load dynamic content from DB (language-aware)
+  // Re-initialize when i18n language changes (e.g., from MoreMenu toggle)
   useEffect(() => {
-    const lang = typeof navigator !== 'undefined'
-      ? (navigator.language || 'en').split('-')[0]
-      : 'en';
+    const lang = i18n.language?.split('-')[0] || 'en';
     travelStore.initializeContent(lang);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [i18n.language]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Check quest reset every minute
   useEffect(() => {
@@ -446,8 +453,141 @@ export default function HomePage() {
             <CountryScreen onBack={() => travelStore.openWorldMap()} />
           )}
           {travelStore.currentView === 'quest' && (
-            <QuestScreen onBack={() => travelStore.goBack()} />
+            <QuestScreen
+              ref={questScreenRef}
+              onBack={() => travelStore.goBack()}
+              onResultChange={handleQuestResultChange}
+            />
           )}
+        </Box>
+      )}
+
+      {/* Quest Result Overlay - rendered at page level (outside travel overlay) to avoid CSS containment issues */}
+      {questResultData && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1300,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: 'rgba(0,0,0,0.7)',
+            p: 2,
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{ width: '100%', maxWidth: 320 }}
+          >
+            {/* Result Card */}
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 3,
+                background: questResultData.correct
+                  ? 'rgba(10,20,15,0.98)'
+                  : 'rgba(20,10,10,0.98)',
+                border: questResultData.correct
+                  ? '1px solid rgba(74,222,128,0.3)'
+                  : '1px solid rgba(248,113,113,0.3)',
+                textAlign: 'center',
+                mb: 1.5,
+              }}
+            >
+              <Typography sx={{ fontSize: 28, mb: 1 }}>{questResultData.emoji}</Typography>
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: questResultData.correct ? '#4ade80' : '#f87171',
+                  mb: 1,
+                }}
+              >
+                {questResultData.title}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.7)',
+                  lineHeight: 1.5,
+                }}
+              >
+                {questResultData.explanation}
+              </Typography>
+
+              {/* Answer text (for history lesson) */}
+              {questResultData.answerText && (
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: 'rgba(255,255,255,0.7)',
+                    mt: 1,
+                    mb: 1.5,
+                  }}
+                >
+                  {questResultData.answerText}
+                </Typography>
+              )}
+
+              {/* Fun Fact (for history lesson) */}
+              {questResultData.funFact && (
+                <Box
+                  sx={{
+                    mt: 1.5,
+                    p: 1.5,
+                    borderRadius: 2,
+                    background: 'rgba(255,215,0,0.06)',
+                    border: '1px solid rgba(255,215,0,0.15)',
+                    textAlign: 'left',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      color: '#FFD700',
+                      fontWeight: 600,
+                      mb: 0.5,
+                    }}
+                  >
+                    💡 {questResultData.funFact.label}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      color: 'rgba(255,255,255,0.7)',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {questResultData.funFact.text}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* Continue Button */}
+            <Box
+              onClick={() => questScreenRef.current?.handleResultContinue()}
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                textAlign: 'center',
+                cursor: 'pointer',
+                background: '#FFD700',
+                color: '#0A0F1A',
+                fontWeight: 700,
+                fontSize: 14,
+                '&:active': { opacity: 0.9 },
+              }}
+            >
+              {t('travel.continue')}
+            </Box>
+          </motion.div>
         </Box>
       )}
 
