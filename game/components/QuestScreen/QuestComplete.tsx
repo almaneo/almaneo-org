@@ -2,12 +2,15 @@
 
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import AppealButton from '@/components/AppealButton';
 
 interface QuestCompleteProps {
   questTitle: string;
   pointsEarned: number;
   correct: boolean;
   onContinue: () => void;
+  questId?: string;
+  countryId?: string;
 }
 
 export default function QuestComplete({
@@ -15,6 +18,8 @@ export default function QuestComplete({
   pointsEarned,
   correct,
   onContinue,
+  questId,
+  countryId,
 }: QuestCompleteProps) {
   return (
     <Box
@@ -111,6 +116,23 @@ export default function QuestComplete({
           </Typography>
         </Box>
       </motion.div>
+
+      {/* Report Error Button */}
+      {questId && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+        >
+          <AppealButton
+            contentType="quest"
+            contentId={questId}
+            fieldPath="quest_data"
+            currentValue={questTitle}
+            compact
+          />
+        </motion.div>
+      )}
 
       {/* Continue Button */}
       <motion.div

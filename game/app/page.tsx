@@ -29,6 +29,7 @@ import { CountryScreen } from '@/components/CountryScreen';
 import { QuestScreen } from '@/components/QuestScreen';
 import { useTravelStore } from '@/hooks/useTravelStore';
 import LoginScreen from '@/components/LoginScreen';
+import AppealHistory from '@/components/AppealHistory';
 import TokenClaimModal from '@/components/TokenClaimModal';
 import { Achievement } from '@/lib/achievements';
 import { getEducationByLevel, EducationContent } from '@/lib/educationContent';
@@ -87,6 +88,8 @@ export default function HomePage() {
 
   // Travel system
   const [showTravel, setShowTravel] = useState(false);
+  // Appeals
+  const [showAppeals, setShowAppeals] = useState(false);
   const travelStore = useTravelStore();
 
   // Active tab tracking for navbar highlighting
@@ -124,6 +127,14 @@ export default function HomePage() {
     }, AUTO_SAVE_INTERVAL);
     return () => clearInterval(interval);
   }, [saveGame]);
+
+  // Load dynamic content from DB (language-aware)
+  useEffect(() => {
+    const lang = typeof navigator !== 'undefined'
+      ? (navigator.language || 'en').split('-')[0]
+      : 'en';
+    travelStore.initializeContent(lang);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Check quest reset every minute
   useEffect(() => {
@@ -409,6 +420,7 @@ export default function HomePage() {
           localStorage.removeItem('storyViewed');
           setShowStory(true);
         }}
+        onAppealsClick={() => setShowAppeals(true)}
       />
 
       {/* World Travel Overlay */}
@@ -433,6 +445,23 @@ export default function HomePage() {
           {travelStore.currentView === 'quest' && (
             <QuestScreen onBack={() => travelStore.goBack()} />
           )}
+        </Box>
+      )}
+
+      {/* Appeals History Overlay */}
+      {showAppeals && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1200,
+            background: '#0A0F1A',
+          }}
+        >
+          <AppealHistory onClose={() => setShowAppeals(false)} />
         </Box>
       )}
 

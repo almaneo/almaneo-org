@@ -100,6 +100,8 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
           pointsEarned={pointsEarned}
           correct={wasCorrect}
           onContinue={handleContinue}
+          questId={quest.id}
+          countryId={country?.id}
         />
       </Box>
     );

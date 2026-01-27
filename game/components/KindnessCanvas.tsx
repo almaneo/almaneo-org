@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playSound, SoundType } from '@/lib/sounds';
-import { KINDNESS_SCENARIOS, KindnessScenario } from '@/lib/kindnessData';
+import { getKindnessScenarios, type KindnessScenario } from '@/lib/kindnessData';
 
 interface KindnessCanvasProps {
   onHarvest: () => void;
@@ -29,8 +29,9 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
 
   // Load random scenario
   const loadNewScenario = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * KINDNESS_SCENARIOS.length);
-    setCurrentScenario(KINDNESS_SCENARIOS[randomIndex]);
+    const scenarios = getKindnessScenarios();
+    const randomIndex = Math.floor(Math.random() * scenarios.length);
+    setCurrentScenario(scenarios[randomIndex]);
     setFeedback(null);
   }, []);
 

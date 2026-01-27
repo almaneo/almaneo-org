@@ -1,9 +1,13 @@
 /**
  * Kindness Scenarios - derived from World Travel country data
  * Used by KindnessCanvas for the main tap gameplay
+ *
+ * Supports both static (hardcoded) and dynamic (DB-loaded) content.
  */
 
 import { ALL_COUNTRIES } from './worldTravel/countries';
+import { contentService } from './contentService';
+import type { Country } from './worldTravel/types';
 import type { CulturalScenarioData } from './worldTravel/types';
 
 export interface KindnessScenario {
@@ -19,13 +23,13 @@ export interface KindnessScenario {
 }
 
 /**
- * Extract all cultural_scenario quests from travel countries
+ * Extract all cultural_scenario quests from countries
  * and convert them to KindnessScenario format
  */
-function buildScenariosFromCountries(): KindnessScenario[] {
+function buildScenarios(countries: Country[]): KindnessScenario[] {
     const scenarios: KindnessScenario[] = [];
 
-    for (const country of ALL_COUNTRIES) {
+    for (const country of countries) {
         for (const quest of country.quests) {
             if (quest.type === 'cultural_scenario') {
                 const data = quest.data as CulturalScenarioData;
@@ -44,4 +48,33 @@ function buildScenariosFromCountries(): KindnessScenario[] {
     return scenarios;
 }
 
-export const KINDNESS_SCENARIOS: KindnessScenario[] = buildScenariosFromCountries();
+// Static fallback (built at module load time from hardcoded data)
+const STATIC_SCENARIOS: KindnessScenario[] = buildScenarios(ALL_COUNTRIES);
+
+// Memoization for dynamic scenarios
+let cachedDynamicScenarios: KindnessScenario[] | null = null;
+let cachedLanguage: string | null = null;
+
+/**
+ * Get kindness scenarios - uses DB content when available, static fallback otherwise.
+ * Results are memoized until content language changes.
+ */
+export function getKindnessScenarios(): KindnessScenario[] {
+    if (!contentService.isLoaded()) {
+        return STATIC_SCENARIOS;
+    }
+
+    const currentLang = contentService.getCurrentLanguage();
+    if (cachedDynamicScenarios && cachedLanguage === currentLang) {
+        return cachedDynamicScenarios;
+    }
+
+    cachedDynamicScenarios = buildScenarios(contentService.getCountries());
+    cachedLanguage = currentLang;
+
+    // Return static if dynamic build produced nothing (shouldn't happen normally)
+    return cachedDynamicScenarios.length > 0 ? cachedDynamicScenarios : STATIC_SCENARIOS;
+}
+
+/** @deprecated Use getKindnessScenarios() for dynamic content support */
+export const KINDNESS_SCENARIOS: KindnessScenario[] = STATIC_SCENARIOS;

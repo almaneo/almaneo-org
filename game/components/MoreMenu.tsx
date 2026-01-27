@@ -20,6 +20,7 @@ interface MoreMenuProps {
   onProfileClick?: () => void;
   onSettingsClick?: () => void;
   onStoryClick?: () => void;
+  onAppealsClick?: () => void;
   achievementBadge?: number;
 }
 
@@ -32,12 +33,14 @@ export default function MoreMenu({
   onProfileClick,
   onSettingsClick,
   onStoryClick,
+  onAppealsClick,
   achievementBadge,
 }: MoreMenuProps) {
   const mainItems: MoreMenuItem[] = [
     { id: 'achievement', icon: '🏆', label: 'Achievement', onClick: onAchievementClick },
     { id: 'ranking', icon: '📊', label: 'Ranking', onClick: onLeaderboardClick },
     { id: 'token', icon: '⛏️', label: 'Token Mining', onClick: onTokenClick },
+    { id: 'appeals', icon: '📝', label: 'My Appeals', onClick: onAppealsClick },
   ];
 
   const secondaryItems: MoreMenuItem[] = [

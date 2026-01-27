@@ -7,6 +7,7 @@ import type {
   RegionProgress,
   StarRating,
   Country,
+  Region,
 } from '@/lib/worldTravel/types';
 import { getRegionForLocale, calculateStars } from '@/lib/worldTravel/types';
 import { REGIONS } from '@/lib/worldTravel/regions';
@@ -18,6 +19,24 @@ import {
   recordQuestResult,
   QUEST_POINTS,
 } from '@/lib/worldTravel/progression';
+import { contentService } from '@/lib/contentService';
+
+// --- Dynamic content (module-level to avoid re-renders) ---
+
+let dynamicCountries: Country[] | null = null;
+let dynamicRegions: Region[] | null = null;
+
+/** Returns DB-loaded countries if available, else static fallback */
+function getActiveCountries(): Country[] {
+  return dynamicCountries || ALL_COUNTRIES;
+}
+
+/** Returns DB-loaded regions if available, else static fallback */
+function getActiveRegions(): Region[] {
+  return dynamicRegions || REGIONS;
+}
+
+// ---
 
 interface TravelStore extends TravelState {
   // Navigation
@@ -41,6 +60,10 @@ interface TravelStore extends TravelState {
 
   // Init
   initialize: () => void;
+
+  // Dynamic content loading
+  contentLoaded: boolean;
+  initializeContent: (lang: string) => Promise<void>;
 }
 
 function detectStartingRegion(): RegionId {
@@ -62,7 +85,7 @@ function buildRegionProgress(
   const unlocked = getUnlockedRegions(totalStars, startingRegion);
 
   const result: Record<string, RegionProgress> = {};
-  for (const region of REGIONS) {
+  for (const region of getActiveRegions()) {
     const regionCountryStars = region.countries.reduce((sum, cId) => {
       return sum + (countryProgress[cId]?.stars || 0);
     }, 0);
@@ -89,6 +112,7 @@ export const useTravelStore = create<TravelStore>((set, get) => ({
   countriesVisited: 0,
   perfectCountries: 0,
   startingRegion: 'east_asia',
+  contentLoaded: false,
 
   // --- Navigation ---
 
@@ -149,7 +173,7 @@ export const useTravelStore = create<TravelStore>((set, get) => ({
     const { selectedCountryId, countryProgress } = state;
     if (!selectedCountryId) return 0;
 
-    const country = ALL_COUNTRIES.find(c => c.id === selectedCountryId);
+    const country = getActiveCountries().find(c => c.id === selectedCountryId);
     if (!country) return 0;
 
     const progress =
@@ -180,7 +204,7 @@ export const useTravelStore = create<TravelStore>((set, get) => ({
   // --- Data Access ---
 
   getCountry: (countryId: CountryId) => {
-    return ALL_COUNTRIES.find(c => c.id === countryId);
+    return getActiveCountries().find(c => c.id === countryId);
   },
 
   getCountryProgress: (countryId: CountryId) => {
@@ -244,5 +268,29 @@ export const useTravelStore = create<TravelStore>((set, get) => ({
       countriesVisited: 0,
       perfectCountries: 0,
     });
+  },
+
+  // --- Dynamic Content Loading ---
+
+  initializeContent: async (lang: string) => {
+    try {
+      const { regions, countries } = await contentService.fetchAllContent(lang);
+
+      if (regions.length > 0) dynamicRegions = regions;
+      if (countries.length > 0) dynamicCountries = countries;
+
+      // Rebuild region progress with potentially updated region data
+      const state = get();
+      const regionProgress = buildRegionProgress(
+        state.countryProgress,
+        state.startingRegion
+      );
+
+      set({ contentLoaded: true, regionProgress });
+    } catch (err) {
+      console.warn('Failed to load dynamic content, using static fallback:', err);
+      // Static data is still available, so the app works without DB
+      set({ contentLoaded: false });
+    }
   },
 }));

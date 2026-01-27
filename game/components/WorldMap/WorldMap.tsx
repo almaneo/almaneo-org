@@ -8,6 +8,7 @@ import { REGIONS } from '@/lib/worldTravel/regions';
 import { ALL_COUNTRIES } from '@/lib/worldTravel/countries';
 import { useTravelStore } from '@/hooks/useTravelStore';
 import { getNextRegionToUnlock } from '@/lib/worldTravel/progression';
+import { contentService } from '@/lib/contentService';
 import type { StarRating } from '@/lib/worldTravel/types';
 import RegionCard from './RegionCard';
 
@@ -29,6 +30,10 @@ export default function WorldMap({ onClose }: WorldMapProps) {
 
   const nextUnlock = getNextRegionToUnlock(totalStars, startingRegion);
 
+  // Use DB-loaded content when available, static fallback otherwise
+  const activeCountries = contentService.isLoaded() ? contentService.getCountries() : ALL_COUNTRIES;
+  const activeRegions = contentService.isLoaded() ? contentService.getRegions() : REGIONS;
+
   // Build country stars map
   const countryStars: Record<string, StarRating> = {};
   const visitedCountries = new Set<string>();
@@ -38,7 +43,7 @@ export default function WorldMap({ onClose }: WorldMapProps) {
   }
 
   // Sort regions: starting region first, then by unlock requirement
-  const sortedRegions = [...REGIONS].sort((a, b) => {
+  const sortedRegions = [...activeRegions].sort((a, b) => {
     if (a.id === startingRegion) return -1;
     if (b.id === startingRegion) return 1;
     return a.unlockRequirement - b.unlockRequirement;
@@ -167,7 +172,7 @@ export default function WorldMap({ onClose }: WorldMapProps) {
         }}
       >
         {sortedRegions.map((region, index) => {
-          const regionCountries = ALL_COUNTRIES.filter(c =>
+          const regionCountries = activeCountries.filter(c =>
             region.countries.includes(c.id)
           );
           const rp = regionProgress[region.id] || {
