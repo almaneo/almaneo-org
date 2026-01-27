@@ -5,12 +5,14 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
   overlay?: 'warm' | 'cold' | 'warm-bottom' | 'none';
   size?: 'default' | 'small';
+  background?: ReactNode;
 }
 
 export function Section({
   children,
   overlay = 'none',
   size = 'default',
+  background,
   className,
   ...props
 }: SectionProps) {
@@ -25,6 +27,7 @@ export function Section({
 
   return (
     <section className={cn(sizeClass, className)} {...props}>
+      {background}
       {overlay !== 'none' && <div className={overlayClass} />}
       <div className="relative z-10">{children}</div>
     </section>

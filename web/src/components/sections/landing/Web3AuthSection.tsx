@@ -46,19 +46,22 @@ export function Web3AuthSection() {
   const { t } = useTranslation('landing');
 
   return (
-    <Section id="web3auth" overlay="cold" className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={onboardingBackground}
-          alt="Onboarding Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Sleek blue overlay for onboarding theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-blue-950/70 to-slate-950/90" />
-      </div>
-
-      <Container className="relative z-10">
+    <Section
+      id="web3auth"
+      overlay="cold"
+      className="relative"
+      background={
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={onboardingBackground}
+            alt="Onboarding Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-blue-950/70 to-slate-950/90" />
+        </div>
+      }
+    >
+      <Container>
         <SectionHeader
           tag={t('web3auth.title')}
           tagColor="cold"

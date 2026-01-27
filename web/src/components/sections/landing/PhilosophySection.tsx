@@ -43,19 +43,22 @@ export function PhilosophySection() {
   const { t } = useTranslation('landing');
 
   return (
-    <Section id="philosophy" overlay="warm" className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={philosophyBackground}
-          alt="Philosophy Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Warm overlay for Jeong theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-orange-950/75 to-slate-950/85" />
-      </div>
-
-      <Container className="relative z-10">
+    <Section
+      id="philosophy"
+      overlay="warm"
+      className="relative"
+      background={
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={philosophyBackground}
+            alt="Philosophy Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-orange-950/75 to-slate-950/85" />
+        </div>
+      }
+    >
+      <Container>
         <SectionHeader
           tag={t('philosophy.title')}
           tagColor="warm"

@@ -9,19 +9,21 @@ export function ProblemSection() {
   const timeKeys = ['morning', 'afternoon', 'evening'] as const;
 
   return (
-    <Section id="problem" className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={problemBackground}
-          alt="Problem Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Dark overlay for problem theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950/90" />
-      </div>
-
-      <Container className="relative z-10">
+    <Section
+      id="problem"
+      className="relative"
+      background={
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={problemBackground}
+            alt="Problem Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950/90" />
+        </div>
+      }
+    >
+      <Container>
         <SectionHeader
           tag={t('problem.title')}
           tagColor="warm"

@@ -56,19 +56,21 @@ export function SolutionSection() {
   const { t } = useTranslation('landing');
 
   return (
-    <Section id="solution" className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={solutionBackground}
-          alt="Solution Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Cool teal/blue overlay for solution theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-teal-950/70 to-slate-950/90" />
-      </div>
-
-      <Container className="relative z-10">
+    <Section
+      id="solution"
+      className="relative"
+      background={
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={solutionBackground}
+            alt="Solution Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-teal-950/70 to-slate-950/90" />
+        </div>
+      }
+    >
+      <Container>
         <SectionHeader
           tag={t('solution.title')}
           tagColor="cold"

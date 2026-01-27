@@ -794,6 +794,45 @@ game/
 
 ---
 
+### Session 48 (2026-01-28) - 홈 화면 시나리오 카드 오른쪽 잘림 수정 ✅
+> **핵심 발견**: 11회에 걸친 팝업 수정은 **여행/퀘스트 결과 팝업**을 대상으로 했으나,
+> 실제 사용자가 보고한 문제는 **홈 화면(KindnessCanvas)의 시나리오 카드**가 오른쪽으로 잘리는 것이었음.
+> 완전히 다른 컴포넌트의 문제였음.
+
+- **근본 원인 분석** ✅
+  - `KindnessCanvas.tsx`의 시나리오 카드가 `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)` 중앙 정렬 사용
+  - `globals.css`의 body에 `padding-left/right: env(safe-area-inset-*)` 적용
+  - body 패딩이 absolute 포지셔닝 기준점을 이동시켜 카드가 오른쪽으로 밀림
+
+- **수정 파일 5개:**
+  - **KindnessCanvas.tsx** (핵심 수정):
+    - 루트 컨테이너: `position: absolute; inset: 0` + `display: flex; align-items: center; justify-content: center` (flexbox 중앙)
+    - 시나리오 카드: `position: absolute + transform: translate(-50%, -50%)` 제거 → `width: '90%'; maxWidth: 400; zIndex: 5; position: 'relative'` (부모 flexbox에 의한 중앙)
+    - `perspective: '1000px'`을 motion.div의 `style` prop으로 이동
+    - 피드백 오버레이: `position: absolute + transform` → 래퍼 Box(`position: absolute; inset: 0; display: flex; align-items: center; justify-content: center`)
+    - 배경 그리드에 `pointerEvents: 'none'` 추가
+  - **globals.css**: body safe-area 패딩 제거 (`padding-left/right: env(safe-area-inset-*)` → 주석으로 대체)
+  - **page.tsx**: 이전 퀘스트 결과 팝업 오버레이 코드 ~130줄 제거, 디버그 yellow border 제거, 미사용 import 제거
+  - **QuestScreen.tsx**: `forwardRef`/`useImperativeHandle` 제거 → phase 기반 렌더링 (`'playing' | 'result' | 'complete'`), 디버그 마커 제거
+  - **QuestScreen/index.ts**: `QuestScreenHandle` export 제거
+
+- **빌드 성공** (TypeScript 에러 0개)
+- **커밋**: `6e748bc` - fix(game): Fix home screen scenario card right-side cutoff on mobile
+- **원격 저장소 푸시 완료**
+
+#### 팝업 수정 이력 최종 (총 12회 시도)
+| # | 접근 | 대상 | 결과 |
+|---|------|------|------|
+| 1~11 | 다양한 CSS/Portal/Dialog 접근 | ❌ 잘못된 컴포넌트 (QuestScreen 결과 팝업) | ❌ 모두 실패 |
+| **12** | **flexbox 중앙 정렬 + body safe-area 패딩 제거** | ✅ 올바른 컴포넌트 (KindnessCanvas 시나리오 카드) | ✅ 해결 |
+
+#### 교훈
+- 11회 실패의 근본 원인: **잘못된 컴포넌트를 수정**하고 있었음
+- 사용자가 "홈 화면에서 팝업이 잘린다"고 했을 때, QuestScreen이 아닌 **KindnessCanvas**를 확인했어야 함
+- `absolute + transform` 중앙 정렬은 body에 safe-area 패딩이 있을 때 오프셋 발생 → **flexbox 중앙 정렬**이 더 안전
+
+---
+
 ## 설계 메모
 
 ### 화면 전환 플로우

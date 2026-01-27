@@ -437,6 +437,14 @@ Semantic:
    - 스토리: 친환경 농업 → AI 민주화
    - 티어 명칭: Jeong-SBT 티어와 일치
 
+4. **세계문화여행 업그레이드 (Session 32~48)** - 2026-01-26~28
+   - Kindness Game → World Culture Travel 전면 업그레이드
+   - 20개국 ~58 퀘스트 (4종류 퀘스트 타입)
+   - 모바일 세로모드 UI 리디자인 + Gold 테마 통일
+   - Game i18n (ko/en), Supabase DB 마이그레이션
+   - 배포: https://game.almaneo.org (Vercel)
+   - 상세 기록: `.claude/GAME_UPDATE.md`, Session 32~48 참조
+
 ### ✅ Completed (Phase 2-F: Web UI 업그레이드) - 2026-01-20
 1. GAII Dashboard 세계지도 시각화 ✅
 2. 랜딩 페이지 신규 섹션 6개 추가 ✅
@@ -2281,7 +2289,69 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 32)
+### ✅ 완료된 작업 (2026-01-26~28 - Session 32~48: 게임 세계문화여행 업그레이드)
+
+> 상세 기록: `.claude/GAME_UPDATE.md` 참조
+
+#### 1. **Kindness Game → 세계문화여행 게임 업그레이드** ✅
+   - 기존 Tap-to-Earn Kindness Game을 세계문화여행(World Culture Travel) 게임으로 전면 업그레이드
+   - 기술 스택: Next.js 14 + TypeScript + MUI + Framer Motion + Zustand + Supabase
+   - 배포: https://game.almaneo.org (Vercel)
+
+#### 2. **세계문화여행 시스템 (20개국, ~58 퀘스트)** ✅
+   - 8개 지역: 동아시아, 동남아시아, 남아시아, 중동, 유럽, 아프리카, 아메리카, 오세아니아
+   - 20개국: KR, JP, CN, TH, VN, ID, IN, NP, TR, AE, FR, GB, DE, IT, ZA, KE, US, CA, BR, MX, AU, NZ
+   - 4종 퀘스트: Cultural Scenario, Trivia Quiz, History Lesson, Cultural Practice
+   - 별 시스템: 국가당 3별 (50% 완료, 100% 완료, 올 퍼펙트)
+   - 지역 언락: 브라우저 locale 기반 시작 지역 + 별 달성 시 다음 지역 해금
+
+#### 3. **모바일 UI 전면 리디자인** ✅
+   - 가로모드 강제 → 세로모드(Portrait) 지원으로 전환
+   - 5탭 이모지 네비바: 🏠 Home | 🌍 Travel | 📋 Quest | ⬆️ Upgrade | ☰ More
+   - More 바텀시트 메뉴 (MUI Drawer): Achievement, Ranking, Token Mining, Story 등
+   - 상단 HUD 간결화: 포인트 | 에너지 | 레벨 | 지갑만 표시
+   - 360x740 모바일 뷰포트 최적화 (Samsung 기준)
+   - Blue(`#0052FF`) → Gold(`#FFD700`) 테마 통일 (전체 컴포넌트)
+
+#### 4. **스토리 팝업 & 타이틀 이미지** ✅
+   - StoryIntro: 카드형 모달 (480px, 1:1 이미지 + 하단 타이핑 텍스트)
+   - 새 5장 스토리 (AI 민주화 테마, .webp 이미지)
+   - StartScreen/LoadingScreen: `almaneo-title.webp` 타이틀 이미지 적용
+
+#### 5. **기존 시스템 연동** ✅
+   - travel 업적 10개 + 일일 퀘스트 4개 (tap/points/upgrade/travel)
+   - useGameStore ↔ useTravelStore 크로스 연동 (저장/로드/통계 동기화)
+   - Supabase: `travel_state` JSONB 컬럼 추가 (game_states 테이블)
+   - kindnessData.ts: 국가 데이터에서 cultural_scenario 동적 추출
+
+#### 6. **퀘스트 콘텐츠 DB 마이그레이션** ✅
+   - 하드코딩 데이터 → Supabase DB (regions, countries, quests, content_translations)
+   - contentService.ts: 5개 병렬 쿼리 + 메모리/localStorage 캐시 (1시간 TTL)
+   - 영어/한국어 번역 시드 완료 (170개 content_translations 레코드)
+   - 콘텐츠 어필 시스템 (AppealButton + AppealHistory)
+
+#### 7. **Game i18n (한국어/영어)** ✅
+   - react-i18next 연동 (~200 번역 키)
+   - ~25개 컴포넌트에 t() 함수 적용
+   - 데이터 파일 키 기반 변환 (constants, quests, achievements, story 등)
+   - MoreMenu에서 🌐 Language 토글 (한국어 ↔ English)
+
+#### 8. **모바일 레이아웃 버그 수정** ✅
+   - 하단 네비바 가시성: `100vh` → `100dvh` + flex 레이아웃 전환
+   - 홈 화면 시나리오 카드 오른쪽 잘림: `absolute+transform` → flexbox 중앙 정렬 + body safe-area 패딩 제거
+   - 퀘스트 결과 팝업 중앙 정렬: 12회 시도 끝 해결 (CSS containment 이슈)
+
+#### 9. **주요 커밋**
+   - `9f36567` - feat(game): World Culture Travel upgrade with UI fixes
+   - `9b8de21` - fix(game): Make bottom navbar always visible on mobile
+   - `a3621e5` - feat(game): Add Korean quest translations for 58 quests
+   - `4dfefff` - fix(game): Fix quest language binding and lift result popup
+   - `5cb8d9e` - fix(game): Use fullScreen Dialog for popup centering
+   - `6e748bc` - fix(game): Fix home screen scenario card right-side cutoff on mobile
+
+---
+
+### 🔲 다음 세션 작업 (Session 49+)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
@@ -2295,15 +2365,15 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 #### 🟡 중간 우선순위
 
-3. **Game 서버 배포**
-   - Firebase → Supabase 마이그레이션
-   - `game/vercel.json` 생성
-   - Vercel 배포 설정
-
-4. **i18n 번역 확장**
+3. **i18n 번역 확장**
    - 나머지 12개 언어에 `aiHub` 섹션 추가
    - Kindness/Meetup 페이지 번역 키 생성
    - `blog` 키 추가 (12개 언어)
+
+4. **Game 추가 개선**
+   - 오세아니아 국가 데이터 완성 (호주, 뉴질랜드 퀘스트 확장)
+   - 추가 언어 퀘스트 번역 (zh, ja, th, vi 등)
+   - 실제 디바이스 QA 테스트
 
 #### 🟢 낮은 우선순위
 
@@ -2318,7 +2388,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 31 기준)
+### 📊 페이지별 상태 요약 (Session 48 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2334,7 +2404,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
 | NFT (외부) | ✅ | nft.almaneo.org |
-| Game (외부) | ❌ | 미배포 |
+| Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
 ---
 
@@ -2419,7 +2489,7 @@ YouTube:    미정 (숨김)
 ```
 Web:  https://almaneo.org (Vercel) ✅ 배포 완료
 NFT:  https://nft.almaneo.org (Vercel) ✅ 배포 완료
-Game: https://game.almaneo.org (미배포)
+Game: https://game.almaneo.org (Vercel) ✅ 배포 완료 (세계문화여행)
 ```
 
 ### Supabase 프로젝트 정보
@@ -2496,8 +2566,8 @@ cd c:\DEV\ALMANEO\game && npm run dev     # Game (포트 3000)
 ```
 
 ### Game 서버 주요 변경사항
-- **토큰명**: MiMiG → NEOS
-- **채굴 풀**: 10M → 800M NEOS (전체 8B의 10%)
+- **토큰명**: MiMiG → ALMAN (NEOS에서 추가 변경)
+- **채굴 풀**: 10M → 800M ALMAN (전체 8B의 10%)
 - **반감기 라벨**: 정(情) 테마 적용
   - Genesis Era (정의 시작)
   - First Halving (따뜻함의 확산)
@@ -2509,6 +2579,13 @@ cd c:\DEV\ALMANEO\game && npm run dev     # Game (포트 3000)
   - Tree of Warmth (따뜻함의 나무)
   - Forest of Humanity (인류의 숲)
 - **스토리**: 친환경 농업 → AI 민주화
+- **세계문화여행 (Session 32~48)**: Kindness Game → World Culture Travel 전면 업그레이드
+  - 8개 지역, 20개국, ~58 퀘스트 (4종류)
+  - 모바일 세로모드 5탭 네비바 (Home | Travel | Quest | Upgrade | More)
+  - Gold(`#FFD700`) 테마 통일
+  - Game i18n (ko/en, ~200 키)
+  - Supabase DB 콘텐츠 시스템 (regions, countries, quests, content_translations)
+  - 상세: `.claude/GAME_UPDATE.md`
 
 ### 친절 모드 (Kindness Mode) 가이드
 친절 모드는 Web3/블록체인 초보자를 위한 용어 설명 기능입니다.

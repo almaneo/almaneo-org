@@ -78,19 +78,21 @@ export function EcosystemSection() {
   const { t } = useTranslation('landing');
 
   return (
-    <Section id="ecosystem" className="relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={ecosystemBackground}
-          alt="Ecosystem Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Cool blue overlay for ecosystem theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-blue-950/80 to-slate-950/90" />
-      </div>
-
-      <Container className="relative z-10">
+    <Section
+      id="ecosystem"
+      className="relative"
+      background={
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={ecosystemBackground}
+            alt="Ecosystem Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-blue-950/80 to-slate-950/90" />
+        </div>
+      }
+    >
+      <Container>
         <SectionHeader
           tag={t('ecosystem.title')}
           tagColor="cold"
