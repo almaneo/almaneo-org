@@ -8,9 +8,11 @@ import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useGameStore } from '@/hooks/useGameStore';
 import QuestCard from './QuestCard';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function QuestPanel() {
   const { dailyQuests, claimQuestReward } = useGameStore();
+  const { t } = useTranslation('game');
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -41,7 +43,7 @@ export default function QuestPanel() {
     return (
       <Box sx={{ textAlign: 'center', py: 4 }}>
         <Typography variant="h6" color="text.secondary">
-          Loading quests...
+          {t('quest.loading')}
         </Typography>
       </Box>
     );
@@ -77,15 +79,15 @@ export default function QuestPanel() {
         >
           <Box>
             <Typography variant={isLandscape ? 'h6' : isMobile ? 'body1' : 'h5'} sx={{ color: 'white', fontWeight: 900, fontSize: isMobile ? 15 : undefined, mb: 0.25 }}>
-              📋 Mission Log
+              📋 {t('quest.title')}
             </Typography>
             <Typography variant="caption" sx={{ color: '#FFD700', fontWeight: 'bold', fontSize: isMobile ? 11 : undefined }}>
-              RECONSTRUCTION: {completedCount} / {dailyQuests.length}
+              {t('quest.reconstruction', { completed: completedCount, total: dailyQuests.length })}
             </Typography>
           </Box>
           <Box sx={{ textAlign: 'right' }}>
             <Typography variant="caption" display="block" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: isLandscape ? 10 : isMobile ? 10 : undefined }}>
-              NEXT REFRESH
+              {t('quest.nextRefresh')}
             </Typography>
             <Typography variant="caption" sx={{ color: 'white', fontWeight: 'bold', fontSize: isMobile ? 11 : undefined }}>
               ⏰ {timeUntilReset}
@@ -103,7 +105,7 @@ export default function QuestPanel() {
             }}
           >
             <Typography variant="caption" sx={{ color: '#4CAF50', fontWeight: 800, fontSize: isMobile ? 11 : undefined }}>
-              REWARDS EARNED: <strong style={{ textDecoration: 'underline' }}>+{totalRewards} 💖</strong>
+              {t('quest.rewardsEarned', { total: totalRewards })} 💖
             </Typography>
           </Box>
         )}
@@ -139,10 +141,10 @@ export default function QuestPanel() {
           }}
         >
           <Typography variant={isLandscape ? 'body2' : isMobile ? 'body2' : 'h6'} sx={{ color: '#4CAF50', fontWeight: 700, fontSize: isMobile ? 13 : undefined }}>
-            🎉 All daily quests completed!
+            🎉 {t('quest.allCompleted')}
           </Typography>
           <Typography variant="caption" sx={{ mt: 0.5, color: 'rgba(255, 255, 255, 0.8)', fontSize: isMobile ? 11 : undefined }}>
-            Come back tomorrow!
+            {t('quest.comeBackTomorrow')}
           </Typography>
         </Box>
       )}

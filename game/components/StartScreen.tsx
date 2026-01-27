@@ -3,6 +3,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 interface StartScreenProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface StartScreenProps {
 }
 
 export default function StartScreen({ open, onStart }: StartScreenProps) {
+  const { t } = useTranslation('game');
   if (!open) return null;
 
   return (
@@ -68,7 +70,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             letterSpacing: 1
           }}
         >
-          Cold Code, Warm Soul.
+          {t('startScreen.tagline')}
         </Typography>
       </motion.div>
 
@@ -98,7 +100,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             transition: 'all 0.3s ease',
           }}
         >
-          ENTER THE HUB
+          {t('startScreen.enterButton')}
         </Button>
       </motion.div>
 
@@ -118,7 +120,7 @@ export default function StartScreen({ open, onStart }: StartScreenProps) {
             px: 2,
           }}
         >
-          Help democratize AI through human connection
+          {t('startScreen.subtitle')}
         </Typography>
       </motion.div>
     </Box>

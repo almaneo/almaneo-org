@@ -2,6 +2,7 @@
 
 import { Box, Typography } from '@mui/material';
 import { useState, MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import ResourceCounter from './ResourceCounter';
 import EnergyBar from './EnergyBar';
 import LevelBadge from './LevelBadge';
@@ -25,6 +26,7 @@ export default function GameHUD({
   maxEnergy,
   level,
 }: GameHUDProps) {
+  const { t } = useTranslation('game');
   const isMobile = useIsMobile();
   const { totalPoints } = useGameStore();
 
@@ -57,7 +59,7 @@ export default function GameHUD({
         }}
       >
         {/* Kindness Score */}
-        <ResourceCounter value={points} label="Kindness" onClick={handlePointsClick} />
+        <ResourceCounter value={points} label={t('hud.kindness')} onClick={handlePointsClick} />
 
         {/* Energy */}
         <EnergyBar current={energy} max={maxEnergy} onClick={handleEnergyClick} />
@@ -77,13 +79,13 @@ export default function GameHUD({
         open={Boolean(pointsAnchor)}
         anchorEl={pointsAnchor}
         onClose={() => setPointsAnchor(null)}
-        title="Kindness Details"
+        title={t('hud.kindnessDetails')}
         icon="💖"
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Current:
+              {t('hud.current')}
             </Typography>
             <Typography sx={{ color: '#FFF', fontWeight: 'bold', fontSize: 14 }}>
               {points.toLocaleString()}
@@ -91,7 +93,7 @@ export default function GameHUD({
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Total Earned:
+              {t('hud.totalEarned')}
             </Typography>
             <Typography sx={{ color: '#FFD700', fontWeight: 'bold', fontSize: 14 }}>
               {totalPoints.toLocaleString()}
@@ -105,13 +107,13 @@ export default function GameHUD({
         open={Boolean(energyAnchor)}
         anchorEl={energyAnchor}
         onClose={() => setEnergyAnchor(null)}
-        title="BP Status"
+        title={t('hud.bpStatus')}
         icon="⚡"
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Current:
+              {t('hud.current')}
             </Typography>
             <Typography sx={{ color: '#FFF', fontWeight: 'bold', fontSize: 14 }}>
               {energy}/{maxEnergy}
@@ -119,10 +121,10 @@ export default function GameHUD({
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Recovery:
+              {t('hud.recovery')}
             </Typography>
             <Typography sx={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 14 }}>
-              +10 every 60s
+              {t('hud.recoveryRate', { rate: 10, interval: 60 })}
             </Typography>
           </Box>
           <Box sx={{ mt: 1, pt: 1, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
@@ -136,13 +138,13 @@ export default function GameHUD({
         open={Boolean(levelAnchor)}
         anchorEl={levelAnchor}
         onClose={() => setLevelAnchor(null)}
-        title="Level Info"
+        title={t('hud.levelInfo')}
         icon="🏆"
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Current Level:
+              {t('hud.currentLevel')}
             </Typography>
             <Typography sx={{ color: '#FFF', fontWeight: 'bold', fontSize: 14 }}>
               {level}
@@ -150,7 +152,7 @@ export default function GameHUD({
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Max Level:
+              {t('hud.maxLevel')}
             </Typography>
             <Typography sx={{ color: '#FFD700', fontWeight: 'bold', fontSize: 14 }}>
               {GAME_CONFIG.MAX_LEVEL}
@@ -158,7 +160,7 @@ export default function GameHUD({
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-              Progress:
+              {t('hud.progress')}
             </Typography>
             <Typography sx={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 14 }}>
               {totalPoints.toLocaleString()}/{(1000 * Math.pow(level, 1.5)).toLocaleString()}

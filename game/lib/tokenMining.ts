@@ -24,28 +24,28 @@ export const HALVING_EPOCHS = [
     start: 0,
     end: 200_000_000,      // 0 - 200M
     rate: 10_000,          // 10,000 포인트 = 1 ALMAN
-    label: 'Genesis Era (정의 시작)',
+    labelKey: 'mining.epoch1',
   },
   {
     epoch: 2,
     start: 200_000_000,
     end: 400_000_000,      // 200M - 400M
     rate: 20_000,          // 20,000 포인트 = 1 ALMAN
-    label: 'First Halving (따뜻함의 확산)',
+    labelKey: 'mining.epoch2',
   },
   {
     epoch: 3,
     start: 400_000_000,
     end: 600_000_000,      // 400M - 600M
     rate: 40_000,          // 40,000 포인트 = 1 ALMAN
-    label: 'Second Halving (연결의 시대)',
+    labelKey: 'mining.epoch3',
   },
   {
     epoch: 4,
     start: 600_000_000,
     end: 800_000_000,      // 600M - 800M
     rate: 80_000,          // 80,000 포인트 = 1 ALMAN
-    label: 'Final Halving (정(情)의 완성)',
+    labelKey: 'mining.epoch4',
   },
 ] as const;
 
@@ -196,7 +196,8 @@ export interface MiningEstimate {
   pointsRequired: number;
   currentRate: number;
   canMine: boolean;
-  epochInfo: string;
+  epochLabelKey: string | null;
+  epochNumber: number | null;
 }
 
 export function estimateMiningReward(
@@ -213,9 +214,8 @@ export function estimateMiningReward(
     pointsRequired: currentRate,
     currentRate,
     canMine,
-    epochInfo: currentEpoch
-      ? `${currentEpoch.label} (Epoch ${currentEpoch.epoch})`
-      : 'Mining Complete',
+    epochLabelKey: currentEpoch ? currentEpoch.labelKey : null,
+    epochNumber: currentEpoch ? currentEpoch.epoch : null,
   };
 }
 

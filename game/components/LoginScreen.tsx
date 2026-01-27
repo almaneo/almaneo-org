@@ -3,12 +3,14 @@
 import { Box, Typography, Button } from '@mui/material';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
+  const { t } = useTranslation('game');
   return (
     <Box
       sx={{
@@ -127,7 +129,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               fontSize: { xs: '1.4rem', sm: '2rem', md: '3rem' },
             }}
           >
-            Cold Code, Warm Soul.
+            {t('login.slogan')}
           </Typography>
 
           <Typography
@@ -141,19 +143,18 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               px: 1,
             }}
           >
-            Democratizing AI through the power of human kindness.
-            Contribute to the global dataset and earn ALMAN rewards.
+            {t('login.description')}
           </Typography>
 
           {/* Stats Preview */}
           <Box sx={{ display: 'flex', gap: { xs: 3, sm: 4 } }}>
             <Box>
               <Typography sx={{ color: '#0052ff', fontWeight: 'bold', fontSize: { xs: '0.9rem', sm: '1rem' } }}>8B+</Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>HUMANS TARGETED</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>{t('login.humansTargeted')}</Typography>
             </Box>
             <Box>
               <Typography sx={{ color: '#FF6B00', fontWeight: 'bold', fontSize: { xs: '0.9rem', sm: '1rem' } }}>100%</Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>OPEN ACCESS</Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>{t('login.openAccess')}</Typography>
             </Box>
           </Box>
         </Box>
@@ -172,14 +173,14 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           }}
         >
           <Typography sx={{ mb: { xs: 2, sm: 3 }, fontWeight: 'bold', textAlign: 'center', fontSize: { xs: '1.1rem', sm: '1.3rem' } }}>
-            Welcome to AI Hub
+            {t('login.welcomeTitle')}
           </Typography>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: { xs: 2, sm: 3 } }}>
             {[
-              { icon: '🧠', text: 'Label Culture Context' },
-              { icon: '💖', text: 'Earn Kindness Points' },
-              { icon: '💎', text: 'Mine ALMAN Tokens' },
+              { icon: '🧠', text: t('login.feature1') },
+              { icon: '💖', text: t('login.feature2') },
+              { icon: '💎', text: t('login.feature3') },
             ].map((feature, i) => (
               <Box
                 key={i}
@@ -218,13 +219,13 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               }
             }}
           >
-            Connect Wallet
+            {t('login.connectWallet')}
           </Button>
 
           <Typography variant="caption" sx={{ display: 'block', mt: { xs: 1.5, sm: 3 }, textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: { xs: '0.6rem', sm: '0.75rem' } }}>
-            Powered by Web3Auth & Biconomy
+            {t('login.poweredBy')}
             <br />
-            Secure Social Login (Google, X, etc.)
+            {t('login.secureLogin')}
           </Typography>
         </Box>
       </Box>
@@ -232,7 +233,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
       {/* Footer Branding */}
       <Box sx={{ textAlign: 'center', width: '100%', opacity: 0.3, py: { xs: 1, sm: 2 }, mt: 'auto' }}>
         <Typography variant="caption" sx={{ letterSpacing: 2, fontSize: { xs: '0.55rem', sm: '0.75rem' } }}>
-          © 2026 ALMANEO ORGANIZATION
+          {t('login.copyright')}
         </Typography>
       </Box>
     </Box>

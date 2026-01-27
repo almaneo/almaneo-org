@@ -1,0 +1,446 @@
+{
+  "common": {
+    "back": "뒤로",
+    "map": "지도",
+    "close": "닫기",
+    "cancel": "취소",
+    "confirm": "확인",
+    "retry": "다시 시도",
+    "loading": "로딩 중...",
+    "comingSoon": "준비 중",
+    "connectWallet": "지갑 연결",
+    "save": "저장",
+    "ok": "확인",
+    "next": "다음",
+    "previous": "이전",
+    "claim": "수령",
+    "points": "포인트",
+    "level": "레벨",
+    "reward": "보상",
+    "max": "최대",
+    "perSecond": "/초",
+    "perMinute": "/분",
+    "cost": "비용",
+    "maxed": "최대 달성",
+    "phase": "페이즈",
+    "stars": "별",
+    "locked": "잠금",
+    "unlocked": "해금",
+    "completed": "완료",
+    "active": "진행 중",
+    "notConnected": "미연결",
+    "error": "오류",
+    "success": "성공",
+    "language": "언어"
+  },
+
+  "tiers": {
+    "bronze": "Seed of Kindness (친절의 씨앗)",
+    "silver": "Sprout of Jeong (정의 싹)",
+    "gold": "Tree of Warmth (따뜻함의 나무)",
+    "platinum": "Forest of Humanity (인류의 숲)"
+  },
+
+  "mining": {
+    "epoch1": "Genesis Era (정의 시작)",
+    "epoch2": "First Halving (따뜻함의 확산)",
+    "epoch3": "Second Halving (연결의 시대)",
+    "epoch4": "Final Halving (정(情)의 완성)",
+    "pointsPerToken": "{{rate}} 포인트 = 1 ALMAN",
+    "miningComplete": "채굴 완료",
+    "epochLabel": "{{label}} (Epoch {{epoch}})"
+  },
+
+  "nav": {
+    "home": "홈",
+    "travel": "여행",
+    "quest": "퀘스트",
+    "upgrade": "업그레이드",
+    "more": "더보기"
+  },
+
+  "moreMenu": {
+    "title": "더보기",
+    "achievement": "업적",
+    "ranking": "순위",
+    "tokenMining": "토큰 채굴",
+    "myAppeals": "내 신고 내역",
+    "profile": "프로필",
+    "settings": "설정",
+    "story": "스토리",
+    "comingSoon": "준비 중",
+    "replay": "다시 보기",
+    "language": "언어"
+  },
+
+  "hud": {
+    "kindness": "친절",
+    "kindnessDetails": "친절 상세",
+    "current": "현재:",
+    "totalEarned": "총 획득:",
+    "bpStatus": "BP 상태",
+    "recovery": "회복:",
+    "recoveryRate": "+{{rate}} / {{interval}}초",
+    "levelInfo": "레벨 정보",
+    "currentLevel": "현재 레벨:",
+    "maxLevel": "최대 레벨:",
+    "progress": "진행도:",
+    "phase": "Phase {{level}}"
+  },
+
+  "canvas": {
+    "feedbackFail": "아쉬워요... 다시 시도해보세요!",
+    "lowBP": "BP 부족 (충전 중...)"
+  },
+
+  "loading": {
+    "message": "여정을 불러오는 중...",
+    "subtitle": "문화를 탐험하고 친절을 퍼뜨리세요",
+    "kindnessHub": "친절 허브 불러오는 중..."
+  },
+
+  "login": {
+    "slogan": "Cold Code, Warm Soul.",
+    "description": "인간의 친절함으로 AI를 민주화합니다. 글로벌 데이터셋에 기여하고 ALMAN 보상을 받으세요.",
+    "humansTargeted": "목표 인류",
+    "openAccess": "오픈 액세스",
+    "welcomeTitle": "AI 허브에 오신 것을 환영합니다",
+    "feature1": "문화적 맥락 라벨링",
+    "feature2": "친절 포인트 획득",
+    "feature3": "ALMAN 토큰 채굴",
+    "connectWallet": "지갑 연결",
+    "poweredBy": "Powered by Web3Auth & Biconomy",
+    "secureLogin": "소셜 로그인 (Google, X 등)",
+    "copyright": "© 2026 ALMANEO ORGANIZATION"
+  },
+
+  "startScreen": {
+    "tagline": "Cold Code, Warm Soul.",
+    "enterButton": "허브 입장",
+    "subtitle": "인간의 연결을 통해 AI 민주화를 도와주세요"
+  },
+
+  "story": {
+    "scene1": "때는 2026년. 인공지능이 세상을 바꿨습니다 — 하지만 평등하게는 아닙니다. 빛나는 도시에서 AI는 코드를 쓰고, 예술을 창조하고, 질병을 진단합니다. 하지만 글로벌 사우스의 수십억 명에게는 간단한 AI 챗봇조차 하루 임금보다 비쌉니다.",
+    "scene2": "그때 당신은 강력한 것을 발견했습니다 — 정(情). 직역이 불가능한 한국어 단어입니다. 함께 식사를 나누는 낯선 이들 사이의 따뜻함, 인간이 서로를 진정으로 바라볼 때 형성되는 유대. 이 오래된 지혜가 디지털 격차를 치유할 수 있다면?",
+    "scene3": "AlmaNEO는 단순한 믿음에서 태어났습니다: 기술은 모든 인류를 위해 봉사해야 한다. Cold Code, Warm Soul — 블록체인의 투명성과 인간의 따뜻함을 결합합니다. 모든 친절한 행동이 기록되고, 가치를 인정받고, 보상받는 프로토콜.",
+    "scene4": "여정이 시작됩니다. 20개국을 여행하고, 그들의 문화를 배우고, 어디를 가든 친절을 퍼뜨리세요. 일본의 사원에서 케냐의 시장까지, 파리의 카페에서 브라질의 축제까지 — 모든 문화에는 나눌 지혜가 있습니다.",
+    "scene5": "모든 탭이 친절을 퍼뜨립니다. 모든 퀘스트가 문화를 연결합니다. 모든 연결이 AI 격차를 줄입니다. 당신은 혼자가 아닙니다 — 80억 영혼, 하나의 꿈. AlmaNEO에 오신 것을 환영합니다. 따뜻함의 여정을 시작하세요.",
+    "tapToSkip": "탭하여 건너뛰기",
+    "tapToContinue": "이미지를 탭하여 계속",
+    "sceneCounter": "{{current}} / {{total}}"
+  },
+
+  "milestones": {
+    "level5": {
+      "title": "친절의 씨앗",
+      "message": "친절을 퍼뜨리는 여정이 시작되었습니다!"
+    },
+    "level10": {
+      "title": "첫 연결 성공!",
+      "message": "당신의 친절이 누군가에게 처음으로 AI 도구를 사용할 수 있게 해주었습니다!"
+    },
+    "level15": {
+      "title": "성장하는 영향력",
+      "message": "당신의 정(情)이 퍼지고 있습니다 — 더 많은 사람들이 운동에 참여하고 있습니다!"
+    },
+    "level20": {
+      "title": "커뮤니티 빌더",
+      "message": "디지털 격차 사이에 다리를 놓고 있습니다. 계속 가세요!"
+    },
+    "level25": {
+      "title": "친절 대사",
+      "message": "당신의 Jeong-SBT가 커뮤니티에서 인정받고 있습니다!"
+    },
+    "level30": {
+      "title": "AI 평등 챔피언",
+      "message": "당신의 기여가 GAII 지수를 측정 가능하게 줄이고 있습니다!"
+    },
+    "level40": {
+      "title": "지역적 영향력",
+      "message": "당신의 친절 네트워크가 지역을 넘어 확장되고 있습니다!"
+    },
+    "level50": {
+      "title": "글로벌 인정",
+      "message": "AI 민주화의 선구자로 인정받고 있습니다!"
+    },
+    "level75": {
+      "title": "따뜻함의 나무",
+      "message": "당신의 친절한 유산이 전 세계 사람들에게 영감을 주고 있습니다!"
+    },
+    "level100": {
+      "title": "인류의 숲",
+      "message": "정점에 도달했습니다! 당신의 정(情)이 인간 연결의 숲을 만들었습니다!"
+    }
+  },
+
+  "upgrades": {
+    "tapPower": {
+      "title": "라벨링 속도",
+      "description": "작업당 효율성 증가"
+    },
+    "autoFarm": {
+      "title": "자동 ML 모델",
+      "description": "오프라인 중 자동 학습"
+    },
+    "energyCapacity": {
+      "title": "컴퓨팅 노드",
+      "description": "최대 BP 용량 증가"
+    },
+    "energyRegen": {
+      "title": "냉각 시스템",
+      "description": "빠른 BP 회복"
+    },
+    "panel": {
+      "title": "허브 업그레이드",
+      "levelLabel": "Lv.{{level}}",
+      "maxLevel": "MAX",
+      "effect": "효과",
+      "costLabel": "비용"
+    }
+  },
+
+  "quest": {
+    "title": "임무 기록",
+    "reconstruction": "진행: {{completed}} / {{total}}",
+    "nextRefresh": "다음 갱신",
+    "rewardsEarned": "획득 보상: +{{total}}",
+    "completed": "완료됨",
+    "claim": "획득",
+    "active": "진행 중",
+    "reward": "보상",
+    "allCompleted": "모든 일일 퀘스트 완료!",
+    "comeBackTomorrow": "내일 다시 오세요!",
+    "loading": "퀘스트를 불러오는 중..."
+  },
+
+  "dailyQuests": {
+    "tap": {
+      "junior": { "title": "초급 동기화기", "description": "데이터 {{target}}회 동기화" },
+      "senior": { "title": "상급 동기화기", "description": "데이터 {{target}}회 동기화" },
+      "engineer": { "title": "데이터 엔지니어", "description": "데이터 {{target}}회 동기화" },
+      "master": { "title": "동기화 마스터", "description": "데이터 {{target}}회 동기화" }
+    },
+    "points": {
+      "micro": { "title": "마이크로 임팩트", "description": "친절 포인트 {{target}} 축적" },
+      "nodeSupport": { "title": "노드 서포트", "description": "친절 포인트 {{target}} 축적" },
+      "communityPillar": { "title": "커뮤니티 기둥", "description": "친절 포인트 {{target}} 축적" },
+      "globalPhilanthropist": { "title": "글로벌 박애주의자", "description": "친절 포인트 {{target}} 축적" }
+    },
+    "upgrade": {
+      "moduleSetup": { "title": "모듈 설치", "description": "허브 업그레이드 {{target}}개 설치" },
+      "techSpecialist": { "title": "기술 전문가", "description": "허브 업그레이드 {{target}}개 설치" },
+      "systemsArchitect": { "title": "시스템 설계자", "description": "허브 업그레이드 {{target}}개 설치" }
+    },
+    "travel": {
+      "quickVisit": { "title": "단기 방문", "description": "여행 퀘스트 {{target}}개 완료" },
+      "cultureExplorer": { "title": "문화 탐험가", "description": "여행 퀘스트 {{target}}개 완료" },
+      "worldTraveler": { "title": "세계 여행자", "description": "여행 퀘스트 {{target}}개 완료" },
+      "globalAmbassador": { "title": "글로벌 대사", "description": "여행 퀘스트 {{target}}개 완료" }
+    }
+  },
+
+  "achievements": {
+    "first_harvest": { "title": "Hello World", "description": "허브에 첫 연결을 설정하세요" },
+    "century_club": { "title": "데이터 스트리머", "description": "허브에 데이터 패킷 100개 동기화" },
+    "millennium": { "title": "하이 밴드위스", "description": "데이터 패킷 1,000개 동기화" },
+    "click_master": { "title": "메인프레임 액세스", "description": "데이터 패킷 10,000개 동기화" },
+    "first_fortune": { "title": "초기 자본", "description": "친절 포인트 1,000 축적" },
+    "point_collector": { "title": "임팩트 메이커", "description": "친절 포인트 10,000 축적" },
+    "wealthy_farmer": { "title": "평등 챔피언", "description": "친절 포인트 100,000 축적" },
+    "first_upgrade": { "title": "노드 최적화", "description": "첫 번째 허브 최적화 모듈 설치" },
+    "max_energy": { "title": "버퍼 오버플로우", "description": "컴퓨팅 노드를 레벨 10으로 업그레이드" },
+    "power_tapper": { "title": "뉴럴 링크", "description": "라벨링 속도를 레벨 10으로 업그레이드" },
+    "automation_king": { "title": "AI 특이점", "description": "자동 ML 모델을 레벨 10으로 업그레이드" },
+    "energy_master": { "title": "제로 레이턴시", "description": "냉각 시스템을 레벨 10으로 업그레이드" },
+    "perfect_farm": { "title": "Tier 1 운영자", "description": "모든 허브 모듈 최대화" },
+    "beginner": { "title": "알파 테스터", "description": "Phase 5 도달" },
+    "advanced": { "title": "베타 동기화기", "description": "Phase 10 도달" },
+    "master": { "title": "허브 설계자", "description": "Phase 25 도달" },
+    "night_owl": { "title": "딥 러닝", "description": "야간 사이클(00:00 - 06:00)에 데이터 동기화" },
+    "dedicated": { "title": "안정적 연결", "description": "7일 연속으로 허브 접속" },
+    "veteran": { "title": "코어 멤버", "description": "총 가동 시간 10시간 초과" },
+    "quest_master": { "title": "미션 베테랑", "description": "일일 로그 10개 완료" },
+    "first_journey": { "title": "첫 걸음", "description": "첫 번째 국가 방문" },
+    "world_explorer": { "title": "세계 탐험가", "description": "5개 다른 국가 방문" },
+    "globe_trotter": { "title": "글로브 트로터", "description": "10개 다른 국가 방문" },
+    "world_citizen": { "title": "세계 시민", "description": "모든 20개 국가 방문" },
+    "first_star": { "title": "라이징 스타", "description": "아무 국가에서 첫 별 획득" },
+    "star_collector": { "title": "별 수집가", "description": "총 별 10개 획득" },
+    "constellation": { "title": "별자리", "description": "총 별 30개 획득" },
+    "perfect_country": { "title": "문화 마스터", "description": "아무 국가에서 별 3개 획득" },
+    "travel_quest_10": { "title": "호기심 많은 여행자", "description": "여행 퀘스트 10개 완료" },
+    "travel_quest_50": { "title": "문화 학자", "description": "여행 퀘스트 50개 완료" },
+    "categories": {
+      "all": "전체",
+      "tap": "탭",
+      "points": "포인트",
+      "upgrade": "업그레이드",
+      "level": "레벨",
+      "special": "특별",
+      "travel": "여행"
+    },
+    "panel": {
+      "title": "업적",
+      "completionRate": "{{count}}% 동기화됨",
+      "earned": "획득",
+      "sync": "동기화: {{current}} / {{target}}",
+      "unlockedReward": "해금 보상",
+      "encrypted": "암호화된 데이터",
+      "encryptedDesc": "이 노드를 잠금 해제하여 미션 데이터를 복호화하세요.",
+      "empty": "업적 없음",
+      "emptyDesc": "다른 카테고리를 선택해보세요"
+    }
+  },
+
+  "leaderboard": {
+    "title": "글로벌 순위",
+    "agents": "{{count}} 에이전트",
+    "allTime": "전체 기간",
+    "weekly": "주간",
+    "monthly": "월간",
+    "empty": "순위 데이터가 없습니다.",
+    "lastUpdated": "{{time}} 전"
+  },
+
+  "offline": {
+    "signalRestored": "📡 신호 복원",
+    "autoMLActive": "자동 ML 모델이 연결 해제 중에도 활동했습니다.",
+    "disconnectDuration": "연결 해제 기간",
+    "secondsFormat": "{{count}}초",
+    "minutesFormat": "{{count}}분",
+    "hoursFormat": "{{count}}시간",
+    "hoursMinutesFormat": "{{hours}}시간 {{minutes}}분",
+    "kindnessAccumulated": "축적된 친절",
+    "pointsSynced": "포인트 동기화됨",
+    "resumeMission": "임무 재개 🚀"
+  },
+
+  "tokenClaim": {
+    "title": "채굴 보상 획득",
+    "walletAssets": "지갑 자산",
+    "miningPool": "글로벌 채굴 풀",
+    "mined": "채굴됨",
+    "poolCapacity": "풀 용량",
+    "hashrate": "라벨링 해시레이트",
+    "nextEpoch": "다음 Epoch까지",
+    "readyToClaim": "수령 준비 완료",
+    "accumulated": "{{points}} 포인트로부터 축적",
+    "miningTransaction": "채굴 트랜잭션 처리 중...",
+    "successMessage": "토큰 채굴 성공!",
+    "viewExplorer": "Explorer에서 보기",
+    "later": "나중에",
+    "claimTokens": "토큰 획득",
+    "mining": "채굴 중...",
+    "connected": "연결됨: {{addr}}",
+    "notConnected": "미연결"
+  },
+
+  "travel": {
+    "title": "세계 여행",
+    "back": "뒤로",
+    "countries": "국가",
+    "quests": "퀘스트",
+    "perfect": "완벽",
+    "nextUnlock": "{{stars}}★ 추가로 {{region}} 해금",
+    "starsRequired": "{{stars}}★ 필요",
+    "starsToUnlock": "{{stars}}★로 해금",
+    "questComplete": "퀘스트 완료!",
+    "questFinished": "퀘스트 종료",
+    "backToCountry": "국가로 돌아가기",
+    "pointsEarnedLabel": "포인트 획득",
+    "earnedStars": "{{stars}}개의 별 획득",
+    "firstAttempt": "첫 시도 성공",
+    "pointsEarned": "+{{points}} 포인트",
+    "continue": "계속",
+    "tryAgain": "다시 시도",
+    "correct": "정답!",
+    "incorrect": "오답",
+    "notQuite": "아쉬워요!",
+    "kindnessSpreads": "친절이 퍼집니다!",
+    "thinkAgain": "다시 생각해봐요...",
+    "wellDone": "잘했어요!",
+    "explanation": "설명",
+    "funFact": "재미있는 사실",
+    "tapToComplete": "탭하여 완료",
+    "tapToPractice": "탭하여 연습!",
+    "progress": "진행도",
+    "stepOf": "{{total}} 중 {{current}}단계",
+    "stepsCompleted": "{{current}} / {{total}} 단계 완료",
+    "readItQuizMe": "다 읽었어요 — 퀴즈 시작!",
+    "answerWas": "정답:",
+    "countriesCount": "{{count}}개 국가",
+    "questProgress": "{{completed}}/{{total}} 퀘스트",
+    "questsCount": "퀘스트 ({{count}})",
+    "starLabels": {
+      "0": "미시작",
+      "1": "탐험함",
+      "2": "완료됨",
+      "3": "마스터!"
+    },
+    "questTypes": {
+      "cultural_scenario": "친절한 선택",
+      "trivia_quiz": "퀴즈",
+      "cultural_practice": "실습",
+      "history_lesson": "역사"
+    },
+    "difficulty": {
+      "easy": "쉬움",
+      "medium": "보통",
+      "hard": "어려움"
+    },
+    "regions": {
+      "east_asia": "동아시아",
+      "southeast_asia": "동남아시아",
+      "south_asia": "남아시아",
+      "middle_east": "중동",
+      "europe": "유럽",
+      "africa": "아프리카",
+      "americas": "아메리카",
+      "oceania": "오세아니아"
+    }
+  },
+
+  "appeal": {
+    "reportError": "오류 신고",
+    "title": "잘못된 정보 신고",
+    "description": "문화 콘텐츠 개선에 도움을 주세요! 승인되면 +30 친절 점수와 +200 게임 포인트를 획득합니다.",
+    "currentValue": "현재 값",
+    "suggestedCorrection": "제안된 수정",
+    "reason": "수정 이유",
+    "sourceUrl": "출처 URL (선택사항)",
+    "success": "신고가 제출되었습니다! 승인되면 보상이 지급됩니다.",
+    "cancel": "취소",
+    "submit": "신고 제출",
+    "submitting": "제출 중...",
+    "submitFailed": "신고 제출에 실패했습니다",
+    "networkError": "네트워크 오류입니다. 다시 시도해주세요.",
+    "history": {
+      "title": "내 신고 내역",
+      "pending": "대기 중",
+      "approved": "승인됨",
+      "rejected": "거부됨",
+      "pointsEarned": "획득 포인트",
+      "emptyTitle": "신고 내역 없음",
+      "emptyDesc": "퀘스트에서 잘못된 정보를 신고하여 보상을 받으세요",
+      "field": "필드: {{path}}",
+      "reason": "이유: {{reason}}",
+      "retry": "다시 시도",
+      "loadFailed": "신고 내역을 불러오지 못했습니다",
+      "kindnessReward": "+{{points}} 친절",
+      "pointsReward": "+{{points}} 포인트"
+    }
+  },
+
+  "modals": {
+    "upgrade": "업그레이드",
+    "quest": "퀘스트",
+    "achievement": "업적",
+    "ranking": "순위",
+    "profile": "프로필",
+    "settings": "설정",
+    "comingSoon": "준비 중...",
+    "profileComingSoon": "프로필 기능이 곧 제공됩니다!",
+    "settingsComingSoon": "설정 기능이 곧 제공됩니다!"
+  }
+}

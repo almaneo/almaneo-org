@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { TriviaQuizData } from '@/lib/worldTravel/types';
+import { useTranslation } from 'react-i18next';
 
 interface TriviaQuizQuestProps {
   data: TriviaQuizData;
@@ -14,6 +15,7 @@ export default function TriviaQuizQuest({
   data,
   onComplete,
 }: TriviaQuizQuestProps) {
+  const { t } = useTranslation('game');
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
 
@@ -183,7 +185,7 @@ export default function TriviaQuizQuest({
                   {isCorrect ? '🎉' : '📚'}
                 </Typography>
                 <Typography sx={{ fontSize: 18, fontWeight: 700, color: isCorrect ? '#4ade80' : '#f87171', mb: 1 }}>
-                  {isCorrect ? 'Correct!' : 'Not quite!'}
+                  {isCorrect ? t('travel.correct') : t('travel.notQuite')}
                 </Typography>
                 <Typography sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
                   {data.explanation}
@@ -203,7 +205,7 @@ export default function TriviaQuizQuest({
                 }}
               >
                 <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                  Continue
+                  {t('travel.continue')}
                 </Typography>
               </Box>
             </motion.div>

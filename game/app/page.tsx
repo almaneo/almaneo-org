@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Box, Typography, Snackbar, Alert } from '@mui/material';
 import { useGameStore } from '@/hooks/useGameStore';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
+import { useTranslation } from 'react-i18next';
 import { AUTO_SAVE_INTERVAL } from '@/lib/constants';
 import { Howl } from 'howler';
 import GameLayout from '@/components/GameLayout';
@@ -54,6 +55,8 @@ export default function HomePage() {
     saveGame,
     isLoading
   } = useGameStore();
+
+  const { t } = useTranslation('game');
 
   // Web3Auth 지갑 연결
   const { address, isConnected, isLoading: web3Loading, login } = useWeb3Auth();
@@ -180,7 +183,7 @@ export default function HomePage() {
       if (milestone) {
         setMilestoneSnackbar({
           open: true,
-          message: `${milestone.emoji} ${milestone.title}: ${milestone.message}`
+          message: `${milestone.emoji} ${t(milestone.titleKey)}: ${t(milestone.messageKey)}`
         });
       }
     }
@@ -270,7 +273,7 @@ export default function HomePage() {
   const canAct = energy >= 1;
 
   if (isLoading || web3Loading) {
-    return <LoadingScreen message="Loading Kindness Hub..." />;
+    return <LoadingScreen message={t('loading.kindnessHub')} />;
   }
 
   if (!isConnected || !address) {
@@ -312,7 +315,7 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'upgrade'}
               onClose={closeModal}
-              title="Upgrade"
+              title={t('modals.upgrade')}
               icon={<Typography sx={{ fontSize: 24 }}>⬆️</Typography>}
             >
               <UpgradePanel />
@@ -322,7 +325,7 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'quest'}
               onClose={closeModal}
-              title="Quest"
+              title={t('modals.quest')}
               icon={<Typography sx={{ fontSize: 24 }}>📋</Typography>}
             >
               <QuestPanel />
@@ -332,7 +335,7 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'achievement'}
               onClose={closeModal}
-              title="Achievement"
+              title={t('modals.achievement')}
               icon={<Typography sx={{ fontSize: 24 }}>🏆</Typography>}
             >
               <AchievementPanel
@@ -356,7 +359,7 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'leaderboard'}
               onClose={closeModal}
-              title="Ranking"
+              title={t('modals.ranking')}
               icon={<Typography sx={{ fontSize: 24 }}>📊</Typography>}
             >
               <LeaderboardPanel />
@@ -366,16 +369,16 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'profile'}
               onClose={closeModal}
-              title="Profile"
+              title={t('modals.profile')}
               icon={<Typography sx={{ fontSize: 24 }}>👤</Typography>}
               maxWidth={400}
             >
               <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Typography variant="h5" gutterBottom sx={{ color: '#FFD700' }}>
-                  Coming Soon...
+                  {t('modals.comingSoon')}
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-                  Profile feature coming soon!
+                  {t('modals.profileComingSoon')}
                 </Typography>
               </Box>
             </GameModal>
@@ -384,16 +387,16 @@ export default function HomePage() {
             <GameModal
               open={activeModal === 'settings'}
               onClose={closeModal}
-              title="Settings"
+              title={t('modals.settings')}
               icon={<Typography sx={{ fontSize: 24 }}>⚙️</Typography>}
               maxWidth={400}
             >
               <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Typography variant="h5" gutterBottom sx={{ color: '#FFD700' }}>
-                  Coming Soon...
+                  {t('modals.comingSoon')}
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-                  Settings feature coming soon!
+                  {t('modals.settingsComingSoon')}
                 </Typography>
               </Box>
             </GameModal>

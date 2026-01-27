@@ -1,12 +1,13 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Typography, Badge } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 interface NavTab {
   id: string;
-  label: string;
+  labelKey: string;
   icon: ReactNode;
   badge?: number;
 }
@@ -30,12 +31,13 @@ export default function GameNavBar({
   onMoreClick,
   questBadge,
 }: GameNavBarProps) {
+  const { t } = useTranslation('game');
   const tabs: NavTab[] = [
-    { id: 'home', label: 'Home', icon: '🏠' },
-    { id: 'travel', label: 'Travel', icon: '🌍' },
-    { id: 'quest', label: 'Quest', icon: '📋', badge: questBadge },
-    { id: 'upgrade', label: 'Upgrade', icon: '⬆️' },
-    { id: 'more', label: 'More', icon: <MoreHorizIcon sx={{ fontSize: 22 }} /> },
+    { id: 'home', labelKey: 'nav.home', icon: '🏠' },
+    { id: 'travel', labelKey: 'nav.travel', icon: '🌍' },
+    { id: 'quest', labelKey: 'nav.quest', icon: '📋', badge: questBadge },
+    { id: 'upgrade', labelKey: 'nav.upgrade', icon: '⬆️' },
+    { id: 'more', labelKey: 'nav.more', icon: <MoreHorizIcon sx={{ fontSize: 22 }} /> },
   ];
 
   const handlers: Record<string, (() => void) | undefined> = {
@@ -123,7 +125,7 @@ export default function GameNavBar({
                 lineHeight: 1,
               }}
             >
-              {tab.label}
+              {t(tab.labelKey)}
             </Typography>
           </Box>
         );

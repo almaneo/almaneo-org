@@ -6,6 +6,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import type { Region } from '@/lib/worldTravel/types';
 import type { Country, StarRating, RegionProgress } from '@/lib/worldTravel/types';
 import CountryNode from './CountryNode';
+import { useTranslation } from 'react-i18next';
 
 interface RegionCardProps {
   region: Region;
@@ -26,6 +27,7 @@ export default function RegionCard({
   onCountrySelect,
   index,
 }: RegionCardProps) {
+  const { t } = useTranslation('game');
   const isLocked = !progress.unlocked;
   const maxStars = countries.length * 3;
   const currentStars = progress.totalStars;
@@ -86,8 +88,8 @@ export default function RegionCard({
                 }}
               >
                 {isLocked
-                  ? `${region.unlockRequirement}★ to unlock`
-                  : `${countries.length} countries`}
+                  ? t('travel.starsToUnlock', { stars: region.unlockRequirement })
+                  : t('travel.countriesCount', { count: countries.length })}
               </Typography>
             </Box>
           </Box>

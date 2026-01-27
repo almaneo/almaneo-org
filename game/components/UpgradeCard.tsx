@@ -3,6 +3,7 @@
 import React from 'react';
 import { Box, Typography, Button, useMediaQuery } from '@mui/material';
 import { formatNumber } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface UpgradeCardProps {
   icon: string;
@@ -27,6 +28,7 @@ export default function UpgradeCard({
   canAfford,
   onUpgrade,
 }: UpgradeCardProps) {
+  const { t } = useTranslation('game');
   const isMaxLevel = level >= maxLevel;
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -96,7 +98,7 @@ export default function UpgradeCard({
               letterSpacing: 1,
             }}
           >
-            UPGRADE PHASE
+            {t('upgrades.panel.effect')}
           </Typography>
           <Typography
             variant="caption"
@@ -108,7 +110,7 @@ export default function UpgradeCard({
               borderRadius: 1,
             }}
           >
-            Lvl {level} / {maxLevel}
+            {t('upgrades.panel.levelLabel', { level })} / {maxLevel}
           </Typography>
         </Box>
         <Box
@@ -143,7 +145,7 @@ export default function UpgradeCard({
               display: 'block',
             }}
           >
-            Requirement
+            {t('upgrades.panel.costLabel')}
           </Typography>
           <Typography
             variant="body2"
@@ -183,7 +185,7 @@ export default function UpgradeCard({
             transition: 'all 0.2s ease',
           }}
         >
-          {isMaxLevel ? 'Maxed' : 'Upgrade'}
+          {isMaxLevel ? t('common.maxed') : t('modals.upgrade')}
         </Button>
       </Box>
     </Box>

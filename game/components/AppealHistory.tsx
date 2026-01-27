@@ -5,12 +5,14 @@ import { Box, Typography, CircularProgress, Chip, useMediaQuery } from '@mui/mat
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
 import { getUserAppeals, type Appeal } from '@/lib/appealService';
+import { useTranslation } from 'react-i18next';
 
 interface AppealHistoryProps {
   onClose: () => void;
 }
 
 export default function AppealHistory({ onClose }: AppealHistoryProps) {
+  const { t } = useTranslation('game');
   const { address } = useWeb3Auth();
   const isMobile = useMediaQuery('(max-width: 480px)');
 
@@ -31,7 +33,7 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
         setAppeals(data);
       }
     } catch {
-      setError('Failed to load appeals');
+      setError(t('appeal.history.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -42,9 +44,9 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
   }, [fetchAppeals]);
 
   const statusConfig = {
-    pending: { label: 'Pending', color: '#FF9800', bg: 'rgba(255,152,0,0.12)' },
-    approved: { label: 'Approved', color: '#4CAF50', bg: 'rgba(76,175,80,0.12)' },
-    rejected: { label: 'Rejected', color: '#f44336', bg: 'rgba(244,67,54,0.12)' },
+    pending: { label: t('appeal.history.pending'), color: '#FF9800', bg: 'rgba(255,152,0,0.12)' },
+    approved: { label: t('appeal.history.approved'), color: '#4CAF50', bg: 'rgba(76,175,80,0.12)' },
+    rejected: { label: t('appeal.history.rejected'), color: '#f44336', bg: 'rgba(244,67,54,0.12)' },
   };
 
   return (
@@ -89,7 +91,7 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
             color: '#fff',
           }}
         >
-          My Appeals
+          {t('appeal.history.title')}
         </Typography>
         <Chip
           label={appeals.length}
@@ -117,11 +119,11 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
             flexShrink: 0,
           }}
         >
-          <StatItem label="Pending" value={appeals.filter(a => a.status === 'pending').length} color="#FF9800" />
-          <StatItem label="Approved" value={appeals.filter(a => a.status === 'approved').length} color="#4CAF50" />
-          <StatItem label="Rejected" value={appeals.filter(a => a.status === 'rejected').length} color="#f44336" />
+          <StatItem label={t('appeal.history.pending')} value={appeals.filter(a => a.status === 'pending').length} color="#FF9800" />
+          <StatItem label={t('appeal.history.approved')} value={appeals.filter(a => a.status === 'approved').length} color="#4CAF50" />
+          <StatItem label={t('appeal.history.rejected')} value={appeals.filter(a => a.status === 'rejected').length} color="#f44336" />
           <StatItem
-            label="Points Earned"
+            label={t('appeal.history.pointsEarned')}
             value={appeals.reduce((sum, a) => sum + (a.game_points_rewarded || 0), 0)}
             color="#FFD700"
           />
@@ -161,7 +163,7 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.12)' },
               }}
             >
-              <Typography sx={{ color: '#fff', fontSize: 12 }}>Retry</Typography>
+              <Typography sx={{ color: '#fff', fontSize: 12 }}>{t('appeal.history.retry')}</Typography>
             </Box>
           </Box>
         )}
@@ -170,10 +172,10 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
           <Box sx={{ textAlign: 'center', pt: 4 }}>
             <Typography sx={{ fontSize: 32, mb: 1 }}>📝</Typography>
             <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>
-              No appeals yet
+              {t('appeal.history.emptyTitle')}
             </Typography>
             <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, mt: 0.5 }}>
-              Report incorrect information in quests to earn rewards
+              {t('appeal.history.emptyDesc')}
             </Typography>
           </Box>
         )}
@@ -219,7 +221,7 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
 
                 {/* Field */}
                 <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', mb: 0.5 }}>
-                  Field: {appeal.field_path}
+                  {t('appeal.history.field', { path: appeal.field_path })}
                 </Typography>
 
                 {/* Suggested value */}
@@ -238,7 +240,7 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
 
                 {/* Reason */}
                 <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', mb: 1 }}>
-                  Reason: {appeal.reason}
+                  {t('appeal.history.reason', { reason: appeal.reason })}
                 </Typography>
 
                 {/* Bottom row */}
@@ -251,12 +253,12 @@ export default function AppealHistory({ onClose }: AppealHistoryProps) {
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       {appeal.kindness_points_rewarded && (
                         <Typography sx={{ fontSize: 11, color: '#4CAF50', fontWeight: 600 }}>
-                          +{appeal.kindness_points_rewarded} Kindness
+                          {t('appeal.history.kindnessReward', { points: appeal.kindness_points_rewarded })}
                         </Typography>
                       )}
                       {appeal.game_points_rewarded && (
                         <Typography sx={{ fontSize: 11, color: '#FFD700', fontWeight: 600 }}>
-                          +{appeal.game_points_rewarded} Points
+                          {t('appeal.history.pointsReward', { points: appeal.game_points_rewarded })}
                         </Typography>
                       )}
                     </Box>

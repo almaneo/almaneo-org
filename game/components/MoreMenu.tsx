@@ -2,12 +2,14 @@
 
 import { Box, Typography, Drawer, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 interface MoreMenuItem {
   id: string;
   icon: string;
-  label: string;
-  sublabel?: string;
+  labelKey: string;
+  sublabelKey?: string;
+  comingSoon?: boolean;
   onClick?: () => void;
 }
 
@@ -36,17 +38,25 @@ export default function MoreMenu({
   onAppealsClick,
   achievementBadge,
 }: MoreMenuProps) {
+  const { t, i18n } = useTranslation('game');
+
+  const currentLang = i18n.language?.startsWith('ko') ? 'ko' : 'en';
+  const toggleLanguage = () => {
+    const newLang = currentLang === 'ko' ? 'en' : 'ko';
+    i18n.changeLanguage(newLang);
+  };
+
   const mainItems: MoreMenuItem[] = [
-    { id: 'achievement', icon: '🏆', label: 'Achievement', onClick: onAchievementClick },
-    { id: 'ranking', icon: '📊', label: 'Ranking', onClick: onLeaderboardClick },
-    { id: 'token', icon: '⛏️', label: 'Token Mining', onClick: onTokenClick },
-    { id: 'appeals', icon: '📝', label: 'My Appeals', onClick: onAppealsClick },
+    { id: 'achievement', icon: '🏆', labelKey: 'moreMenu.achievement', onClick: onAchievementClick },
+    { id: 'ranking', icon: '📊', labelKey: 'moreMenu.ranking', onClick: onLeaderboardClick },
+    { id: 'token', icon: '⛏️', labelKey: 'moreMenu.tokenMining', onClick: onTokenClick },
+    { id: 'appeals', icon: '📝', labelKey: 'moreMenu.myAppeals', onClick: onAppealsClick },
   ];
 
   const secondaryItems: MoreMenuItem[] = [
-    { id: 'profile', icon: '👤', label: 'Profile', sublabel: 'Coming Soon', onClick: onProfileClick },
-    { id: 'settings', icon: '⚙️', label: 'Settings', sublabel: 'Coming Soon', onClick: onSettingsClick },
-    { id: 'story', icon: '📖', label: 'Story', sublabel: 'Replay', onClick: onStoryClick },
+    { id: 'profile', icon: '👤', labelKey: 'moreMenu.profile', sublabelKey: 'moreMenu.comingSoon', comingSoon: true, onClick: onProfileClick },
+    { id: 'settings', icon: '⚙️', labelKey: 'moreMenu.settings', sublabelKey: 'moreMenu.comingSoon', comingSoon: true, onClick: onSettingsClick },
+    { id: 'story', icon: '📖', labelKey: 'moreMenu.story', sublabelKey: 'moreMenu.replay', onClick: onStoryClick },
   ];
 
   const handleItemClick = (item: MoreMenuItem) => {
@@ -111,7 +121,7 @@ export default function MoreMenu({
             fontFamily: "'Orbitron', sans-serif",
           }}
         >
-          More
+          {t('moreMenu.title')}
         </Typography>
         <Box
           onClick={onClose}
@@ -163,7 +173,7 @@ export default function MoreMenu({
                 flex: 1,
               }}
             >
-              {item.label}
+              {t(item.labelKey)}
             </Typography>
             {item.id === 'achievement' && achievementBadge && achievementBadge > 0 && (
               <Box
@@ -187,6 +197,54 @@ export default function MoreMenu({
             <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>›</Typography>
           </Box>
         ))}
+      </Box>
+
+      <Divider sx={{ my: 1, mx: 2.5, borderColor: 'rgba(255,255,255,0.08)' }} />
+
+      {/* Language Toggle */}
+      <Box sx={{ px: 1.5 }}>
+        <Box
+          onClick={toggleLanguage}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+            px: 1.5,
+            py: 1.5,
+            borderRadius: 1.5,
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' },
+            '&:active': { bgcolor: 'rgba(255,255,255,0.1)', transform: 'scale(0.98)' },
+          }}
+        >
+          <Typography sx={{ fontSize: 24, lineHeight: 1 }}>🌐</Typography>
+          <Typography
+            sx={{
+              color: 'white',
+              fontSize: 15,
+              fontWeight: 500,
+              flex: 1,
+            }}
+          >
+            {t('common.language')}
+          </Typography>
+          <Box
+            sx={{
+              px: 1.5,
+              py: 0.5,
+              borderRadius: 1,
+              bgcolor: 'rgba(0,82,255,0.15)',
+              border: '1px solid rgba(0,82,255,0.3)',
+            }}
+          >
+            <Typography sx={{ color: '#60a5fa', fontSize: 12, fontWeight: 600 }}>
+              {currentLang === 'ko' ? '한국어' : 'English'}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
 
       <Divider sx={{ my: 1, mx: 2.5, borderColor: 'rgba(255,255,255,0.08)' }} />
@@ -221,19 +279,19 @@ export default function MoreMenu({
                 flex: 1,
               }}
             >
-              {item.label}
+              {t(item.labelKey)}
             </Typography>
-            {item.sublabel && (
+            {item.sublabelKey && (
               <Typography
                 sx={{
-                  color: item.sublabel === 'Coming Soon'
+                  color: item.comingSoon
                     ? 'rgba(255,255,255,0.3)'
                     : '#4CAF50',
                   fontSize: 12,
                   fontWeight: 500,
                 }}
               >
-                {item.sublabel}
+                {t(item.sublabelKey)}
               </Typography>
             )}
             <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>›</Typography>

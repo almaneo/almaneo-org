@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playSound, SoundType } from '@/lib/sounds';
 import { getKindnessScenarios, type KindnessScenario } from '@/lib/kindnessData';
+import AppealButton from './AppealButton';
 
 interface KindnessCanvasProps {
   onHarvest: () => void;
@@ -21,6 +23,7 @@ interface ClickEffect {
 }
 
 export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: KindnessCanvasProps) {
+  const { t } = useTranslation('game');
   const [clickEffects, setClickEffects] = useState<ClickEffect[]>([]);
 
   // Game State
@@ -49,7 +52,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
     if (!isKind) {
       // Wrong choice - show feedback then allow retry
       playSound(SoundType.WARNING);
-      setFeedback({ type: 'fail', message: "Not quite... Try again!" });
+      setFeedback({ type: 'fail', message: t('canvas.feedbackFail') });
       setTimeout(() => setFeedback(null), 1500);
       return;
     }
@@ -199,6 +202,17 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
                   {currentScenario.options.right.text}
                 </Button>
               </Box>
+
+              {/* Report Error */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1.5 }}>
+                <AppealButton
+                  contentType="quest"
+                  contentId={currentScenario.id}
+                  fieldPath="data"
+                  currentValue={currentScenario.situation}
+                  compact
+                />
+              </Box>
             </Paper>
           </motion.div>
         </AnimatePresence>
@@ -271,7 +285,7 @@ export default function KindnessCanvas({ onHarvest, canHarvest, tapPower }: Kind
           }}
         >
           <Typography sx={{ color: '#ff9800', fontWeight: 'bold' }}>
-            ⚡ Low BP (Recharging...)
+            {t('canvas.lowBP')}
           </Typography>
         </Box>
       )}

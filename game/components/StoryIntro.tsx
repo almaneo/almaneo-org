@@ -13,6 +13,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { openingStory, getTotalScenes } from '@/lib/storyContent';
 import { Howl } from 'howler';
+import { useTranslation } from 'react-i18next';
 
 // ============================================================================
 // Types
@@ -28,6 +29,7 @@ interface StoryIntroProps {
 // ============================================================================
 
 export default function StoryIntro({ open, onClose }: StoryIntroProps) {
+  const { t } = useTranslation('game');
   // Scene navigation
   const [currentScene, setCurrentScene] = useState(0);
   const totalScenes = getTotalScenes();
@@ -127,7 +129,7 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
         soundsRef.current.typing.play();
       }
 
-      const fullText = scene.text;
+      const fullText = t(scene.textKey);
       let index = 0;
 
       typingIntervalRef.current = setInterval(() => {
@@ -192,7 +194,7 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
         clearInterval(typingIntervalRef.current);
         typingIntervalRef.current = null;
       }
-      setDisplayedText(scene.text);
+      setDisplayedText(t(scene.textKey));
       setIsTypingComplete(true);
       if (soundsRef.current.typing) {
         soundsRef.current.typing.stop();
@@ -322,7 +324,7 @@ export default function StoryIntro({ open, onClose }: StoryIntroProps) {
 
           {/* Tap hint */}
           <p className="story-tap-hint">
-            {isTypingComplete ? 'Tap image to continue' : 'Tap to skip'}
+            {isTypingComplete ? t('story.tapToContinue') : t('story.tapToSkip')}
           </p>
         </motion.div>
       </motion.div>

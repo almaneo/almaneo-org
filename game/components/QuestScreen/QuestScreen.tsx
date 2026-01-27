@@ -16,12 +16,14 @@ import TriviaQuizQuest from './TriviaQuizQuest';
 import CulturalPracticeQuest from './CulturalPracticeQuest';
 import HistoryLessonQuest from './HistoryLessonQuest';
 import QuestComplete from './QuestComplete';
+import { useTranslation } from 'react-i18next';
 
 interface QuestScreenProps {
   onBack: () => void;
 }
 
 export default function QuestScreen({ onBack }: QuestScreenProps) {
+  const { t } = useTranslation('game');
   const {
     selectedCountryId,
     selectedQuestId,
@@ -141,7 +143,7 @@ export default function QuestScreen({ onBack }: QuestScreenProps) {
           }}
         >
           <ArrowBackIcon fontSize="small" />
-          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>Back</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>{t('travel.back')}</Typography>
         </Box>
 
         <Typography

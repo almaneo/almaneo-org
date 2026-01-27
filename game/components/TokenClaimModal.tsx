@@ -6,6 +6,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -39,6 +40,7 @@ interface TokenClaimModalProps {
 }
 
 export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps) {
+  const { t } = useTranslation('game');
   // Media queries
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -159,7 +161,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
     <GameModal
       open={open}
       onClose={handleClose}
-      title="Claim Mining Rewards"
+      title={t('tokenClaim.title')}
       icon={
         <Image
           src="/images/icons/alman-token.png"
@@ -196,7 +198,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
           }}
         >
           <Typography variant="caption" sx={{ display: 'block', mb: 0.5, color: 'rgba(255,255,255,0.7)', fontSize: isMobile ? 10 : undefined }}>
-            Wallet Assets
+            {t('tokenClaim.walletAssets')}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
             <Typography variant={isLandscape ? 'h6' : isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 'bold', color: '#FFD700' }}>
@@ -229,11 +231,11 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
                 <MiningIcon sx={{ fontSize: isLandscape ? 18 : isMobile ? 16 : 20, color: '#FF6B00' }} />
               </Box>
               <Typography variant={isLandscape ? 'body2' : 'body1'} fontWeight="bold" sx={{ color: '#FF6B00', fontSize: isMobile ? 13 : undefined }}>
-                Global Mining Pool
+                {t('tokenClaim.miningPool')}
               </Typography>
             </Box>
             <Chip
-              label={miningStats.currentEpoch?.label || 'Complete'}
+              label={miningStats.currentEpoch ? t(miningStats.currentEpoch.labelKey) : t('mining.miningComplete')}
               size="small"
               sx={{
                 fontSize: isLandscape ? 10 : isMobile ? 9 : 11,
@@ -271,7 +273,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box>
               <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', fontSize: isMobile ? 10 : undefined }}>
-                Mined
+                {t('tokenClaim.mined')}
               </Typography>
               <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold', fontSize: isMobile ? 12 : undefined }}>
                 {formatMiningProgress(miningStats.totalMined)}
@@ -279,7 +281,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
             </Box>
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', fontSize: isMobile ? 10 : undefined }}>
-                Pool Capacity
+                {t('tokenClaim.poolCapacity')}
               </Typography>
               <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold', fontSize: isMobile ? 12 : undefined }}>
                 10,000,000
@@ -301,7 +303,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
             <RateIcon sx={{ fontSize: isMobile ? 18 : 20, color: '#FFD700' }} />
             <Box>
               <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', fontSize: isMobile ? 10 : undefined }}>
-                Labeling Hashrate
+                {t('tokenClaim.hashrate')}
               </Typography>
               <Typography variant="body2" fontWeight="bold" sx={{ color: 'white', fontSize: isMobile ? 12 : undefined }}>
                 {formatConversionRate(currentRate)}
@@ -312,7 +314,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
           {miningStats.tokensUntilHalving !== null && (
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', fontSize: isMobile ? 10 : undefined }}>
-                Next Epoch In
+                {t('tokenClaim.nextEpoch')}
               </Typography>
               <Typography variant="body2" sx={{ color: '#FFD700', fontWeight: 'bold', fontSize: isMobile ? 12 : undefined }}>
                 {miningStats.tokensUntilHalving.toLocaleString()} ALMAN
@@ -341,7 +343,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
           }}
         >
           <Typography variant="caption" sx={{ display: 'block', mb: isMobile ? 0.5 : 1, color: 'rgba(255,255,255,0.7)', letterSpacing: 2, fontWeight: 'bold', fontSize: isMobile ? 10 : undefined }}>
-            READY TO CLAIM
+            {t('tokenClaim.readyToClaim')}
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: isMobile ? 1 : 1.5, mb: isMobile ? 0.5 : 1 }}>
             <Typography variant={isLandscape ? 'h4' : isMobile ? 'h5' : 'h3'} sx={{ fontWeight: 'black', color: '#FFD700', textShadow: '0 0 20px rgba(255, 215, 0, 0.4)' }}>
@@ -352,7 +354,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
             </Typography>
           </Box>
           <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontSize: isMobile ? 10 : undefined }}>
-            Accumulated from {formatGamePoints(totalPoints)} points
+            {t('tokenClaim.accumulated', { points: formatGamePoints(totalPoints) })}
           </Typography>
 
           {isClaiming && (
@@ -369,7 +371,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
             }}>
               <CircularProgress size={isMobile ? 32 : 40} thickness={2} sx={{ mb: 1.5, color: '#FFD700' }} />
               <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold', letterSpacing: 1, fontSize: isMobile ? 12 : undefined }}>
-                MINING TRANSACTION...
+                {t('tokenClaim.miningTransaction')}
               </Typography>
             </Box>
           )}
@@ -379,7 +381,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
         {claimStatus === 'success' && (
           <Alert severity="success" variant="filled" icon={<SuccessIcon />}>
             <Typography variant="body2" fontWeight="bold">
-              Tokens Successfully Mined!
+              {t('tokenClaim.successMessage')}
             </Typography>
             {txHash && (
               <Typography
@@ -390,7 +392,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
                 rel="noopener noreferrer"
                 sx={{ display: 'block', mt: 0.5, color: 'inherit', textDecoration: 'underline' }}
               >
-                View on Explorer
+                {t('tokenClaim.viewExplorer')}
               </Typography>
             )}
           </Alert>
@@ -419,7 +421,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
               '&:hover': { borderWidth: 2 }
             }}
           >
-            Later
+            {t('tokenClaim.later')}
           </Button>
 
           <Button
@@ -445,7 +447,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
               }
             }}
           >
-            {isClaiming ? 'Mining...' : 'Claim Tokens'}
+            {isClaiming ? t('tokenClaim.mining') : t('tokenClaim.claimTokens')}
           </Button>
         </Box>
 
@@ -453,7 +455,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 0.75, mt: isMobile ? 0.5 : 1 }}>
           <Box sx={{ width: isMobile ? 6 : 8, height: isMobile ? 6 : 8, borderRadius: '50%', bgcolor: isConnected ? '#4caf50' : '#f44336' }} />
           <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontSize: isMobile ? 10 : undefined }}>
-            {isConnected ? `Connected: ${address?.slice(0, 6)}...${address?.slice(-4)}` : 'Not Connected'}
+            {isConnected ? t('tokenClaim.connected', { addr: `${address?.slice(0, 6)}...${address?.slice(-4)}` }) : t('tokenClaim.notConnected')}
           </Typography>
         </Box>
       </Box>

@@ -1,0 +1,446 @@
+{
+  "common": {
+    "back": "Back",
+    "map": "Map",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "comingSoon": "Coming Soon",
+    "connectWallet": "Connect Wallet",
+    "save": "Save",
+    "ok": "OK",
+    "next": "Next",
+    "previous": "Previous",
+    "claim": "Claim",
+    "points": "Points",
+    "level": "Level",
+    "reward": "Reward",
+    "max": "Max",
+    "perSecond": "/sec",
+    "perMinute": "/min",
+    "cost": "Cost",
+    "maxed": "Maxed",
+    "phase": "Phase",
+    "stars": "Stars",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "completed": "Completed",
+    "active": "Active",
+    "notConnected": "Not Connected",
+    "error": "Error",
+    "success": "Success",
+    "language": "Language"
+  },
+
+  "tiers": {
+    "bronze": "Seed of Kindness",
+    "silver": "Sprout of Jeong",
+    "gold": "Tree of Warmth",
+    "platinum": "Forest of Humanity"
+  },
+
+  "mining": {
+    "epoch1": "Genesis Era",
+    "epoch2": "First Halving",
+    "epoch3": "Second Halving",
+    "epoch4": "Final Halving",
+    "pointsPerToken": "{{rate}} Points = 1 ALMAN",
+    "miningComplete": "Mining Complete",
+    "epochLabel": "{{label}} (Epoch {{epoch}})"
+  },
+
+  "nav": {
+    "home": "Home",
+    "travel": "Travel",
+    "quest": "Quest",
+    "upgrade": "Upgrade",
+    "more": "More"
+  },
+
+  "moreMenu": {
+    "title": "More",
+    "achievement": "Achievement",
+    "ranking": "Ranking",
+    "tokenMining": "Token Mining",
+    "myAppeals": "My Appeals",
+    "profile": "Profile",
+    "settings": "Settings",
+    "story": "Story",
+    "comingSoon": "Coming Soon",
+    "replay": "Replay",
+    "language": "Language"
+  },
+
+  "hud": {
+    "kindness": "Kindness",
+    "kindnessDetails": "Kindness Details",
+    "current": "Current:",
+    "totalEarned": "Total Earned:",
+    "bpStatus": "BP Status",
+    "recovery": "Recovery:",
+    "recoveryRate": "+{{rate}} / {{interval}}s",
+    "levelInfo": "Level Info",
+    "currentLevel": "Current Level:",
+    "maxLevel": "Max Level:",
+    "progress": "Progress:",
+    "phase": "Phase {{level}}"
+  },
+
+  "canvas": {
+    "feedbackFail": "Not quite... Try again!",
+    "lowBP": "Low BP (Recharging...)"
+  },
+
+  "loading": {
+    "message": "Loading your journey...",
+    "subtitle": "Explore cultures, spread kindness",
+    "kindnessHub": "Loading Kindness Hub..."
+  },
+
+  "login": {
+    "slogan": "Cold Code, Warm Soul.",
+    "description": "Democratizing AI through the power of human kindness. Contribute to the global dataset and earn ALMAN rewards.",
+    "humansTargeted": "HUMANS TARGETED",
+    "openAccess": "OPEN ACCESS",
+    "welcomeTitle": "Welcome to AI Hub",
+    "feature1": "Label Culture Context",
+    "feature2": "Earn Kindness Points",
+    "feature3": "Mine ALMAN Tokens",
+    "connectWallet": "Connect Wallet",
+    "poweredBy": "Powered by Web3Auth & Biconomy",
+    "secureLogin": "Secure Social Login (Google, X, etc.)",
+    "copyright": "© 2026 ALMANEO ORGANIZATION"
+  },
+
+  "startScreen": {
+    "tagline": "Cold Code, Warm Soul.",
+    "enterButton": "ENTER THE HUB",
+    "subtitle": "Help democratize AI through human connection"
+  },
+
+  "story": {
+    "scene1": "The year is 2026. Artificial Intelligence has transformed the world — but not equally. In gleaming cities, AI writes code, creates art, and diagnoses diseases. Yet for billions across the Global South, even a simple AI chatbot costs more than a day's wage.",
+    "scene2": "Then you discovered something powerful — 정(情). A Korean word with no direct translation. It's the warmth between strangers who share a meal, the bond that forms when humans truly see each other. What if this ancient wisdom could heal the digital divide?",
+    "scene3": "AlmaNEO was born from a simple belief: technology should serve all of humanity. Cold Code, Warm Soul — combining blockchain's transparency with the warmth of human kindness. A protocol where every act of compassion is recorded, valued, and rewarded.",
+    "scene4": "Your journey begins now. Travel across 20 countries, learn their cultures, and spread kindness wherever you go. From the temples of Japan to the markets of Kenya, from the cafés of Paris to the festivals of Brazil — every culture has wisdom to share.",
+    "scene5": "Every tap spreads kindness. Every quest bridges cultures. Every connection reduces the AI divide. You are not alone — 8 billion souls, one shared dream. Welcome to AlmaNEO. Let your journey of warmth begin.",
+    "tapToSkip": "Tap to skip",
+    "tapToContinue": "Tap image to continue",
+    "sceneCounter": "{{current}} / {{total}}"
+  },
+
+  "milestones": {
+    "level5": {
+      "title": "Seeds of Kindness",
+      "message": "Your journey of spreading kindness has begun!"
+    },
+    "level10": {
+      "title": "First Connection Made!",
+      "message": "Your kindness has helped someone access AI tools for the first time!"
+    },
+    "level15": {
+      "title": "Growing Impact",
+      "message": "Your 정(情) is spreading — more people are joining the movement!"
+    },
+    "level20": {
+      "title": "Community Builder",
+      "message": "You're building bridges between the digital divide. Keep going!"
+    },
+    "level25": {
+      "title": "Kindness Ambassador",
+      "message": "Your Jeong-SBT is gaining recognition in the community!"
+    },
+    "level30": {
+      "title": "AI Equality Champion",
+      "message": "Your contributions are measurably reducing the GAII index!"
+    },
+    "level40": {
+      "title": "Regional Impact",
+      "message": "Your kindness network is expanding across regions!"
+    },
+    "level50": {
+      "title": "Global Recognition",
+      "message": "You're recognized as a pioneer in AI democratization!"
+    },
+    "level75": {
+      "title": "Tree of Warmth",
+      "message": "Your legacy of kindness inspires people around the world!"
+    },
+    "level100": {
+      "title": "Forest of Humanity",
+      "message": "You've reached the pinnacle! Your 정(情) has created a forest of human connection!"
+    }
+  },
+
+  "upgrades": {
+    "tapPower": {
+      "title": "Labeling Speed",
+      "description": "Increase efficiency per task"
+    },
+    "autoFarm": {
+      "title": "Auto-ML Model",
+      "description": "Passive learning while offline"
+    },
+    "energyCapacity": {
+      "title": "Compute Nodes",
+      "description": "Increase max BP capacity"
+    },
+    "energyRegen": {
+      "title": "Cooling System",
+      "description": "Faster BP recovery"
+    },
+    "panel": {
+      "title": "Hub Upgrades",
+      "levelLabel": "Lv.{{level}}",
+      "maxLevel": "MAX",
+      "effect": "Effect",
+      "costLabel": "Cost"
+    }
+  },
+
+  "quest": {
+    "title": "Mission Log",
+    "reconstruction": "PROGRESS: {{completed}} / {{total}}",
+    "nextRefresh": "NEXT REFRESH",
+    "rewardsEarned": "REWARDS EARNED: +{{total}}",
+    "completed": "Completed",
+    "claim": "Claim",
+    "active": "Active",
+    "reward": "REWARD",
+    "allCompleted": "All daily quests completed!",
+    "comeBackTomorrow": "Come back tomorrow!",
+    "loading": "Loading quests..."
+  },
+
+  "dailyQuests": {
+    "tap": {
+      "junior": { "title": "Junior Synchronizer", "description": "Sync data {{target}} times" },
+      "senior": { "title": "Senior Synchronizer", "description": "Sync data {{target}} times" },
+      "engineer": { "title": "Data Engineer", "description": "Sync data {{target}} times" },
+      "master": { "title": "Sync Master", "description": "Sync data {{target}} times" }
+    },
+    "points": {
+      "micro": { "title": "Micro Impact", "description": "Accumulate {{target}} kindness points" },
+      "nodeSupport": { "title": "Node Support", "description": "Accumulate {{target}} kindness points" },
+      "communityPillar": { "title": "Community Pillar", "description": "Accumulate {{target}} kindness points" },
+      "globalPhilanthropist": { "title": "Global Philanthropist", "description": "Accumulate {{target}} kindness points" }
+    },
+    "upgrade": {
+      "moduleSetup": { "title": "Module Setup", "description": "Install {{target}} hub upgrade(s)" },
+      "techSpecialist": { "title": "Tech Specialist", "description": "Install {{target}} hub upgrades" },
+      "systemsArchitect": { "title": "Systems Architect", "description": "Install {{target}} hub upgrades" }
+    },
+    "travel": {
+      "quickVisit": { "title": "Quick Visit", "description": "Complete {{target}} travel quest" },
+      "cultureExplorer": { "title": "Culture Explorer", "description": "Complete {{target}} travel quests" },
+      "worldTraveler": { "title": "World Traveler", "description": "Complete {{target}} travel quests" },
+      "globalAmbassador": { "title": "Global Ambassador", "description": "Complete {{target}} travel quests" }
+    }
+  },
+
+  "achievements": {
+    "first_harvest": { "title": "Hello World", "description": "Establish your first connection to the Hub" },
+    "century_club": { "title": "Data Streamer", "description": "Sync 100 data packets to the Hub" },
+    "millennium": { "title": "High Bandwidth", "description": "Sync 1,000 data packets" },
+    "click_master": { "title": "Mainframe Access", "description": "Sync 10,000 data packets" },
+    "first_fortune": { "title": "Initial Capital", "description": "Accumulate your first 1,000 kindness points" },
+    "point_collector": { "title": "Impact Maker", "description": "Accumulate 10,000 kindness points" },
+    "wealthy_farmer": { "title": "Equality Champion", "description": "Accumulate 100,000 kindness points" },
+    "first_upgrade": { "title": "Node Optimization", "description": "Install your first hub optimization module" },
+    "max_energy": { "title": "Buffer Overflow", "description": "Upgrade Compute Nodes to level 10" },
+    "power_tapper": { "title": "Neural Link", "description": "Upgrade Labeling Speed to level 10" },
+    "automation_king": { "title": "AI Singularity", "description": "Upgrade Auto-ML Model to level 10" },
+    "energy_master": { "title": "Zero Latency", "description": "Upgrade Cooling System to level 10" },
+    "perfect_farm": { "title": "Tier 1 Operator", "description": "Maximize all hub modules" },
+    "beginner": { "title": "Alpha Tester", "description": "Reach Phase 5" },
+    "advanced": { "title": "Beta Synchronizer", "description": "Reach Phase 10" },
+    "master": { "title": "Hub Architect", "description": "Reach Phase 25" },
+    "night_owl": { "title": "Deep Learning", "description": "Sync data during the night cycle (00:00 - 06:00)" },
+    "dedicated": { "title": "Stable Connection", "description": "Access the hub for 7 consecutive days" },
+    "veteran": { "title": "Core Member", "description": "Total uptime exceeds 10 hours" },
+    "quest_master": { "title": "Mission Veteran", "description": "Complete 10 daily logs" },
+    "first_journey": { "title": "First Steps", "description": "Visit your first country" },
+    "world_explorer": { "title": "World Explorer", "description": "Visit 5 different countries" },
+    "globe_trotter": { "title": "Globe Trotter", "description": "Visit 10 different countries" },
+    "world_citizen": { "title": "World Citizen", "description": "Visit all 20 countries" },
+    "first_star": { "title": "Rising Star", "description": "Earn your first star in any country" },
+    "star_collector": { "title": "Star Collector", "description": "Earn 10 stars total" },
+    "constellation": { "title": "Constellation", "description": "Earn 30 stars total" },
+    "perfect_country": { "title": "Cultural Master", "description": "Get 3 stars in any country" },
+    "travel_quest_10": { "title": "Curious Traveler", "description": "Complete 10 travel quests" },
+    "travel_quest_50": { "title": "Cultural Scholar", "description": "Complete 50 travel quests" },
+    "categories": {
+      "all": "All",
+      "tap": "Tap",
+      "points": "Points",
+      "upgrade": "Upgrade",
+      "level": "Level",
+      "special": "Special",
+      "travel": "Travel"
+    },
+    "panel": {
+      "title": "Accomplishments",
+      "completionRate": "{{count}}% SYNCED",
+      "earned": "EARNED",
+      "sync": "SYNC: {{current}} / {{target}}",
+      "unlockedReward": "UNLOCKED REWARD",
+      "encrypted": "Encrypted Data",
+      "encryptedDesc": "Unlock this node to decrypt mission data.",
+      "empty": "No Achievements",
+      "emptyDesc": "Try selecting a different category"
+    }
+  },
+
+  "leaderboard": {
+    "title": "Global Ranking",
+    "agents": "{{count}} AGENTS",
+    "allTime": "All Time",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "empty": "No ranking data available.",
+    "lastUpdated": "{{time}} AGO"
+  },
+
+  "offline": {
+    "signalRestored": "📡 Signal Restored",
+    "autoMLActive": "Your Auto-ML model stayed active during disconnect.",
+    "disconnectDuration": "DISCONNECT DURATION",
+    "secondsFormat": "{{count}} seconds",
+    "minutesFormat": "{{count}} minutes",
+    "hoursFormat": "{{count}} hours",
+    "hoursMinutesFormat": "{{hours}} hours {{minutes}} min",
+    "kindnessAccumulated": "KINDNESS ACCUMULATED",
+    "pointsSynced": "POINTS SYNCED",
+    "resumeMission": "RESUME MISSION 🚀"
+  },
+
+  "tokenClaim": {
+    "title": "Claim Mining Rewards",
+    "walletAssets": "Wallet Assets",
+    "miningPool": "Global Mining Pool",
+    "mined": "Mined",
+    "poolCapacity": "Pool Capacity",
+    "hashrate": "Labeling Hashrate",
+    "nextEpoch": "Next Epoch In",
+    "readyToClaim": "READY TO CLAIM",
+    "accumulated": "Accumulated from {{points}} points",
+    "miningTransaction": "MINING TRANSACTION...",
+    "successMessage": "Tokens Successfully Mined!",
+    "viewExplorer": "View on Explorer",
+    "later": "Later",
+    "claimTokens": "Claim Tokens",
+    "mining": "Mining...",
+    "connected": "Connected: {{addr}}",
+    "notConnected": "Not Connected"
+  },
+
+  "travel": {
+    "title": "World Travel",
+    "back": "Back",
+    "countries": "Countries",
+    "quests": "Quests",
+    "perfect": "Perfect",
+    "nextUnlock": "{{region}} unlocks in {{stars}}★",
+    "starsRequired": "{{stars}}★ required",
+    "starsToUnlock": "{{stars}}★ to unlock",
+    "questComplete": "Quest Complete!",
+    "questFinished": "Quest Finished",
+    "backToCountry": "Back to Country",
+    "pointsEarnedLabel": "points earned",
+    "earnedStars": "Earned {{stars}} star(s)",
+    "firstAttempt": "First attempt bonus",
+    "pointsEarned": "+{{points}} points",
+    "continue": "Continue",
+    "tryAgain": "Try Again",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "notQuite": "Not quite!",
+    "kindnessSpreads": "Kindness Spreads!",
+    "thinkAgain": "Think Again...",
+    "wellDone": "Well Done!",
+    "explanation": "Explanation",
+    "funFact": "Fun Fact",
+    "tapToComplete": "Tap to complete",
+    "tapToPractice": "Tap to practice!",
+    "progress": "Progress",
+    "stepOf": "Step {{current}} of {{total}}",
+    "stepsCompleted": "{{current}} / {{total}} steps completed",
+    "readItQuizMe": "I've Read It — Quiz Me!",
+    "answerWas": "The answer was:",
+    "countriesCount": "{{count}} countries",
+    "questProgress": "{{completed}}/{{total}} quests",
+    "questsCount": "Quests ({{count}})",
+    "starLabels": {
+      "0": "Not started",
+      "1": "Explored",
+      "2": "Completed",
+      "3": "Mastered!"
+    },
+    "questTypes": {
+      "cultural_scenario": "Kindness Choice",
+      "trivia_quiz": "Quiz",
+      "cultural_practice": "Practice",
+      "history_lesson": "History"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "regions": {
+      "east_asia": "East Asia",
+      "southeast_asia": "Southeast Asia",
+      "south_asia": "South Asia",
+      "middle_east": "Middle East",
+      "europe": "Europe",
+      "africa": "Africa",
+      "americas": "Americas",
+      "oceania": "Oceania"
+    }
+  },
+
+  "appeal": {
+    "reportError": "Report Error",
+    "title": "Report Incorrect Information",
+    "description": "Help improve our cultural content! If approved, you will earn +30 Kindness Score and +200 Game Points.",
+    "currentValue": "Current Value",
+    "suggestedCorrection": "Suggested Correction",
+    "reason": "Reason for correction",
+    "sourceUrl": "Source URL (optional)",
+    "success": "Appeal submitted! You will be rewarded if approved.",
+    "cancel": "Cancel",
+    "submit": "Submit Appeal",
+    "submitting": "Submitting...",
+    "submitFailed": "Failed to submit appeal",
+    "networkError": "Network error. Please try again.",
+    "history": {
+      "title": "My Appeals",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pointsEarned": "Points Earned",
+      "emptyTitle": "No appeals yet",
+      "emptyDesc": "Report incorrect information in quests to earn rewards",
+      "field": "Field: {{path}}",
+      "reason": "Reason: {{reason}}",
+      "retry": "Retry",
+      "loadFailed": "Failed to load appeals",
+      "kindnessReward": "+{{points}} Kindness",
+      "pointsReward": "+{{points}} Points"
+    }
+  },
+
+  "modals": {
+    "upgrade": "Upgrade",
+    "quest": "Quest",
+    "achievement": "Achievement",
+    "ranking": "Ranking",
+    "profile": "Profile",
+    "settings": "Settings",
+    "comingSoon": "Coming Soon...",
+    "profileComingSoon": "Profile feature coming soon!",
+    "settingsComingSoon": "Settings feature coming soon!"
+  }
+}

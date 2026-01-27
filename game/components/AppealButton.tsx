@@ -13,6 +13,7 @@ import {
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
 import { submitAppeal } from '@/lib/appealService';
+import { useTranslation } from 'react-i18next';
 
 interface AppealButtonProps {
   contentType: 'region' | 'country' | 'quest';
@@ -32,6 +33,7 @@ export default function AppealButton({
   currentValue,
   compact = false,
 }: AppealButtonProps) {
+  const { t } = useTranslation('game');
   const { address } = useWeb3Auth();
   const isMobile = useMediaQuery('(max-width: 480px)');
 
@@ -62,15 +64,15 @@ export default function AppealButton({
       });
 
       if (success) {
-        setResult({ success: true, message: 'Appeal submitted! You will be rewarded if approved.' });
+        setResult({ success: true, message: t('appeal.success') });
         setSuggestedValue('');
         setReason('');
         setSourceUrl('');
       } else {
-        setResult({ success: false, message: error || 'Failed to submit appeal' });
+        setResult({ success: false, message: error || t('appeal.submitFailed') });
       }
     } catch {
-      setResult({ success: false, message: 'Network error. Please try again.' });
+      setResult({ success: false, message: t('appeal.networkError') });
     } finally {
       setSubmitting(false);
     }
@@ -102,7 +104,7 @@ export default function AppealButton({
       >
         <ReportProblemOutlinedIcon sx={{ fontSize: compact ? 14 : 16, color: '#FF9800' }} />
         <Typography sx={{ fontSize: compact ? 11 : 12, color: '#FF9800', fontWeight: 600 }}>
-          Report Error
+          {t('appeal.reportError')}
         </Typography>
       </Box>
 
@@ -131,21 +133,19 @@ export default function AppealButton({
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
             <ReportProblemOutlinedIcon sx={{ color: '#FF9800', fontSize: 22 }} />
             <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>
-              Report Incorrect Information
+              {t('appeal.title')}
             </Typography>
           </Box>
 
           <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, mb: 2 }}>
-            Help improve our cultural content! If approved, you will earn{' '}
-            <b style={{ color: '#FFD700' }}>+30 Kindness Score</b> and{' '}
-            <b style={{ color: '#FFD700' }}>+200 Game Points</b>.
+            {t('appeal.description')}
           </Typography>
 
           {/* Current Value */}
           {currentValue && (
             <Box sx={{ mb: 2 }}>
               <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, mb: 0.5, textTransform: 'uppercase' }}>
-                Current Value
+                {t('appeal.currentValue')}
               </Typography>
               <Box
                 sx={{
@@ -165,7 +165,7 @@ export default function AppealButton({
           {/* Suggested Correction */}
           <TextField
             fullWidth
-            label="Suggested Correction"
+            label={t('appeal.suggestedCorrection')}
             value={suggestedValue}
             onChange={e => setSuggestedValue(e.target.value)}
             multiline
@@ -177,7 +177,7 @@ export default function AppealButton({
           {/* Reason */}
           <TextField
             fullWidth
-            label="Reason for correction"
+            label={t('appeal.reason')}
             value={reason}
             onChange={e => setReason(e.target.value)}
             multiline
@@ -189,7 +189,7 @@ export default function AppealButton({
           {/* Source URL (Optional) */}
           <TextField
             fullWidth
-            label="Source URL (optional)"
+            label={t('appeal.sourceUrl')}
             value={sourceUrl}
             onChange={e => setSourceUrl(e.target.value)}
             disabled={submitting}
@@ -234,7 +234,7 @@ export default function AppealButton({
               }}
             >
               <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: 13 }}>
-                Cancel
+                {t('appeal.cancel')}
               </Typography>
             </Box>
 
@@ -268,7 +268,7 @@ export default function AppealButton({
                   fontSize: 13,
                 }}
               >
-                {submitting ? 'Submitting...' : 'Submit Appeal'}
+                {submitting ? t('appeal.submitting') : t('appeal.submit')}
               </Typography>
             </Box>
           </Box>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { HistoryLessonData } from '@/lib/worldTravel/types';
+import { useTranslation } from 'react-i18next';
 
 interface HistoryLessonQuestProps {
   data: HistoryLessonData;
@@ -14,6 +15,7 @@ export default function HistoryLessonQuest({
   data,
   onComplete,
 }: HistoryLessonQuestProps) {
+  const { t } = useTranslation('game');
   const [phase, setPhase] = useState<'read' | 'quiz' | 'result'>('read');
   const [selected, setSelected] = useState<number | null>(null);
 
@@ -74,7 +76,7 @@ export default function HistoryLessonQuest({
               }}
             >
               <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                I&apos;ve Read It — Quiz Me! 📝
+                {t('travel.readItQuizMe')}
               </Typography>
             </Box>
           </motion.div>
@@ -233,7 +235,7 @@ export default function HistoryLessonQuest({
                     mb: 1,
                   }}
                 >
-                  {isCorrect ? 'Correct!' : 'Not quite!'}
+                  {isCorrect ? t('travel.correct') : t('travel.notQuite')}
                 </Typography>
                 <Typography
                   sx={{
@@ -242,7 +244,7 @@ export default function HistoryLessonQuest({
                     mb: 1.5,
                   }}
                 >
-                  The answer was: <b>{data.choices[data.correctIndex]}</b>
+                  {t('travel.answerWas')} <b>{data.choices[data.correctIndex]}</b>
                 </Typography>
 
                 {/* Fun Fact */}
@@ -258,7 +260,7 @@ export default function HistoryLessonQuest({
                   <Typography
                     sx={{ fontSize: 11, color: '#FFD700', fontWeight: 600, mb: 0.5 }}
                   >
-                    💡 Fun Fact
+                    💡 {t('travel.funFact')}
                   </Typography>
                   <Typography
                     sx={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
@@ -281,7 +283,7 @@ export default function HistoryLessonQuest({
                 }}
               >
                 <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                  Continue
+                  {t('travel.continue')}
                 </Typography>
               </Box>
             </motion.div>

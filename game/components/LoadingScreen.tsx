@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * LoadingScreen Component
  * 게임 데이터 로딩 중 표시되는 화면
@@ -5,14 +7,17 @@
 
 import { Box, Typography, CircularProgress } from '@mui/material';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 interface LoadingScreenProps {
   message?: string;
 }
 
 export default function LoadingScreen({
-  message = 'Loading your journey...'
+  message
 }: LoadingScreenProps) {
+  const { t } = useTranslation('game');
+  const displayMessage = message || t('loading.message');
   return (
     <Box
       sx={{
@@ -87,7 +92,7 @@ export default function LoadingScreen({
             textShadow: '0 2px 8px rgba(0,0,0,0.6)',
           }}
         >
-          {message}
+          {displayMessage}
         </Typography>
 
         <Typography
@@ -100,7 +105,7 @@ export default function LoadingScreen({
             textShadow: '0 1px 4px rgba(0,0,0,0.5)',
           }}
         >
-          Explore cultures, spread kindness
+          {t('loading.subtitle')}
         </Typography>
       </Box>
     </Box>

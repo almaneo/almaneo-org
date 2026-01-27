@@ -7,12 +7,14 @@ import { useTravelStore } from '@/hooks/useTravelStore';
 import type { StarRating } from '@/lib/worldTravel/types';
 import CultureCard from './CultureCard';
 import QuestList from './QuestList';
+import { useTranslation } from 'react-i18next';
 
 interface CountryScreenProps {
   onBack: () => void;
 }
 
 export default function CountryScreen({ onBack }: CountryScreenProps) {
+  const { t } = useTranslation('game');
   const {
     selectedCountryId,
     getCountry,
@@ -34,10 +36,10 @@ export default function CountryScreen({ onBack }: CountryScreenProps) {
   const completionPercent = totalQuests > 0 ? (completedQuests / totalQuests) * 100 : 0;
 
   const starLabels: Record<number, string> = {
-    0: 'Not started',
-    1: 'Explored',
-    2: 'Completed',
-    3: 'Mastered!',
+    0: t('travel.starLabels.0'),
+    1: t('travel.starLabels.1'),
+    2: t('travel.starLabels.2'),
+    3: t('travel.starLabels.3'),
   };
 
   return (
@@ -74,7 +76,7 @@ export default function CountryScreen({ onBack }: CountryScreenProps) {
           }}
         >
           <ArrowBackIcon fontSize="small" />
-          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>Map</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>{t('common.map')}</Typography>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -127,7 +129,7 @@ export default function CountryScreen({ onBack }: CountryScreenProps) {
           <Typography
             sx={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}
           >
-            {completedQuests}/{totalQuests} quests
+            {t('travel.questProgress', { completed: completedQuests, total: totalQuests })}
           </Typography>
           <Typography
             sx={{

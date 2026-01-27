@@ -11,12 +11,14 @@ import { getNextRegionToUnlock } from '@/lib/worldTravel/progression';
 import { contentService } from '@/lib/contentService';
 import type { StarRating } from '@/lib/worldTravel/types';
 import RegionCard from './RegionCard';
+import { useTranslation } from 'react-i18next';
 
 interface WorldMapProps {
   onClose: () => void;
 }
 
 export default function WorldMap({ onClose }: WorldMapProps) {
+  const { t } = useTranslation('game');
   const {
     regionProgress,
     countryProgress,
@@ -83,7 +85,7 @@ export default function WorldMap({ onClose }: WorldMapProps) {
           }}
         >
           <ArrowBackIcon fontSize="small" />
-          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>Back</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 500 }}>{t('travel.back')}</Typography>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -96,7 +98,7 @@ export default function WorldMap({ onClose }: WorldMapProps) {
               color: '#fff',
             }}
           >
-            World Travel
+            {t('travel.title')}
           </Typography>
         </Box>
 
@@ -125,9 +127,9 @@ export default function WorldMap({ onClose }: WorldMapProps) {
           flexShrink: 0,
         }}
       >
-        <StatItem label="Countries" value={countriesVisited} />
-        <StatItem label="Quests" value={totalQuestsCompleted} />
-        <StatItem label="Perfect" value={perfectCountries} icon="⭐" />
+        <StatItem label={t('travel.countries')} value={countriesVisited} />
+        <StatItem label={t('travel.quests')} value={totalQuestsCompleted} />
+        <StatItem label={t('travel.perfect')} value={perfectCountries} icon="⭐" />
       </Box>
 
       {/* Next Unlock Hint */}
@@ -151,8 +153,8 @@ export default function WorldMap({ onClose }: WorldMapProps) {
               textAlign: 'center',
             }}
           >
-            {nextUnlock.region.emoji} <b style={{ color: nextUnlock.region.color }}>{nextUnlock.region.name}</b> unlocks in{' '}
-            <b style={{ color: '#FFD700' }}>{nextUnlock.starsNeeded}★</b>
+            {nextUnlock.region.emoji}{' '}
+            {t('travel.nextUnlock', { region: nextUnlock.region.name, stars: nextUnlock.starsNeeded })}
           </Typography>
         </Box>
       )}

@@ -3,6 +3,7 @@
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import AppealButton from '@/components/AppealButton';
+import { useTranslation } from 'react-i18next';
 
 interface QuestCompleteProps {
   questTitle: string;
@@ -21,6 +22,7 @@ export default function QuestComplete({
   questId,
   countryId,
 }: QuestCompleteProps) {
+  const { t } = useTranslation('game');
   return (
     <Box
       sx={{
@@ -57,7 +59,7 @@ export default function QuestComplete({
             fontFamily: "'Orbitron', sans-serif",
           }}
         >
-          {correct ? 'Quest Complete!' : 'Quest Finished'}
+          {correct ? t('travel.questComplete') : t('travel.questFinished')}
         </Typography>
       </motion.div>
 
@@ -112,7 +114,7 @@ export default function QuestComplete({
               letterSpacing: 1,
             }}
           >
-            points earned
+            {t('travel.pointsEarnedLabel')}
           </Typography>
         </Box>
       </motion.div>
@@ -153,7 +155,7 @@ export default function QuestComplete({
           }}
         >
           <Typography sx={{ color: '#0A0F1A', fontWeight: 700, fontSize: 14 }}>
-            Back to Country
+            {t('travel.backToCountry')}
           </Typography>
         </Box>
       </motion.div>

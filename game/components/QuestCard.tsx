@@ -7,6 +7,7 @@
 import { Box, Typography, Button, LinearProgress, useMediaQuery } from '@mui/material';
 import { DailyQuest, getQuestProgress } from '@/lib/quests';
 import { formatNumber } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface QuestCardProps {
   quest: DailyQuest;
@@ -14,6 +15,7 @@ interface QuestCardProps {
 }
 
 export default function QuestCard({ quest, onClaim }: QuestCardProps) {
+  const { t } = useTranslation('game');
   const progress = getQuestProgress(quest);
   const isCompleted = quest.completed;
   const canClaim = progress >= 100 && !isCompleted;
@@ -63,7 +65,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
               letterSpacing: -0.5,
             }}
           >
-            {quest.title}
+            {quest.titleKey ? t(quest.titleKey) : quest.title}
           </Typography>
         </Box>
       </Box>
@@ -78,7 +80,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
           fontWeight: 300,
         }}
       >
-        {quest.description}
+        {quest.descriptionKey ? t(quest.descriptionKey, { target: quest.target }) : quest.description}
       </Typography>
 
       {/* Progress Bar */}
@@ -126,7 +128,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
         }}
       >
         <Box>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>REWARD</Typography>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>{t('quest.reward')}</Typography>
           <Typography
             variant="body2"
             sx={{
@@ -164,7 +166,7 @@ export default function QuestCard({ quest, onClaim }: QuestCardProps) {
             transition: 'all 0.2s ease',
           }}
         >
-          {isCompleted ? 'Completed' : canClaim ? 'Claim' : 'Active'}
+          {isCompleted ? t('quest.completed') : canClaim ? t('quest.claim') : t('quest.active')}
         </Button>
       </Box>
     </Box>

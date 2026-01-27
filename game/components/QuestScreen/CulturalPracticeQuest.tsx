@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CulturalPracticeData } from '@/lib/worldTravel/types';
+import { useTranslation } from 'react-i18next';
 
 interface CulturalPracticeQuestProps {
   data: CulturalPracticeData;
@@ -14,6 +15,7 @@ export default function CulturalPracticeQuest({
   data,
   onComplete,
 }: CulturalPracticeQuestProps) {
+  const { t } = useTranslation('game');
   const [taps, setTaps] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -85,7 +87,7 @@ export default function CulturalPracticeQuest({
             <Typography
               sx={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', mb: 0.5 }}
             >
-              Step {currentStep + 1} of {data.steps.length}
+              {t('travel.stepOf', { current: currentStep + 1, total: data.steps.length })}
             </Typography>
             <Typography
               sx={{
@@ -111,7 +113,7 @@ export default function CulturalPracticeQuest({
           }}
         >
           <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
-            Progress
+            {t('travel.progress')}
           </Typography>
           <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
             {taps}/{data.tapsRequired}
@@ -161,7 +163,7 @@ export default function CulturalPracticeQuest({
                 fontWeight: 600,
               }}
             >
-              Tap to practice!
+              {t('travel.tapToPractice')}
             </Typography>
           </Box>
         </motion.div>
@@ -206,7 +208,7 @@ export default function CulturalPracticeQuest({
                 <Typography
                   sx={{ fontSize: 18, fontWeight: 700, color: '#4ade80', mb: 1 }}
                 >
-                  Well Done!
+                  {t('travel.wellDone')}
                 </Typography>
                 <Typography
                   sx={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}
@@ -228,7 +230,7 @@ export default function CulturalPracticeQuest({
                 }}
               >
                 <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                  Continue
+                  {t('travel.continue')}
                 </Typography>
               </Box>
             </motion.div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CulturalScenarioData } from '@/lib/worldTravel/types';
+import { useTranslation } from 'react-i18next';
 
 interface CulturalScenarioQuestProps {
   data: CulturalScenarioData;
@@ -14,6 +15,7 @@ export default function CulturalScenarioQuest({
   data,
   onComplete,
 }: CulturalScenarioQuestProps) {
+  const { t } = useTranslation('game');
   const [chosen, setChosen] = useState<'left' | 'right' | null>(null);
   const [showResult, setShowResult] = useState(false);
 
@@ -183,7 +185,7 @@ export default function CulturalScenarioQuest({
                     mb: 1,
                   }}
                 >
-                  {isCorrect ? 'Kindness Spreads!' : 'Think Again...'}
+                  {isCorrect ? t('travel.kindnessSpreads') : t('travel.thinkAgain')}
                 </Typography>
                 <Typography
                   sx={{
@@ -209,7 +211,7 @@ export default function CulturalScenarioQuest({
                 }}
               >
                 <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>
-                  Continue
+                  {t('travel.continue')}
                 </Typography>
               </Box>
             </motion.div>

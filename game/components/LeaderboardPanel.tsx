@@ -18,6 +18,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useTranslation } from 'react-i18next';
 import LeaderboardCard from './LeaderboardCard';
 import {
   LeaderboardEntry,
@@ -36,6 +37,7 @@ import {
 import { useGameStore } from '@/hooks/useGameStore';
 
 export default function LeaderboardPanel() {
+  const { t } = useTranslation('game');
   // Landscape 모드 감지
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -204,10 +206,10 @@ export default function LeaderboardPanel() {
               letterSpacing: -0.5,
             }}
           >
-            🏆 Global Ranking
+            🏆 {t('leaderboard.title')}
           </Typography>
           <Chip
-            label={`${stats.totalPlayers} AGENTS`}
+            label={t('leaderboard.agents', { count: stats.totalPlayers })}
             size="small"
             sx={{
               bgcolor: 'rgba(255, 215, 0, 0.15)',
@@ -274,9 +276,9 @@ export default function LeaderboardPanel() {
           },
         }}
       >
-        <Tab label="All Time" value="global" />
-        <Tab label="Weekly" value="weekly" />
-        <Tab label="Monthly" value="monthly" />
+        <Tab label={t('leaderboard.allTime')} value="global" />
+        <Tab label={t('leaderboard.weekly')} value="weekly" />
+        <Tab label={t('leaderboard.monthly')} value="monthly" />
       </Tabs>
 
       <Divider sx={{ mb: isMobile ? 1 : 2, borderColor: 'rgba(255, 255, 255, 0.05)' }} />
@@ -348,7 +350,7 @@ export default function LeaderboardPanel() {
               }}
             >
               <Typography sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                No ranking data available.
+                {t('leaderboard.empty')}
               </Typography>
             </Box>
           )}

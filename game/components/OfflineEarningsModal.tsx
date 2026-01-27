@@ -2,25 +2,27 @@
 
 import { Box, Typography, Modal, Button, Backdrop, Fade, useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useGameStore } from '@/hooks/useGameStore';
 
 export default function OfflineEarningsModal() {
+  const { t } = useTranslation('game');
   const { showOfflineModal, offlineEarnings, offlineTime, dismissOfflineModal } = useGameStore();
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
 
   const formatTime = (seconds: number): string => {
     if (seconds < 60) {
-      return `${seconds} seconds`;
+      return t('offline.secondsFormat', { count: seconds });
     } else if (seconds < 3600) {
       const minutes = Math.floor(seconds / 60);
-      return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+      return t('offline.minutesFormat', { count: minutes });
     } else {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       if (minutes === 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''}`;
+        return t('offline.hoursFormat', { count: hours });
       }
-      return `${hours} hour${hours > 1 ? 's' : ''} ${minutes} min`;
+      return t('offline.hoursMinutesFormat', { hours, minutes });
     }
   };
 
@@ -84,7 +86,7 @@ export default function OfflineEarningsModal() {
                   textShadow: '0 0 20px rgba(255,255,255,0.3)',
                 }}
               >
-                📡 Signal Restored
+                {t('offline.signalRestored')}
               </Typography>
               <Typography
                 variant={isLandscape ? 'caption' : 'body2'}
@@ -93,7 +95,7 @@ export default function OfflineEarningsModal() {
                   fontWeight: 'light'
                 }}
               >
-                Your Auto-ML model stayed active during disconnect.
+                {t('offline.autoMLActive')}
               </Typography>
             </Box>
           </motion.div>
@@ -125,7 +127,7 @@ export default function OfflineEarningsModal() {
                     fontWeight: 'bold'
                   }}
                 >
-                  DISCONNECT DURATION
+                  {t('offline.disconnectDuration')}
                 </Typography>
                 <Typography
                   variant={isLandscape ? 'h6' : 'h5'}
@@ -158,7 +160,7 @@ export default function OfflineEarningsModal() {
                     fontWeight: 'bold'
                   }}
                 >
-                  KINDNESS ACCUMULATED
+                  {t('offline.kindnessAccumulated')}
                 </Typography>
                 <Typography
                   variant={isLandscape ? 'h4' : 'h3'}
@@ -178,7 +180,7 @@ export default function OfflineEarningsModal() {
                     fontWeight: 'bold'
                   }}
                 >
-                  POINTS SYNCED
+                  {t('offline.pointsSynced')}
                 </Typography>
               </Box>
 
@@ -203,7 +205,7 @@ export default function OfflineEarningsModal() {
                   transition: 'all 0.2s ease',
                 }}
               >
-                RESUME MISSION 🚀
+                {t('offline.resumeMission')}
               </Button>
             </Box>
           </motion.div>

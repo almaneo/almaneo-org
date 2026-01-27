@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, LinearProgress, useMediaQuery } from '@mui/material';
 import { Achievement } from '@/lib/achievements';
+import { useTranslation } from 'react-i18next';
 
 interface AchievementCardProps {
   achievement: Achievement;
@@ -9,6 +10,7 @@ interface AchievementCardProps {
 }
 
 export default function AchievementCard({ achievement, current, onClaim }: AchievementCardProps) {
+  const { t } = useTranslation('game');
   const { id, title, description, icon, target, reward, completed, completedAt, hidden } = achievement;
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -71,7 +73,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             boxShadow: '0 2px 8px rgba(255, 215, 0, 0.5)',
           }}
         >
-          EARNED
+          {t('achievements.panel.earned')}
         </Box>
       )}
 
@@ -101,7 +103,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
               letterSpacing: -0.5,
             }}
           >
-            {isHidden ? 'Encrypted Data' : title}
+            {isHidden ? t('achievements.panel.encrypted') : t(`achievements.${id}.title`, title)}
           </Typography>
 
           <Typography
@@ -113,7 +115,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
               fontWeight: 300,
             }}
           >
-            {isHidden ? 'Unlock this node to decrypt mission data.' : description}
+            {isHidden ? t('achievements.panel.encryptedDesc') : t(`achievements.${id}.description`, description)}
           </Typography>
         </Box>
       </Box>
@@ -147,7 +149,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
             }}
           >
             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: isMobile ? 10 : undefined }}>
-              SYNC: {current} / {target}
+              {t('achievements.panel.sync', { current, target })}
             </Typography>
             <Typography variant="caption" sx={{ color: isCompleted ? '#4CAF50' : '#FFD700', fontWeight: 800, fontSize: isMobile ? 10 : undefined }}>
               {progress.toFixed(0)}%
@@ -168,7 +170,7 @@ export default function AchievementCard({ achievement, current, onClaim }: Achie
         }}
       >
         <Box>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>UNLOCKED REWARD</Typography>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', fontSize: isMobile ? 9 : 10 }}>{t('achievements.panel.unlockedReward')}</Typography>
           <Typography
             variant="body2"
             sx={{

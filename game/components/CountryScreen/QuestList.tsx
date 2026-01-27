@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import StarIcon from '@mui/icons-material/Star';
 import type { Quest, QuestResult } from '@/lib/worldTravel/types';
+import { useTranslation } from 'react-i18next';
 
 interface QuestListProps {
   quests: Quest[];
@@ -19,12 +20,7 @@ const QUEST_TYPE_ICONS: Record<string, string> = {
   history_lesson: '📖',
 };
 
-const QUEST_TYPE_LABELS: Record<string, string> = {
-  cultural_scenario: 'Kindness Choice',
-  trivia_quiz: 'Quiz',
-  cultural_practice: 'Practice',
-  history_lesson: 'History',
-};
+// Quest type labels loaded from i18n in component
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   easy: '#4ade80',
@@ -37,6 +33,7 @@ export default function QuestList({
   questResults,
   onQuestSelect,
 }: QuestListProps) {
+  const { t } = useTranslation('game');
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
       <Typography
@@ -49,7 +46,7 @@ export default function QuestList({
           mb: 0.5,
         }}
       >
-        Quests ({quests.length})
+        {t('travel.questsCount', { count: quests.length })}
       </Typography>
 
       {quests.map((quest, index) => {
@@ -130,7 +127,7 @@ export default function QuestList({
                       textTransform: 'uppercase',
                     }}
                   >
-                    {QUEST_TYPE_LABELS[quest.type]}
+                    {t(`travel.questTypes.${quest.type}`)}
                   </Typography>
                   <Box
                     sx={{
@@ -148,7 +145,7 @@ export default function QuestList({
                       textTransform: 'uppercase',
                     }}
                   >
-                    {quest.difficulty}
+                    {t(`travel.difficulty.${quest.difficulty}`)}
                   </Typography>
                 </Box>
               </Box>

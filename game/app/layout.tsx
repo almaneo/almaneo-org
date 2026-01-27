@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Orbitron, Exo_2 } from 'next/font/google';
 import './globals.css';
 import { Web3AuthProvider } from '@/contexts/Web3AuthProvider';
+import I18nProvider from '@/components/I18nProvider';
 
 const orbitron = Orbitron({ 
   subsets: ['latin'],
@@ -74,7 +75,9 @@ export default function RootLayout({
       </head>
       <body className={`${orbitron.variable} ${exo2.variable}`}>
         <Web3AuthProvider>
-          {children}
+          <I18nProvider>
+            {children}
+          </I18nProvider>
         </Web3AuthProvider>
       </body>
     </html>

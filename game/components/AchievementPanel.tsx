@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Tabs, Tab, Chip, useMediaQuery } from '@mui/material';
 import { Achievement, AchievementCategory } from '@/lib/achievements';
 import AchievementCard from './AchievementCard';
+import { useTranslation } from 'react-i18next';
 
 interface AchievementPanelProps {
   achievements: Achievement[];
@@ -21,6 +22,7 @@ interface AchievementPanelProps {
 }
 
 export default function AchievementPanel({ achievements, stats, onClaim }: AchievementPanelProps) {
+  const { t } = useTranslation('game');
   const [selectedCategory, setSelectedCategory] = useState<'all' | AchievementCategory>('all');
   const isLandscape = useMediaQuery('(orientation: landscape) and (max-height: 500px)');
   const isMobile = useMediaQuery('(max-width: 480px)');
@@ -88,12 +90,12 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
 
   // Category icons and labels
   const categories: { value: 'all' | AchievementCategory; label: string; icon: string }[] = [
-    { value: 'all', label: 'All', icon: '🏆' },
-    { value: 'tap', label: 'Tap', icon: '👆' },
-    { value: 'points', label: 'Points', icon: '💎' },
-    { value: 'upgrade', label: 'Upgrade', icon: '📈' },
-    { value: 'level', label: 'Level', icon: '🌟' },
-    { value: 'special', label: 'Special', icon: '✨' },
+    { value: 'all', label: t('achievements.categories.all'), icon: '🏆' },
+    { value: 'tap', label: t('achievements.categories.tap'), icon: '👆' },
+    { value: 'points', label: t('achievements.categories.points'), icon: '💎' },
+    { value: 'upgrade', label: t('achievements.categories.upgrade'), icon: '📈' },
+    { value: 'level', label: t('achievements.categories.level'), icon: '🌟' },
+    { value: 'special', label: t('achievements.categories.special'), icon: '✨' },
   ];
 
   return (
@@ -102,7 +104,7 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
       <Box sx={{ mb: isLandscape ? 1.5 : isMobile ? 1.5 : 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: isLandscape ? 1 : isMobile ? 1 : 2 }}>
           <Typography variant={isLandscape ? 'h6' : isMobile ? 'body1' : 'h5'} sx={{ color: 'white', fontWeight: 900, fontSize: isMobile ? 15 : undefined, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            🏆 Accomplishments
+            🏆 {t('achievements.panel.title')}
           </Typography>
 
           {/* Completion Rate */}
@@ -120,7 +122,7 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
               }}
             />
             <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', fontSize: isMobile ? 10 : undefined }}>
-              {completionRate}% SYNCED
+              {t('achievements.panel.completionRate', { count: completionRate })}
             </Typography>
           </Box>
         </Box>
@@ -184,10 +186,10 @@ export default function AchievementPanel({ achievements, stats, onClaim }: Achie
             }}
           >
             <Typography variant="h6" sx={{ mb: 1 }}>
-              No Achievements
+              {t('achievements.panel.empty')}
             </Typography>
             <Typography variant="body2">
-              Try selecting a different category
+              {t('achievements.panel.emptyDesc')}
             </Typography>
           </Box>
         ) : (
