@@ -16,6 +16,9 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { questTranslationsKoPart1 } from './data/ko-quests-part1';
+import { questTranslationsKoPart2 } from './data/ko-quests-part2';
+import { questTranslationsKoPart3 } from './data/ko-quests-part3';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://euchaicondbmdkomnilr.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -252,36 +255,12 @@ const countryTranslations = [
 //   history_lesson:    { title, quest_data: { type, story, question, choices[], correctIndex, funFact } }
 //
 // NOTE: correctIndex, tapsRequired, and isKind are NOT translated (keep original values).
-//
-// TODO: Add Korean quest translations here. The translations array should follow
-// the same structure as countryTranslations above but with quest_data JSONB.
 // =============================================================================
 
-const questTranslations: Array<{
-  content_type: string;
-  content_id: string;
-  language: string;
-  translations: Record<string, unknown>;
-  verified: boolean;
-}> = [
-  // Quest translations will be generated externally and inserted here.
-  // Example:
-  // {
-  //   content_type: 'quest', content_id: 'kr-q1', language: 'ko', verified: true,
-  //   translations: {
-  //     title: '정(情)의 정신',
-  //     quest_data: {
-  //       type: 'cultural_scenario',
-  //       culturalValue: '정(情)',
-  //       situation: '서울의 가파른 언덕을...',
-  //       options: {
-  //         left: { text: '따뜻하게 다가가...', isKind: true },
-  //         right: { text: '빠르게 지나갑니다...', isKind: false },
-  //       },
-  //       explanation: '한국 문화에서 정(情)은...',
-  //     },
-  //   },
-  // },
+const questTranslations = [
+  ...questTranslationsKoPart1, // 22 quests: East Asia, Southeast Asia, South Asia
+  ...questTranslationsKoPart2, // 15 quests: Middle East, Europe
+  ...questTranslationsKoPart3, // 21 quests: Africa, Americas, Oceania
 ];
 
 // =============================================================================
