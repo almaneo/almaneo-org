@@ -65,5 +65,198 @@
   "language": {
     "select": "Pilih bahasa",
     "current": "Bahasa semasa"
+  },
+  "glossary": {
+    "exampleLabel": "Contoh",
+    "categories": {
+      "blockchain": "Blockchain",
+      "token": "Token",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "Tadbir Urus",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "Blockchain",
+      "simple": "Lejar digital yang direkodkan oleh banyak komputer bersama-sama.",
+      "detailed": "Setelah direkodkan, hampir mustahil untuk diubah, menjadikannya telus dan selamat.",
+      "example": "Anda boleh mengesahkan transaksi tanpa memerlukan bank."
+    },
+    "wallet": {
+      "term": "Dompet",
+      "simple": "Akaun yang menyimpan aset digital anda.",
+      "detailed": "Seperti akaun bank, anda boleh menyimpan, menghantar dan menerima token.",
+      "example": "Apabila log masuk dengan Web3Auth, dompet dicipta secara automatik."
+    },
+    "gasPrice": {
+      "term": "Yuran Gas",
+      "simple": "Yuran yang dibayar untuk merekodkan data pada blockchain.",
+      "detailed": "Ia adalah yuran penggunaan rangkaian yang dibayar kepada komputer yang memproses transaksi anda.",
+      "example": "AlmaNEO menanggung yuran gas untuk anda, jadi anda boleh menggunakannya secara percuma!"
+    },
+    "transaction": {
+      "term": "Transaksi",
+      "simple": "Satu operasi yang direkodkan pada blockchain.",
+      "detailed": "Setiap tindakan seperti pemindahan token atau pembelian NFT direkodkan sebagai transaksi."
+    },
+    "smartContract": {
+      "term": "Kontrak Pintar",
+      "simple": "Kontrak digital yang dilaksanakan secara automatik.",
+      "detailed": "Apabila syarat dipenuhi, ia berjalan dengan sendiri — tiada perantara diperlukan.",
+      "example": "Ganjaran staking dibayar secara automatik berkat kontrak pintar."
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "Rangkaian blockchain yang pantas dan mampu milik.",
+      "detailed": "Serasi dengan Ethereum tetapi dengan yuran gas yang jauh lebih rendah.",
+      "example": "AlmaNEO memilih Polygon supaya semua orang boleh menggunakannya tanpa risau tentang kos."
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "Perkhidmatan untuk log masuk ke blockchain dengan akaun sosial.",
+      "detailed": "Tanpa persediaan dompet yang rumit — cukup guna Google, Facebook, dll.",
+      "example": "Dengan Web3Auth, sesiapa sahaja boleh memulakan dengan mudah di AlmaNEO!"
+    },
+    "gasless": {
+      "term": "Tanpa Gas",
+      "simple": "Transaksi yang tidak memerlukan pembayaran yuran gas.",
+      "detailed": "Platform menanggung yuran gas supaya pengguna berinteraksi secara percuma.",
+      "example": "Kebanyakan transaksi di AlmaNEO adalah tanpa gas!"
+    },
+    "token": {
+      "term": "Token",
+      "simple": "Mata wang digital atau aset pada blockchain.",
+      "detailed": "Seperti syiling dalam permainan, token boleh digunakan dalam platform tertentu."
+    },
+    "alman": {
+      "term": "Token ALMAN",
+      "simple": "Token asal platform AlmaNEO.",
+      "detailed": "Digunakan untuk staking, pengundian tadbir urus, pembelian NFT dan banyak lagi.",
+      "example": "Anda boleh mendapat token ALMAN sebagai ganjaran untuk aktiviti kebaikan."
+    },
+    "neos": {
+      "term": "Token ALMAN",
+      "simple": "Token asal platform AlmaNEO.",
+      "detailed": "Digunakan untuk staking, pengundian tadbir urus, pembelian NFT dan banyak lagi.",
+      "example": "Anda boleh mendapat token ALMAN sebagai ganjaran untuk aktiviti kebaikan."
+    },
+    "totalSupply": {
+      "term": "Jumlah Bekalan",
+      "simple": "Jumlah keseluruhan token yang akan diterbitkan.",
+      "detailed": "ALMAN mempunyai 8 bilion token, melambangkan 8 bilion manusia di Bumi."
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "Acara di mana token diterbitkan buat pertama kali.",
+      "detailed": "Singkatan Token Generation Event — pelancaran rasmi token."
+    },
+    "staking": {
+      "term": "Staking",
+      "simple": "Mendepositkan token untuk mendapat faedah.",
+      "detailed": "Seperti deposit bank — setor token anda dan terima ganjaran.",
+      "example": "Staking ALMAN untuk mendapat ganjaran tahunan 5–18%."
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "Kadar pulangan tahunan.",
+      "detailed": "Singkatan Annual Percentage Yield — menunjukkan pendapatan yang dijangka dalam setahun.",
+      "example": "Dengan APY 10%, staking 100 ALMAN memberi anda 110 ALMAN selepas setahun."
+    },
+    "airdrop": {
+      "term": "Airdrop",
+      "simple": "Pengagihan token secara percuma.",
+      "detailed": "Dilakukan untuk mempromosikan projek baharu atau memberi ganjaran kepada komuniti.",
+      "example": "AlmaNEO membuat airdrop kepada orang yang melakukan aktiviti kebaikan."
+    },
+    "liquidity": {
+      "term": "Kecairan",
+      "simple": "Betapa mudahnya aset boleh didagangkan.",
+      "detailed": "Kecairan tinggi bermaksud anda boleh membeli atau menjual dengan cepat pada harga yang dikehendaki."
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "Bursa di mana anda boleh menukar token tanpa perantara.",
+      "detailed": "Singkatan Decentralized Exchange — perdagangan berlaku secara automatik melalui kontrak pintar.",
+      "example": "Anda boleh berdagang ALMAN di platform seperti Uniswap atau QuickSwap."
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "Bukti pemilikan digital yang unik.",
+      "detailed": "Singkatan Non-Fungible Token — membuktikan anda memiliki item digital seperti seni atau koleksi."
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "NFT khas yang tidak boleh dipindahkan.",
+      "detailed": "Singkatan Soulbound Token — setelah diterima, ia tidak boleh dijual atau dipindahkan.",
+      "example": "Jeong-SBT merekodkan skor kebaikan anda secara kekal."
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "Token jiwa yang membuktikan kebaikan anda.",
+      "detailed": "Apabila skor kebaikan anda meningkat, tahap anda naik dan anda membuka lebih banyak manfaat.",
+      "example": "Capai tahap Forest untuk diskaun 50% yuran NFT!"
+    },
+    "royalty": {
+      "term": "Royalti",
+      "simple": "Pendapatan yang diperoleh pencipta asal apabila NFT dijual semula.",
+      "detailed": "Ciri hebat Web3 yang memastikan pencipta terus memperoleh pendapatan daripada karya mereka."
+    },
+    "governance": {
+      "term": "Tadbir Urus",
+      "simple": "Bersama-sama menentukan hala tuju sesuatu projek.",
+      "detailed": "Pemegang token boleh menyertai keputusan penting melalui pengundian.",
+      "example": "Ciri baharu dan perkongsian ditentukan oleh undian komuniti."
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "Organisasi digital yang ditadbir melalui pengundian.",
+      "detailed": "Singkatan Decentralized Autonomous Organization — beroperasi tanpa pihak berkuasa pusat.",
+      "example": "DAO AlmaNEO dipimpin secara langsung oleh komunitinya."
+    },
+    "proposal": {
+      "term": "Cadangan",
+      "simple": "Item yang dikemukakan untuk undian dalam tadbir urus.",
+      "detailed": "Sesiapa boleh mengemukakan cadangan, dan pemegang token mengundi."
+    },
+    "quorum": {
+      "term": "Kuorum",
+      "simple": "Penyertaan minimum yang diperlukan untuk undian sah.",
+      "detailed": "AlmaNEO mempunyai kuorum 4% — sekurang-kurangnya 4% daripada semua token mesti mengundi untuk meluluskan."
+    },
+    "jeong": {
+      "term": "Jeong (情)",
+      "simple": "Ikatan emosi yang mendalam yang terbina seiring masa.",
+      "detailed": "Konsep unik Korea — hubungan manusia yang mendalam melampaui kebaikan ringkas.",
+      "example": "AlmaNEO membawa nilai hangat ini ke dalam blockchain."
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "Indeks yang mengukur ketidaksamaan AI.",
+      "detailed": "Singkatan Global AI Inequality Index — mengukur kebolehcapaian AI mengikut negara.",
+      "example": "Semakin tinggi skor, semakin sukar untuk mengakses AI di kawasan tersebut."
+    },
+    "kindnessScore": {
+      "term": "Skor Kebaikan",
+      "simple": "Skor anda untuk aktiviti kebaikan.",
+      "detailed": "Semakin banyak perbuatan baik yang anda lakukan, semakin tinggi skor dan manfaat anda.",
+      "example": "Skor lebih tinggi bermaksud tahap Jeong-SBT lebih tinggi!"
+    },
+    "kindnessProtocol": {
+      "term": "Protokol Kebaikan",
+      "simple": "Sistem yang membuktikan dan menghargai kebaikan.",
+      "detailed": "Proof of Humanity — cara baharu untuk membuktikan kemanusiaan anda."
+    },
+    "globalSouth": {
+      "term": "Global South",
+      "simple": "Negara-negara membangun dan baru muncul.",
+      "detailed": "Terutamanya merujuk kepada kawasan di Afrika, Asia Selatan, Asia Tenggara dan Amerika Latin.",
+      "example": "AlmaNEO bertujuan meningkatkan kebolehcapaian AI di Global South."
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "Rangkaian infrastruktur fizikal terdesentralisasi.",
+      "detailed": "Singkatan Decentralized Physical Infrastructure Network.",
+      "example": "Menghubungkan komputer peribadi untuk berkongsi kuasa pengkomputeran AI."
+    }
   }
 }

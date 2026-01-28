@@ -1,15 +1,17 @@
 /**
  * KindnessTerm Component
  * 친절 모드에서 용어에 도움말 툴팁을 표시하는 컴포넌트
+ * i18n 연동으로 다국어 지원
  */
 
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useKindnessMode } from '../../contexts/KindnessModeContext';
-import { findTerm, type GlossaryTerm } from '../../data/glossary';
+import { isValidTermKey, getTermCategory } from '../../data/glossary';
 
 interface KindnessTermProps {
-  /** 용어 키 (glossary.ts의 key) */
+  /** 용어 키 (glossary의 key) */
   termKey: string;
   /** 표시할 텍스트 (없으면 glossary의 term 사용) */
   children?: ReactNode;
@@ -31,13 +33,22 @@ export function KindnessTerm({
   inline = true,
 }: KindnessTermProps) {
   const { isKindnessMode } = useKindnessMode();
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState<TooltipPosition>({ vertical: 'top', horizontal: 'center' });
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
   const triggerRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const term = findTerm(termKey);
+  const isValid = isValidTermKey(termKey);
+  const category = getTermCategory(termKey);
+
+  // i18n에서 용어 텍스트 로드
+  const termText = t(`glossary.${termKey}.term`, { defaultValue: '' });
+  const simpleText = t(`glossary.${termKey}.simple`, { defaultValue: '' });
+  const detailedText = t(`glossary.${termKey}.detailed`, { defaultValue: '' });
+  const exampleText = t(`glossary.${termKey}.example`, { defaultValue: '' });
+  const exampleLabel = t('glossary.exampleLabel', { defaultValue: 'Example' });
 
   // 툴팁 위치 계산 (상하좌우 경계 체크)
   const calculatePosition = useCallback(() => {
@@ -114,11 +125,11 @@ export function KindnessTerm({
   }, [isOpen]);
 
   // 친절 모드가 꺼져있거나 용어를 찾을 수 없으면 일반 텍스트로 표시
-  if (!isKindnessMode || !term) {
-    return <span className={className}>{children || term?.term || termKey}</span>;
+  if (!isKindnessMode || !isValid) {
+    return <span className={className}>{children || termText || termKey}</span>;
   }
 
-  const displayText = children || term.term;
+  const displayText = children || termText;
 
   return (
     <span
@@ -171,25 +182,27 @@ export function KindnessTerm({
           <div className="kindness-tooltip-content">
             {/* Header */}
             <div className="kindness-tooltip-header">
-              <span className="kindness-tooltip-term">{term.term}</span>
-              <span className={`kindness-tooltip-category kindness-tooltip-category-${term.category}`}>
-                {getCategoryLabel(term.category)}
-              </span>
+              <span className="kindness-tooltip-term">{termText}</span>
+              {category && (
+                <span className={`kindness-tooltip-category kindness-tooltip-category-${category}`}>
+                  {t(`glossary.categories.${category}`)}
+                </span>
+              )}
             </div>
 
             {/* Simple explanation */}
-            <p className="kindness-tooltip-simple">{term.simple}</p>
+            {simpleText && <p className="kindness-tooltip-simple">{simpleText}</p>}
 
             {/* Detailed explanation (if exists) */}
-            {term.detailed && (
-              <p className="kindness-tooltip-detailed">{term.detailed}</p>
+            {detailedText && (
+              <p className="kindness-tooltip-detailed">{detailedText}</p>
             )}
 
             {/* Example (if exists) */}
-            {term.example && (
+            {exampleText && (
               <div className="kindness-tooltip-example">
-                <span className="kindness-tooltip-example-label">예시</span>
-                <span>{term.example}</span>
+                <span className="kindness-tooltip-example-label">{exampleLabel}</span>
+                <span>{exampleText}</span>
               </div>
             )}
           </div>
@@ -197,19 +210,6 @@ export function KindnessTerm({
       )}
     </span>
   );
-}
-
-// 카테고리 라벨
-function getCategoryLabel(category: GlossaryTerm['category']): string {
-  const labels: Record<GlossaryTerm['category'], string> = {
-    blockchain: '블록체인',
-    token: '토큰',
-    defi: 'DeFi',
-    nft: 'NFT',
-    governance: '거버넌스',
-    neos: 'NEOS',
-  };
-  return labels[category];
 }
 
 export default KindnessTerm;

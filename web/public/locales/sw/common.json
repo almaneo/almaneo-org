@@ -65,5 +65,198 @@
   "language": {
     "select": "Chagua lugha",
     "current": "Lugha ya sasa"
+  },
+  "glossary": {
+    "exampleLabel": "Mfano",
+    "categories": {
+      "blockchain": "Blockchain",
+      "token": "Tokeni",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "Utawala",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "Blockchain",
+      "simple": "Daftari la kidijitali linalorekodiwa na kompyuta nyingi pamoja.",
+      "detailed": "Mara ikirekodi, ni karibu haiwezekani kubadilisha, na kuifanya kuwa ya uwazi na salama.",
+      "example": "Unaweza kuthibitisha miamala bila kuhitaji benki."
+    },
+    "wallet": {
+      "term": "Pochi",
+      "simple": "Akaunti inayohifadhi mali zako za kidijitali.",
+      "detailed": "Kama akaunti ya benki, unaweza kuhifadhi, kutuma, na kupokea tokeni.",
+      "example": "Unapoingia kwa Web3Auth, pochi huundwa kiotomatiki."
+    },
+    "gasPrice": {
+      "term": "Ada ya Gesi",
+      "simple": "Ada inayolipwa kurekodi data kwenye blockchain.",
+      "detailed": "Ni ada ya matumizi ya mtandao inayolipwa kwa kompyuta zinazoshughulikia muamala wako.",
+      "example": "AlmaNEO inalipia ada ya gesi kwa niaba yako, kwa hivyo unaweza kuitumia bure!"
+    },
+    "transaction": {
+      "term": "Muamala",
+      "simple": "Operesheni moja iliyorekodiwa kwenye blockchain.",
+      "detailed": "Kila hatua kama uhamishaji wa tokeni au ununuzi wa NFT hurekodiwa kama muamala."
+    },
+    "smartContract": {
+      "term": "Mkataba Mzuri",
+      "simple": "Mkataba wa kidijitali unaotekelezwa kiotomatiki.",
+      "detailed": "Masharti yanapotimizwa, unafanya kazi peke yake — hakuna mpatanishi anayehitajika.",
+      "example": "Tuzo za kuweka hisa hulipwa kiotomatiki shukrani kwa mikataba mizuri."
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "Mtandao wa blockchain wa haraka na nafuu.",
+      "detailed": "Inaendana na Ethereum lakini kwa ada ya gesi ya chini sana.",
+      "example": "AlmaNEO ilichagua Polygon ili kila mtu aweze kuitumia bila wasiwasi wa gharama."
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "Huduma ya kuingia kwenye blockchain kwa akaunti za kijamii.",
+      "detailed": "Hakuna usanidi ngumu wa pochi unaohitajika — tumia Google, Facebook, nk.",
+      "example": "Kwa Web3Auth, mtu yeyote anaweza kuanza kwa urahisi kwenye AlmaNEO!"
+    },
+    "gasless": {
+      "term": "Bila Gesi",
+      "simple": "Miamala isiyohitaji kulipa ada ya gesi.",
+      "detailed": "Jukwaa linalipia ada ya gesi ili watumiaji wachangamane bure.",
+      "example": "Miamala mingi kwenye AlmaNEO ni bila gesi!"
+    },
+    "token": {
+      "term": "Tokeni",
+      "simple": "Sarafu ya kidijitali au mali kwenye blockchain.",
+      "detailed": "Kama sarafu za mchezo, tokeni zinaweza kutumika ndani ya jukwaa maalum."
+    },
+    "alman": {
+      "term": "Tokeni ya ALMAN",
+      "simple": "Tokeni asili ya jukwaa la AlmaNEO.",
+      "detailed": "Inatumika kwa kuweka hisa, kupiga kura ya utawala, kununua NFT na zaidi.",
+      "example": "Unaweza kupata tokeni za ALMAN kama tuzo kwa shughuli za upole."
+    },
+    "neos": {
+      "term": "Tokeni ya ALMAN",
+      "simple": "Tokeni asili ya jukwaa la AlmaNEO.",
+      "detailed": "Inatumika kwa kuweka hisa, kupiga kura ya utawala, kununua NFT na zaidi.",
+      "example": "Unaweza kupata tokeni za ALMAN kama tuzo kwa shughuli za upole."
+    },
+    "totalSupply": {
+      "term": "Ugavi Jumla",
+      "simple": "Jumla ya tokeni zitakazotolewa.",
+      "detailed": "ALMAN ina tokeni bilioni 8, ikiashiria watu bilioni 8 duniani."
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "Tukio ambapo tokeni zinatolewa kwa mara ya kwanza.",
+      "detailed": "Inasimamia Token Generation Event — uzinduzi rasmi wa tokeni."
+    },
+    "staking": {
+      "term": "Kuweka Hisa",
+      "simple": "Kuweka tokeni kupata riba.",
+      "detailed": "Kama amana ya benki — weka tokeni zako na upokee tuzo.",
+      "example": "Weka hisa ALMAN kupata tuzo za kila mwaka ya 5–18%."
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "Kiwango cha mapato ya kila mwaka.",
+      "detailed": "Inasimamia Annual Percentage Yield — inaonyesha mapato yanayotarajiwa katika mwaka mmoja.",
+      "example": "Kwa APY ya 10%, kuweka hisa 100 ALMAN kunakupa 110 ALMAN baada ya mwaka mmoja."
+    },
+    "airdrop": {
+      "term": "Usambazaji wa Bure",
+      "simple": "Usambazaji wa tokeni bure.",
+      "detailed": "Hufanywa kutangaza miradi mipya au kutuza jamii.",
+      "example": "AlmaNEO inasambaza tokeni kwa watu wanaofanya shughuli za upole."
+    },
+    "liquidity": {
+      "term": "Ukwasi",
+      "simple": "Jinsi mali zinavyoweza kuuzwa kwa urahisi.",
+      "detailed": "Ukwasi wa juu maana yake unaweza kununua au kuuza haraka kwa bei unayotaka."
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "Soko ambapo unaweza kubadilishana tokeni bila mpatanishi.",
+      "detailed": "Inasimamia Decentralized Exchange — biashara hufanyika kiotomatiki kupitia mikataba mizuri.",
+      "example": "Unaweza kubiashara ALMAN kwenye majukwaa kama Uniswap au QuickSwap."
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "Uthibitisho wa kipekee wa kidijitali wa umiliki.",
+      "detailed": "Inasimamia Non-Fungible Token — inathibitisha kuwa unamiliki kitu cha kidijitali kama sanaa au ukusanyaji."
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "NFT maalum ambayo haiwezi kuhamishwa.",
+      "detailed": "Inasimamia Soulbound Token — ikishapokelewa, haiwezi kuuzwa au kuhamishwa.",
+      "example": "Jeong-SBT inarekodi alama yako ya upole daima."
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "Tokeni ya roho inayothibitisha upole wako.",
+      "detailed": "Alama yako ya upole inavyoongezeka, ngazi yako inapanda na unafungua faida zaidi.",
+      "example": "Fikia ngazi ya Forest kwa punguzo la 50% kwenye ada za NFT!"
+    },
+    "royalty": {
+      "term": "Mrabaha",
+      "simple": "Mapato ambayo muundaji asili anapata NFT inapouzwa tena.",
+      "detailed": "Kipengele cha ajabu cha Web3 kinachohakikisha waundaji wanaendelea kupata kutoka kwa kazi yao."
+    },
+    "governance": {
+      "term": "Utawala",
+      "simple": "Pamoja kuamua mwelekeo wa mradi.",
+      "detailed": "Wamiliki wa tokeni wanaweza kushiriki katika maamuzi muhimu kupitia kupiga kura.",
+      "example": "Vipengele vipya na ushirikiano huamuliwa na kura za jamii."
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "Shirika la kidijitali linalosimamiwa kwa kupiga kura.",
+      "detailed": "Inasimamia Decentralized Autonomous Organization — inafanya kazi bila mamlaka kuu.",
+      "example": "DAO ya AlmaNEO inaongozwa moja kwa moja na jamii yake."
+    },
+    "proposal": {
+      "term": "Pendekezo",
+      "simple": "Jambo linalowekwa kwa kura katika utawala.",
+      "detailed": "Mtu yeyote anaweza kuwasilisha pendekezo, na wamiliki wa tokeni wanapiga kura."
+    },
+    "quorum": {
+      "term": "Akidi",
+      "simple": "Ushiriki wa chini unaohitajika ili kura iwe halali.",
+      "detailed": "AlmaNEO ina akidi ya 4% — angalau 4% ya tokeni zote lazima zipige kura ili kupitisha."
+    },
+    "jeong": {
+      "term": "Jeong (情)",
+      "simple": "Uhusiano wa kihisia wa kina uliojengwa kwa wakati.",
+      "detailed": "Dhana ya pekee ya Kikorea — uhusiano wa kibinadamu wa kina unaozidi upole rahisi.",
+      "example": "AlmaNEO inabeba thamani hii ya joto kwenye blockchain."
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "Fahirisi inayopima ukosefu wa usawa wa AI.",
+      "detailed": "Inasimamia Global AI Inequality Index — inapima upatikanaji wa AI kwa nchi.",
+      "example": "Alama inavyoongezeka, ndivyo inavyokuwa vigumu kupata AI katika eneo hilo."
+    },
+    "kindnessScore": {
+      "term": "Alama ya Upole",
+      "simple": "Alama yako kwa shughuli za upole.",
+      "detailed": "Unavyofanya vitendo vizuri zaidi, alama yako na faida zako zinaongezeka.",
+      "example": "Alama ya juu zaidi maana yake ngazi ya Jeong-SBT ya juu zaidi!"
+    },
+    "kindnessProtocol": {
+      "term": "Itifaki ya Upole",
+      "simple": "Mfumo unaothibitisha na kutuza upole.",
+      "detailed": "Proof of Humanity — njia mpya ya kuthibitisha ubinadamu wako."
+    },
+    "globalSouth": {
+      "term": "Kusini mwa Ulimwengu",
+      "simple": "Nchi zinazoendelea na zinazojitokeza.",
+      "detailed": "Kimsingi inarejelea maeneo ya Afrika, Asia Kusini, Asia ya Kusini-Mashariki, na Amerika Kusini.",
+      "example": "AlmaNEO inalenga kuboresha upatikanaji wa AI katika Kusini mwa Ulimwengu."
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "Mtandao wa miundombinu ya kimwili usio na kati.",
+      "detailed": "Inasimamia Decentralized Physical Infrastructure Network.",
+      "example": "Kuunganisha kompyuta binafsi kushiriki nguvu ya kompyuta ya AI."
+    }
   }
 }

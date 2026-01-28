@@ -65,5 +65,198 @@
   "language": {
     "select": "Chọn ngôn ngữ",
     "current": "Ngôn ngữ hiện tại"
+  },
+  "glossary": {
+    "exampleLabel": "Ví dụ",
+    "categories": {
+      "blockchain": "Blockchain",
+      "token": "Token",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "Quản trị",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "Blockchain",
+      "simple": "Sổ cái kỹ thuật số được ghi lại bởi nhiều máy tính cùng nhau.",
+      "detailed": "Một khi đã ghi lại, gần như không thể thay đổi, giúp nó minh bạch và an toàn.",
+      "example": "Bạn có thể xác minh giao dịch mà không cần ngân hàng."
+    },
+    "wallet": {
+      "term": "Ví",
+      "simple": "Tài khoản lưu trữ tài sản kỹ thuật số của bạn.",
+      "detailed": "Giống như tài khoản ngân hàng, bạn có thể lưu trữ, gửi và nhận token.",
+      "example": "Khi đăng nhập bằng Web3Auth, ví sẽ được tạo tự động."
+    },
+    "gasPrice": {
+      "term": "Phí Gas",
+      "simple": "Phí phải trả khi ghi dữ liệu lên blockchain.",
+      "detailed": "Đây là phí sử dụng mạng trả cho các máy tính xử lý giao dịch của bạn.",
+      "example": "AlmaNEO thanh toán phí gas cho bạn, nên bạn có thể sử dụng miễn phí!"
+    },
+    "transaction": {
+      "term": "Giao dịch",
+      "simple": "Một thao tác được ghi lại trên blockchain.",
+      "detailed": "Mọi hành động như chuyển token hay mua NFT đều được ghi lại dưới dạng giao dịch."
+    },
+    "smartContract": {
+      "term": "Hợp đồng thông minh",
+      "simple": "Hợp đồng kỹ thuật số tự động thực thi.",
+      "detailed": "Khi điều kiện được đáp ứng, nó tự chạy — không cần trung gian.",
+      "example": "Phần thưởng staking được trả tự động nhờ hợp đồng thông minh."
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "Mạng blockchain nhanh và giá rẻ.",
+      "detailed": "Tương thích với Ethereum nhưng có phí gas thấp hơn rất nhiều.",
+      "example": "AlmaNEO chọn Polygon để mọi người đều có thể sử dụng mà không lo chi phí."
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "Dịch vụ đăng nhập blockchain bằng tài khoản mạng xã hội.",
+      "detailed": "Không cần thiết lập ví phức tạp — chỉ cần dùng Google, Facebook, v.v.",
+      "example": "Với Web3Auth, bất kỳ ai cũng có thể dễ dàng bắt đầu trên AlmaNEO!"
+    },
+    "gasless": {
+      "term": "Không phí Gas",
+      "simple": "Giao dịch không cần trả phí gas.",
+      "detailed": "Nền tảng thanh toán phí gas để người dùng tương tác miễn phí.",
+      "example": "Hầu hết giao dịch trên AlmaNEO đều không có phí gas!"
+    },
+    "token": {
+      "term": "Token",
+      "simple": "Tiền tệ kỹ thuật số hoặc tài sản trên blockchain.",
+      "detailed": "Giống như tiền xu trong game, token có thể được sử dụng trong một nền tảng cụ thể."
+    },
+    "alman": {
+      "term": "Token ALMAN",
+      "simple": "Token chính của nền tảng AlmaNEO.",
+      "detailed": "Được sử dụng cho staking, bỏ phiếu quản trị, mua NFT và nhiều hơn nữa.",
+      "example": "Bạn có thể nhận token ALMAN như phần thưởng cho các hoạt động tử tế."
+    },
+    "neos": {
+      "term": "Token ALMAN",
+      "simple": "Token chính của nền tảng AlmaNEO.",
+      "detailed": "Được sử dụng cho staking, bỏ phiếu quản trị, mua NFT và nhiều hơn nữa.",
+      "example": "Bạn có thể nhận token ALMAN như phần thưởng cho các hoạt động tử tế."
+    },
+    "totalSupply": {
+      "term": "Tổng cung",
+      "simple": "Tổng số token sẽ được phát hành.",
+      "detailed": "ALMAN có 8 tỷ token, tượng trưng cho 8 tỷ người trên Trái đất."
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "Sự kiện phát hành token lần đầu.",
+      "detailed": "Viết tắt của Token Generation Event — thời điểm ra mắt chính thức của token."
+    },
+    "staking": {
+      "term": "Staking",
+      "simple": "Gửi token để nhận lãi suất.",
+      "detailed": "Giống như gửi tiết kiệm ngân hàng — gửi token và nhận phần thưởng.",
+      "example": "Stake ALMAN để nhận phần thưởng hàng năm 5–18%."
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "Tỷ suất lợi nhuận hàng năm.",
+      "detailed": "Viết tắt của Annual Percentage Yield — cho thấy thu nhập dự kiến trong một năm.",
+      "example": "Với APY 10%, stake 100 ALMAN sẽ cho bạn 110 ALMAN sau một năm."
+    },
+    "airdrop": {
+      "term": "Airdrop",
+      "simple": "Phân phối token miễn phí.",
+      "detailed": "Được thực hiện để quảng bá dự án mới hoặc thưởng cho cộng đồng.",
+      "example": "AlmaNEO airdrop token cho những người thực hiện các hoạt động tử tế."
+    },
+    "liquidity": {
+      "term": "Thanh khoản",
+      "simple": "Mức độ dễ dàng giao dịch tài sản.",
+      "detailed": "Thanh khoản cao nghĩa là bạn có thể mua hoặc bán nhanh chóng ở mức giá mong muốn."
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "Sàn giao dịch mà bạn có thể trao đổi token không cần trung gian.",
+      "detailed": "Viết tắt của Decentralized Exchange — giao dịch diễn ra tự động qua hợp đồng thông minh.",
+      "example": "Bạn có thể giao dịch ALMAN trên các nền tảng như Uniswap hoặc QuickSwap."
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "Bằng chứng sở hữu kỹ thuật số duy nhất.",
+      "detailed": "Viết tắt của Non-Fungible Token — chứng minh bạn sở hữu một vật phẩm kỹ thuật số như nghệ thuật hay đồ sưu tầm."
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "NFT đặc biệt không thể chuyển nhượng.",
+      "detailed": "Viết tắt của Soulbound Token — một khi nhận được, không thể bán hoặc di chuyển.",
+      "example": "Jeong-SBT ghi lại vĩnh viễn điểm tử tế của bạn."
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "Token linh hồn chứng minh sự tử tế của bạn.",
+      "detailed": "Khi điểm tử tế tăng lên, cấp bậc của bạn tăng và mở khóa thêm quyền lợi.",
+      "example": "Đạt cấp Forest để được giảm 50% phí NFT!"
+    },
+    "royalty": {
+      "term": "Tiền bản quyền",
+      "simple": "Thu nhập mà người tạo gốc nhận được khi NFT được bán lại.",
+      "detailed": "Tính năng tuyệt vời của Web3 đảm bảo người sáng tạo tiếp tục kiếm tiền từ tác phẩm."
+    },
+    "governance": {
+      "term": "Quản trị",
+      "simple": "Cùng nhau quyết định hướng đi của dự án.",
+      "detailed": "Người nắm giữ token có thể tham gia các quyết định quan trọng thông qua bỏ phiếu.",
+      "example": "Tính năng mới và quan hệ đối tác được quyết định bởi phiếu bầu cộng đồng."
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "Tổ chức kỹ thuật số được điều hành bằng bỏ phiếu.",
+      "detailed": "Viết tắt của Decentralized Autonomous Organization — hoạt động không cần cơ quan trung ương.",
+      "example": "DAO AlmaNEO được dẫn dắt trực tiếp bởi cộng đồng."
+    },
+    "proposal": {
+      "term": "Đề xuất",
+      "simple": "Một mục được đưa ra bỏ phiếu trong quản trị.",
+      "detailed": "Bất kỳ ai cũng có thể gửi đề xuất, và người nắm giữ token sẽ bỏ phiếu."
+    },
+    "quorum": {
+      "term": "Số đại biểu tối thiểu",
+      "simple": "Mức tham gia tối thiểu cần thiết để cuộc bỏ phiếu có hiệu lực.",
+      "detailed": "AlmaNEO có số đại biểu tối thiểu 4% — ít nhất 4% tổng token phải bỏ phiếu để thông qua."
+    },
+    "jeong": {
+      "term": "Jeong (情)",
+      "simple": "Mối liên kết cảm xúc sâu sắc được xây dựng theo thời gian.",
+      "detailed": "Khái niệm độc đáo của Hàn Quốc — sự kết nối sâu sắc giữa con người vượt xa lòng tốt đơn thuần.",
+      "example": "AlmaNEO mang giá trị ấm áp này lên blockchain."
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "Chỉ số đo lường bất bình đẳng AI.",
+      "detailed": "Viết tắt của Global AI Inequality Index — định lượng khả năng tiếp cận AI theo quốc gia.",
+      "example": "Điểm càng cao, càng khó tiếp cận AI ở khu vực đó."
+    },
+    "kindnessScore": {
+      "term": "Điểm Tử tế",
+      "simple": "Điểm số của bạn cho các hoạt động tử tế.",
+      "detailed": "Bạn càng làm nhiều việc tốt, điểm và quyền lợi càng cao.",
+      "example": "Điểm cao hơn nghĩa là cấp Jeong-SBT cao hơn!"
+    },
+    "kindnessProtocol": {
+      "term": "Giao thức Tử tế",
+      "simple": "Hệ thống chứng minh và thưởng cho sự tử tế.",
+      "detailed": "Proof of Humanity — cách mới để chứng minh tính nhân văn của bạn."
+    },
+    "globalSouth": {
+      "term": "Global South",
+      "simple": "Các nước đang phát triển và mới nổi.",
+      "detailed": "Chủ yếu đề cập đến các khu vực ở Châu Phi, Nam Á, Đông Nam Á và Mỹ Latinh.",
+      "example": "AlmaNEO nhằm cải thiện khả năng tiếp cận AI ở Global South."
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "Mạng cơ sở hạ tầng vật lý phi tập trung.",
+      "detailed": "Viết tắt của Decentralized Physical Infrastructure Network.",
+      "example": "Kết nối máy tính cá nhân để chia sẻ sức mạnh tính toán AI."
+    }
   }
 }

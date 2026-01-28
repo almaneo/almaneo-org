@@ -65,5 +65,198 @@
   "language": {
     "select": "Seleccionar idioma",
     "current": "Idioma actual"
+  },
+  "glossary": {
+    "exampleLabel": "Ejemplo",
+    "categories": {
+      "blockchain": "Blockchain",
+      "token": "Token",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "Gobernanza",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "Blockchain",
+      "simple": "Un libro digital registrado por múltiples computadoras.",
+      "detailed": "Una vez registrado, es casi imposible modificarlo, lo que lo hace transparente y seguro.",
+      "example": "Puedes verificar transacciones sin necesitar un banco."
+    },
+    "wallet": {
+      "term": "Billetera",
+      "simple": "Una cuenta que almacena tus activos digitales.",
+      "detailed": "Como una cuenta bancaria, puedes guardar, enviar y recibir tokens.",
+      "example": "Al iniciar sesión con Web3Auth, se crea automáticamente una billetera."
+    },
+    "gasPrice": {
+      "term": "Tarifa de Gas",
+      "simple": "Una comisión que se paga al registrar datos en la blockchain.",
+      "detailed": "Es una tarifa de uso de la red que se paga a los computadores que procesan la transacción.",
+      "example": "¡AlmaNEO cubre las tarifas de gas por ti, así que puedes usarlo gratis!"
+    },
+    "transaction": {
+      "term": "Transacción",
+      "simple": "Una operación individual registrada en la blockchain.",
+      "detailed": "Cada acción como transferencias de tokens o compras de NFT se registra como una transacción."
+    },
+    "smartContract": {
+      "term": "Contrato Inteligente",
+      "simple": "Un contrato digital que se ejecuta automáticamente.",
+      "detailed": "Cuando se cumplen las condiciones, se ejecuta solo, sin necesidad de intermediarios.",
+      "example": "Las recompensas de staking se pagan automáticamente gracias a los contratos inteligentes."
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "Una red blockchain rápida y económica.",
+      "detailed": "Compatible con Ethereum pero con tarifas de gas mucho más bajas.",
+      "example": "AlmaNEO eligió Polygon para que todos puedan usarlo sin preocuparse por los costos."
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "Un servicio para iniciar sesión en blockchain con cuentas sociales.",
+      "detailed": "Sin necesidad de configurar una billetera compleja: usa Google, Facebook, etc.",
+      "example": "¡Con Web3Auth, cualquiera puede empezar fácilmente en AlmaNEO!"
+    },
+    "gasless": {
+      "term": "Sin Gas",
+      "simple": "Transacciones que no requieren pagar tarifas de gas.",
+      "detailed": "La plataforma cubre las tarifas de gas para que los usuarios interactúen gratis.",
+      "example": "¡La mayoría de las transacciones en AlmaNEO son sin gas!"
+    },
+    "token": {
+      "term": "Token",
+      "simple": "Una moneda digital o activo en la blockchain.",
+      "detailed": "Como las monedas de un juego, los tokens se pueden usar en una plataforma específica."
+    },
+    "alman": {
+      "term": "Token ALMAN",
+      "simple": "El token nativo de la plataforma AlmaNEO.",
+      "detailed": "Se usa para staking, votación de gobernanza, compra de NFT y más.",
+      "example": "Puedes ganar tokens ALMAN como recompensa por actividades de bondad."
+    },
+    "neos": {
+      "term": "Token ALMAN",
+      "simple": "El token nativo de la plataforma AlmaNEO.",
+      "detailed": "Se usa para staking, votación de gobernanza, compra de NFT y más.",
+      "example": "Puedes ganar tokens ALMAN como recompensa por actividades de bondad."
+    },
+    "totalSupply": {
+      "term": "Suministro Total",
+      "simple": "El número total de tokens que se emitirán.",
+      "detailed": "ALMAN tiene 8 mil millones de tokens, simbolizando los 8 mil millones de personas en la Tierra."
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "El evento donde los tokens se emiten por primera vez.",
+      "detailed": "Significa Token Generation Event: el lanzamiento oficial del token."
+    },
+    "staking": {
+      "term": "Staking",
+      "simple": "Depositar tokens para ganar intereses.",
+      "detailed": "Como un depósito bancario: deposita tus tokens y recibe recompensas.",
+      "example": "Haz staking con ALMAN para ganar entre 5 y 18% de recompensas anuales."
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "La tasa de rendimiento anual.",
+      "detailed": "Significa Annual Percentage Yield: muestra tus ganancias esperadas en un año.",
+      "example": "Con un APY del 10%, hacer staking de 100 ALMAN te da 110 ALMAN después de un año."
+    },
+    "airdrop": {
+      "term": "Airdrop",
+      "simple": "Una distribución gratuita de tokens.",
+      "detailed": "Se hace para promover nuevos proyectos o recompensar a la comunidad.",
+      "example": "AlmaNEO hace airdrops a personas que realizan actividades de bondad."
+    },
+    "liquidity": {
+      "term": "Liquidez",
+      "simple": "Qué tan fácilmente se pueden comerciar los activos.",
+      "detailed": "Alta liquidez significa que puedes comprar o vender rápidamente al precio que deseas."
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "Un intercambio donde puedes comerciar tokens sin intermediarios.",
+      "detailed": "Significa Decentralized Exchange: las transacciones ocurren automáticamente vía contratos inteligentes.",
+      "example": "Puedes comerciar ALMAN en plataformas como Uniswap o QuickSwap."
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "Una prueba digital única de propiedad.",
+      "detailed": "Significa Non-Fungible Token: demuestra que posees un artículo digital como arte o coleccionables."
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "Un NFT especial que no se puede transferir.",
+      "detailed": "Significa Soulbound Token: una vez recibido, no se puede vender ni mover.",
+      "example": "El Jeong-SBT registra permanentemente tu puntuación de bondad."
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "Un token del alma que demuestra tu bondad.",
+      "detailed": "A medida que crece tu puntuación de bondad, tu nivel sube y desbloqueas más beneficios.",
+      "example": "¡Alcanza el nivel Forest para obtener un 50% de descuento en las tarifas de NFT!"
+    },
+    "royalty": {
+      "term": "Regalía",
+      "simple": "Ingresos que el creador original gana cuando un NFT es revendido.",
+      "detailed": "Una maravillosa característica de Web3 que asegura que los creadores sigan ganando por su trabajo."
+    },
+    "governance": {
+      "term": "Gobernanza",
+      "simple": "Decidir colectivamente la dirección de un proyecto.",
+      "detailed": "Los poseedores de tokens pueden participar en decisiones importantes mediante votación.",
+      "example": "Nuevas funciones y asociaciones se deciden por votación de la comunidad."
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "Una organización digital gobernada por votación.",
+      "detailed": "Significa Decentralized Autonomous Organization: funciona sin una autoridad central.",
+      "example": "La DAO de AlmaNEO es dirigida directamente por su comunidad."
+    },
+    "proposal": {
+      "term": "Propuesta",
+      "simple": "Un asunto puesto a votación en la gobernanza.",
+      "detailed": "Cualquiera puede presentar una propuesta y los poseedores de tokens votan sobre ella."
+    },
+    "quorum": {
+      "term": "Quórum",
+      "simple": "La participación mínima necesaria para que una votación sea válida.",
+      "detailed": "AlmaNEO tiene un quórum del 4%: al menos el 4% de todos los tokens deben votar para aprobar."
+    },
+    "jeong": {
+      "term": "Jeong (情)",
+      "simple": "Un vínculo emocional profundo construido a lo largo del tiempo.",
+      "detailed": "Un concepto exclusivamente coreano: una conexión humana profunda que va más allá de la simple amabilidad.",
+      "example": "AlmaNEO lleva este cálido valor en la blockchain."
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "Un índice que mide la desigualdad en IA.",
+      "detailed": "Significa Global AI Inequality Index: cuantifica la accesibilidad a la IA por país.",
+      "example": "Cuanto mayor sea la puntuación, más difícil es acceder a la IA en esa región."
+    },
+    "kindnessScore": {
+      "term": "Puntuación de Bondad",
+      "simple": "Tu puntuación por actividades de bondad.",
+      "detailed": "Cuantos más actos de bondad hagas, mayor será tu puntuación y tus beneficios.",
+      "example": "¡Una puntuación más alta significa un nivel más alto de Jeong-SBT!"
+    },
+    "kindnessProtocol": {
+      "term": "Protocolo de Bondad",
+      "simple": "Un sistema que demuestra y recompensa la bondad.",
+      "detailed": "Proof of Humanity: una nueva forma de demostrar tu humanidad."
+    },
+    "globalSouth": {
+      "term": "Sur Global",
+      "simple": "Países en desarrollo y emergentes.",
+      "detailed": "Se refiere principalmente a regiones de África, Asia del Sur, Sudeste Asiático y América Latina.",
+      "example": "AlmaNEO busca mejorar la accesibilidad a la IA en el Sur Global."
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "Una red descentralizada de infraestructura física.",
+      "detailed": "Significa Decentralized Physical Infrastructure Network.",
+      "example": "Conectar computadoras personales para compartir poder de cómputo de IA."
+    }
   }
 }

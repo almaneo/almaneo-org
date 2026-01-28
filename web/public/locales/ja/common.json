@@ -65,5 +65,198 @@
   "language": {
     "select": "言語を選択",
     "current": "現在の言語"
+  },
+  "glossary": {
+    "exampleLabel": "例",
+    "categories": {
+      "blockchain": "ブロックチェーン",
+      "token": "トークン",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "ガバナンス",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "ブロックチェーン",
+      "simple": "複数のコンピュータが一緒に記録するデジタル台帳です。",
+      "detailed": "一度記録されると変更が難しく、透明で安全です。",
+      "example": "銀行なしでも取引記録をみんなで検証できます。"
+    },
+    "wallet": {
+      "term": "ウォレット",
+      "simple": "デジタル資産を保管するアカウントです。",
+      "detailed": "銀行口座のように、トークンを保管・送受信できます。",
+      "example": "Web3Authでログインすると自動的にウォレットが作成されます。"
+    },
+    "gasPrice": {
+      "term": "ガス代",
+      "simple": "ブロックチェーンに記録する際に支払う手数料です。",
+      "detailed": "ネットワーク利用料として、取引を処理するコンピュータに支払われます。",
+      "example": "AlmaNEOがガス代を負担するので、無料で利用できます！"
+    },
+    "transaction": {
+      "term": "トランザクション",
+      "simple": "ブロックチェーンに記録される一つの操作です。",
+      "detailed": "トークンの送金やNFTの購入など、すべての行動がトランザクションとして記録されます。"
+    },
+    "smartContract": {
+      "term": "スマートコントラクト",
+      "simple": "自動的に実行されるデジタル契約書です。",
+      "detailed": "条件が満たされると自動的に実行され、仲介者が不要です。",
+      "example": "ステーキング報酬が自動的に支払われるのもスマートコントラクトのおかげです。"
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "高速で低コストなブロックチェーンネットワークです。",
+      "detailed": "イーサリアムと互換性がありながら、ガス代が非常に安いです。",
+      "example": "AlmaNEOがPolygonを選んだ理由は、誰でも負担なく使えるからです。"
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "ソーシャルアカウントでブロックチェーンにログインするサービスです。",
+      "detailed": "複雑なウォレット設定なしで、Google、Facebookなどですぐに始められます。",
+      "example": "Web3Authで誰でも簡単にAlmaNEOを始められます！"
+    },
+    "gasless": {
+      "term": "ガスレス",
+      "simple": "ガス代を支払わなくてよい取引です。",
+      "detailed": "プラットフォームがガス代を負担するので、ユーザーは無料で利用できます。",
+      "example": "AlmaNEOではほとんどの取引がガスレスです！"
+    },
+    "token": {
+      "term": "トークン",
+      "simple": "ブロックチェーン上のデジタル通貨や資産です。",
+      "detailed": "ゲームのコインのように、特定のプラットフォームで使用できます。"
+    },
+    "alman": {
+      "term": "ALMANトークン",
+      "simple": "AlmaNEOプラットフォームの基本トークンです。",
+      "detailed": "ステーキング、ガバナンス投票、NFT購入などに使用されます。",
+      "example": "親切な活動をするとALMANトークンが報酬としてもらえます。"
+    },
+    "neos": {
+      "term": "ALMANトークン",
+      "simple": "AlmaNEOプラットフォームの基本トークンです。",
+      "detailed": "ステーキング、ガバナンス投票、NFT購入などに使用されます。",
+      "example": "親切な活動をするとALMANトークンが報酬としてもらえます。"
+    },
+    "totalSupply": {
+      "term": "総供給量",
+      "simple": "発行されるトークンの総数です。",
+      "detailed": "ALMANは80億枚で、地球の人口80億人を象徴しています。"
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "トークンが初めて発行されるイベントです。",
+      "detailed": "Token Generation Eventの略で、トークンが公式にローンチされる瞬間です。"
+    },
+    "staking": {
+      "term": "ステーキング",
+      "simple": "トークンを預けて利息をもらうことです。",
+      "detailed": "銀行預金のように、トークンを預けると報酬がもらえます。",
+      "example": "ALMANをステーキングすると年5〜18%の報酬が得られます。"
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "年間利回りです。",
+      "detailed": "Annual Percentage Yieldの略で、1年間の予想収益をパーセントで表示します。",
+      "example": "APY 10%なら、100 ALMANをステーキングすると1年後に110 ALMANになります。"
+    },
+    "airdrop": {
+      "term": "エアドロップ",
+      "simple": "トークンを無料で配布するイベントです。",
+      "detailed": "新しいプロジェクトの宣伝やコミュニティへの報酬として行われます。",
+      "example": "AlmaNEOは親切な活動をした人にエアドロップを実施します。"
+    },
+    "liquidity": {
+      "term": "流動性",
+      "simple": "取引がどれだけ簡単に行えるかを示します。",
+      "detailed": "流動性が高ければ、希望の価格で素早く売買できます。"
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "仲介者なしでトークンを交換できる取引所です。",
+      "detailed": "Decentralized Exchangeの略で、スマートコントラクトで自動取引されます。",
+      "example": "Uniswap、QuickSwapなどでALMANを取引できます。"
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "世界に一つだけのデジタル所有権証明書です。",
+      "detailed": "Non-Fungible Tokenの略で、デジタルアートやアイテムの所有権を証明します。"
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "譲渡できない特別なNFTです。",
+      "detailed": "Soulbound Tokenの略で、一度受け取ると売ったり移したりできません。",
+      "example": "Jeong-SBTはあなたの親切スコアを永遠に記録します。"
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "あなたの親切を証明する魂のトークンです。",
+      "detailed": "親切スコアが貯まるとティアが上がり、より多くの特典が得られます。",
+      "example": "Forestティアになると NFT手数料が50%割引！"
+    },
+    "royalty": {
+      "term": "ロイヤリティ",
+      "simple": "NFTが再販売された時に原作者が受け取る収益です。",
+      "detailed": "クリエイターが継続的に報酬を得られるWeb3の素晴らしい機能です。"
+    },
+    "governance": {
+      "term": "ガバナンス",
+      "simple": "プロジェクトの方向性をみんなで決めることです。",
+      "detailed": "トークン保有者が投票で重要な決定に参加できます。",
+      "example": "新機能の追加やパートナーシップの決定などを投票で決めます。"
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "投票で運営されるデジタル組織です。",
+      "detailed": "Decentralized Autonomous Organizationの略で、中央管理者なしで運営されます。",
+      "example": "AlmaNEO DAOはコミュニティが直接プロジェクトを導きます。"
+    },
+    "proposal": {
+      "term": "提案",
+      "simple": "ガバナンスで投票にかけられる議案です。",
+      "detailed": "誰でも提案を出すことができ、トークン保有者が投票します。"
+    },
+    "quorum": {
+      "term": "クォーラム",
+      "simple": "投票が有効になるために必要な最低参加率です。",
+      "detailed": "AlmaNEOは4%のクォーラムで、全トークンの4%が投票に参加する必要があります。"
+    },
+    "jeong": {
+      "term": "情(ジョン)",
+      "simple": "長い時間を共に過ごす中で築かれる深い心の絆です。",
+      "detailed": "韓国固有の概念で、単なる親切を超えた深い人間的なつながりです。",
+      "example": "AlmaNEOはこの温かい価値をブロックチェーンに込めています。"
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "AI格差の程度を測定する指数です。",
+      "detailed": "Global AI Inequality Indexの略で、国別のAIアクセシビリティを数値化します。",
+      "example": "スコアが高いほど、その地域ではAIへのアクセスが困難です。"
+    },
+    "kindnessScore": {
+      "term": "親切スコア",
+      "simple": "あなたの親切活動のスコアです。",
+      "detailed": "親切な行動をするほどスコアが上がり、特典が増えます。",
+      "example": "スコアが高いとJeong-SBTのティアが上がります！"
+    },
+    "kindnessProtocol": {
+      "term": "親切プロトコル",
+      "simple": "親切を証明し報酬を与えるシステムです。",
+      "detailed": "Proof of Humanity — 人間らしさを証明する新しい方法です。"
+    },
+    "globalSouth": {
+      "term": "グローバルサウス",
+      "simple": "開発途上国や新興国を指します。",
+      "detailed": "主にアフリカ、南アジア、東南アジア、中南米地域を指します。",
+      "example": "AlmaNEOはグローバルサウスのAIアクセシビリティ向上を目指しています。"
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "分散型の物理インフラネットワークです。",
+      "detailed": "Decentralized Physical Infrastructure Networkの略です。",
+      "example": "個人のコンピュータをつないでAI計算力を共有する方式です。"
+    }
   }
 }

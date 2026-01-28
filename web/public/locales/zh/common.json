@@ -65,5 +65,198 @@
   "language": {
     "select": "选择语言",
     "current": "当前语言"
+  },
+  "glossary": {
+    "exampleLabel": "示例",
+    "categories": {
+      "blockchain": "区块链",
+      "token": "代币",
+      "defi": "DeFi",
+      "nft": "NFT",
+      "governance": "治理",
+      "neos": "AlmaNEO"
+    },
+    "blockchain": {
+      "term": "区块链",
+      "simple": "多台电脑共同记录的数字账本。",
+      "detailed": "一旦记录就很难更改，因此非常透明和安全。",
+      "example": "无需银行，所有人都可以验证交易记录。"
+    },
+    "wallet": {
+      "term": "钱包",
+      "simple": "存储数字资产的账户。",
+      "detailed": "像银行账户一样，可以存储、发送和接收代币。",
+      "example": "使用Web3Auth登录后会自动创建钱包。"
+    },
+    "gasPrice": {
+      "term": "Gas费",
+      "simple": "在区块链上记录数据时支付的手续费。",
+      "detailed": "这是支付给处理交易的计算机的网络使用费。",
+      "example": "AlmaNEO为您承担Gas费，所以可以免费使用！"
+    },
+    "transaction": {
+      "term": "交易",
+      "simple": "记录在区块链上的一次操作。",
+      "detailed": "代币转账、NFT购买等所有操作都会作为交易记录。"
+    },
+    "smartContract": {
+      "term": "智能合约",
+      "simple": "自动执行的数字合同。",
+      "detailed": "条件满足时自动执行，无需中间人。",
+      "example": "质押奖励自动发放也是智能合约的功劳。"
+    },
+    "polygon": {
+      "term": "Polygon",
+      "simple": "快速且费用低廉的区块链网络。",
+      "detailed": "与以太坊兼容，但Gas费非常低。",
+      "example": "AlmaNEO选择Polygon，让每个人都能无负担地使用。"
+    },
+    "web3auth": {
+      "term": "Web3Auth",
+      "simple": "使用社交账号登录区块链的服务。",
+      "detailed": "无需复杂的钱包设置，用Google、Facebook等即可开始。",
+      "example": "通过Web3Auth，任何人都能轻松开始使用AlmaNEO！"
+    },
+    "gasless": {
+      "term": "免Gas",
+      "simple": "无需支付Gas费的交易。",
+      "detailed": "平台代付Gas费，用户可以免费使用。",
+      "example": "AlmaNEO上的大多数交易都是免Gas的！"
+    },
+    "token": {
+      "term": "代币",
+      "simple": "区块链上的数字货币或资产。",
+      "detailed": "像游戏币一样，可以在特定平台上使用。"
+    },
+    "alman": {
+      "term": "ALMAN 代币",
+      "simple": "AlmaNEO平台的基础代币。",
+      "detailed": "用于质押、治理投票、NFT购买等。",
+      "example": "参与善行活动可以获得ALMAN代币奖励。"
+    },
+    "neos": {
+      "term": "ALMAN 代币",
+      "simple": "AlmaNEO平台的基础代币。",
+      "detailed": "用于质押、治理投票、NFT购买等。",
+      "example": "参与善行活动可以获得ALMAN代币奖励。"
+    },
+    "totalSupply": {
+      "term": "总供应量",
+      "simple": "将发行的代币总数。",
+      "detailed": "ALMAN共80亿枚，象征地球80亿人口。"
+    },
+    "tge": {
+      "term": "TGE",
+      "simple": "代币首次发行的事件。",
+      "detailed": "Token Generation Event的缩写，代币正式推出的时刻。"
+    },
+    "staking": {
+      "term": "质押",
+      "simple": "存入代币并获得利息。",
+      "detailed": "像银行存款一样，存入代币即可获得奖励。",
+      "example": "质押ALMAN可获得5-18%的年化收益。"
+    },
+    "apy": {
+      "term": "APY",
+      "simple": "年化收益率。",
+      "detailed": "Annual Percentage Yield的缩写，以百分比显示一年的预期收益。",
+      "example": "APY 10%意味着质押100 ALMAN，一年后变成110 ALMAN。"
+    },
+    "airdrop": {
+      "term": "空投",
+      "simple": "免费分发代币的活动。",
+      "detailed": "用于宣传新项目或奖励社区。",
+      "example": "AlmaNEO向参与善行活动的人空投代币。"
+    },
+    "liquidity": {
+      "term": "流动性",
+      "simple": "衡量交易进行的容易程度。",
+      "detailed": "流动性高意味着可以快速地按理想价格买卖。"
+    },
+    "dex": {
+      "term": "DEX",
+      "simple": "无需中间人即可交换代币的交易所。",
+      "detailed": "Decentralized Exchange的缩写，通过智能合约自动交易。",
+      "example": "可以在Uniswap、QuickSwap等平台交易ALMAN。"
+    },
+    "nft": {
+      "term": "NFT",
+      "simple": "独一无二的数字所有权证明。",
+      "detailed": "Non-Fungible Token的缩写，证明数字艺术或物品的所有权。"
+    },
+    "sbt": {
+      "term": "SBT",
+      "simple": "不可转让的特殊NFT。",
+      "detailed": "Soulbound Token的缩写，一旦获得就不能出售或转移。",
+      "example": "Jeong-SBT永久记录您的善行分数。"
+    },
+    "jeongSbt": {
+      "term": "Jeong-SBT",
+      "simple": "证明您善行的灵魂代币。",
+      "detailed": "善行分数累积后等级提升，可获得更多优惠。",
+      "example": "达到Forest等级可享受NFT手续费50%折扣！"
+    },
+    "royalty": {
+      "term": "版税",
+      "simple": "NFT转售时原创者获得的收入。",
+      "detailed": "Web3的出色功能，确保创作者持续获得回报。"
+    },
+    "governance": {
+      "term": "治理",
+      "simple": "共同决定项目方向。",
+      "detailed": "代币持有者可以通过投票参与重要决策。",
+      "example": "新功能添加、合作关系等都通过投票决定。"
+    },
+    "dao": {
+      "term": "DAO",
+      "simple": "通过投票运营的数字组织。",
+      "detailed": "Decentralized Autonomous Organization的缩写，无需中央管理者。",
+      "example": "AlmaNEO DAO由社区直接引领项目发展。"
+    },
+    "proposal": {
+      "term": "提案",
+      "simple": "在治理中提交投票的议案。",
+      "detailed": "任何人都可以提交提案，代币持有者进行投票。"
+    },
+    "quorum": {
+      "term": "法定人数",
+      "simple": "投票有效所需的最低参与率。",
+      "detailed": "AlmaNEO设定4%法定人数，至少4%的代币需要参与投票才能通过。"
+    },
+    "jeong": {
+      "term": "情(정)",
+      "simple": "长时间共处中积累的深厚情感纽带。",
+      "detailed": "韩国特有的概念，超越简单善意的深层人际连接。",
+      "example": "AlmaNEO将这份温暖的价值承载于区块链之上。"
+    },
+    "gaii": {
+      "term": "GAII",
+      "simple": "衡量AI不平等程度的指数。",
+      "detailed": "Global AI Inequality Index的缩写，量化各国AI可及性。",
+      "example": "分数越高，说明该地区越难获取AI服务。"
+    },
+    "kindnessScore": {
+      "term": "善行分数",
+      "simple": "您的善行活动得分。",
+      "detailed": "善行越多，分数越高，优惠越多。",
+      "example": "分数越高，Jeong-SBT等级就越高！"
+    },
+    "kindnessProtocol": {
+      "term": "善行协议",
+      "simple": "证明并奖励善行的系统。",
+      "detailed": "Proof of Humanity — 证明人性的新方式。"
+    },
+    "globalSouth": {
+      "term": "全球南方",
+      "simple": "发展中国家或新兴国家。",
+      "detailed": "主要指非洲、南亚、东南亚和拉丁美洲地区。",
+      "example": "AlmaNEO致力于提升全球南方的AI可及性。"
+    },
+    "depin": {
+      "term": "DePIN",
+      "simple": "去中心化的物理基础设施网络。",
+      "detailed": "Decentralized Physical Infrastructure Network的缩写。",
+      "example": "将个人电脑连接起来共享AI算力。"
+    }
   }
 }
