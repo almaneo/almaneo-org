@@ -2421,9 +2421,112 @@ function updateReputation(node, delta) external onlyCoordinator;
    - 커밋: `a9c5d63` - fix(web): Fix markdown table rendering in whitepaper for 14 languages
    - 수정 파일: `whitepaper.json`, `almaneo_whitepaper.db`
 
+### ✅ 완료된 작업 (2026-01-28 - Session 51: 친절 모드 다국어 지원)
+
+#### 1. **친절 모드 (Kindness Mode) i18n 다국어 지원 구현**
+   - 기존: 용어 설명 (glossary) 30+ 용어가 한국어로만 하드코딩
+   - 변경: 14개 언어로 번역, i18n 시스템 연동
+
+#### 2. **glossary.ts 구조 변경**
+   - `web/src/data/glossary.ts` 전면 리팩토링
+   - 기존: 한국어 텍스트(term, simple, detailed, example) + 카테고리 함께 관리
+   - 변경: 구조 데이터(키, 카테고리)만 관리, 텍스트는 i18n으로 이동
+   - 기존 `findTerm()` 제거 → `isValidTermKey()`, `getTermCategory()`, `getKeysByCategory()` 추가
+   - `glossaryKeys: Record<string, GlossaryCategory>` 매핑 export
+
+#### 3. **KindnessTerm.tsx i18n 연동**
+   - `web/src/components/ui/KindnessTerm.tsx` 업데이트
+   - `useTranslation('common')` 훅 추가
+   - 용어 텍스트: `t('glossary.{termKey}.term/simple/detailed/example')` 로드
+   - 카테고리 라벨: `t('glossary.categories.{category}')` 로드
+   - 예시 라벨: `t('glossary.exampleLabel')` 로드
+   - 기존 `getCategoryLabel()` 함수 제거 (i18n으로 대체)
+
+#### 4. **14개 언어 glossary 번역 추가** (`common.json`)
+   - 각 언어 `common.json`에 `glossary` 섹션 추가
+   - 30+ 용어 × 14개 언어 = 420+ 번역 항목
+   - 각 용어: `term`, `simple`, `detailed` (선택), `example` (선택)
+   - 6개 카테고리 라벨: blockchain, token, defi, nft, governance, neos
+   - `exampleLabel` (예시 라벨) 각 언어별 번역
+
+   | 언어 | 파일 | 상태 |
+   |------|------|------|
+   | ko | `public/locales/ko/common.json` | ✅ |
+   | en | `public/locales/en/common.json` | ✅ |
+   | zh | `public/locales/zh/common.json` | ✅ |
+   | ja | `public/locales/ja/common.json` | ✅ |
+   | es | `public/locales/es/common.json` | ✅ |
+   | fr | `public/locales/fr/common.json` | ✅ |
+   | ar | `public/locales/ar/common.json` | ✅ |
+   | pt | `public/locales/pt/common.json` | ✅ |
+   | id | `public/locales/id/common.json` | ✅ |
+   | ms | `public/locales/ms/common.json` | ✅ |
+   | th | `public/locales/th/common.json` | ✅ |
+   | vi | `public/locales/vi/common.json` | ✅ |
+   | km | `public/locales/km/common.json` | ✅ |
+   | sw | `public/locales/sw/common.json` | ✅ |
+
+#### 5. **빌드 테스트 성공** (34.61초)
+
 ---
 
-### 🔲 다음 세션 작업 (Session 51+)
+### ✅ 완료된 작업 (2026-01-29 - Session 52: FAQ 섹션 다국어 번역 완료)
+
+#### 1. **FAQ 섹션 번역 누락 문제 확인**
+   - 문제: 6개 언어(id, ms, th, vi, km, sw)의 FAQ가 부분적으로 영어로 표시
+   - 원인: FAQ 구조가 FAQSection.tsx 컴포넌트와 불일치
+     - 메타데이터 키 누락: `tag`, `titlePrefix`, `titleHighlight`, `subtitleFull`, `contactMessage`
+     - 카테고리 불일치: `all`, `general`, `token`, `technical` → 5개 카테고리 필요
+     - FAQ 항목 ID 불일치: `whatIs`, `whatIsGAII` 등 → 10개 항목 필요
+
+#### 2. **6개 언어 FAQ 구조 수정 완료**
+   - 수정 언어: Indonesian (id), Malay (ms), Thai (th), Vietnamese (vi), Khmer (km), Swahili (sw)
+   - 각 언어별 작은 단위로 수정 (메타데이터 → 카테고리 → 각 항목)
+
+#### 3. **FAQ 메타데이터 추가**
+   ```json
+   {
+     "tag": "FAQ",
+     "titlePrefix": "Frequently",
+     "titleHighlight": "Asked Questions",
+     "subtitleFull": "Frequently asked questions about AlmaNEO and culture of kindness",
+     "categoryLabel": "Category",
+     "contactCta": "Have more questions?",
+     "contactMessage": "Contact us at support@almaneo.org"
+   }
+   ```
+
+#### 4. **카테고리 변경** (4개 → 5개)
+   | 기존 | 변경 |
+   |------|------|
+   | `all`, `general`, `token`, `technical` | `general`, `token`, `technology`, `nft`, `participation` |
+
+#### 5. **FAQ 항목 ID 통일** (10개 항목)
+   | 기존 항목 | 변경 항목 | 비고 |
+   |----------|----------|------|
+   | whatIs | whatIsAlmaNEO | 이름 변경 |
+   | whatIsJeong | whatIsJeong | ✅ 유지 |
+   | whatIsGAII | totalSupply | 교체 |
+   | tokenUtility | howToGetToken | 교체 |
+   | howToBuy | (삭제) | - |
+   | howToStart | whichBlockchain | 교체 |
+   | isSafe | noWallet | 교체 |
+   | whatIsJeongSBT | whatIsJeongSBT | ✅ 유지 |
+   | supportedLanguages | nftMarketplaceFeatures | 교체 |
+   | howToContribute | howStakingWorks | 교체 |
+   | (신규) | whatIsKindnessGame | 추가 |
+
+#### 6. **Khmer 텍스트 오류 수정**
+   - `org ទួល` → `ដើម្បីទទួល` (to receive)
+   - `ផ org ល់` → `ផ្តល់` (provide)
+
+#### 7. **빌드 테스트 성공** (34.66초)
+   - 모든 14개 언어가 동일한 FAQ 구조 사용
+   - FAQSection.tsx 컴포넌트와 완벽히 일치
+
+---
+
+### 🔲 다음 세션 작업 (Session 53+)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
@@ -2465,7 +2568,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 50 기준)
+### 📊 페이지별 상태 요약 (Session 52 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2665,18 +2768,19 @@ cd c:\DEV\ALMANEO\game && npm run dev     # Game (포트 3000)
   - 상세: `.claude/GAME_UPDATE.md`
 
 ### 친절 모드 (Kindness Mode) 가이드
-친절 모드는 Web3/블록체인 초보자를 위한 용어 설명 기능입니다.
+친절 모드는 Web3/블록체인 초보자를 위한 용어 설명 기능입니다. (14개 언어 지원, Session 51)
 
 **파일 구조:**
 - `contexts/KindnessModeContext.tsx`: 전역 상태 관리
-- `data/glossary.ts`: 용어 정의 데이터
-- `components/ui/KindnessTerm.tsx`: 툴팁 컴포넌트
+- `data/glossary.ts`: 용어 키/카테고리 구조 데이터 (텍스트 없음)
+- `components/ui/KindnessTerm.tsx`: 툴팁 컴포넌트 (i18n 연동)
+- `public/locales/{lang}/common.json` → `glossary` 섹션: 번역 텍스트
 
 **사용 방법:**
 ```tsx
 import { KindnessTerm } from '../ui';
 
-// 텍스트에 툴팁 적용
+// 텍스트에 툴팁 적용 (children은 표시 텍스트, termKey는 glossary 키)
 <KindnessTerm termKey="staking">스테이킹</KindnessTerm>
 ```
 
@@ -2686,20 +2790,27 @@ import { KindnessTerm } from '../ui';
 - `defi`: 스테이킹, APY, 유동성 등
 - `nft`: NFT, 로열티, 민팅 등
 - `governance`: DAO, 제안, 투표, 쿼럼 등
-- `neos`: NEOS 고유 개념 (정, Kindness Score, Jeong-SBT 등)
+- `neos`: AlmaNEO 고유 개념 (정, Kindness Score, Jeong-SBT 등)
 
-**신규 용어 추가:**
+**신규 용어 추가 (2단계):**
 ```typescript
-// data/glossary.ts
-export const glossary: Record<string, GlossaryTerm> = {
-  newTerm: {
-    term: '새 용어',
-    simple: '간단한 설명 (1줄)',
-    detailed: '자세한 설명 (예시 포함)',
-    example: '실제 사용 예시',
-    category: 'blockchain' | 'token' | 'defi' | 'nft' | 'governance' | 'neos',
-  },
+// 1단계: data/glossary.ts에 키+카테고리 추가
+export const glossaryKeys: Record<string, GlossaryCategory> = {
+  newTerm: 'blockchain', // 카테고리만 지정
 };
+
+// 2단계: 14개 언어 common.json에 번역 추가
+// public/locales/{ko,en,...}/common.json → glossary 섹션
+{
+  "glossary": {
+    "newTerm": {
+      "term": "새 용어",
+      "simple": "간단한 설명 (1줄)",
+      "detailed": "자세한 설명 (선택)",
+      "example": "실제 사용 예시 (선택)"
+    }
+  }
+}
 ```
 
 ### Header 네비게이션 구조
