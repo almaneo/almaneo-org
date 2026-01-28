@@ -282,9 +282,15 @@
         "name": "Polygon",
         "description": "เครือข่าย blockchain หลัก"
       },
-      "firebase": {
-        "name": "Firebase",
-        "description": "Backend และการยืนยันตัวตน"
+      "supabase": {
+        "name": "Supabase",
+        "category": "Backend",
+        "description": "ฐานข้อมูล, การยืนยันตัวตน & เรียลไทม์"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "Deploy แบบ edge & serverless"
       },
       "biconomy": {
         "name": "Biconomy",

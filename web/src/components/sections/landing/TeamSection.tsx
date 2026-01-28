@@ -58,7 +58,7 @@ function MemberCard({ member }: { member: TeamMember }) {
           {member.socials.twitter && (
             <a
               href={member.socials.twitter}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -68,7 +68,7 @@ function MemberCard({ member }: { member: TeamMember }) {
           {member.socials.linkedin && (
             <a
               href={member.socials.linkedin}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -78,7 +78,7 @@ function MemberCard({ member }: { member: TeamMember }) {
           {member.socials.github && (
             <a
               href={member.socials.github}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -147,7 +147,7 @@ export function TeamSection() {
           <h3 className="text-lg font-semibold text-text-secondary mb-6 text-center">
             {t('team.coFounders')}
           </h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {coFounders.map((member, i) => (
               <MemberCard key={i} member={member} />
             ))}
@@ -165,7 +165,7 @@ export function TeamSection() {
               {t('team.joinUsMessage')}
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {openRoles.map((role, i) => (
               <OpenRoleCard key={i} roleId={role.id} icon={role.icon} />
             ))}

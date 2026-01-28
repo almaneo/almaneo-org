@@ -270,7 +270,7 @@ export default function GAIIDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -303,13 +303,13 @@ export default function GAIIDashboard() {
         )}
 
         {/* Global Index Hero */}
-        <div className="card p-8 mb-8 relative overflow-hidden">
+        <div className="card p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 relative overflow-hidden">
           <div
             className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getGAIIGradient(
               globalData.globalGaii
             )}`}
           />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Score */}
             <div className="lg:col-span-1 flex flex-col items-center justify-center">
               <p className="text-slate-400 text-sm mb-2">Global GAII Score</p>
@@ -365,7 +365,7 @@ export default function GAIIDashboard() {
             </div>
 
             {/* Key Metrics */}
-            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+            <div className="lg:col-span-2 grid grid-cols-2 gap-2 sm:gap-4">
               <div className="p-4 bg-slate-800/50 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <Cpu className="w-5 h-5 text-neos-blue" />
@@ -545,7 +545,7 @@ export default function GAIIDashboard() {
               <div key={region.code}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-white font-medium w-48 truncate">
+                    <span className="text-white font-medium w-28 sm:w-48 truncate">
                       {region.name}
                     </span>
                     <TrendIcon trend={region.trend} value={region.trendValue} />

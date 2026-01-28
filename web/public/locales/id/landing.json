@@ -282,9 +282,15 @@
         "name": "Polygon",
         "description": "Jaringan blockchain utama"
       },
-      "firebase": {
-        "name": "Firebase",
-        "description": "Backend dan autentikasi"
+      "supabase": {
+        "name": "Supabase",
+        "category": "Backend",
+        "description": "Database, autentikasi & real-time"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "Deploy edge & serverless"
       },
       "biconomy": {
         "name": "Biconomy",

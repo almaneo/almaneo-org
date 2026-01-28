@@ -200,7 +200,11 @@ export default function Governance() {
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
             </button>
-            <button className="btn-primary flex items-center gap-2">
+            <button
+              className="btn-primary flex items-center gap-2 opacity-50 cursor-not-allowed"
+              disabled
+              title="Coming soon - Governance proposals will be enabled after mainnet launch"
+            >
               <Plus className="w-5 h-5" />
               Create Proposal
             </button>
@@ -392,7 +396,11 @@ export default function Governance() {
             <p className="text-slate-400 mb-6">
               Be the first to create a proposal for the AlmaNEO community!
             </p>
-            <button className="btn-primary px-6 py-3">
+            <button
+              className="btn-primary px-6 py-3 opacity-50 cursor-not-allowed"
+              disabled
+              title="Coming soon - Governance proposals will be enabled after mainnet launch"
+            >
               Create First Proposal
             </button>
           </div>

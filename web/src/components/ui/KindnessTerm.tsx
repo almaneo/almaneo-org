@@ -127,12 +127,22 @@ export function KindnessTerm({
     >
       <span
         className="kindness-term"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setIsOpen(!isOpen);
+        }}
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && setIsOpen(!isOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.stopPropagation();
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+        }}
       >
         {displayText}
         <HelpCircle className="kindness-term-icon" strokeWidth={2} />

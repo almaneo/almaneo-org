@@ -9,6 +9,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { Web3Auth } from '@web3auth/modal';
 import { WEB3AUTH_NETWORK, CHAIN_NAMESPACES, type IProvider } from '@web3auth/base';
 import { BrowserProvider, JsonRpcSigner, formatEther } from 'ethers';
+import i18n from 'i18next';
+
+// Web3Auth 지원 언어 매핑 (사이트 언어 → Web3Auth 언어)
+const WEB3AUTH_LANGUAGES = ['en', 'de', 'ja', 'ko', 'zh', 'es', 'fr', 'pt', 'nl', 'tr'] as const;
+type Web3AuthLang = (typeof WEB3AUTH_LANGUAGES)[number];
+function getWeb3AuthLanguage(): Web3AuthLang {
+  const lang = i18n.language?.split('-')[0] || 'en';
+  return (WEB3AUTH_LANGUAGES as readonly string[]).includes(lang) ? lang as Web3AuthLang : 'en';
+}
 import type {
   WalletState,
   UserInfo,
@@ -226,7 +235,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                 onPrimary: '#FFFFFF',
               },
               mode: 'dark',
-              defaultLanguage: 'ko',
+              defaultLanguage: getWeb3AuthLanguage(),
               loginMethodsOrder: ['google', 'facebook', 'twitter', 'discord'],
               primaryButton: 'socialLogin',
             },

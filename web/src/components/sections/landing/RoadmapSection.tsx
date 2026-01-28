@@ -90,7 +90,7 @@ export function RoadmapSection() {
           {/* Vertical Line (Desktop) */}
           <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-green-400 via-jeong-orange to-purple-400 opacity-30" />
 
-          <div className="space-y-8 lg:space-y-0">
+          <div className="space-y-4 sm:space-y-8 lg:space-y-0">
             {phasesData.map((phase, i) => (
               <div
                 key={i}
@@ -169,7 +169,7 @@ export function RoadmapSection() {
         </div>
 
         {/* Legend */}
-        <div className="flex justify-center gap-6 mt-12">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 mt-8 sm:mt-12">
           <div className="flex items-center gap-2 text-sm">
             <Check className="w-4 h-4 text-green-400" strokeWidth={2} />
             <span className="text-text-muted">{t('roadmap.legend.completed')}</span>

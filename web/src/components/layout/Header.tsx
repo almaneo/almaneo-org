@@ -274,11 +274,11 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-nav">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src={logoImg} alt="AlmaNEO" className="h-8 w-auto object-contain" />
+            <img src={logoImg} alt="AlmaNEO" className="h-8 w-auto max-w-[35vw] sm:max-w-none object-contain" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -436,22 +436,21 @@ export default function Header() {
 
               {/* Language */}
               <div className="px-4 mb-2 text-xs text-slate-500 uppercase">{t('language.select')}</div>
-              <div className="flex flex-wrap gap-2 px-4">
-                {languageList.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      i18n.changeLanguage(lang.code);
-                      document.documentElement.dir = languages[lang.code]?.dir || 'ltr';
-                    }}
-                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${lang.code === currentLang
-                      ? 'bg-neos-blue/20 text-neos-blue'
-                      : 'bg-white/5 text-slate-400 hover:text-white'
-                      }`}
-                  >
-                    {lang.flag} {lang.code.toUpperCase()}
-                  </button>
-                ))}
+              <div className="px-4">
+                <select
+                  value={currentLang}
+                  onChange={(e) => {
+                    i18n.changeLanguage(e.target.value);
+                    document.documentElement.dir = languages[e.target.value as LanguageCode]?.dir || 'ltr';
+                  }}
+                  className="w-full appearance-none bg-slate-800 text-slate-300 text-sm px-4 py-3 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-neos-blue min-h-[44px]"
+                >
+                  {languageList.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.flag} {lang.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -493,8 +492,7 @@ export default function Header() {
                     connect();
                   }}
                   disabled={isLoading}
-                  className="w-full mx-4 btn-primary flex items-center justify-center gap-2 px-4 py-3 disabled:opacity-50"
-                  style={{ width: 'calc(100% - 2rem)' }}
+                  className="btn-primary flex items-center justify-center gap-2 px-4 py-3 disabled:opacity-50 mx-4 w-[calc(100%-2rem)]"
                 >
                   {isLoading ? (
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -556,7 +554,7 @@ function MobileAccordion({
     <div>
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors min-h-[44px]"
       >
         <span>{t(labelKey)}</span>
         <ChevronDown
@@ -570,7 +568,7 @@ function MobileAccordion({
           {items.map((item) => {
             const Icon = item.icon;
             const content = (
-              <div className="flex items-center gap-3 px-4 py-2.5">
+              <div className="flex items-center gap-3 px-4 py-2.5 min-h-[44px]">
                 {Icon && <Icon className="w-4 h-4 text-slate-500" strokeWidth={1.5} />}
                 <span className="flex-1">{t(item.nameKey)}</span>
                 {item.badgeKey && (

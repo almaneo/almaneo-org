@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Globe, FileText, ChevronDown, X } from 'lucide-react';
+import { Gamepad2, Globe, FileText, ChevronDown, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { HeartbeatLine, AnimatedCounter, Button } from '../ui';
 import heroBackground from '../../assets/images/01.webp';
@@ -76,10 +76,10 @@ const SnsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void })
         {/* Header */}
         <div className="text-center mb-6">
           <h3 className="text-xl font-bold text-white mb-2">
-            {t('hero.snsModal.title', '커뮤니티에 참여하세요')}
+            {t('hero.snsModal.title', 'Join Our Community')}
           </h3>
           <p className="text-sm text-slate-400">
-            {t('hero.snsModal.description', 'AlmaNEO의 최신 소식을 받아보세요')}
+            {t('hero.snsModal.description', 'Get the latest news from AlmaNEO')}
           </p>
         </div>
 
@@ -127,11 +127,11 @@ export const HeroSection = () => {
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 animate-pulse-slow"
+          className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 md:w-96 md:h-96 rounded-full opacity-20 animate-pulse-slow"
           style={{ background: 'radial-gradient(circle, #0052FF 0%, transparent 70%)' }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-15 animate-pulse-slow"
+          className="absolute bottom-1/4 right-1/4 w-40 h-40 sm:w-60 sm:h-60 md:w-80 md:h-80 rounded-full opacity-15 animate-pulse-slow"
           style={{
             background: 'radial-gradient(circle, #FF6B00 0%, transparent 70%)',
             animationDelay: '1s'
@@ -146,16 +146,16 @@ export const HeroSection = () => {
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight font-montserrat">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-4 sm:mb-6 leading-tight font-montserrat">
           <span className="block text-blue-400">Cold Code,</span>
           <span className="block gradient-text">Warm Soul.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-xl md:text-2xl mb-3 font-light text-slate-300">
+        <p className="text-base sm:text-xl md:text-2xl mb-3 font-light text-slate-300">
           {t('hero.subtitle')}
         </p>
-        <p className="text-lg md:text-xl mb-10 text-slate-400">
+        <p className="text-sm sm:text-lg md:text-xl mb-8 sm:mb-10 text-slate-400">
           {t('hero.description')}
         </p>
 
@@ -165,10 +165,10 @@ export const HeroSection = () => {
             <Button
               size="lg"
               glow
-              icon={<Globe className="w-5 h-5" strokeWidth={1.5} />}
+              icon={<Gamepad2 className="w-5 h-5" strokeWidth={1.5} />}
               className="w-full"
             >
-              Play AI Hub
+              {t('hero.cta.playGame', 'Play Game')}
             </Button>
           </a>
           <Button
@@ -193,21 +193,21 @@ export const HeroSection = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-lg mx-auto">
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-400">
+            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-blue-400">
               <AnimatedCounter end={8} suffix="B" />
             </div>
             <div className="text-xs mt-1 text-slate-500">{t('hero.stats.totalSupply')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-jeong-orange">
+            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-jeong-orange">
               <AnimatedCounter end={8} suffix="B" />
             </div>
             <div className="text-xs mt-1 text-slate-500">{t('hero.stats.forHumans')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-green-400">
+            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-green-400">
               100+
             </div>
             <div className="text-xs mt-1 text-slate-500">{t('hero.stats.countries')}</div>

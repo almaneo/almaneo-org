@@ -78,7 +78,7 @@ export function Web3AuthSection() {
           <GlassCard padding="xl" className="relative overflow-hidden">
             {/* Background Glow */}
             <div
-              className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-20 blur-3xl"
+              className="absolute -top-20 -right-20 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full opacity-20 blur-3xl"
               style={{ background: '#0052FF' }}
             />
 

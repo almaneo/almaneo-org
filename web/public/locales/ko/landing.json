@@ -6,7 +6,8 @@
     "cta": {
       "joinMovement": "함께하기",
       "learnMore": "더 알아보기",
-      "whitepaper": "백서 읽기"
+      "whitepaper": "백서 읽기",
+      "playGame": "게임하기"
     },
     "stats": {
       "totalSupply": "총 공급량",
@@ -325,10 +326,15 @@
         "category": "Infrastructure",
         "description": "가스비 없는 트랜잭션"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "Backend",
-        "description": "실시간 데이터베이스 & 인증"
+        "description": "데이터베이스, 인증 & 실시간"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "엣지 배포 & 서버리스"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

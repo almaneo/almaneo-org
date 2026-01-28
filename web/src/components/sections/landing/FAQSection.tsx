@@ -51,7 +51,7 @@ function FAQItemComponent({ itemId, isOpen, onToggle }: FAQItemProps) {
           isOpen ? 'max-h-96 pb-5' : 'max-h-0'
         }`}
       >
-        <p className="text-sm text-text-muted leading-relaxed pl-[calc(0.5rem+3.5rem)]">
+        <p className="text-sm text-text-muted leading-relaxed pl-4 sm:pl-[calc(0.5rem+3.5rem)]">
           {t(`faq.items.${itemId}.answer`)}
         </p>
       </div>
@@ -100,7 +100,7 @@ export function FAQSection() {
         />
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-6 sm:mb-8">
           <span className="text-sm text-text-muted flex items-center gap-2">
             <HelpCircle className="w-4 h-4" strokeWidth={1.5} />
             {t('faq.categoryLabel')}

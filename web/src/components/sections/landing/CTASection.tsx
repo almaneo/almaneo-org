@@ -2,6 +2,7 @@ import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Section, Container } from '../../layout';
 import { HeartbeatLine, GlassCard, Button, GradientText } from '../../ui';
+import { useWallet } from '../../wallet';
 
 // SNS Icons (Hero 섹션과 동일)
 const TwitterXIcon = ({ className }: { className?: string }) => (
@@ -37,6 +38,7 @@ const socialLinks = [
 
 export function CTASection() {
   const { t } = useTranslation('landing');
+  const { isConnected, address, connect, isLoading } = useWallet();
 
   return (
     <Section overlay="warm-bottom">
@@ -58,16 +60,20 @@ export function CTASection() {
           </blockquote>
         </GlassCard>
 
-        {/* CTA Button */}
-        <Button
-          size="lg"
-          glow
-          heartbeat
-          className="text-lg sm:text-xl mb-10 w-full sm:w-auto"
-          icon={<Heart className="w-5 h-5" strokeWidth={2} />}
-        >
-          {t('cta.button')}
-        </Button>
+        {/* CTA Button - hidden when wallet is connected */}
+        {!(isConnected && address) && (
+          <Button
+            size="lg"
+            glow
+            heartbeat
+            className="text-lg sm:text-xl mb-10 w-full sm:w-auto"
+            icon={<Heart className="w-5 h-5" strokeWidth={2} />}
+            onClick={connect}
+            loading={isLoading}
+          >
+            {t('cta.button')}
+          </Button>
+        )}
 
         {/* Social Links */}
         <div className="flex justify-center gap-4">

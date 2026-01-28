@@ -36,7 +36,7 @@ export function ProblemSection() {
         />
 
         {/* Comparison Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {/* Developed Country Card */}
           <GlassCard border="cold" className="border-cold-blue-300/30">
             <div className="flex items-center gap-3 mb-5">
@@ -83,7 +83,7 @@ export function ProblemSection() {
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
           {(['stat1', 'stat2', 'stat3', 'stat4'] as const).map((statKey, i) => {
             const colors = ['#f87171', '#FB923C', '#facc15', '#60a5fa'];
             return (

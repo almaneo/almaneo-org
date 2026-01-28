@@ -282,9 +282,15 @@
         "name": "Polygon",
         "description": "Mạng blockchain chính"
       },
-      "firebase": {
-        "name": "Firebase",
-        "description": "Backend và xác thực"
+      "supabase": {
+        "name": "Supabase",
+        "category": "Backend",
+        "description": "Cơ sở dữ liệu, xác thực & thời gian thực"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "Triển khai edge & serverless"
       },
       "biconomy": {
         "name": "Biconomy",

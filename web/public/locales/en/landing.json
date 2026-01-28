@@ -6,7 +6,8 @@
     "cta": {
       "joinMovement": "Join the Movement",
       "learnMore": "Learn More",
-      "whitepaper": "Read Whitepaper"
+      "whitepaper": "Read Whitepaper",
+      "playGame": "Play Game"
     },
     "stats": {
       "totalSupply": "Total Supply",
@@ -325,10 +326,15 @@
         "category": "Infrastructure",
         "description": "Gasless transactions"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "Backend",
-        "description": "Real-time database & authentication"
+        "description": "Database, Auth & Real-time"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "Edge deployment & serverless"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

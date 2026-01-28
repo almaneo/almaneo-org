@@ -104,7 +104,7 @@ export function EcosystemSection() {
           subtitle={t('ecosystem.subtitle')}
         />
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
           {ecosystemItemsData.map((item, i) => {
             const Icon = item.icon;
             const title = t(`ecosystem.${item.id}.title`);

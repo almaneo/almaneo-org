@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -452,13 +452,13 @@ export default function Whitepaper() {
 
             {/* Download / Links */}
             <div className="mt-8 pt-6 border-t border-slate-800">
-              <a
-                href="#"
+              <Link
+                to="/gaii-report"
                 className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
               >
                 <Download className="w-4 h-4" />
-                Download PDF
-              </a>
+                Download Report PDF
+              </Link>
               <a
                 href="https://github.com/almaneo"
                 target="_blank"
@@ -481,7 +481,7 @@ export default function Whitepaper() {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0 px-4 lg:px-8 py-8 mt-12 lg:mt-0">
+        <main className="flex-1 min-w-0 px-3 sm:px-4 lg:px-8 py-6 sm:py-8 mt-12 lg:mt-0">
           <div className="max-w-4xl mx-auto">
             {/* Section Header */}
             <div className="mb-8">
@@ -497,7 +497,7 @@ export default function Whitepaper() {
                   const Icon = sectionIcons[activeSection] || FileText;
                   return <Icon className="w-8 h-8 text-neos-blue" />;
                 })()}
-                <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                   {sectionTitles[activeSection]?.[selectedLang] || sectionTitles[activeSection]?.['en'] || activeSection}
                 </h1>
               </div>

@@ -292,10 +292,15 @@
         "category": "Infrastructure",
         "description": "ガス代無料トランザクション"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "Backend",
-        "description": "リアルタイムデータベース＆認証"
+        "description": "データベース、認証＆リアルタイム"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "エッジデプロイ＆サーバーレス"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

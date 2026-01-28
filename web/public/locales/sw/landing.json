@@ -282,9 +282,15 @@
         "name": "Polygon",
         "description": "Mtandao mkuu wa blockchain"
       },
-      "firebase": {
-        "name": "Firebase",
-        "description": "Backend na uthibitishaji"
+      "supabase": {
+        "name": "Supabase",
+        "category": "Backend",
+        "description": "Hifadhidata, uthibitishaji & wakati halisi"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "Uwekaji wa edge & serverless"
       },
       "biconomy": {
         "name": "Biconomy",

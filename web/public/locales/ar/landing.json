@@ -292,10 +292,15 @@
         "category": "البنية التحتية",
         "description": "معاملات بدون رسوم غاز"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "الخلفية",
-        "description": "قاعدة بيانات في الوقت الفعلي والمصادقة"
+        "description": "قاعدة بيانات ومصادقة وبيانات فورية"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "الاستضافة",
+        "description": "نشر على الحافة وبدون خادم"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

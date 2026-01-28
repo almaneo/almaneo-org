@@ -22,6 +22,7 @@
     @apply font-inter antialiased text-white;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     min-height: 100vh;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -126,6 +127,7 @@
   .btn {
     @apply px-6 py-3 rounded-full font-semibold transition-all duration-300;
     @apply hover:scale-105 active:scale-95;
+    min-height: 44px;
   }
 
   .btn-sm {
@@ -170,7 +172,7 @@
      Cards
      ============================================= */
   .card {
-    @apply glass rounded-3xl p-8;
+    @apply glass rounded-3xl p-4 sm:p-6 md:p-8;
   }
 
   .card-hover {
@@ -196,11 +198,11 @@
      Sections
      ============================================= */
   .section {
-    @apply py-24 px-6 relative;
+    @apply py-12 px-4 sm:py-16 sm:px-6 md:py-24 relative;
   }
 
   .section-sm {
-    @apply py-16 px-6 relative;
+    @apply py-10 px-4 sm:py-12 sm:px-6 md:py-16 relative;
   }
 
   .section-overlay-warm {
@@ -222,7 +224,7 @@
      Section Headers
      ============================================= */
   .section-header {
-    @apply text-center mb-16;
+    @apply text-center mb-8 sm:mb-12 md:mb-16;
   }
 
   .section-tag {
@@ -230,11 +232,11 @@
   }
 
   .section-title {
-    @apply text-4xl md:text-5xl font-bold mt-4 mb-4;
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-4;
   }
 
   .section-subtitle {
-    @apply text-lg text-text-muted;
+    @apply text-base sm:text-lg text-text-muted;
   }
 
   /* =============================================
@@ -246,6 +248,34 @@
 
   .glow-blue {
     @apply animate-glow-blue;
+  }
+
+  /* Mobile: smaller glow effects */
+  @media (max-width: 639px) {
+    .glow-orange {
+      animation: glow-mobile 2s ease-in-out infinite;
+    }
+    .glow-blue {
+      animation: glow-blue-mobile 2s ease-in-out infinite;
+    }
+  }
+
+  @keyframes glow-mobile {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(255, 107, 0, 0.3), 0 0 20px rgba(255, 107, 0, 0.15);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.4), 0 0 30px rgba(255, 107, 0, 0.2);
+    }
+  }
+
+  @keyframes glow-blue-mobile {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(0, 82, 255, 0.3), 0 0 20px rgba(0, 82, 255, 0.15);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(0, 82, 255, 0.4), 0 0 30px rgba(0, 82, 255, 0.2);
+    }
   }
 
   /* =============================================
@@ -264,7 +294,7 @@
   }
 
   .feature-card {
-    @apply glass rounded-3xl p-7 card-hover;
+    @apply glass rounded-3xl p-4 sm:p-5 md:p-7 card-hover;
   }
 
   .feature-icon {
@@ -447,8 +477,8 @@
 
   .kindness-tooltip {
     @apply absolute z-50;
-    width: 280px;
-    max-width: calc(100vw - 24px);
+    width: 260px;
+    max-width: calc(100vw - 32px);
     animation: fadeInUp 0.2s ease-out;
   }
 

@@ -12,7 +12,8 @@ const partnersData: PartnerData[] = [
   { id: 'polygon', logo: 'POL', color: '#8247E5' },
   { id: 'web3auth', logo: 'W3A', color: '#0364FF' },
   { id: 'biconomy', logo: 'BIO', color: '#FF4E17' },
-  { id: 'firebase', logo: 'FB', color: '#FFCA28' },
+  { id: 'supabase', logo: 'SB', color: '#3ECF8E' },
+  { id: 'vercel', logo: '▲', color: '#FFFFFF' },
   { id: 'openzeppelin', logo: 'OZ', color: '#4E5EE4' },
   { id: 'ipfs', logo: 'IPFS', color: '#65C2CB' },
 ];
@@ -46,7 +47,7 @@ export function PartnersSection() {
         />
 
         {/* Partners Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 mb-8 sm:mb-16">
           {partnersData.map((partner, i) => (
             <GlassCard
               key={i}
@@ -83,14 +84,14 @@ export function PartnersSection() {
           <h3 className="text-lg font-semibold text-text-secondary mb-6">
             {t('partners.blockchainStandards')}
           </h3>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             {integrationKeys.map((key, i) => (
               <div
                 key={i}
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-neos-blue/50 transition-colors"
+                className="px-3 py-2 sm:px-4 rounded-xl bg-white/5 border border-white/10 hover:border-neos-blue/50 transition-colors"
               >
                 <span className="text-sm font-mono text-neos-blue">{integrationNames[key]}</span>
-                <span className="text-xs text-text-muted ml-2">{t(`partners.standards.${key}`)}</span>
+                <span className="text-xs text-text-muted ml-1 sm:ml-2 hidden sm:inline">{t(`partners.standards.${key}`)}</span>
               </div>
             ))}
           </div>

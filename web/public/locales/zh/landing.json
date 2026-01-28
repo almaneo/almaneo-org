@@ -292,10 +292,15 @@
         "category": "基础设施",
         "description": "无Gas交易"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "后端",
-        "description": "实时数据库和认证"
+        "description": "数据库、认证与实时"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "托管",
+        "description": "边缘部署与无服务器"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

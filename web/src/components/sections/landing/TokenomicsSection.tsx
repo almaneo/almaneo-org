@@ -50,7 +50,7 @@ export function TokenomicsSection() {
 
         {/* Token Info */}
         <GlassCard padding="lg" className="mb-10">
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-4 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 text-center">
             {tokenInfoData.map((info) => (
               <div key={info.labelKey}>
                 <div className="text-xs mb-1 text-text-subtle">{t(`tokenomics.tokenInfo.${info.labelKey}`)}</div>

@@ -74,12 +74,12 @@ export function PhilosophySection() {
         <GlassCard padding="xl" className="mb-12 relative overflow-hidden">
           {/* Background Glow */}
           <div
-            className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-20"
+            className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 rounded-full opacity-20"
             style={{ background: 'radial-gradient(circle, #FF6B00, transparent)' }}
           />
           <div className="relative z-10">
-            <div className="text-6xl mb-5 text-jeong-orange font-serif">情</div>
-            <p className="text-xl leading-relaxed mb-5 text-text-primary">
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-5 text-jeong-orange font-serif">情</div>
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed mb-5 text-text-primary">
               <span className="text-jeong-orange font-semibold">{t('philosophy.jeongCard.title')}</span>
               {t('philosophy.jeongCard.description1')}
               <br />
@@ -94,7 +94,7 @@ export function PhilosophySection() {
         </GlassCard>
 
         {/* Principles */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
           {principlesData.map((p) => {
             const Icon = p.icon;
             return (

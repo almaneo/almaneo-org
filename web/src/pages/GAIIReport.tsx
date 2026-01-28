@@ -368,7 +368,7 @@ export default function GAIIReport() {
           />
 
           {/* Global Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-8">
             <StatCard
               label="Global GAII Score"
               value={executiveSummary.globalStats.globalGaii}
@@ -415,7 +415,7 @@ export default function GAIIReport() {
           {/* Indicator Averages */}
           <div className="glass p-6 rounded-xl">
             <h3 className="text-white font-semibold mb-4">Global Average by Indicator</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Globe className="w-5 h-5 text-blue-400" />

@@ -493,11 +493,11 @@ Semantic:
 
 ### 🔲 Pending (Phase 2-H ~ I)
 - [x] 컴포넌트에 t() 함수 적용 (실제 번역 표시) ✅ Session 9 완료
-- [ ] 나머지 섹션에 t() 함수 확장 (Team, Partners, Roadmap, FAQ)
+- [x] 나머지 섹션에 t() 함수 확장 (Team, Partners, Roadmap, FAQ) ✅ Session 10 완료
 - [ ] 이미지/미디어 추가
 - [ ] 접근성 기능 (고대비, 큰 글씨 등)
-- [ ] Game 서버 배포
-- [ ] 반응형 최적화
+- [x] Game 서버 배포 ✅ game.almaneo.org (Vercel)
+- [x] 반응형 최적화 ✅ Session 49 완료 (5그룹, ~20개 파일)
 - [ ] 메인넷 배포
 
 ## Commands
@@ -2351,7 +2351,48 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 49+)
+### ✅ 완료된 작업 (2026-01-28 - Session 49: 모바일 반응형 최적화 & UX 수정)
+
+#### 1. **모바일 반응형 최적화 (5그룹, ~20개 파일)**
+   - **Group 1 - Global CSS Foundation**: `index.css` 섹션 패딩/폰트 반응형, `GlassCard.tsx` padding variants 반응형
+   - **Group 2 - Link & Button Fixes**: HeroSection 게임 버튼 수정, Whitepaper PDF 링크, Governance disabled 버튼
+   - **Group 3 - Landing Section Responsive**: TokenomicsSection, ProblemSection, EcosystemSection, FAQSection, TeamSection, PartnersSection, RoadmapSection, SolutionSection, PhilosophySection gap/spacing 축소
+   - **Group 4 - Page-Level Fixes**: GAII.tsx, GAIIReport.tsx, Whitepaper.tsx 반응형 grid/spacing
+   - **Group 5 - Footer & Header**: Footer ContractLink 모바일 레이아웃, Header 언어선택기 `<select>` 드롭다운, 로고 `max-w-[35vw]`
+
+#### 2. **Partners Section: Firebase → Supabase/Vercel 교체**
+   - `PartnersSection.tsx`: firebase → supabase + vercel 데이터 교체
+   - 14개 언어 번역 파일 (ko, en, zh, ja, es, fr, ar, pt, id, ms, th, vi, km, sw) 업데이트
+
+#### 3. **배경 글로우 효과 모바일 축소**
+   - `NEOSLanding.tsx`: ambient glow w-96→w-48/sm:w-72/md:w-96
+   - `HeroSection.tsx`: radial glow 동일 패턴
+   - `PhilosophySection.tsx`: card glow w-64→w-32/sm:w-48/md:w-64
+   - `Web3AuthSection.tsx`: blur glow w-40→w-24/sm:w-32/md:w-40
+   - `index.css`: `@media (max-width: 639px)` glow-mobile 키프레임 추가
+
+#### 4. **KindnessTerm 클릭 우선순위 수정**
+   - 문제: EcosystemSection에서 KindnessTerm이 Link 안에 있어 클릭 시 네비게이션 발생
+   - 해결: `KindnessTerm.tsx` onClick/onKeyDown에 `stopPropagation()` + `preventDefault()` 추가
+   - 모바일에서 친절 모드 툴팁이 하이퍼링크보다 우선 작동
+
+#### 5. **CTA 버튼 → 지갑 연결 기능**
+   - `CTASection.tsx`: `useWallet()` 훅 연동
+   - 버튼 클릭 시 `connect()` 호출 (지갑 연결 팝업)
+   - 이미 로그인된 경우 (`isConnected && address`) 버튼 숨김
+   - 연결 중 로딩 스피너 표시 (`loading` prop)
+
+#### 6. **Web3Auth 팝업 언어 i18n 연동**
+   - 문제: `defaultLanguage: 'ko'` 하드코딩 → 사이트 언어 변경해도 팝업은 항상 한국어
+   - 해결: `i18n.language`에서 현재 사이트 언어를 읽어 Web3Auth 지원 언어로 매핑
+   - 수정 파일: `WalletContext.tsx`, `Web3AuthProvider.tsx`
+   - Web3Auth 지원 언어: en, de, ja, ko, zh, es, fr, pt, nl, tr
+   - 미지원 언어 (ar, id, ms, th, vi, km, sw) → en 폴백
+   - 참고: 싱글톤이므로 언어 변경 후 새로고침 필요
+
+---
+
+### 🔲 다음 세션 작업 (Session 50+)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
@@ -2363,32 +2404,37 @@ function updateReputation(node, delta) external onlyCoordinator;
    - 실제 스테이킹 트랜잭션 테스트
    - UI 오류 수정
 
+3. **모바일 실기기 QA 테스트**
+   - Chrome DevTools 320px, 375px, 390px, 428px 뷰포트 확인
+   - 수평 스크롤바 없음 확인
+   - 모든 터치 타겟 44px 이상 확인
+
 #### 🟡 중간 우선순위
 
-3. **i18n 번역 확장**
+4. **i18n 번역 확장**
    - 나머지 12개 언어에 `aiHub` 섹션 추가
    - Kindness/Meetup 페이지 번역 키 생성
    - `blog` 키 추가 (12개 언어)
 
-4. **Game 추가 개선**
+5. **Game 추가 개선**
    - 오세아니아 국가 데이터 완성 (호주, 뉴질랜드 퀘스트 확장)
    - 추가 언어 퀘스트 번역 (zh, ja, th, vi 등)
    - 실제 디바이스 QA 테스트
 
 #### 🟢 낮은 우선순위
 
-5. **Grant 프로그램 신청**
+6. **Grant 프로그램 신청**
    - Google for Nonprofits 신청
    - Polygon Grants 신청
    - Vercel Pro (오픈소스) 신청
 
-6. **메인넷 배포 준비**
+7. **메인넷 배포 준비**
    - 스마트 컨트랙트 감사 검토
    - 메인넷 배포 스크립트 준비
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 48 기준)
+### 📊 페이지별 상태 요약 (Session 49 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|

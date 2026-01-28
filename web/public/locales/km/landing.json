@@ -282,9 +282,15 @@
         "name": "Polygon",
         "description": "បណ្តាញ blockchain សំខាន់"
       },
-      "firebase": {
-        "name": "Firebase",
-        "description": "Backend និងការផ្ទៀងផ្ទាត់"
+      "supabase": {
+        "name": "Supabase",
+        "category": "Backend",
+        "description": "មូលដ្ឋានទិន្នន័យ, ការផ្ទៀងផ្ទាត់ & ពេលវេលាពិត"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hosting",
+        "description": "ដាក់ពង្រាយ edge & serverless"
       },
       "biconomy": {
         "name": "Biconomy",

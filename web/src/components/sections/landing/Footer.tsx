@@ -34,16 +34,16 @@ function ContractLink({ name, address, description }: { name: string; address: s
       href={`${EXPLORER_URL}${address}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors"
+      className="group flex flex-col sm:flex-row sm:items-center sm:justify-between p-2 rounded-lg hover:bg-white/5 transition-colors"
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-text-primary">{name}</span>
+          <span className="text-xs sm:text-sm font-medium text-text-primary">{name}</span>
           <ExternalLink className="w-3 h-3 text-text-subtle opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <p className="text-xs text-text-subtle truncate">{description}</p>
+        <p className="text-[10px] sm:text-xs text-text-subtle truncate">{description}</p>
       </div>
-      <code className="text-xs font-mono text-neos-blue/80 ml-2">{shortAddress}</code>
+      <code className="text-[10px] sm:text-xs font-mono text-neos-blue/80 sm:ml-2">{shortAddress}</code>
     </a>
   );
 }
@@ -56,7 +56,7 @@ export function Footer() {
     <footer className="border-t border-white/10">
       {/* Contract Transparency Section */}
       <div className="py-6 bg-gradient-to-b from-transparent to-white/[0.02]">
-        <Container className="px-6">
+        <Container className="px-4 sm:px-6">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="w-full flex items-center justify-center gap-2 text-sm text-text-subtle hover:text-text-primary transition-colors group"
@@ -104,7 +104,7 @@ export function Footer() {
 
       {/* Main Footer */}
       <div className="py-8">
-        <Container className="px-6">
+        <Container className="px-4 sm:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export function Footer() {
             </Link>
 
             {/* Legal Links */}
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm">
               <Link
                 to="/privacy"
                 className="text-text-subtle hover:text-text-primary transition-colors"

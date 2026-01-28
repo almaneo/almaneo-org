@@ -292,10 +292,15 @@
         "category": "Infrastructure",
         "description": "Transactions sans frais de gas"
       },
-      "firebase": {
-        "name": "Firebase",
+      "supabase": {
+        "name": "Supabase",
         "category": "Backend",
-        "description": "Base de données temps réel et authentification"
+        "description": "Base de données, auth et temps réel"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "category": "Hébergement",
+        "description": "Déploiement edge et serverless"
       },
       "openzeppelin": {
         "name": "OpenZeppelin",

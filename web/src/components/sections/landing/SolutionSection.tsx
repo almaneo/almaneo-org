@@ -82,7 +82,7 @@ export function SolutionSection() {
           subtitle={t('solution.description')}
         />
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
           {solutionsData.map((s) => {
             const Icon = s.icon;
             return (
