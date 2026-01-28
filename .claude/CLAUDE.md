@@ -2390,9 +2390,40 @@ function updateReputation(node, delta) external onlyCoordinator;
    - 미지원 언어 (ar, id, ms, th, vi, km, sw) → en 폴백
    - 참고: 싱글톤이므로 언어 변경 후 새로고침 필요
 
+### ✅ 완료된 작업 (2026-01-28 - Session 50: 화이트페이퍼 마크다운 테이블 렌더링 수정)
+
+#### 1. **화이트페이퍼 마크다운 테이블 렌더링 버그 수정**
+   - 문제: 일부 언어에서 마크다운 표가 렌더링되지 않고 원문 그대로 표시
+   - 영향 언어: ja, fr, ar, pt, id, th, vi (+ zh, es, sw 추가 발견)
+   - 총 ~3,100건 수정 (14개 언어 × 13개 섹션)
+
+#### 2. **수정된 이슈 유형**
+   | 이슈 | 영향 언어 | 수정 건수 |
+   |------|----------|----------|
+   | 표 행 사이 빈 줄 (header↔separator↔data) | zh, fr, ar, pt, id, th, vi, sw | ~2,500 |
+   | 데이터 행 끝 `\|` 누락 | ja | 217 |
+   | 데이터/구분자 행 시작 `\|` 누락 | ar, th, fr, es, id, vi, sw, km | ~200 |
+   | JA 헤더 행 열 구분 `\|` 누락 (열 이름 합쳐짐) | ja | 61 |
+   | 헤더+구분자 행 병합 (한 줄에 합쳐짐) | 다수 언어 (expansion, expo 등) | ~40 |
+   | 구분자 열 수 불일치 | sw, km, es | ~15 |
+
+#### 3. **일본어(JA) 헤더 재구성**
+   - 한국어 헤더를 참조하여 ko→ja 사전 매핑 (50+ 용어)
+   - 예: `|コンポーネント説明|` → `| コンポーネント | 説明 |`
+   - 한국어 잔재 5건 추가 수정 (problem, philosophy, technical, expansion, governance)
+
+#### 4. **DB 동기화**
+   - `almaneo_whitepaper.db`에 수정사항 역동기화 (131개 번역 레코드 업데이트)
+   - JSON ↔ DB 전체 일치 검증 완료
+
+#### 5. **빌드 & 푸시**
+   - 빌드 성공 (35.21초)
+   - 커밋: `a9c5d63` - fix(web): Fix markdown table rendering in whitepaper for 14 languages
+   - 수정 파일: `whitepaper.json`, `almaneo_whitepaper.db`
+
 ---
 
-### 🔲 다음 세션 작업 (Session 50+)
+### 🔲 다음 세션 작업 (Session 51+)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
@@ -2434,7 +2465,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 49 기준)
+### 📊 페이지별 상태 요약 (Session 50 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
