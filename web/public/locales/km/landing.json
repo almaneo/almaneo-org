@@ -374,18 +374,22 @@
     }
   },
   "faq": {
-    "title": "សំណួរញឹកញាប់",
-    "subtitle": "មានសំណួរទេ?",
+    "tag": "FAQ",
+    "titlePrefix": "សំណួរ",
+    "titleHighlight": "ញឹកញាប់",
+    "subtitleFull": "សំណួរដែលសួរញឹកញាប់អំពី AlmaNEO និងវប្បធម៌នៃភាពសប្បុរស",
     "categoryLabel": "ប្រភេទ",
-    "contactCta": "មានសំណួរផ្សេងទៀត? ទាក់ទងយើងនៅ support@almaneo.org",
+    "contactCta": "មានសំណួរផ្សេងទៀត?",
+    "contactMessage": "ទាក់ទងមកយើងនៅ support@almaneo.org",
     "categories": {
-      "all": "ទាំងអស់",
       "general": "ទូទៅ",
       "token": "Token",
-      "technical": "បច្ចេកទេស"
+      "technology": "បច្ចេកវិទ្យា",
+      "nft": "NFT",
+      "participation": "ការចូលរួម"
     },
     "items": {
-      "whatIs": {
+      "whatIsAlmaNEO": {
         "question": "AlmaNEO គឺជាអ្វី?",
         "answer": "AlmaNEO គឺជាវេទិកា Web3 ដែលរចនាឡើងដើម្បីដោះស្រាយភាពមិនស្មើគ្នា AI។ ផ្អែកលើវប្បធម៌ 'ជង (情)' របស់កូរ៉េ មានគោលបំណងធានាថាមនុស្ស ៨ ពាន់លាននាក់ទូទាំងពិភពលោកអាចទទួលបានអត្ថប្រយោជន៍ស្មើគ្នាពីបច្ចេកវិទ្យា AI។",
         "category": "general"
@@ -395,45 +399,45 @@
         "answer": "'ជង' គឺជាគំនិតពិសេសរបស់កូរ៉េអំពីចំណងអារម្មណ៍។ វាមិនមែនជាសប្បុរសធម៌ធម្មតាទេ—វាតំណាងឱ្យទំនាក់ទំនងជ្រៅនិងបេះដូងកក់ក្តៅ។",
         "category": "general"
       },
-      "whatIsGAII": {
-        "question": "សន្ទស្សន៍ GAII គឺជាអ្វី?",
-        "answer": "GAII (Global AI Inequality Index) គឺជាសន្ទស្សន៍ដែលវាស់ភាពមិនស្មើគ្នា AI សកលក្នុងពេលវេលាជាក់ស្តែង។ វាពិចារណាការចូលប្រើ AI ថ្លៃ ហេដ្ឋារចនាសម្ព័ន្ធ និងកត្តាផ្សេងទៀតដើម្បីវាយតម្លៃភាពយុត្តិធម៌ AI ក្នុងប្រទេសនីមួយៗ។",
-        "category": "general"
-      },
-      "tokenUtility": {
-        "question": "Token ALMAN អាចប្រើសម្រាប់អ្វី?",
-        "answer": "Token ALMAN អាចប្រើសម្រាប់ការបោះឆ្នោតអភិបាលកិច្ច រង្វាន់ staking ការចូលប្រើ AI Hub បញ្ចុះថ្លៃសេវា ទិញ NFT និងច្រើនទៀត។",
+      "totalSupply": {
+        "question": "ហេតុអ្វីបានជាការផ្គត់ផ្គង់សរុបគឺ ៨ ពាន់លាន?",
+        "answer": "ALMAN មានការផ្គត់ផ្គង់សរុប ៨ ពាន់លាន ដែលតំណាងឱ្យចំនួនប្រជាជនពិភពលោក។ នេះបង្ហាញពីចក្ខុវិស័យរបស់យើងថាមនុស្សគ្រប់គ្នាទូទាំងពិភពលោកសមនឹងទទួលបានបច្ចេកវិទ្យា AI ដោយស្មើភាព។",
         "category": "token"
       },
-      "howToBuy": {
-        "question": "តើទទួល token ALMAN បានដោយរបៀបណា?",
-        "answer": "បន្ទាប់ពី TGE (Token Generation Event) token ALMAN នឹងមានលើ DEX និង CEX។ អ្នកក៏អាចទទួលបានតាមរយៈ staking, airdrop និងហ្គេមអេកូស៊ីស្តេម។",
+      "howToGetToken": {
+        "question": "តើអាចទទួល token ALMAN បានដោយរបៀបណា?",
+        "answer": "មានវិធីផ្សេងៗដើម្បីទទួល token ALMAN: 1) សកម្មភាពសប្បុរស (ជួប ជួយ បកប្រែ) 2) ចូលរួមហ្គេមសប្បុរស 3) Staking និងទទួលរង្វាន់ 4) TGE នាពេលអនាគត។ សកម្មភាពសប្បុរសផ្តល់ token ច្រើនជាងការដោះដូរធម្មតា។",
         "category": "token"
       },
-      "howToStart": {
-        "question": "តើចាប់ផ្តើមយ៉ាងដូចម្តេច?",
-        "answer": "គ្រាន់តែចូលជាមួយគណនី Google, Facebook ឬបណ្តាញសង្គមផ្សេងទៀតតាមរយៈ Web3Auth។ អ្នកអាចចាប់ផ្តើមភ្លាមៗដោយមិនចាំបាច់រៀបចំកាបូបស្មុគស្មាញ។ ប្រតិបត្តិការដំបូងគ្មានថ្លៃ gas!",
-        "category": "technical"
+      "whichBlockchain": {
+        "question": "AlmaNEO ប្រើ blockchain អ្វី?",
+        "answer": "AlmaNEO ត្រូវបានសាងសង់លើ Polygon ដែលជាដំណោះស្រាយ Layer 2 របស់ Ethereum។ Polygon ផ្តល់ប្រតិបត្តិការលឿននិងថោកខណៈរក្សាសុវត្ថិភាព Ethereum។ កិច្ចសន្យាឆ្លាតវៃទាំងអស់ត្រូវបានធ្វើសវនកម្មនិងសាងសង់ដោយ OpenZeppelin។",
+        "category": "technology"
       },
-      "isSafe": {
-        "question": "សុវត្ថិភាពទេ?",
-        "answer": "បាទ/ចាស កិច្ចសន្យាឆ្លាតវៃទាំងអស់របស់យើងត្រូវបានសាងសង់ជាមួយគំរូ UUPS ដែលអាចអាប់គ្រេដដោយប្រើ OpenZeppelin 5.x។ សវនកម្មសុវត្ថិភាពត្រូវបានធ្វើមុនពេលបើកដំណើរការ mainnet ហើយយើងបន្តកែលម្អការការពារសុវត្ថិភាព។",
-        "category": "technical"
+      "noWallet": {
+        "question": "តើអាចប្រើដោយគ្មានកាបូបទេ?",
+        "answer": "បាទ/ចាស! តាមរយៈ Web3Auth អ្នកអាចចូលដោយប្រើគណនី Google, Facebook ឬ Twitter ដោយគ្មានកាបូប។ Web3Auth បង្កើតកាបូបដោយស្វ័យប្រវត្តិហើយប្រតិបត្តិការដំបូងគ្មានថ្លៃ gas តាមរយៈ Biconomy Paymaster។",
+        "category": "technology"
       },
       "whatIsJeongSBT": {
         "question": "Jeong-SBT គឺជាអ្វី?",
         "answer": "Jeong-SBT (Soulbound Token) គឺជា NFT ដែលមិនអាចផ្ទេរបានដែលបញ្ជាក់អំពើល្អរបស់អ្នក។ កាន់តែធ្វើអំពើល org កាន់តែខ្ពស់ tier និងកាន់តែទទួលបានអត្ថប្រយោជន៍ច្រើនក្នុងអេកូស៊ីស្តេម។",
         "category": "technical"
       },
-      "supportedLanguages": {
-        "question": "ភាសាអ្វីខ្លះត្រូវបានគាំទ្រ?",
-        "answer": "AlmaNEO គាំទ្រ ១៤ ភាសា: កូរ៉េ អង់គ្លេស ចិន ជប៉ុន អេស្ប៉ាញ បារាំង អារ៉ាប់ ព័រទុយហ្គាល់ ឥណ្ឌូនេស៊ី ម៉ាឡេ ថៃ វៀតណាម ខ្មែរ និង Swahili។ យើងបន្តបន្ថែមភាសាដើម្បីគាំទ្រ Global South កាន់តែច្រើន។",
-        "category": "general"
+      "nftMarketplaceFeatures": {
+        "question": "ផ្សារ NFT មានមុខងារពិសេសអ្វីខ្លះ?",
+        "answer": "ផ្សារ NFT របស់ AlmaNEO អនុញ្ញាតឱ្យអ្នកទិញ លក់ និងជួល Jeong-SBT និងផ្លាកសប្បុរស។ ប្រតិបត្តិការគ្មានថ្លៃ gas ភាគលាភអ្នកបង្កើត និងបញ្ចុះតម្លៃថ្លៃសេវាតាម tier Jeong-SBT របស់អ្នក។",
+        "category": "nft"
       },
-      "howToContribute": {
-        "question": "តើរួមចំណែកក្នុងគម្រោងបានដោយរបៀបណា?",
-        "answer": "អ្នកអាចរួមចំណែកតាមរយៈសកម្មភាពសប្បុរស ការអភិវឌ្ឍន៍សហគមន៍ ការអភិវឌ្ឍន៍កូដចំហរ និងច្រើនទៀត។ ចូលរួម Discord របស់យើងហើយរកមើលវិធីផ្សេងៗដើម្បីរួមចំណែក!",
-        "category": "general"
+      "howStakingWorks": {
+        "question": "ប្រព័ន្ធ staking ដំណើរការយ៉ាងដូចម្តេច?",
+        "answer": "Stake token ALMAN និងទទួលបាន 5-18% APY។ APY កើនឡើងតាម tier Jeong-SBT របស់អ្នក។ នេះជាប្រព័ន្ធដែលសកម្មភាពសប្បុរសផ្តល់អត្ថប្រយោជន៍ហិរញ្ញវត្ថុផងដែរ។",
+        "category": "participation"
+      },
+      "whatIsKindnessGame": {
+        "question": "ហ្គេមសប្បុរសគឺជាអ្វី?",
+        "answer": "ហ្គេមសប្បុរសគឺជាហ្គេម Tap-to-Earn ដែលអ្នកអនុវត្តសប្បុរសធម៌ដោយសប្បាយ។ ទទួលសំណួរស្ថានភាពពិតប្រាកដ ជ្រើសរើសជម្រើសសប្បុរស និងទទួល token។ លេងតែម្នាក់ឯងឬជាមួយមិត្តភក្តិ។",
+        "category": "participation"
       }
     }
   },

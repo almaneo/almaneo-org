@@ -374,18 +374,22 @@
     }
   },
   "faq": {
-    "title": "Maswali Yanayoulizwa Mara kwa Mara",
-    "subtitle": "Una maswali?",
+    "tag": "FAQ",
+    "titlePrefix": "Maswali",
+    "titleHighlight": "Yanayoulizwa Mara kwa Mara",
+    "subtitleFull": "Maswali yanayoulizwa mara kwa mara kuhusu AlmaNEO na utamaduni wa upole",
     "categoryLabel": "Kategoria",
-    "contactCta": "Una maswali mengine? Wasiliana nasi kwa support@almaneo.org",
+    "contactCta": "Una maswali mengine?",
+    "contactMessage": "Wasiliana nasi kwa support@almaneo.org",
     "categories": {
-      "all": "Yote",
       "general": "Jumla",
       "token": "Tokeni",
-      "technical": "Kiufundi"
+      "technology": "Teknolojia",
+      "nft": "NFT",
+      "participation": "Ushiriki"
     },
     "items": {
-      "whatIs": {
+      "whatIsAlmaNEO": {
         "question": "AlmaNEO ni nini?",
         "answer": "AlmaNEO ni jukwaa la Web3 lililobuniwa kutatua ukosefu wa usawa wa AI. Kulingana na utamaduni wa Kikorea wa 'Jeong (情)', lengo lake ni kuhakikisha watu bilioni 8 duniani kote wanaweza kunufaika sawa na teknolojia ya AI.",
         "category": "general"
@@ -395,45 +399,45 @@
         "answer": "'Jeong' ni dhana ya kipekee ya Kikorea ya kifungo cha kihisia. Si upole tu—inawakilisha mahusiano ya kina na mioyo ya joto.",
         "category": "general"
       },
-      "whatIsGAII": {
-        "question": "Kielelezo cha GAII ni nini?",
-        "answer": "GAII (Global AI Inequality Index) ni kielelezo kinachopima ukosefu wa usawa wa AI duniani kwa wakati halisi. Inazingatia upatikanaji wa AI, gharama, miundombinu, na mambo mengine kutathmini haki ya AI katika kila nchi.",
-        "category": "general"
-      },
-      "tokenUtility": {
-        "question": "Tokeni za ALMAN zinaweza kutumika kwa nini?",
-        "answer": "Tokeni za ALMAN zinaweza kutumika kwa kupiga kura kwa utawala, zawadi za kuweka hisa, upatikanaji wa AI Hub, punguzo la ada, ununuzi wa NFT na zaidi.",
+      "totalSupply": {
+        "question": "Kwa nini jumla ya ugavi ni bilioni 8?",
+        "answer": "ALMAN ina jumla ya ugavi wa bilioni 8, inayowakilisha idadi ya watu duniani. Hii inaonyesha maono yetu kwamba kila mtu duniani anastahili kupata teknolojia ya AI kwa usawa.",
         "category": "token"
       },
-      "howToBuy": {
-        "question": "Nitapata tokeni za ALMAN vipi?",
-        "answer": "Baada ya TGE (Token Generation Event), tokeni za ALMAN zitapatikana kwenye DEX na CEX. Unaweza pia kupata kupitia staking, airdrop, na michezo ya mfumo wa ikolojia.",
+      "howToGetToken": {
+        "question": "Ninawezaje kupata tokeni za ALMAN?",
+        "answer": "Kuna njia mbalimbali za kupata tokeni za ALMAN: 1) Shughuli za upole (miliki, kusaidia, tafsiri) 2) Kushiriki Mchezo wa Upole 3) Kuweka hisa na kupata zawadi 4) TGE baadaye. Shughuli za upole zinatoa tokeni zaidi kuliko ubadilishanaji wa kawaida.",
         "category": "token"
       },
-      "howToStart": {
-        "question": "Ninaanza vipi?",
-        "answer": "Ingia tu na akaunti yako ya Google, Facebook, au mitandao mingine ya kijamii kupitia Web3Auth. Unaweza kuanza mara moja bila kuweka pochi ngumu. Miamala ya awali haina ada ya gesi!",
-        "category": "technical"
+      "whichBlockchain": {
+        "question": "AlmaNEO inatumia blockchain gani?",
+        "answer": "AlmaNEO inajengwa kwenye Polygon, suluhisho la Layer 2 la Ethereum. Polygon hutoa miamala ya haraka na ya bei nafuu huku ikidumisha usalama wa Ethereum. Mikataba yote ya smart inakaguliwa na kujengwa kwa OpenZeppelin.",
+        "category": "technology"
       },
-      "isSafe": {
-        "question": "Je, ni salama?",
-        "answer": "Ndiyo, mikataba yote ya smart imejengwa na muundo wa UUPS unaoweza kuboreshwa kwa kutumia OpenZeppelin 5.x. Ukaguzi wa usalama unafanywa kabla ya kuzindua mainnet, na tunaendelea kuboresha ulinzi wa usalama.",
-        "category": "technical"
+      "noWallet": {
+        "question": "Je, naweza kutumia bila pochi?",
+        "answer": "Ndiyo! Kupitia Web3Auth, unaweza kuingia na akaunti yako ya Google, Facebook, au Twitter bila kuwa na pochi. Web3Auth huunda pochi kiotomatiki, na miamala ya awali haijumuishi ada za gesi kupitia Biconomy Paymaster.",
+        "category": "technology"
       },
       "whatIsJeongSBT": {
         "question": "Jeong-SBT ni nini?",
         "answer": "Jeong-SBT (Soulbound Token) ni NFT isiyoweza kuhamishwa inayothibitisha vitendo vyako vya upole. Kadri unavyofanya mambo mazuri, ndivyo tier yako inavyoongezeka, na faida zaidi katika mfumo wa ikolojia.",
         "category": "technical"
       },
-      "supportedLanguages": {
-        "question": "Lugha zipi zinaungwa mkono?",
-        "answer": "AlmaNEO inasidia lugha 14: Kikorea, Kiingereza, Kichina, Kijapani, Kihispania, Kifaransa, Kiarabu, Kireno, Kiindonesia, Kimalaysia, Kithai, Kivietinamu, Kikhmeri, na Kiswahili. Tunaendelea kuongeza lugha kusaidia Global South zaidi.",
-        "category": "general"
+      "nftMarketplaceFeatures": {
+        "question": "Soko la NFT lina vipengele gani maalum?",
+        "answer": "Soko la NFT la AlmaNEO linakuwezesha kununua, kuuza, na kuwa na Jeong-SBT na Beji za Upole. Miamala bila gesi, mrabaha wa waundaji, na punguzo la ada kulingana na tier ya Jeong-SBT yako yanapatikana.",
+        "category": "nft"
       },
-      "howToContribute": {
-        "question": "Ninawezaje kuchangia mradi?",
-        "answer": "Unaweza kuchangia kupitia shughuli za upole, kuendeleza jamii, kuendeleza msimbo huria, na zaidi. Jiunge na Discord yetu na gundua njia mbalimbali za kuchangia!",
-        "category": "general"
+      "howStakingWorks": {
+        "question": "Mfumo wa staking unafanyaje kazi?",
+        "answer": "Weka hisa tokeni za ALMAN na upate 5-18% APY. APY inaongezeka kulingana na tier yako ya Jeong-SBT. Hii ni mfumo ambapo shughuli za upole zinakupa faida ya kifedha pia.",
+        "category": "participation"
+      },
+      "whatIsKindnessGame": {
+        "question": "Mchezo wa Upole ni nini?",
+        "answer": "Mchezo wa Upole ni mchezo wa Tap-to-Earn ambapo unafanya vitendo vya upole kwa kufurahia. Pokea maswali ya hali halisi, chagua chaguo la upole, na upate tokeni. Cheza peke yako au pamoja na marafiki.",
+        "category": "participation"
       }
     }
   },

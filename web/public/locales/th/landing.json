@@ -376,64 +376,70 @@
   "faq": {
     "title": "คำถามที่พบบ่อย",
     "subtitle": "มีคำถามหรือไม่?",
-    "categoryLabel": "หมวดหมู่",
-    "contactCta": "มีคำถามอื่นๆ? ติดต่อเราที่ support@almaneo.org",
+    "tag": "FAQ",
+    "titlePrefix": "คำถามที่พบ",
+    "titleHighlight": "บ่อย",
+    "subtitleFull": "ค้นหาคำตอบสำหรับคำถามทั่วไปเกี่ยวกับ AlmaNEO",
+    "categoryLabel": "หมวดหมู่:",
+    "contactCta": "ไม่พบสิ่งที่คุณกำลังมองหา?",
+    "contactMessage": "ติดต่อเราที่",
     "categories": {
-      "all": "ทั้งหมด",
-      "general": "ทั่วไป",
-      "token": "โทเค็น",
-      "technical": "เทคนิค"
+      "general": "General",
+      "token": "Token",
+      "technology": "Technology",
+      "nft": "NFT",
+      "participation": "Participation"
     },
     "items": {
-      "whatIs": {
+      "whatIsAlmaNEO": {
+        "category": "General",
         "question": "AlmaNEO คืออะไร?",
-        "answer": "AlmaNEO คือแพลตฟอร์ม Web3 ที่ออกแบบมาเพื่อแก้ปัญหาความไม่เท่าเทียมของ AI โดยอิงจากวัฒนธรรม 'จอง (情)' ของเกาหลี มุ่งหวังให้มนุษย์ 8 พันล้านคนทั่วโลกได้รับประโยชน์จากเทคโนโลยี AI อย่างเท่าเทียมกัน",
-        "category": "general"
+        "answer": "AlmaNEO เป็นโครงการที่แก้ไขปัญหาความไม่เท่าเทียมของ AI และรวมคุณค่า \"จอง (情)\" ไว้ในบล็อกเชน ผ่านสามโซลูชันหลัก—Global AI Inequality Index (GAII), AI Hub และ Kindness Protocol—เรากำลังสร้างโลกที่มนุษย์ 8 พันล้านคนสามารถเข้าถึงประโยชน์ของ AI ได้"
       },
       "whatIsJeong": {
-        "question": "'จอง (情)' คืออะไร?",
-        "answer": "'จอง' เป็นแนวคิดเฉพาะตัวของเกาหลีเกี่ยวกับความผูกพันทางอารมณ์ ไม่ใช่แค่ความใจดี แต่หมายถึงความสัมพันธ์ลึกซึ้งและหัวใจที่อบอุ่น",
-        "category": "general"
+        "category": "General",
+        "question": "\"จอง (情)\" คืออะไร?",
+        "answer": "จอง เป็นแนวคิดเฉพาะของเกาหลีที่เกินกว่าความใจดีธรรมดา มันหมายถึงความผูกพันลึกซึ้งและความเข้าใจโดยไม่ต้องพูดที่สร้างขึ้นตามเวลา AlmaNEO ทำให้คุณค่าจองนี้เป็นดิจิทัลและให้รางวัลผ่าน Kindness Protocol"
       },
-      "whatIsGAII": {
-        "question": "ดัชนี GAII คืออะไร?",
-        "answer": "GAII (Global AI Inequality Index) เป็นดัชนีที่วัดความไม่เท่าเทียมของ AI ทั่วโลกแบบเรียลไทม์ พิจารณาการเข้าถึง AI ค่าใช้จ่าย โครงสร้างพื้นฐาน และปัจจัยอื่นๆ เพื่อประเมินความยุติธรรมของ AI ในแต่ละประเทศ",
-        "category": "general"
+      "totalSupply": {
+        "category": "Token",
+        "question": "จำนวนโทเค็น ALMAN ทั้งหมดเท่าไหร่?",
+        "answer": "จำนวนโทเค็น ALMAN ทั้งหมดคือ 8 พันล้าน ซึ่งสัญลักษณ์แทน 8 พันล้านคนบนโลก และสะท้อนปรัชญา \"1 คน 1 โทเค็น\" โทเค็นออกบนเครือข่าย Polygon ตามมาตรฐาน ERC-20"
       },
-      "tokenUtility": {
-        "question": "โทเค็น ALMAN ใช้ทำอะไรได้?",
-        "answer": "โทเค็น ALMAN สามารถใช้สำหรับการโหวตกำกับดูแล รางวัล Staking การเข้าถึง AI Hub ส่วนลดค่าธรรมเนียม ซื้อ NFT และอื่นๆ",
-        "category": "token"
-      },
-      "howToBuy": {
+      "howToGetToken": {
+        "category": "Token",
         "question": "จะได้รับโทเค็น ALMAN ได้อย่างไร?",
-        "answer": "หลังจาก TGE (Token Generation Event) โทเค็น ALMAN จะมีให้บน DEX และ CEX คุณยังสามารถรับได้ผ่าน staking, airdrop และเกมในระบบนิเวศ",
-        "category": "token"
+        "answer": "1) ขุดผ่าน Tap-to-Earn ใน Kindness Game 2) เข้าร่วม airdrop (ตามกิจกรรมความใจดี) 3) รางวัล staking 4) ซื้อใน DEX/CEX ในอนาคต ในตอนแรก เกมและ airdrop เป็นวิธีหลักในการรับ"
       },
-      "howToStart": {
-        "question": "จะเริ่มต้นได้อย่างไร?",
-        "answer": "เพียงเข้าสู่ระบบด้วยบัญชี Google, Facebook หรือโซเชียลอื่นๆ ผ่าน Web3Auth คุณสามารถเริ่มต้นได้ทันทีโดยไม่ต้องตั้งค่ากระเป๋าที่ซับซ้อน ธุรกรรมเริ่มต้นไม่มีค่า gas!",
-        "category": "technical"
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "ใช้บล็อกเชนอะไร?",
+        "answer": "AlmaNEO ใช้เครือข่าย Polygon Polygon มีความเข้ากันได้กับ Ethereum ค่า gas ต่ำ และธุรกรรมรวดเร็ว ทำให้ผู้ใช้ Global South สามารถเข้าร่วมได้โดยไม่มีภาระ"
       },
-      "isSafe": {
-        "question": "ปลอดภัยหรือไม่?",
-        "answer": "ใช่ Smart Contract ทั้งหมดของเราสร้างด้วยรูปแบบ UUPS ที่อัปเกรดได้โดยใช้ OpenZeppelin 5.x การตรวจสอบความปลอดภัยดำเนินการก่อนเปิดตัว mainnet และเราปรับปรุงการป้องกันความปลอดภัยอย่างต่อเนื่อง",
-        "category": "technical"
+      "noWallet": {
+        "category": "Technology",
+        "question": "สามารถเข้าร่วมโดยไม่มีกระเป๋าได้หรือไม่?",
+        "answer": "ได้! คุณสามารถเข้าสู่ระบบโดยตรงด้วยบัญชี Google, Facebook, X และบัญชีโซเชียลอื่นๆ ผ่าน Web3Auth ไม่ต้องตั้งค่ากระเป๋าหรือจัดการ seed phrase และด้วยการรวม Biconomy ธุรกรรมส่วนใหญ่ไม่มีค่า gas"
       },
       "whatIsJeongSBT": {
+        "category": "NFT",
         "question": "Jeong-SBT คืออะไร?",
-        "answer": "Jeong-SBT (Soulbound Token) เป็น NFT ที่โอนไม่ได้ที่พิสูจน์การกระทำที่ดีของคุณ ยิ่งทำความดีมาก ยิ่ง tier สูง และยิ่งได้รับประโยชน์มากในระบบนิเวศ",
-        "category": "technical"
+        "answer": "Jeong-SBT เป็น Soulbound Token ที่โอนไม่ได้ซึ่งบันทึก Kindness Score ของคุณ มันเติบโตผ่าน 4 tier (Seed → Sprout → Tree → Forest) โดย tier ที่สูงกว่าได้รับประโยชน์เช่นส่วนลดค่าธรรมเนียม NFT และโบนัส staking"
       },
-      "supportedLanguages": {
-        "question": "รองรับภาษาอะไรบ้าง?",
-        "answer": "AlmaNEO รองรับ 14 ภาษา: เกาหลี อังกฤษ จีน ญี่ปุ่น สเปน ฝรั่งเศส อาหรับ โปรตุเกส อินโดนีเซีย มาเลย์ ไทย เวียดนาม เขมร และสวาฮีลี เราเพิ่มภาษาเรื่อยๆ เพื่อสนับสนุน Global South มากขึ้น",
-        "category": "general"
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "ตลาด NFT มีฟีเจอร์อะไรบ้าง?",
+        "answer": "1) ไม่มีค่า gas (การรวม Biconomy) 2) ส่วนลดค่าธรรมเนียมสูงสุด 50% สำหรับผู้ถือ Jeong-SBT 3) ส่วนลดเพิ่ม 5% สำหรับการชำระด้วยโทเค็น ALMAN 4) รองรับการเช่า NFT (ERC-4907/5006) 5) ตัวเลือกการชำระหลายแบบ (POL, USDC, ALMAN)"
       },
-      "howToContribute": {
-        "question": "จะมีส่วนร่วมในโครงการได้อย่างไร?",
-        "answer": "คุณสามารถมีส่วนร่วมผ่านกิจกรรมความใจดี การพัฒนาชุมชน การพัฒนาโอเพนซอร์ส และอื่นๆ เข้าร่วม Discord ของเราและค้นพบวิธีต่างๆ ในการมีส่วนร่วม!",
-        "category": "general"
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "Staking ทำงานอย่างไร?",
+        "answer": "ฝากโทเค็น ALMAN เพื่อรับรางวัลรายปี 5-18% แบ่งเป็น 4 tier (30/90/180/365 วัน) โดยมีโบนัสเพิ่มตาม tier Jeong-SBT ของคุณ โทเค็นที่ stake ยังมีสิทธิ์โหวต governance"
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "Kindness Game คืออะไร?",
+        "answer": "เกม Tap-to-Earn ที่คุณขุดโทเค็น ALMAN โดยการแตะหน้าจอ มีฟีเจอร์รวมถึง quest รายวัน ระบบอัปเกรด และการแข่งขัน leaderboard 800 ล้าน ALMAN (10% ของจำนวนทั้งหมด) ถูกจัดสรรให้ mining pool"
       }
     }
   },

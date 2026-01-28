@@ -376,64 +376,70 @@
   "faq": {
     "title": "Câu hỏi thường gặp",
     "subtitle": "Có câu hỏi?",
-    "categoryLabel": "Danh mục",
-    "contactCta": "Có câu hỏi khác? Liên hệ chúng tôi tại support@almaneo.org",
+    "tag": "FAQ",
+    "titlePrefix": "Câu hỏi ",
+    "titleHighlight": "Thường gặp",
+    "subtitleFull": "Tìm câu trả lời cho các câu hỏi phổ biến về AlmaNEO",
+    "categoryLabel": "Danh mục:",
+    "contactCta": "Không tìm thấy điều bạn cần?",
+    "contactMessage": "Liên hệ chúng tôi tại",
     "categories": {
-      "all": "Tất cả",
-      "general": "Chung",
+      "general": "General",
       "token": "Token",
-      "technical": "Kỹ thuật"
+      "technology": "Technology",
+      "nft": "NFT",
+      "participation": "Participation"
     },
     "items": {
-      "whatIs": {
+      "whatIsAlmaNEO": {
+        "category": "General",
         "question": "AlmaNEO là gì?",
-        "answer": "AlmaNEO là nền tảng Web3 được thiết kế để giải quyết bất bình đẳng AI. Dựa trên văn hóa 'Jeong (情)' của Hàn Quốc, nhằm đảm bảo 8 tỷ người trên toàn thế giới có thể hưởng lợi bình đẳng từ công nghệ AI.",
-        "category": "general"
+        "answer": "AlmaNEO là dự án giải quyết bất bình đẳng AI và hiện thực hóa giá trị \"Jeong (情)\" trong blockchain. Thông qua ba giải pháp cốt lõi—Global AI Inequality Index (GAII), AI Hub và Kindness Protocol—chúng tôi đang xây dựng thế giới nơi 8 tỷ người có thể hưởng lợi từ AI."
       },
       "whatIsJeong": {
-        "question": "'Jeong (情)' là gì?",
-        "answer": "'Jeong' là khái niệm độc đáo của Hàn Quốc về liên kết cảm xúc. Không chỉ là sự tử tế—mà đại diện cho mối quan hệ sâu sắc và trái tim ấm áp.",
-        "category": "general"
+        "category": "General",
+        "question": "\"Jeong (情)\" là gì?",
+        "answer": "Jeong là khái niệm độc đáo của Hàn Quốc vượt qua sự tử tế đơn giản. Nó đại diện cho mối liên kết sâu sắc và sự hiểu biết không lời được xây dựng theo thời gian. AlmaNEO số hóa và trao thưởng giá trị Jeong này thông qua Kindness Protocol."
       },
-      "whatIsGAII": {
-        "question": "Chỉ số GAII là gì?",
-        "answer": "GAII (Global AI Inequality Index) là chỉ số đo lường bất bình đẳng AI toàn cầu theo thời gian thực. Nó xem xét quyền truy cập AI, chi phí, cơ sở hạ tầng và các yếu tố khác để đánh giá sự công bằng của AI ở mỗi quốc gia.",
-        "category": "general"
+      "totalSupply": {
+        "category": "Token",
+        "question": "Tổng cung token ALMAN là bao nhiêu?",
+        "answer": "Tổng cung token ALMAN là 8 tỷ. Điều này tượng trưng cho 8 tỷ người trên Trái Đất và thể hiện triết lý \"1 người 1 token\". Token được phát hành trên mạng Polygon theo tiêu chuẩn ERC-20."
       },
-      "tokenUtility": {
-        "question": "Token ALMAN dùng để làm gì?",
-        "answer": "Token ALMAN có thể được sử dụng để bỏ phiếu quản trị, phần thưởng staking, truy cập AI Hub, giảm phí, mua NFT và nhiều hơn nữa.",
-        "category": "token"
+      "howToGetToken": {
+        "category": "Token",
+        "question": "Làm sao để nhận token ALMAN?",
+        "answer": "1) Đào qua Tap-to-Earn trong Kindness Game 2) Tham gia airdrop (dựa trên hoạt động tử tế) 3) Phần thưởng staking 4) Mua trên DEX/CEX trong tương lai. Ban đầu, game và airdrop là cách chính để nhận."
       },
-      "howToBuy": {
-        "question": "Làm thế nào để có token ALMAN?",
-        "answer": "Sau TGE (Token Generation Event), token ALMAN sẽ có sẵn trên DEX và CEX. Bạn cũng có thể nhận được thông qua staking, airdrop và các trò chơi hệ sinh thái.",
-        "category": "token"
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "Sử dụng blockchain nào?",
+        "answer": "AlmaNEO sử dụng mạng Polygon. Polygon cung cấp khả năng tương thích Ethereum, phí gas thấp và giao dịch nhanh, cho phép người dùng Global South tham gia mà không có gánh nặng."
       },
-      "howToStart": {
-        "question": "Làm thế nào để bắt đầu?",
-        "answer": "Chỉ cần đăng nhập bằng tài khoản Google, Facebook hoặc mạng xã hội khác qua Web3Auth. Bạn có thể bắt đầu ngay mà không cần thiết lập ví phức tạp. Giao dịch ban đầu không mất phí gas!",
-        "category": "technical"
-      },
-      "isSafe": {
-        "question": "Có an toàn không?",
-        "answer": "Có, tất cả smart contract của chúng tôi được xây dựng với mẫu UUPS có thể nâng cấp sử dụng OpenZeppelin 5.x. Kiểm toán bảo mật được thực hiện trước khi ra mắt mainnet, và chúng tôi liên tục cải thiện bảo vệ an ninh.",
-        "category": "technical"
+      "noWallet": {
+        "category": "Technology",
+        "question": "Có thể tham gia mà không cần ví không?",
+        "answer": "Có! Bạn có thể đăng nhập trực tiếp bằng tài khoản Google, Facebook, X và các tài khoản mạng xã hội khác qua Web3Auth. Không cần thiết lập ví hay quản lý seed phrase, và với tích hợp Biconomy, hầu hết giao dịch không mất phí gas."
       },
       "whatIsJeongSBT": {
+        "category": "NFT",
         "question": "Jeong-SBT là gì?",
-        "answer": "Jeong-SBT (Soulbound Token) là NFT không thể chuyển nhượng chứng minh hành động tốt của bạn. Càng làm nhiều việc tốt, tier càng cao, và càng nhận được nhiều lợi ích trong hệ sinh thái.",
-        "category": "technical"
+        "answer": "Jeong-SBT là Soulbound Token không thể chuyển nhượng ghi lại Kindness Score của bạn. Nó phát triển qua 4 tier (Seed → Sprout → Tree → Forest), với tier cao hơn nhận được lợi ích như giảm phí NFT và thưởng staking."
       },
-      "supportedLanguages": {
-        "question": "Những ngôn ngữ nào được hỗ trợ?",
-        "answer": "AlmaNEO hỗ trợ 14 ngôn ngữ: Hàn, Anh, Trung, Nhật, Tây Ban Nha, Pháp, Ả Rập, Bồ Đào Nha, Indonesia, Mã Lai, Thái, Việt, Khmer và Swahili. Chúng tôi tiếp tục thêm ngôn ngữ để hỗ trợ nhiều Global South hơn.",
-        "category": "general"
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "Chợ NFT có tính năng gì?",
+        "answer": "1) Miễn phí gas (tích hợp Biconomy) 2) Giảm phí đến 50% cho người giữ Jeong-SBT 3) Giảm thêm 5% khi thanh toán bằng token ALMAN 4) Hỗ trợ cho thuê NFT (ERC-4907/5006) 5) Nhiều tùy chọn thanh toán (POL, USDC, ALMAN)"
       },
-      "howToContribute": {
-        "question": "Làm thế nào để đóng góp cho dự án?",
-        "answer": "Bạn có thể đóng góp thông qua hoạt động tử tế, phát triển cộng đồng, phát triển mã nguồn mở và nhiều hơn nữa. Tham gia Discord của chúng tôi và khám phá nhiều cách để đóng góp!",
-        "category": "general"
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "Staking hoạt động như thế nào?",
+        "answer": "Gửi token ALMAN để nhận phần thưởng hàng năm 5-18%. Chia thành 4 tier (30/90/180/365 ngày), với thưởng thêm dựa trên tier Jeong-SBT của bạn. Token stake cũng có quyền bỏ phiếu governance."
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "Kindness Game là gì?",
+        "answer": "Trò chơi Tap-to-Earn nơi bạn đào token ALMAN bằng cách chạm màn hình. Có các tính năng như quest hàng ngày, hệ thống nâng cấp và thi đấu bảng xếp hạng. 800 triệu ALMAN (10% tổng cung) được phân bổ cho mining pool."
       }
     }
   },

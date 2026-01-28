@@ -376,64 +376,70 @@
   "faq": {
     "title": "Soalan Lazim",
     "subtitle": "Ada soalan?",
-    "categoryLabel": "Kategori",
-    "contactCta": "Ada soalan lain? Hubungi kami di support@almaneo.org",
+    "tag": "FAQ",
+    "titlePrefix": "Soalan Yang Sering ",
+    "titleHighlight": "Ditanya",
+    "subtitleFull": "Cari jawapan kepada soalan lazim tentang AlmaNEO",
+    "categoryLabel": "Kategori:",
+    "contactCta": "Tidak menemui apa yang anda cari?",
+    "contactMessage": "Hubungi kami di",
     "categories": {
-      "all": "Semua",
-      "general": "Am",
+      "general": "General",
       "token": "Token",
-      "technical": "Teknikal"
+      "technology": "Technology",
+      "nft": "NFT",
+      "participation": "Participation"
     },
     "items": {
-      "whatIs": {
+      "whatIsAlmaNEO": {
+        "category": "General",
         "question": "Apakah AlmaNEO?",
-        "answer": "AlmaNEO adalah platform Web3 yang direka untuk menyelesaikan ketidaksamaan AI. Berdasarkan budaya Korea 'Jeong (情)', ia bertujuan memastikan 8 bilion orang di seluruh dunia boleh mendapat manfaat sama rata daripada teknologi AI.",
-        "category": "general"
+        "answer": "AlmaNEO adalah projek yang menangani ketidaksamaan AI dan mewujudkan nilai \"Jeong (情)\" dalam blockchain. Melalui tiga penyelesaian teras—Global AI Inequality Index (GAII), AI Hub, dan Kindness Protocol—kami membina dunia di mana 8 bilion manusia boleh menikmati manfaat AI."
       },
       "whatIsJeong": {
-        "question": "Apakah 'Jeong (情)'?",
-        "answer": "'Jeong' adalah konsep Korea yang unik tentang ikatan emosi. Ia bukan sekadar kebaikan—ia mewakili hubungan yang mendalam dan hati yang hangat.",
-        "category": "general"
+        "category": "General",
+        "question": "Apakah \"Jeong (情)\"?",
+        "answer": "Jeong adalah konsep unik Korea yang melampaui kebaikan mudah. Ia mewakili ikatan mendalam dan pemahaman tanpa kata yang terbina sepanjang masa. AlmaNEO mendigitalkan dan memberi ganjaran kepada nilai Jeong ini melalui Kindness Protocol."
       },
-      "whatIsGAII": {
-        "question": "Apakah Indeks GAII?",
-        "answer": "GAII (Global AI Inequality Index) adalah indeks yang mengukur ketidaksamaan AI global secara masa nyata. Ia mempertimbangkan akses AI, kos, infrastruktur, dan faktor lain untuk menilai keadilan AI di setiap negara.",
-        "category": "general"
+      "totalSupply": {
+        "category": "Token",
+        "question": "Berapakah jumlah bekalan token ALMAN?",
+        "answer": "Jumlah bekalan token ALMAN adalah 8 bilion. Ini melambangkan 8 bilion penduduk Bumi dan mewujudkan falsafah \"1 orang 1 token\". Token dikeluarkan di rangkaian Polygon mengikut standard ERC-20."
       },
-      "tokenUtility": {
-        "question": "Untuk apa token ALMAN boleh digunakan?",
-        "answer": "Token ALMAN boleh digunakan untuk undian tadbir urus, ganjaran staking, akses AI Hub, diskaun yuran, pembelian NFT dan banyak lagi.",
-        "category": "token"
-      },
-      "howToBuy": {
+      "howToGetToken": {
+        "category": "Token",
         "question": "Bagaimana untuk mendapatkan token ALMAN?",
-        "answer": "Selepas TGE (Token Generation Event), token ALMAN akan tersedia di DEX dan CEX. Anda juga boleh mendapatkannya melalui staking, airdrop, dan permainan ekosistem.",
-        "category": "token"
+        "answer": "1) Melombong melalui Tap-to-Earn di Kindness Game 2) Menyertai airdrop (berdasarkan aktiviti kebaikan) 3) Ganjaran staking 4) Membeli di DEX/CEX pada masa hadapan. Pada mulanya, permainan dan airdrop adalah cara utama untuk mendapatkannya."
       },
-      "howToStart": {
-        "question": "Bagaimana untuk bermula?",
-        "answer": "Hanya log masuk dengan akaun Google, Facebook, atau media sosial lain melalui Web3Auth. Anda boleh bermula segera tanpa tetapan dompet yang rumit. Transaksi awal tanpa yuran gas!",
-        "category": "technical"
+      "whichBlockchain": {
+        "category": "Technology",
+        "question": "Blockchain apa yang digunakan?",
+        "answer": "AlmaNEO menggunakan rangkaian Polygon. Polygon menawarkan keserasian Ethereum, yuran gas rendah, dan transaksi pantas, membolehkan pengguna Global South untuk menyertai tanpa beban."
       },
-      "isSafe": {
-        "question": "Adakah ia selamat?",
-        "answer": "Ya, semua kontrak pintar kami dibina dengan corak UUPS yang boleh ditingkatkan menggunakan OpenZeppelin 5.x. Audit keselamatan dilakukan sebelum pelepasan mainnet, dan kami terus meningkatkan perlindungan keselamatan.",
-        "category": "technical"
+      "noWallet": {
+        "category": "Technology",
+        "question": "Bolehkah menyertai tanpa dompet?",
+        "answer": "Ya! Anda boleh log masuk terus dengan akaun Google, Facebook, X, dan akaun sosial lain melalui Web3Auth. Tidak perlu tetapan dompet atau pengurusan seed phrase, dan dengan integrasi Biconomy, kebanyakan transaksi bebas yuran gas."
       },
       "whatIsJeongSBT": {
+        "category": "NFT",
         "question": "Apakah Jeong-SBT?",
-        "answer": "Jeong-SBT (Soulbound Token) adalah NFT yang tidak boleh dipindahkan yang membuktikan tindakan kebaikan anda. Semakin banyak kebaikan, semakin tinggi tier anda, dan semakin besar manfaat dalam ekosistem.",
-        "category": "technical"
+        "answer": "Jeong-SBT adalah Soulbound Token yang tidak boleh dipindahkan yang merekodkan Kindness Score anda. Ia berkembang melalui 4 tier (Seed → Sprout → Tree → Forest), dengan tier lebih tinggi mendapat manfaat seperti diskaun yuran NFT dan bonus staking."
       },
-      "supportedLanguages": {
-        "question": "Bahasa apa yang disokong?",
-        "answer": "AlmaNEO menyokong 14 bahasa: Korea, Inggeris, Cina, Jepun, Sepanyol, Perancis, Arab, Portugis, Indonesia, Melayu, Thai, Vietnam, Khmer, dan Swahili. Kami terus menambah bahasa untuk menyokong lebih banyak Global South.",
-        "category": "general"
+      "nftMarketplaceFeatures": {
+        "category": "NFT",
+        "question": "Apakah ciri-ciri pasaran NFT?",
+        "answer": "1) Bebas gas (integrasi Biconomy) 2) Diskaun yuran sehingga 50% untuk pemegang Jeong-SBT 3) Diskaun tambahan 5% untuk pembayaran token ALMAN 4) Sokongan penyewaan NFT (ERC-4907/5006) 5) Pelbagai pilihan pembayaran (POL, USDC, ALMAN)"
       },
-      "howToContribute": {
-        "question": "Bagaimana untuk menyumbang kepada projek?",
-        "answer": "Anda boleh menyumbang melalui aktiviti kebaikan, pembangunan komuniti, pembangunan sumber terbuka, dan banyak lagi. Sertai Discord kami dan temui pelbagai cara untuk menyumbang!",
-        "category": "general"
+      "howStakingWorks": {
+        "category": "Participation",
+        "question": "Bagaimana staking berfungsi?",
+        "answer": "Deposit token ALMAN untuk mendapat ganjaran tahunan 5-18%. Dibahagikan kepada 4 tier (30/90/180/365 hari), dengan bonus tambahan berdasarkan tier Jeong-SBT anda. Token yang distaking juga mempunyai hak mengundi governance."
+      },
+      "whatIsKindnessGame": {
+        "category": "Participation",
+        "question": "Apakah Kindness Game?",
+        "answer": "Permainan Tap-to-Earn di mana anda melombong token ALMAN dengan mengetuk skrin. Ciri termasuk quest harian, sistem upgrade, dan pertandingan leaderboard. 800 juta ALMAN (10% daripada jumlah bekalan) diperuntukkan kepada mining pool."
       }
     }
   },
