@@ -2526,26 +2526,75 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 53+)
+### ✅ 완료된 작업 (2026-01-29 - Session 53: GAII Dashboard/Report i18n 다국어 지원)
+
+#### 1. **platform.json 네임스페이스 신설**
+   - 기존 landing.json, common.json과 분리하여 GAII 전용 번역 파일 생성
+   - `web/public/locales/ko/platform.json` - 한국어 번역
+   - `web/public/locales/en/platform.json` - 영어 번역
+   - i18n 설정에 'platform' 네임스페이스 추가 (`ns: ['common', 'landing', 'platform']`)
+
+#### 2. **GAII Dashboard i18n 적용** (`web/src/pages/GAII.tsx`)
+   - 대시보드 전체 UI 번역 키 적용
+   - 국가명/지역명 다국어 표시: `i18n.language === 'ko'` 조건으로 분기
+   - 번역 키 구조:
+     - `gaii.dashboard.*`: 타이틀, 로딩, 에러 메시지
+     - `gaii.grades.*`: 등급 라벨 (Low, Moderate, High, Critical)
+     - `gaii.metrics.*`: 지표 카드 (adoptionRate, inequalityGap, countriesTracked, totalPopulation)
+     - `gaii.worldMap.*`, `gaii.topCountries.*`, `gaii.bottomCountries.*`: 세계지도, 순위
+     - `gaii.regional.*`: 지역별 분석 (정렬 옵션, 통계 라벨)
+
+#### 3. **GAII Report i18n 적용** (`web/src/pages/GAIIReport.tsx`)
+   - 리포트 전체 콘텐츠 번역
+   - Key Findings 동적 값 보간: `{{score}}`, `{{north}}`, `{{south}}`, `{{ratio}}`
+   - Key Mapping 패턴 구현:
+     ```typescript
+     const insightKeyMap: Record<string, string> = {
+       'The Global AI Divide is Widening': 'globalDivide',
+       'AI Costs Burden Low-Income Countries': 'affordabilityCosts',
+       // ...
+     };
+     ```
+   - 번역 키 구조:
+     - `gaiiReport.header.*`: 헤더 정보
+     - `gaiiReport.keyFindings.*`: 핵심 발견 (4개 항목)
+     - `gaiiReport.insights.*`: 주요 인사이트 (5개 항목, title/description/recommendation)
+     - `gaiiReport.recommendations.*`: 정책 권고 (6개 항목, title/description/impact)
+     - `gaiiReport.regionalInsights.*`: 10개 지역별 분석 (NA, EU, EA, SA, SEA, LA, ME, SSA, OC, CA)
+     - `gaiiReport.sections.*`: 섹션 제목/부제
+     - `gaiiReport.methodology.*`: 방법론 (공식, 가중치, 등급 기준)
+     - `gaiiReport.cta.*`: 액션 버튼 (PDF 다운로드 등)
+
+#### 4. **커밋 정보**
+   - 커밋: `1d5439e` - feat(web): Add i18n support for GAII Dashboard and Report pages
+   - 5개 파일, +755줄, -146줄 변경
+
+---
+
+### 🔲 다음 세션 작업 (Session 54+)
 
 #### 🔴 높은 우선순위 (핵심 기능 완성)
 
-1. **Governance 실제 제안 로드**
+1. **GAII 페이지 i18n 완성**
+   - 나머지 12개 언어에 `platform.json` 번역 파일 추가
+   - 대상 언어: zh, ja, es, fr, ar, pt, id, ms, th, vi, km, sw
+
+2. **Governance 실제 제안 로드**
    - ProposalCreated 이벤트 조회
    - Mock 데이터 제거, 온체인 데이터로 교체
 
-2. **Staking 페이지 테스트**
+3. **Staking 페이지 테스트**
    - 실제 스테이킹 트랜잭션 테스트
    - UI 오류 수정
 
-3. **모바일 실기기 QA 테스트**
+4. **모바일 실기기 QA 테스트**
    - Chrome DevTools 320px, 375px, 390px, 428px 뷰포트 확인
    - 수평 스크롤바 없음 확인
    - 모든 터치 타겟 44px 이상 확인
 
 #### 🟡 중간 우선순위
 
-4. **i18n 번역 확장**
+5. **i18n 번역 확장**
    - 나머지 12개 언어에 `aiHub` 섹션 추가
    - Kindness/Meetup 페이지 번역 키 생성
    - `blog` 키 추가 (12개 언어)
@@ -2568,13 +2617,13 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 52 기준)
+### 📊 페이지별 상태 요약 (Session 53 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
 | Landing | ✅ | 완료 |
-| GAII Dashboard | ✅ | 세계지도 + 50개국 |
-| GAII Report | ✅ | PDF 다운로드 |
+| GAII Dashboard | ✅ | 세계지도 + 50개국 + i18n (ko/en) |
+| GAII Report | ✅ | PDF 다운로드 + i18n (ko/en) |
 | AI Hub | ✅ | Gemini + Groq |
 | Kindness | ✅ | Supabase + Ambassador |
 | Meetup | ✅ | 생성/참가/검증 |
