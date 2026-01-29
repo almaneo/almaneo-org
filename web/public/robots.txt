@@ -1,0 +1,14 @@
+# AlmaNEO - Cold Code, Warm Soul
+# https://almaneo.org
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://almaneo.org/sitemap.xml
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
+
+# Disallow API paths
+Disallow: /api/

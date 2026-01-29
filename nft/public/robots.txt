@@ -1,0 +1,15 @@
+# AlmaNEO NFT Marketplace
+# https://nft.almaneo.org
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://nft.almaneo.org/sitemap.xml
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
+
+# Disallow private paths
+Disallow: /api/
+Disallow: /*.json$

@@ -2,18 +2,73 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/almaneo-logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AlmaNEO NFT Marketplace - Jeong-SBT & Kindness NFTs" />
-    <title>AlmaNEO NFT Marketplace</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/icon-57.png" />
+    <link rel="apple-touch-icon" sizes="128x128" href="/icon-128.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="256x256" href="/icon-256.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0A0F1A" />
+
+    <!-- Primary Meta Tags -->
+    <title>AlmaNEO NFT Marketplace | Jeong-SBT & Kindness NFTs</title>
+    <meta name="title" content="AlmaNEO NFT Marketplace | Jeong-SBT & Kindness NFTs" />
+    <meta name="description" content="Discover, collect, and trade unique Jeong-SBT soulbound tokens and Kindness NFTs on AlmaNEO. Join the movement for AI democratization through the culture of kindness." />
+    <meta name="keywords" content="AlmaNEO, NFT, Marketplace, Jeong-SBT, Soulbound Token, Kindness NFT, Web3, Polygon, ALMAN, AI democratization" />
+    <meta name="author" content="AlmaNEO Team" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nft.almaneo.org/" />
+    <meta property="og:title" content="AlmaNEO NFT Marketplace | Jeong-SBT & Kindness NFTs" />
+    <meta property="og:description" content="Discover, collect, and trade unique Jeong-SBT soulbound tokens and Kindness NFTs on AlmaNEO. Join the movement for AI democratization." />
+    <meta property="og:image" content="https://nft.almaneo.org/og-image.webp" />
+    <meta property="og:site_name" content="AlmaNEO NFT" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://nft.almaneo.org/" />
+    <meta name="twitter:title" content="AlmaNEO NFT Marketplace | Jeong-SBT & Kindness NFTs" />
+    <meta name="twitter:description" content="Discover, collect, and trade unique Jeong-SBT soulbound tokens and Kindness NFTs on AlmaNEO." />
+    <meta name="twitter:image" content="https://nft.almaneo.org/og-image.webp" />
+    <meta name="twitter:site" content="@almaneo_org" />
+    <meta name="twitter:creator" content="@almaneo_org" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nft.almaneo.org/" />
+
+    <!-- Fonts: Montserrat + Pretendard -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Node.js polyfills - must load before any modules -->
+    <script>
+      // process polyfill with nextTick that has bind method
+      if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
+        window.process = {
+          env: {},
+          browser: true,
+          version: '',
+          platform: 'browser',
+          nextTick: function(fn) { setTimeout(fn, 0); },
+          cwd: function() { return '/'; }
+        };
+      }
+      // global polyfill
+      if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
+        window.global = window;
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
