@@ -5,6 +5,7 @@
  */
 
 import { useState, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   FileText,
@@ -140,6 +141,8 @@ function StatCard({
 
 // 국가 순위 테이블
 function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryRanking[]; showAll?: boolean }) {
+  const { t, i18n } = useTranslation('platform');
+  const isKo = i18n.language === 'ko';
   const [expanded, setExpanded] = useState(showAll);
   const displayRankings = expanded ? rankings : rankings.slice(0, 10);
 
@@ -148,14 +151,14 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
       <table className="w-full">
         <thead>
           <tr className="border-b border-gray-700">
-            <th className="text-left py-3 px-4 text-gray-400 font-medium">Rank</th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium">Country</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium">GAII</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium">Grade</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden sm:table-cell">Access</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden sm:table-cell">Afford.</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden md:table-cell">Lang.</th>
-            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden md:table-cell">Skill</th>
+            <th className="text-left py-3 px-4 text-gray-400 font-medium">{t('gaiiReport.table.rank')}</th>
+            <th className="text-left py-3 px-4 text-gray-400 font-medium">{t('gaiiReport.table.country')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium">{t('gaiiReport.table.gaii')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium">{t('gaiiReport.table.grade')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden sm:table-cell">{t('gaiiReport.indicators.access')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden sm:table-cell">{t('gaiiReport.indicators.affordability')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden md:table-cell">{t('gaiiReport.indicators.language')}</th>
+            <th className="text-center py-3 px-4 text-gray-400 font-medium hidden md:table-cell">{t('gaiiReport.indicators.skill')}</th>
           </tr>
         </thead>
         <tbody>
@@ -164,8 +167,8 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
               <td className="py-3 px-4 text-white font-medium">#{item.rank}</td>
               <td className="py-3 px-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-white">{item.country.name}</span>
-                  <span className="text-gray-500 text-sm hidden sm:inline">({item.country.nameKo})</span>
+                  <span className="text-white">{isKo ? item.country.nameKo : item.country.name}</span>
+                  <span className="text-gray-500 text-sm hidden sm:inline">({isKo ? item.country.name : item.country.nameKo})</span>
                 </div>
               </td>
               <td className="py-3 px-4 text-center">
@@ -199,9 +202,9 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
           className="w-full py-3 text-center text-[#FF6B00] hover:text-orange-400 transition-colors flex items-center justify-center gap-2"
         >
           {expanded ? (
-            <>Show Less <ChevronUp className="w-4 h-4" /></>
+            <>{t('gaiiReport.table.showLess')} <ChevronUp className="w-4 h-4" /></>
           ) : (
-            <>Show All {rankings.length} Countries <ChevronDown className="w-4 h-4" /></>
+            <>{t('gaiiReport.table.showAll', { count: rankings.length })} <ChevronDown className="w-4 h-4" /></>
           )}
         </button>
       )}
@@ -211,6 +214,8 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
 
 // 지역 카드
 function RegionCard({ region }: { region: RegionReport }) {
+  const { t, i18n } = useTranslation('platform');
+  const isKo = i18n.language === 'ko';
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -222,8 +227,8 @@ function RegionCard({ region }: { region: RegionReport }) {
         <div className="flex items-center gap-4">
           <div className="text-3xl font-bold text-[#FF6B00]">{region.avgGaii}</div>
           <div>
-            <h3 className="text-white font-semibold text-left">{region.name}</h3>
-            <p className="text-gray-400 text-sm text-left">{region.nameKo} • {region.countries} countries</p>
+            <h3 className="text-white font-semibold text-left">{isKo ? region.nameKo : region.name}</h3>
+            <p className="text-gray-400 text-sm text-left">{isKo ? region.name : region.nameKo} • {region.countries} {t('gaiiReport.region.countries')}</p>
           </div>
         </div>
         {expanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
@@ -231,34 +236,34 @@ function RegionCard({ region }: { region: RegionReport }) {
 
       {expanded && (
         <div className="mt-4 pt-4 border-t border-gray-700">
-          <p className="text-gray-300 text-sm mb-4">{region.keyInsight}</p>
+          <p className="text-gray-300 text-sm mb-4">{t(`gaiiReport.regionalInsights.${region.code}`)}</p>
 
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="text-center p-2 bg-white/5 rounded-lg">
-              <div className="text-xs text-gray-400">Access</div>
+              <div className="text-xs text-gray-400">{t('gaiiReport.indicators.access')}</div>
               <div className="text-white font-medium">{region.indicators.access}</div>
             </div>
             <div className="text-center p-2 bg-white/5 rounded-lg">
-              <div className="text-xs text-gray-400">Affordability</div>
+              <div className="text-xs text-gray-400">{t('gaiiReport.indicators.affordability')}</div>
               <div className="text-white font-medium">{region.indicators.affordability}</div>
             </div>
             <div className="text-center p-2 bg-white/5 rounded-lg">
-              <div className="text-xs text-gray-400">Language</div>
+              <div className="text-xs text-gray-400">{t('gaiiReport.indicators.language')}</div>
               <div className="text-white font-medium">{region.indicators.language}</div>
             </div>
             <div className="text-center p-2 bg-white/5 rounded-lg">
-              <div className="text-xs text-gray-400">Skill</div>
+              <div className="text-xs text-gray-400">{t('gaiiReport.indicators.skill')}</div>
               <div className="text-white font-medium">{region.indicators.skill}</div>
             </div>
           </div>
 
           <div className="flex justify-between text-sm">
             <div>
-              <span className="text-gray-400">Top: </span>
+              <span className="text-gray-400">{t('gaiiReport.region.top')}: </span>
               <span className="text-green-400">{region.topPerformer}</span>
             </div>
             <div>
-              <span className="text-gray-400">Bottom: </span>
+              <span className="text-gray-400">{t('gaiiReport.region.bottom')}: </span>
               <span className="text-red-400">{region.bottomPerformer}</span>
             </div>
           </div>
@@ -268,8 +273,20 @@ function RegionCard({ region }: { region: RegionReport }) {
   );
 }
 
+// 인사이트 키 매핑
+const insightKeyMap: Record<string, string> = {
+  'The Global AI Divide is Widening': 'globalDivide',
+  'AI Costs Burden Low-Income Countries': 'affordabilityCosts',
+  'Language Barrier Excludes Billions': 'languageBarrier',
+  'Infrastructure Gap in Rural Areas': 'infrastructureGap',
+  'AI Literacy Crisis': 'aiLiteracy',
+};
+
 // 인사이트 카드
-function InsightCard({ insight }: { insight: KeyInsight }) {
+function InsightCard({ insight, insightKey }: { insight: KeyInsight; insightKey?: string }) {
+  const { t } = useTranslation('platform');
+  const key = insightKey || insightKeyMap[insight.title] || '';
+
   return (
     <div className="glass p-6 rounded-xl">
       <div className="flex items-start gap-4">
@@ -277,8 +294,12 @@ function InsightCard({ insight }: { insight: KeyInsight }) {
           <CategoryIcon category={insight.category} />
         </div>
         <div className="flex-1">
-          <h3 className="text-white font-semibold mb-2">{insight.title}</h3>
-          <p className="text-gray-400 text-sm mb-3">{insight.description}</p>
+          <h3 className="text-white font-semibold mb-2">
+            {key ? t(`gaiiReport.insights.${key}.title`) : insight.title}
+          </h3>
+          <p className="text-gray-400 text-sm mb-3">
+            {key ? t(`gaiiReport.insights.${key}.description`) : insight.description}
+          </p>
 
           {insight.countries && insight.countries.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
@@ -290,10 +311,12 @@ function InsightCard({ insight }: { insight: KeyInsight }) {
             </div>
           )}
 
-          {insight.recommendation && (
+          {(key || insight.recommendation) && (
             <div className="flex items-start gap-2 p-3 bg-green-500/10 rounded-lg">
               <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-              <p className="text-green-300 text-sm">{insight.recommendation}</p>
+              <p className="text-green-300 text-sm">
+                {key ? t(`gaiiReport.insights.${key}.recommendation`) : insight.recommendation}
+              </p>
             </div>
           )}
         </div>
@@ -302,8 +325,21 @@ function InsightCard({ insight }: { insight: KeyInsight }) {
   );
 }
 
+// 권고 키 매핑
+const recommendationKeyMap: Record<string, string> = {
+  'Implement Tiered Pricing for Emerging Markets': 'tieredPricing',
+  'Invest in National AI Infrastructure': 'nationalInfrastructure',
+  'Expand Multilingual AI Support': 'multilingualSupport',
+  'Launch AI Literacy Programs': 'aiLiteracyPrograms',
+  'Establish Global AI Equity Fund': 'equityFund',
+  'Include GAII in National Development Metrics': 'gaiiMetric',
+};
+
 // 권고 카드
-function RecommendationCard({ rec }: { rec: PolicyRecommendation }) {
+function RecommendationCard({ rec, recKey }: { rec: PolicyRecommendation; recKey?: string }) {
+  const { t } = useTranslation('platform');
+  const key = recKey || recommendationKeyMap[rec.title] || '';
+
   const priorityColors = {
     high: 'bg-red-500/20 text-red-400 border-red-500/30',
     medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
@@ -318,15 +354,21 @@ function RecommendationCard({ rec }: { rec: PolicyRecommendation }) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-white font-semibold">{rec.title}</h3>
+            <h3 className="text-white font-semibold">
+              {key ? t(`gaiiReport.recommendations.${key}.title`) : rec.title}
+            </h3>
             <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${priorityColors[rec.priority]}`}>
-              {rec.priority}
+              {t(`gaiiReport.priority.${rec.priority}`)}
             </span>
           </div>
-          <p className="text-gray-400 text-sm mb-3">{rec.description}</p>
+          <p className="text-gray-400 text-sm mb-3">
+            {key ? t(`gaiiReport.recommendations.${key}.description`) : rec.description}
+          </p>
           <div className="flex items-start gap-2 p-3 bg-white/5 rounded-lg">
             <Info className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
-            <p className="text-gray-300 text-sm"><strong>Impact:</strong> {rec.impact}</p>
+            <p className="text-gray-300 text-sm">
+              <strong>{t('gaiiReport.impact')}:</strong> {key ? t(`gaiiReport.recommendations.${key}.impact`) : rec.impact}
+            </p>
           </div>
         </div>
       </div>
@@ -336,6 +378,7 @@ function RecommendationCard({ rec }: { rec: PolicyRecommendation }) {
 
 // 메인 컴포넌트
 export default function GAIIReport() {
+  const { t } = useTranslation('platform');
   const report = GAII_REPORT_V1;
   const { metadata, executiveSummary, regionalAnalysis, countryRankings, keyInsights, recommendations } = report;
 
@@ -346,48 +389,48 @@ export default function GAIIReport() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF6B00]/20 text-[#FF6B00] text-sm mb-4">
             <FileText className="w-4 h-4" />
-            <span>Version {metadata.version} • {metadata.publishDate}</span>
+            <span>{t('gaiiReport.version')} {metadata.version} • {metadata.publishDate}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            {metadata.title}
+            {t('gaiiReport.reportTitle')}
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-            {metadata.subtitle}
+            {t('gaiiReport.reportSubtitle')}
           </p>
           <p className="text-gray-500">
-            Published by {metadata.organization} • <a href={metadata.website} className="text-[#FF6B00] hover:underline">{metadata.website}</a>
+            {t('gaiiReport.header.publishedBy')} {metadata.organization} • <a href={metadata.website} className="text-[#FF6B00] hover:underline">{metadata.website}</a>
           </p>
         </div>
 
         {/* Executive Summary */}
         <section className="mb-16">
           <SectionHeader
-            title="Executive Summary"
-            subtitle="Key findings from the GAII Report v1.0"
+            title={t('gaiiReport.sections.executiveSummary.title')}
+            subtitle={t('gaiiReport.sections.executiveSummary.subtitle')}
             icon={BarChart3}
           />
 
           {/* Global Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-8">
             <StatCard
-              label="Global GAII Score"
+              label={t('gaiiReport.stats.globalGaii')}
               value={executiveSummary.globalStats.globalGaii}
               unit="/100"
               color="orange"
             />
             <StatCard
-              label="Countries Analyzed"
+              label={t('gaiiReport.stats.countriesAnalyzed')}
               value={executiveSummary.globalStats.totalCountries}
               color="blue"
             />
             <StatCard
-              label="Population Covered"
+              label={t('gaiiReport.stats.populationCovered')}
               value={executiveSummary.globalStats.totalPopulation}
               unit="B"
               color="green"
             />
             <StatCard
-              label="Inequality Gap"
+              label={t('gaiiReport.stats.inequalityGap')}
               value={executiveSummary.globalStats.inequalityGap}
               unit="%"
               color="red"
@@ -396,30 +439,64 @@ export default function GAIIReport() {
 
           {/* Key Findings */}
           <div className="grid md:grid-cols-2 gap-4 mb-8">
-            {executiveSummary.keyFindings.map((finding, i) => (
-              <div key={i} className="glass p-6 rounded-xl">
-                <div className="flex items-start gap-3">
-                  {finding.trend && <TrendIcon trend={finding.trend} />}
-                  <div>
-                    <h3 className="text-white font-semibold mb-1">{finding.title}</h3>
-                    <p className="text-gray-400 text-sm">{finding.description}</p>
-                    {finding.stat && (
-                      <div className="mt-2 text-2xl font-bold text-[#FF6B00]">{finding.stat}</div>
-                    )}
-                  </div>
+            {/* AI Inequality Finding */}
+            <div className="glass p-6 rounded-xl">
+              <div className="flex items-start gap-3">
+                <TrendIcon trend="negative" />
+                <div>
+                  <h3 className="text-white font-semibold mb-1">{t('gaiiReport.keyFindings.aiInequality.title')}</h3>
+                  <p className="text-gray-400 text-sm">{t('gaiiReport.keyFindings.aiInequality.description', { score: executiveSummary.globalStats.globalGaii })}</p>
+                  <div className="mt-2 text-2xl font-bold text-[#FF6B00]">{executiveSummary.globalStats.globalGaii}/100</div>
                 </div>
               </div>
-            ))}
+            </div>
+            {/* North vs South Gap */}
+            <div className="glass p-6 rounded-xl">
+              <div className="flex items-start gap-3">
+                <TrendIcon trend="negative" />
+                <div>
+                  <h3 className="text-white font-semibold mb-1">{t('gaiiReport.keyFindings.northSouthGap.title')}</h3>
+                  <p className="text-gray-400 text-sm">{t('gaiiReport.keyFindings.northSouthGap.description', {
+                    north: executiveSummary.globalStats.globalNorthAdoption,
+                    south: executiveSummary.globalStats.globalSouthAdoption,
+                    ratio: Math.round(executiveSummary.globalStats.globalNorthAdoption / executiveSummary.globalStats.globalSouthAdoption * 10) / 10
+                  })}</p>
+                  <div className="mt-2 text-2xl font-bold text-[#FF6B00]">{executiveSummary.globalStats.inequalityGap}% gap</div>
+                </div>
+              </div>
+            </div>
+            {/* Affordability */}
+            <div className="glass p-6 rounded-xl">
+              <div className="flex items-start gap-3">
+                <TrendIcon trend="negative" />
+                <div>
+                  <h3 className="text-white font-semibold mb-1">{t('gaiiReport.keyFindings.affordability.title')}</h3>
+                  <p className="text-gray-400 text-sm">{t('gaiiReport.keyFindings.affordability.description', { score: executiveSummary.globalStats.avgAffordability })}</p>
+                  <div className="mt-2 text-2xl font-bold text-[#FF6B00]">{executiveSummary.globalStats.avgAffordability}/100</div>
+                </div>
+              </div>
+            </div>
+            {/* Language Support */}
+            <div className="glass p-6 rounded-xl">
+              <div className="flex items-start gap-3">
+                <TrendIcon trend="negative" />
+                <div>
+                  <h3 className="text-white font-semibold mb-1">{t('gaiiReport.keyFindings.language.title')}</h3>
+                  <p className="text-gray-400 text-sm">{t('gaiiReport.keyFindings.language.description', { score: executiveSummary.globalStats.avgLanguage })}</p>
+                  <div className="mt-2 text-2xl font-bold text-[#FF6B00]">{executiveSummary.globalStats.avgLanguage}/100</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Indicator Averages */}
           <div className="glass p-6 rounded-xl">
-            <h3 className="text-white font-semibold mb-4">Global Average by Indicator</h3>
+            <h3 className="text-white font-semibold mb-4">{t('gaiiReport.indicators.globalAverage')}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Globe className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-400">Access</span>
+                  <span className="text-gray-400">{t('gaiiReport.indicators.access')}</span>
                 </div>
                 <div className="text-2xl font-bold text-white">{executiveSummary.globalStats.avgAccess}</div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -429,7 +506,7 @@ export default function GAIIReport() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5 text-green-400" />
-                  <span className="text-gray-400">Affordability</span>
+                  <span className="text-gray-400">{t('gaiiReport.indicators.affordability')}</span>
                 </div>
                 <div className="text-2xl font-bold text-white">{executiveSummary.globalStats.avgAffordability}</div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -439,7 +516,7 @@ export default function GAIIReport() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Languages className="w-5 h-5 text-purple-400" />
-                  <span className="text-gray-400">Language</span>
+                  <span className="text-gray-400">{t('gaiiReport.indicators.language')}</span>
                 </div>
                 <div className="text-2xl font-bold text-white">{executiveSummary.globalStats.avgLanguage}</div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -449,7 +526,7 @@ export default function GAIIReport() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <GraduationCap className="w-5 h-5 text-yellow-400" />
-                  <span className="text-gray-400">Skill</span>
+                  <span className="text-gray-400">{t('gaiiReport.indicators.skill')}</span>
                 </div>
                 <div className="text-2xl font-bold text-white">{executiveSummary.globalStats.avgSkill}</div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -463,8 +540,8 @@ export default function GAIIReport() {
         {/* Country Rankings */}
         <section className="mb-16">
           <SectionHeader
-            title="Country Rankings"
-            subtitle="GAII scores for 50 countries (lower is better)"
+            title={t('gaiiReport.sections.countryRankings.title')}
+            subtitle={t('gaiiReport.sections.countryRankings.subtitle')}
             icon={Users}
           />
           <div className="glass rounded-xl overflow-hidden">
@@ -475,8 +552,8 @@ export default function GAIIReport() {
         {/* Regional Analysis */}
         <section className="mb-16">
           <SectionHeader
-            title="Regional Analysis"
-            subtitle="GAII breakdown by world region"
+            title={t('gaiiReport.sections.regionalAnalysis.title')}
+            subtitle={t('gaiiReport.sections.regionalAnalysis.subtitle')}
             icon={Globe}
           />
           <div className="grid md:grid-cols-2 gap-4">
@@ -489,8 +566,8 @@ export default function GAIIReport() {
         {/* Key Insights */}
         <section className="mb-16">
           <SectionHeader
-            title="Key Insights"
-            subtitle="Critical findings and observations"
+            title={t('gaiiReport.sections.keyInsights.title')}
+            subtitle={t('gaiiReport.sections.keyInsights.subtitle')}
             icon={AlertTriangle}
           />
           <div className="space-y-4">
@@ -503,8 +580,8 @@ export default function GAIIReport() {
         {/* Policy Recommendations */}
         <section className="mb-16">
           <SectionHeader
-            title="Policy Recommendations"
-            subtitle="Actions for stakeholders to address AI inequality"
+            title={t('gaiiReport.sections.recommendations.title')}
+            subtitle={t('gaiiReport.sections.recommendations.subtitle')}
             icon={CheckCircle}
           />
           <div className="space-y-4">
@@ -517,13 +594,13 @@ export default function GAIIReport() {
         {/* Methodology */}
         <section className="mb-16">
           <SectionHeader
-            title="Methodology"
-            subtitle="How GAII scores are calculated"
+            title={t('gaiiReport.sections.methodology.title')}
+            subtitle={t('gaiiReport.sections.methodology.subtitle')}
             icon={Info}
           />
           <div className="glass p-6 rounded-xl">
             <div className="mb-6">
-              <h3 className="text-white font-semibold mb-2">Formula</h3>
+              <h3 className="text-white font-semibold mb-2">{t('gaiiReport.methodology.formula')}</h3>
               <code className="block p-4 bg-black/50 rounded-lg text-cyan-400 font-mono text-sm">
                 {metadata.methodology.formula}
               </code>
@@ -531,11 +608,11 @@ export default function GAIIReport() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-white font-semibold mb-3">Indicator Weights</h3>
+                <h3 className="text-white font-semibold mb-3">{t('gaiiReport.methodology.weights')}</h3>
                 <div className="space-y-2">
                   {Object.entries(metadata.methodology.weights).map(([key, value]) => (
                     <div key={key} className="flex items-center gap-3">
-                      <div className="w-24 text-gray-400 capitalize">{key}</div>
+                      <div className="w-24 text-gray-400">{t(`gaiiReport.indicators.${key}`)}</div>
                       <div className="flex-1 bg-gray-700 rounded-full h-2">
                         <div
                           className="bg-[#FF6B00] h-2 rounded-full"
@@ -549,27 +626,27 @@ export default function GAIIReport() {
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-3">Grade Thresholds</h3>
+                <h3 className="text-white font-semibold mb-3">{t('gaiiReport.methodology.thresholds')}</h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-400/10 text-green-400">Low</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-400/10 text-green-400">{t('gaii.grades.low')}</span>
                     <span className="text-gray-400">0 - 30</span>
-                    <span className="text-gray-500 text-sm">Best AI equality</span>
+                    <span className="text-gray-500 text-sm">{t('gaiiReport.methodology.thresholdDesc.low')}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-400/10 text-yellow-400">Moderate</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-400/10 text-yellow-400">{t('gaii.grades.moderate')}</span>
                     <span className="text-gray-400">30 - 50</span>
-                    <span className="text-gray-500 text-sm">Room for improvement</span>
+                    <span className="text-gray-500 text-sm">{t('gaiiReport.methodology.thresholdDesc.moderate')}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-400/10 text-orange-400">High</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-400/10 text-orange-400">{t('gaii.grades.high')}</span>
                     <span className="text-gray-400">50 - 70</span>
-                    <span className="text-gray-500 text-sm">Significant inequality</span>
+                    <span className="text-gray-500 text-sm">{t('gaiiReport.methodology.thresholdDesc.high')}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-400/10 text-red-400">Critical</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-400/10 text-red-400">{t('gaii.grades.critical')}</span>
                     <span className="text-gray-400">70 - 100</span>
-                    <span className="text-gray-500 text-sm">Urgent intervention needed</span>
+                    <span className="text-gray-500 text-sm">{t('gaiiReport.methodology.thresholdDesc.critical')}</span>
                   </div>
                 </div>
               </div>
@@ -580,8 +657,8 @@ export default function GAIIReport() {
         {/* Data Sources */}
         <section className="mb-16">
           <SectionHeader
-            title="Data Sources"
-            subtitle="Primary data sources used in this report"
+            title={t('gaiiReport.sections.dataSources.title')}
+            subtitle={t('gaiiReport.sections.dataSources.subtitle')}
             icon={FileText}
           />
           <div className="grid md:grid-cols-2 gap-4">
@@ -621,16 +698,16 @@ export default function GAIIReport() {
         {/* Call to Action */}
         <section className="text-center">
           <div className="glass p-8 rounded-2xl bg-gradient-to-br from-[#FF6B00]/20 to-transparent">
-            <h2 className="text-2xl font-bold text-white mb-4">Join the Movement for AI Equality</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">{t('gaiiReport.cta.title')}</h2>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-              {executiveSummary.callToAction}
+              {t('gaiiReport.callToAction')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="https://almaneo.org"
                 className="px-6 py-3 bg-[#FF6B00] text-white rounded-lg font-medium hover:bg-orange-600 transition-colors"
               >
-                Learn More About AlmaNEO
+                {t('gaiiReport.cta.learnMore')}
               </a>
               <Suspense
                 fallback={
@@ -639,7 +716,7 @@ export default function GAIIReport() {
                     className="px-6 py-3 border border-gray-600 text-gray-500 rounded-lg font-medium flex items-center gap-2 cursor-wait"
                   >
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Loading PDF...
+                    {t('gaiiReport.cta.loadingPdf')}
                   </button>
                 }
               >
@@ -652,12 +729,12 @@ export default function GAIIReport() {
                     loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Generating PDF...
+                        {t('gaiiReport.cta.generatingPdf')}
                       </>
                     ) : (
                       <>
                         <Download className="w-4 h-4" />
-                        Download Full Report (PDF)
+                        {t('gaiiReport.cta.downloadPdf')}
                       </>
                     )
                   }

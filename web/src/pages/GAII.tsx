@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Globe,
   TrendingDown,
@@ -56,15 +57,16 @@ function getGAIIGradient(gaii: number): string {
   return 'from-red-500 to-rose-500';
 }
 
-function getGAIILabel(gaii: number): string {
-  if (gaii < 30) return 'Low Inequality';
-  if (gaii < 50) return 'Moderate';
-  if (gaii < 70) return 'High Inequality';
-  return 'Critical';
+// Returns translation key for GAII grade
+function getGAIIGradeKey(gaii: number): string {
+  if (gaii < 30) return 'gaii.grades.low';
+  if (gaii < 50) return 'gaii.grades.moderate';
+  if (gaii < 70) return 'gaii.grades.high';
+  return 'gaii.grades.critical';
 }
 
 // 트렌드 아이콘
-function TrendIcon({ trend, value }: { trend: 'up' | 'down' | 'stable'; value: number }) {
+function TrendIcon({ trend, value, stableLabel }: { trend: 'up' | 'down' | 'stable'; value: number; stableLabel?: string }) {
   if (trend === 'up') {
     return (
       <span className="flex items-center gap-1 text-red-400 text-sm">
@@ -84,7 +86,7 @@ function TrendIcon({ trend, value }: { trend: 'up' | 'down' | 'stable'; value: n
   return (
     <span className="flex items-center gap-1 text-slate-400 text-sm">
       <Activity className="w-4 h-4" />
-      Stable
+      {stableLabel || 'Stable'}
     </span>
   );
 }
@@ -99,6 +101,9 @@ function RegionCard({
   expanded: boolean;
   onToggle: () => void;
 }) {
+  const { t, i18n } = useTranslation('platform');
+  const isKo = i18n.language === 'ko';
+
   return (
     <div className="card overflow-hidden">
       <button
@@ -110,8 +115,8 @@ function RegionCard({
             className={`w-3 h-3 rounded-full ${getGAIIBgColor(region.weightedGaii)}`}
           />
           <div className="text-left">
-            <p className="text-white font-medium">{region.name}</p>
-            <p className="text-slate-500 text-sm">{region.nameKo}</p>
+            <p className="text-white font-medium">{isKo ? region.nameKo : region.name}</p>
+            <p className="text-slate-500 text-sm">{isKo ? region.name : region.nameKo}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -119,7 +124,7 @@ function RegionCard({
             <p className={`text-lg font-bold ${getGAIIColor(region.weightedGaii)}`}>
               {region.weightedGaii.toFixed(0)}
             </p>
-            <TrendIcon trend={region.trend} value={region.trendValue} />
+            <TrendIcon trend={region.trend} value={region.trendValue} stableLabel={t('gaii.trend.stable')} />
           </div>
           {expanded ? (
             <ChevronUp className="w-5 h-5 text-slate-400" />
@@ -135,7 +140,7 @@ function RegionCard({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Cpu className="w-4 h-4 text-neos-blue" />
-                <span className="text-xs text-slate-400">Avg AI Adoption</span>
+                <span className="text-xs text-slate-400">{t('gaii.regional.avgAdoption')}</span>
               </div>
               <p className="text-lg font-semibold text-white">{region.avgAdoptionRate.toFixed(1)}%</p>
               <div className="mt-2 h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -148,7 +153,7 @@ function RegionCard({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <BarChart3 className="w-4 h-4 text-purple-400" />
-                <span className="text-xs text-slate-400">Avg GAII</span>
+                <span className="text-xs text-slate-400">{t('gaii.regional.avgGaii')}</span>
               </div>
               <p className="text-lg font-semibold text-white">{region.avgGaii.toFixed(1)}</p>
               <div className="mt-2 h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -170,11 +175,11 @@ function RegionCard({
           <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center justify-between">
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <Users className="w-4 h-4" />
-              <span>Population: {region.totalPopulation.toFixed(0)}M</span>
+              <span>{t('gaii.regional.population')}: {region.totalPopulation.toFixed(0)}M</span>
             </div>
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <Globe className="w-4 h-4" />
-              <span>{region.countryCount} countries</span>
+              <span>{region.countryCount} {t('gaii.regional.countries')}</span>
             </div>
             <span
               className={`px-2 py-1 text-xs rounded-full ${
@@ -183,7 +188,7 @@ function RegionCard({
                   : 'bg-red-500/20 text-red-400'
               }`}
             >
-              {getGAIILabel(region.weightedGaii)}
+              {t(getGAIIGradeKey(region.weightedGaii))}
             </span>
           </div>
         </div>
@@ -194,21 +199,24 @@ function RegionCard({
 
 // 국가 카드 컴포넌트
 function CountryCard({ country }: { country: CountryGAIIData }) {
+  const { t, i18n } = useTranslation('platform');
+  const isKo = i18n.language === 'ko';
+
   return (
     <div className="p-3 bg-slate-800/50 rounded-lg hover:bg-slate-800/70 transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${getGAIIBgColor(country.gaii)}`} />
           <div>
-            <p className="text-white text-sm font-medium">{country.name}</p>
-            <p className="text-slate-500 text-xs">{country.nameKo}</p>
+            <p className="text-white text-sm font-medium">{isKo ? country.nameKo : country.name}</p>
+            <p className="text-slate-500 text-xs">{isKo ? country.name : country.nameKo}</p>
           </div>
         </div>
         <div className="text-right">
           <p className={`text-sm font-bold ${getGAIIColor(country.gaii)}`}>
             {country.gaii.toFixed(1)}
           </p>
-          <p className="text-slate-500 text-xs">{country.adoptionRate}% adoption</p>
+          <p className="text-slate-500 text-xs">{country.adoptionRate}% {t('gaii.adoption')}</p>
         </div>
       </div>
     </div>
@@ -216,6 +224,7 @@ function CountryCard({ country }: { country: CountryGAIIData }) {
 }
 
 export default function GAIIDashboard() {
+  const { t } = useTranslation('platform');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedRegion, setExpandedRegion] = useState<string | null>(null);
@@ -235,11 +244,11 @@ export default function GAIIDashboard() {
       // 시뮬레이션 로딩 (실제 API 연동 시 제거)
       await new Promise((resolve) => setTimeout(resolve, 500));
     } catch {
-      setError('Failed to load GAII data. Please try again.');
+      setError(t('gaii.dashboard.error'));
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchData();
@@ -262,7 +271,7 @@ export default function GAIIDashboard() {
             <div className="absolute inset-0 rounded-full border-4 border-slate-700" />
             <div className="absolute inset-0 rounded-full border-4 border-neos-blue border-t-transparent animate-spin" />
           </div>
-          <p className="text-slate-400">Loading GAII data...</p>
+          <p className="text-slate-400">{t('gaii.dashboard.loading')}</p>
         </div>
       </div>
     );
@@ -278,10 +287,10 @@ export default function GAIIDashboard() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-neos-blue to-cyan-500 flex items-center justify-center">
                 <Globe className="w-5 h-5 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-white">GAII Dashboard</h1>
+              <h1 className="text-3xl font-bold text-white">{t('gaii.dashboard.title')}</h1>
             </div>
             <p className="text-slate-400">
-              Global AI Inequality Index - AI 불평등 실시간 모니터링
+              {t('gaii.dashboard.subtitle')}
             </p>
           </div>
           <button
@@ -290,7 +299,7 @@ export default function GAIIDashboard() {
             className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Refresh</span>
+            <span className="hidden sm:inline">{t('gaii.dashboard.refresh')}</span>
           </button>
         </div>
 
@@ -312,7 +321,7 @@ export default function GAIIDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Score */}
             <div className="lg:col-span-1 flex flex-col items-center justify-center">
-              <p className="text-slate-400 text-sm mb-2">Global GAII Score</p>
+              <p className="text-slate-400 text-sm mb-2">{t('gaii.globalIndex.title')}</p>
               <div className="relative w-40 h-40">
                 {/* Background circle */}
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
@@ -346,12 +355,12 @@ export default function GAIIDashboard() {
                   <span className={`text-4xl font-bold ${getGAIIColor(globalData.globalGaii)}`}>
                     {globalData.globalGaii.toFixed(0)}
                   </span>
-                  <span className="text-slate-500 text-sm">/ 100</span>
+                  <span className="text-slate-500 text-sm">{t('gaii.globalIndex.outOf')}</span>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <TrendIcon trend="down" value={2.1} />
-                <span className="text-slate-500 text-sm">vs last month</span>
+                <TrendIcon trend="down" value={2.1} stableLabel={t('gaii.trend.stable')} />
+                <span className="text-slate-500 text-sm">{t('gaii.trend.vsLastMonth')}</span>
               </div>
               <span
                 className={`mt-2 px-3 py-1 text-sm rounded-full ${
@@ -360,7 +369,7 @@ export default function GAIIDashboard() {
                     : 'bg-red-500/20 text-red-400'
                 }`}
               >
-                {getGAIILabel(globalData.globalGaii)}
+                {t(getGAIIGradeKey(globalData.globalGaii))}
               </span>
             </div>
 
@@ -369,52 +378,52 @@ export default function GAIIDashboard() {
               <div className="p-4 bg-slate-800/50 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <Cpu className="w-5 h-5 text-neos-blue" />
-                  <span className="text-slate-400 text-sm">Global Adoption Rate</span>
+                  <span className="text-slate-400 text-sm">{t('gaii.metrics.adoptionRate.title')}</span>
                 </div>
                 <p className="text-3xl font-bold text-white mb-1">
                   {globalData.globalAdoptionRate.toFixed(1)}%
                 </p>
                 <p className="text-slate-500 text-xs">
-                  average AI adoption across all countries
+                  {t('gaii.metrics.adoptionRate.description')}
                 </p>
               </div>
 
               <div className="p-4 bg-slate-800/50 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <DollarSign className="w-5 h-5 text-green-400" />
-                  <span className="text-slate-400 text-sm">Inequality Gap</span>
+                  <span className="text-slate-400 text-sm">{t('gaii.metrics.inequalityGap.title')}</span>
                 </div>
                 <p className="text-3xl font-bold text-white mb-1">
                   {globalData.inequalityGap.toFixed(1)}%
                 </p>
                 <p className="text-slate-500 text-xs">
-                  Global North vs South adoption gap
+                  {t('gaii.metrics.inequalityGap.description')}
                 </p>
               </div>
 
               <div className="p-4 bg-slate-800/50 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <Globe className="w-5 h-5 text-purple-400" />
-                  <span className="text-slate-400 text-sm">Countries Tracked</span>
+                  <span className="text-slate-400 text-sm">{t('gaii.metrics.countriesTracked.title')}</span>
                 </div>
                 <p className="text-3xl font-bold text-white mb-1">
                   {globalData.countries.length}
                 </p>
                 <p className="text-slate-500 text-xs">
-                  countries with GAII data
+                  {t('gaii.metrics.countriesTracked.description')}
                 </p>
               </div>
 
               <div className="p-4 bg-slate-800/50 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <Users className="w-5 h-5 text-jeong-orange" />
-                  <span className="text-slate-400 text-sm">Total Population</span>
+                  <span className="text-slate-400 text-sm">{t('gaii.metrics.totalPopulation.title')}</span>
                 </div>
                 <p className="text-3xl font-bold text-white mb-1">
                   {(globalData.totalPopulation / 1000).toFixed(1)}B
                 </p>
                 <p className="text-slate-500 text-xs">
-                  population covered
+                  {t('gaii.metrics.totalPopulation.description')}
                 </p>
               </div>
             </div>
@@ -425,11 +434,9 @@ export default function GAIIDashboard() {
         <div className="mb-8 p-4 bg-neos-blue/10 border border-neos-blue/30 rounded-lg flex items-start gap-3">
           <Info className="w-5 h-5 text-neos-blue flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-neos-blue font-medium mb-1">About GAII</p>
+            <p className="text-neos-blue font-medium mb-1">{t('gaii.about.title')}</p>
             <p className="text-slate-400 text-sm">
-              GAII (Global AI Inequality Index)는 AI 접근성의 불평등을 측정하는 지표입니다.
-              0은 완전한 평등, 100은 극심한 불평등을 의미합니다.
-              데이터 소스: Microsoft Global AI Adoption 2025 Report
+              {t('gaii.about.description')}
             </p>
           </div>
         </div>
@@ -438,11 +445,10 @@ export default function GAIIDashboard() {
         <div className="card p-6 mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Map className="w-5 h-5 text-slate-400" />
-            <h2 className="text-xl font-semibold text-white">Global GAII Map</h2>
+            <h2 className="text-xl font-semibold text-white">{t('gaii.worldMap.title')}</h2>
           </div>
           <p className="text-slate-400 text-sm mb-4">
-            국가를 클릭하면 상세 정보를 확인할 수 있습니다. 색상이 빨간색에 가까울수록 AI 불평등이 심각합니다.
-            회색 국가는 데이터가 없습니다.
+            {t('gaii.worldMap.description')}
           </p>
           <WorldMap
             selectedCountry={selectedCountry}
@@ -467,8 +473,8 @@ export default function GAIIDashboard() {
           <div className="card p-6">
             <div className="flex items-center gap-3 mb-4">
               <TrendingDown className="w-5 h-5 text-green-400" />
-              <h3 className="text-lg font-semibold text-white">Top 5 Countries</h3>
-              <span className="text-xs text-slate-500">(Lowest GAII)</span>
+              <h3 className="text-lg font-semibold text-white">{t('gaii.topCountries.title')}</h3>
+              <span className="text-xs text-slate-500">{t('gaii.topCountries.subtitle')}</span>
             </div>
             <div className="space-y-3">
               {topCountries.map((country, idx) => (
@@ -484,8 +490,8 @@ export default function GAIIDashboard() {
           <div className="card p-6">
             <div className="flex items-center gap-3 mb-4">
               <TrendingUp className="w-5 h-5 text-red-400" />
-              <h3 className="text-lg font-semibold text-white">Bottom 5 Countries</h3>
-              <span className="text-xs text-slate-500">(Highest GAII)</span>
+              <h3 className="text-lg font-semibold text-white">{t('gaii.bottomCountries.title')}</h3>
+              <span className="text-xs text-slate-500">{t('gaii.bottomCountries.subtitle')}</span>
             </div>
             <div className="space-y-3">
               {bottomCountries.map((country, idx) => (
@@ -503,18 +509,18 @@ export default function GAIIDashboard() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <MapPin className="w-5 h-5 text-slate-400" />
-              <h2 className="text-xl font-semibold text-white">Regional Analysis</h2>
+              <h2 className="text-xl font-semibold text-white">{t('gaii.regional.title')}</h2>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-slate-500 text-sm">Sort by:</span>
+              <span className="text-slate-500 text-sm">{t('gaii.regional.sortBy')}:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                 className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-neos-blue"
               >
-                <option value="gaii">GAII Score</option>
-                <option value="population">Population</option>
-                <option value="name">Name</option>
+                <option value="gaii">{t('gaii.regional.options.gaii')}</option>
+                <option value="population">{t('gaii.regional.options.population')}</option>
+                <option value="name">{t('gaii.regional.options.name')}</option>
               </select>
             </div>
           </div>
@@ -538,7 +544,7 @@ export default function GAIIDashboard() {
         <div className="card p-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <BarChart3 className="w-5 h-5 text-slate-400" />
-            <h2 className="text-xl font-semibold text-white">Regional Comparison</h2>
+            <h2 className="text-xl font-semibold text-white">{t('gaii.comparison.title')}</h2>
           </div>
           <div className="space-y-4">
             {sortedRegions.map((region) => (
@@ -548,7 +554,7 @@ export default function GAIIDashboard() {
                     <span className="text-white font-medium w-28 sm:w-48 truncate">
                       {region.name}
                     </span>
-                    <TrendIcon trend={region.trend} value={region.trendValue} />
+                    <TrendIcon trend={region.trend} value={region.trendValue} stableLabel={t('gaii.trend.stable')} />
                   </div>
                   <span className={`font-bold ${getGAIIColor(region.weightedGaii)}`}>
                     {region.weightedGaii.toFixed(0)}
@@ -570,10 +576,10 @@ export default function GAIIDashboard() {
         {/* Footer Info */}
         <div className="text-center text-slate-500 text-sm">
           <p>
-            Last updated: {globalData.lastUpdated}
+            {t('gaii.dashboard.lastUpdated')}: {globalData.lastUpdated}
           </p>
           <p className="mt-1">
-            Data sources: {globalData.dataSources.join(', ')}
+            {t('gaii.dashboard.dataSources')}: {globalData.dataSources.join(', ')}
           </p>
         </div>
       </div>

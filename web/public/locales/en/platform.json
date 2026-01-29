@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "GAII Dashboard",
+      "subtitle": "Global AI Inequality Index - Real-time AI Inequality Monitoring",
+      "loading": "Loading GAII data...",
+      "error": "Failed to load GAII data. Please try again.",
+      "refresh": "Refresh",
+      "lastUpdated": "Last updated",
+      "dataSources": "Data sources"
+    },
+    "grades": {
+      "low": "Low Inequality",
+      "moderate": "Moderate",
+      "high": "High Inequality",
+      "critical": "Critical"
+    },
+    "trend": {
+      "stable": "Stable",
+      "vsLastMonth": "vs last month"
+    },
+    "globalIndex": {
+      "title": "Global GAII Score",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "Global Adoption Rate",
+        "description": "Average AI adoption across all countries"
+      },
+      "inequalityGap": {
+        "title": "Inequality Gap",
+        "description": "Global North vs South adoption gap"
+      },
+      "countriesTracked": {
+        "title": "Countries Tracked",
+        "description": "Countries with GAII data"
+      },
+      "totalPopulation": {
+        "title": "Total Population",
+        "description": "Population covered"
+      }
+    },
+    "about": {
+      "title": "About GAII",
+      "description": "GAII (Global AI Inequality Index) measures AI accessibility inequality. 0 means complete equality, 100 means extreme inequality. Data Source: Microsoft Global AI Adoption 2025 Report"
+    },
+    "worldMap": {
+      "title": "Global GAII Map",
+      "description": "Click on a country to see details. The redder the color, the more severe the AI inequality. Gray countries have no data."
+    },
+    "topCountries": {
+      "title": "Top 5 Countries",
+      "subtitle": "(Lowest GAII)"
+    },
+    "bottomCountries": {
+      "title": "Bottom 5 Countries",
+      "subtitle": "(Highest GAII)"
+    },
+    "regional": {
+      "title": "Regional Analysis",
+      "sortBy": "Sort by",
+      "options": {
+        "gaii": "GAII Score",
+        "population": "Population",
+        "name": "Name"
+      },
+      "avgAdoption": "Avg AI Adoption",
+      "avgGaii": "Avg GAII",
+      "population": "Population",
+      "countries": "countries"
+    },
+    "comparison": {
+      "title": "Regional Comparison"
+    },
+    "adoption": "adoption"
+  },
+  "gaiiReport": {
+    "version": "Version",
+    "reportTitle": "Global AI Inequality Index Report",
+    "reportSubtitle": "Measuring AI Access, Affordability, Language Support, and Skills Across 50 Countries",
+    "header": {
+      "publishedBy": "Published by",
+      "keyFindings": "Key findings from the GAII Report v1.0"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "AI Inequality is Real and Measurable",
+        "description": "The average GAII score is {{score}}, indicating significant global AI inequality."
+      },
+      "northSouthGap": {
+        "title": "Global North vs South Gap",
+        "description": "AI adoption in developed countries ({{north}}%) is {{ratio}}x higher than developing regions ({{south}}%)."
+      },
+      "affordability": {
+        "title": "Affordability is the Biggest Barrier",
+        "description": "Global average affordability score is only {{score}}/100, with AI costs consuming up to 30% of income in the poorest countries."
+      },
+      "language": {
+        "title": "Language Support is Critical",
+        "description": "Languages spoken by billions have limited AI support, with average language score of {{score}}/100."
+      }
+    },
+    "callToAction": "AI companies, governments, and international organizations must work together to close the AI inequality gap. The AlmaNEO Foundation calls for tiered pricing, multilingual AI development, and investment in digital infrastructure to ensure AI benefits all of humanity.",
+    "insights": {
+      "globalDivide": {
+        "title": "The Global AI Divide is Widening",
+        "description": "AI adoption in Global North (33.2%) is 3.5x higher than Global South (9.5%), creating a digital divide that reinforces existing inequalities.",
+        "recommendation": "Prioritize infrastructure investment and affordable AI access in developing regions."
+      },
+      "affordabilityCosts": {
+        "title": "AI Costs Burden Low-Income Countries",
+        "description": "In countries like Bangladesh and Pakistan, AI subscription costs represent 25-28% of average monthly income, making AI tools inaccessible for most citizens.",
+        "recommendation": "Develop tiered pricing models and free tiers for low-income regions."
+      },
+      "languageBarrier": {
+        "title": "Language Barrier Excludes Billions",
+        "description": "Over 3 billion people speak languages with limited AI support. Local language AI quality averages only 35/100 in South Asia and 28/100 in Sub-Saharan Africa.",
+        "recommendation": "Invest in multilingual AI models and community-driven translation efforts."
+      },
+      "infrastructureGap": {
+        "title": "Infrastructure Gap in Rural Areas",
+        "description": "Urban-rural digital divide persists even in middle-income countries. Internet penetration drops by 30-40% in rural areas.",
+        "recommendation": "Expand mobile connectivity and offline-capable AI applications."
+      },
+      "aiLiteracy": {
+        "title": "AI Literacy Crisis",
+        "description": "Global average AI literacy score is only 42/100. Even in developed countries, over 60% of the population lacks basic AI understanding.",
+        "recommendation": "Integrate AI education into school curricula and workforce training programs."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "Implement Tiered Pricing for Emerging Markets",
+        "description": "AI companies should offer income-adjusted pricing tiers, making AI tools accessible to users in low-income countries at $1-5/month instead of $20+.",
+        "impact": "Could increase AI access for 2+ billion people in Global South."
+      },
+      "nationalInfrastructure": {
+        "title": "Invest in National AI Infrastructure",
+        "description": "Governments should prioritize broadband expansion, data center development, and public AI computing resources.",
+        "impact": "Foundational requirement for AI democratization."
+      },
+      "multilingualSupport": {
+        "title": "Expand Multilingual AI Support",
+        "description": "Prioritize development of AI capabilities in underserved languages including Hindi, Bengali, Swahili, and Vietnamese.",
+        "impact": "Would serve 2.5+ billion speakers of underserved languages."
+      },
+      "aiLiteracyPrograms": {
+        "title": "Launch AI Literacy Programs",
+        "description": "Partner with local organizations to deliver AI education through community centers, libraries, and mobile units.",
+        "impact": "Build grassroots AI capability in underserved communities."
+      },
+      "equityFund": {
+        "title": "Establish Global AI Equity Fund",
+        "description": "Create international funding mechanism to subsidize AI access for least developed countries.",
+        "impact": "Systematic approach to addressing AI inequality."
+      },
+      "gaiiMetric": {
+        "title": "Include GAII in National Development Metrics",
+        "description": "Adopt GAII as official indicator alongside HDI and GDP to track AI inequality.",
+        "impact": "Increases visibility and accountability for AI equity."
+      }
+    },
+    "regionalInsights": {
+      "NA": "North America shows high AI adoption but significant cost barriers for lower-income populations.",
+      "EU": "Europe demonstrates strong infrastructure but varies widely in AI literacy across member states.",
+      "EA": "East Asia leads in infrastructure quality with South Korea and Singapore as global leaders.",
+      "SA": "South Asia faces major affordability challenges with AI subscriptions costing up to 28% of monthly income.",
+      "SEA": "Southeast Asia shows rapid growth potential with Singapore as regional hub.",
+      "LA": "Latin America benefits from Spanish language support but faces infrastructure gaps.",
+      "ME": "Middle East shows polarized development with UAE leading while conflict zones lag behind.",
+      "SSA": "Sub-Saharan Africa has critical infrastructure and affordability gaps requiring urgent intervention.",
+      "OC": "Oceania achieves near-universal access with Australia and New Zealand as benchmarks.",
+      "CA": "Central Asia shows moderate development with growing investment in digital infrastructure."
+    },
+    "targets": {
+      "governments": "Governments",
+      "corporations": "Corporations",
+      "ngos": "NGOs",
+      "international": "International"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "Executive Summary",
+        "subtitle": "Key findings from the GAII Report v1.0"
+      },
+      "countryRankings": {
+        "title": "Country Rankings",
+        "subtitle": "GAII scores for 50 countries (lower is better)"
+      },
+      "regionalAnalysis": {
+        "title": "Regional Analysis",
+        "subtitle": "GAII breakdown by world region"
+      },
+      "keyInsights": {
+        "title": "Key Insights",
+        "subtitle": "Critical findings and observations"
+      },
+      "recommendations": {
+        "title": "Policy Recommendations",
+        "subtitle": "Actions for stakeholders to address AI inequality"
+      },
+      "methodology": {
+        "title": "Methodology",
+        "subtitle": "How GAII scores are calculated"
+      },
+      "dataSources": {
+        "title": "Data Sources",
+        "subtitle": "Primary data sources used in this report"
+      }
+    },
+    "stats": {
+      "globalGaii": "Global GAII Score",
+      "countriesAnalyzed": "Countries Analyzed",
+      "populationCovered": "Population Covered",
+      "inequalityGap": "Inequality Gap"
+    },
+    "indicators": {
+      "access": "Access",
+      "affordability": "Affordability",
+      "language": "Language",
+      "skill": "Skill",
+      "globalAverage": "Global Average by Indicator"
+    },
+    "table": {
+      "rank": "Rank",
+      "country": "Country",
+      "gaii": "GAII",
+      "grade": "Grade",
+      "showLess": "Show Less",
+      "showAll": "Show All {{count}} Countries"
+    },
+    "region": {
+      "countries": "countries",
+      "top": "Top",
+      "bottom": "Bottom"
+    },
+    "methodology": {
+      "formula": "Formula",
+      "weights": "Indicator Weights",
+      "thresholds": "Grade Thresholds",
+      "thresholdDesc": {
+        "low": "Best AI equality",
+        "moderate": "Room for improvement",
+        "high": "Significant inequality",
+        "critical": "Urgent intervention needed"
+      }
+    },
+    "priority": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low"
+    },
+    "impact": "Impact",
+    "cta": {
+      "title": "Join the Movement for AI Equality",
+      "learnMore": "Learn More About AlmaNEO",
+      "downloadPdf": "Download Full Report (PDF)",
+      "loadingPdf": "Loading PDF...",
+      "generatingPdf": "Generating PDF..."
+    }
+  }
+}

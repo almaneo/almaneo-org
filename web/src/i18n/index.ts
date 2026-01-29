@@ -46,7 +46,7 @@ export const initPromise = i18n
       lookupLocalStorage: 'almaneo-language',
     },
 
-    ns: ['common', 'landing'],
+    ns: ['common', 'landing', 'platform'],
     defaultNS: 'common',
 
     react: {

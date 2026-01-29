@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "GAII 대시보드",
+      "subtitle": "Global AI Inequality Index - AI 불평등 실시간 모니터링",
+      "loading": "GAII 데이터 로딩 중...",
+      "error": "GAII 데이터를 불러오지 못했습니다. 다시 시도해 주세요.",
+      "refresh": "새로고침",
+      "lastUpdated": "마지막 업데이트",
+      "dataSources": "데이터 출처"
+    },
+    "grades": {
+      "low": "낮은 불평등",
+      "moderate": "보통",
+      "high": "높은 불평등",
+      "critical": "심각"
+    },
+    "trend": {
+      "stable": "안정",
+      "vsLastMonth": "전월 대비"
+    },
+    "globalIndex": {
+      "title": "글로벌 GAII 점수",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "글로벌 AI 채택률",
+        "description": "전체 국가 평균 AI 채택률"
+      },
+      "inequalityGap": {
+        "title": "불평등 격차",
+        "description": "선진국과 Global South 채택률 격차"
+      },
+      "countriesTracked": {
+        "title": "추적 국가",
+        "description": "GAII 데이터가 있는 국가"
+      },
+      "totalPopulation": {
+        "title": "총 인구",
+        "description": "데이터 적용 인구"
+      }
+    },
+    "about": {
+      "title": "GAII 소개",
+      "description": "GAII(Global AI Inequality Index)는 AI 접근성의 불평등을 측정하는 지표입니다. 0은 완전한 평등, 100은 극심한 불평등을 의미합니다. 데이터 소스: Microsoft Global AI Adoption 2025 Report"
+    },
+    "worldMap": {
+      "title": "글로벌 GAII 지도",
+      "description": "국가를 클릭하면 상세 정보를 확인할 수 있습니다. 색상이 빨간색에 가까울수록 AI 불평등이 심각합니다. 회색 국가는 데이터가 없습니다."
+    },
+    "topCountries": {
+      "title": "상위 5개국",
+      "subtitle": "(낮은 GAII)"
+    },
+    "bottomCountries": {
+      "title": "하위 5개국",
+      "subtitle": "(높은 GAII)"
+    },
+    "regional": {
+      "title": "지역별 분석",
+      "sortBy": "정렬 기준",
+      "options": {
+        "gaii": "GAII 점수",
+        "population": "인구",
+        "name": "이름"
+      },
+      "avgAdoption": "평균 AI 채택률",
+      "avgGaii": "평균 GAII",
+      "population": "인구",
+      "countries": "개국"
+    },
+    "comparison": {
+      "title": "지역 비교"
+    },
+    "adoption": "채택률"
+  },
+  "gaiiReport": {
+    "version": "버전",
+    "reportTitle": "글로벌 AI 불평등 지수 리포트",
+    "reportSubtitle": "50개국의 AI 접근성, 비용 적정성, 언어 지원, 역량 측정",
+    "header": {
+      "publishedBy": "발행",
+      "keyFindings": "GAII 리포트 v1.0 주요 발견"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "AI 불평등은 실재하며 측정 가능합니다",
+        "description": "평균 GAII 점수는 {{score}}점으로, 전 세계적으로 상당한 AI 불평등이 존재함을 보여줍니다."
+      },
+      "northSouthGap": {
+        "title": "글로벌 북반구 vs 남반구 격차",
+        "description": "선진국의 AI 채택률({{north}}%)은 개발도상국({{south}}%)보다 {{ratio}}배 높습니다."
+      },
+      "affordability": {
+        "title": "비용이 가장 큰 장벽입니다",
+        "description": "글로벌 평균 비용 적정성 점수는 {{score}}/100에 불과하며, 최빈국에서는 AI 비용이 소득의 30%까지 차지합니다."
+      },
+      "language": {
+        "title": "언어 지원이 핵심입니다",
+        "description": "수십억 명이 사용하는 언어들이 제한적인 AI 지원을 받고 있으며, 평균 언어 점수는 {{score}}/100입니다."
+      }
+    },
+    "callToAction": "AI 기업, 정부, 국제기구는 AI 불평등 격차를 해소하기 위해 협력해야 합니다. AlmaNEO 재단은 차등 가격제, 다국어 AI 개발, 디지털 인프라 투자를 통해 AI의 혜택이 모든 인류에게 돌아가도록 촉구합니다.",
+    "insights": {
+      "globalDivide": {
+        "title": "글로벌 AI 격차가 심화되고 있습니다",
+        "description": "글로벌 북반구(33.2%)의 AI 채택률은 글로벌 남반구(9.5%)보다 3.5배 높아, 기존 불평등을 강화하는 디지털 격차를 만들고 있습니다.",
+        "recommendation": "개발도상 지역에 인프라 투자와 합리적인 AI 접근성을 우선시해야 합니다."
+      },
+      "affordabilityCosts": {
+        "title": "AI 비용이 저소득 국가에 부담이 됩니다",
+        "description": "방글라데시, 파키스탄과 같은 국가에서 AI 구독 비용은 월평균 소득의 25-28%를 차지하여 대부분의 시민이 AI 도구에 접근할 수 없습니다.",
+        "recommendation": "저소득 지역을 위한 차등 가격 모델과 무료 티어를 개발해야 합니다."
+      },
+      "languageBarrier": {
+        "title": "언어 장벽이 수십억 명을 배제합니다",
+        "description": "30억 명 이상이 AI 지원이 제한된 언어를 사용합니다. 현지 언어 AI 품질은 남아시아에서 평균 35/100, 사하라 이남 아프리카에서 28/100입니다.",
+        "recommendation": "다국어 AI 모델과 커뮤니티 주도의 번역 노력에 투자해야 합니다."
+      },
+      "infrastructureGap": {
+        "title": "농촌 지역의 인프라 격차",
+        "description": "중소득 국가에서도 도시-농촌 디지털 격차가 지속됩니다. 농촌 지역의 인터넷 보급률은 30-40% 낮습니다.",
+        "recommendation": "모바일 연결성과 오프라인 가능한 AI 애플리케이션을 확대해야 합니다."
+      },
+      "aiLiteracy": {
+        "title": "AI 리터러시 위기",
+        "description": "글로벌 평균 AI 리터러시 점수는 42/100에 불과합니다. 선진국에서도 인구의 60% 이상이 기본적인 AI 이해가 부족합니다.",
+        "recommendation": "AI 교육을 학교 교과과정과 직업 훈련 프로그램에 통합해야 합니다."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "신흥 시장을 위한 차등 가격제 도입",
+        "description": "AI 기업은 소득에 맞는 가격 티어를 제공하여 저소득 국가 사용자가 월 $20+ 대신 $1-5로 AI 도구에 접근할 수 있도록 해야 합니다.",
+        "impact": "글로벌 남반구의 20억 명 이상에게 AI 접근성을 높일 수 있습니다."
+      },
+      "nationalInfrastructure": {
+        "title": "국가 AI 인프라 투자",
+        "description": "정부는 광대역 확대, 데이터 센터 개발, 공공 AI 컴퓨팅 자원을 우선시해야 합니다.",
+        "impact": "AI 민주화의 기초 요건입니다."
+      },
+      "multilingualSupport": {
+        "title": "다국어 AI 지원 확대",
+        "description": "힌디어, 벵골어, 스와힐리어, 베트남어를 포함한 소외된 언어의 AI 기능 개발을 우선시해야 합니다.",
+        "impact": "소외된 언어를 사용하는 25억 명 이상에게 서비스를 제공할 수 있습니다."
+      },
+      "aiLiteracyPrograms": {
+        "title": "AI 리터러시 프로그램 시작",
+        "description": "지역 단체와 협력하여 커뮤니티 센터, 도서관, 이동식 유닛을 통해 AI 교육을 제공합니다.",
+        "impact": "소외된 커뮤니티에서 기초 AI 역량을 구축합니다."
+      },
+      "equityFund": {
+        "title": "글로벌 AI 형평성 기금 설립",
+        "description": "최빈개도국의 AI 접근성을 보조하기 위한 국제 자금 메커니즘을 만듭니다.",
+        "impact": "AI 불평등 해소를 위한 체계적 접근법입니다."
+      },
+      "gaiiMetric": {
+        "title": "GAII를 국가 발전 지표에 포함",
+        "description": "HDI, GDP와 함께 AI 불평등을 추적하기 위해 GAII를 공식 지표로 채택합니다.",
+        "impact": "AI 형평성에 대한 가시성과 책임감을 높입니다."
+      }
+    },
+    "regionalInsights": {
+      "NA": "북미는 높은 AI 채택률을 보이지만 저소득층에게는 상당한 비용 장벽이 있습니다.",
+      "EU": "유럽은 강력한 인프라를 보여주지만 회원국 간 AI 리터러시에 큰 차이가 있습니다.",
+      "EA": "동아시아는 한국과 싱가포르가 글로벌 리더로서 인프라 품질에서 선두를 달리고 있습니다.",
+      "SA": "남아시아는 AI 구독료가 월 소득의 28%까지 차지하는 심각한 비용 문제에 직면해 있습니다.",
+      "SEA": "동남아시아는 싱가포르를 지역 허브로 빠른 성장 잠재력을 보여줍니다.",
+      "LA": "라틴 아메리카는 스페인어 AI 지원의 혜택을 받지만 인프라 격차가 있습니다.",
+      "ME": "중동은 UAE가 선두를 달리지만 분쟁 지역은 뒤처지는 양극화된 발전을 보여줍니다.",
+      "SSA": "사하라 이남 아프리카는 긴급한 개입이 필요한 심각한 인프라와 비용 격차를 가지고 있습니다.",
+      "OC": "오세아니아는 호주와 뉴질랜드를 벤치마크로 거의 보편적인 접근성을 달성했습니다.",
+      "CA": "중앙아시아는 디지털 인프라에 대한 투자가 증가하면서 중간 수준의 발전을 보여줍니다."
+    },
+    "targets": {
+      "governments": "정부",
+      "corporations": "기업",
+      "ngos": "NGO",
+      "international": "국제기구"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "요약",
+        "subtitle": "GAII 리포트 v1.0 주요 발견"
+      },
+      "countryRankings": {
+        "title": "국가 순위",
+        "subtitle": "50개국 GAII 점수 (낮을수록 좋음)"
+      },
+      "regionalAnalysis": {
+        "title": "지역별 분석",
+        "subtitle": "세계 지역별 GAII 분석"
+      },
+      "keyInsights": {
+        "title": "주요 인사이트",
+        "subtitle": "핵심 발견 및 관찰"
+      },
+      "recommendations": {
+        "title": "정책 권고",
+        "subtitle": "AI 불평등 해소를 위한 이해관계자 행동 방안"
+      },
+      "methodology": {
+        "title": "방법론",
+        "subtitle": "GAII 점수 산출 방식"
+      },
+      "dataSources": {
+        "title": "데이터 출처",
+        "subtitle": "본 리포트에 사용된 주요 데이터 출처"
+      }
+    },
+    "stats": {
+      "globalGaii": "글로벌 GAII 점수",
+      "countriesAnalyzed": "분석 국가",
+      "populationCovered": "적용 인구",
+      "inequalityGap": "불평등 격차"
+    },
+    "indicators": {
+      "access": "접근성",
+      "affordability": "비용 적정성",
+      "language": "언어",
+      "skill": "역량",
+      "globalAverage": "글로벌 지표 평균"
+    },
+    "table": {
+      "rank": "순위",
+      "country": "국가",
+      "gaii": "GAII",
+      "grade": "등급",
+      "showLess": "접기",
+      "showAll": "전체 {{count}}개국 보기"
+    },
+    "region": {
+      "countries": "개국",
+      "top": "상위",
+      "bottom": "하위"
+    },
+    "methodology": {
+      "formula": "공식",
+      "weights": "지표 가중치",
+      "thresholds": "등급 기준",
+      "thresholdDesc": {
+        "low": "AI 평등 최고",
+        "moderate": "개선 여지 있음",
+        "high": "상당한 불평등",
+        "critical": "긴급 개입 필요"
+      }
+    },
+    "priority": {
+      "high": "높음",
+      "medium": "중간",
+      "low": "낮음"
+    },
+    "impact": "영향",
+    "cta": {
+      "title": "AI 평등 운동에 동참하세요",
+      "learnMore": "AlmaNEO 더 알아보기",
+      "downloadPdf": "전체 리포트 다운로드 (PDF)",
+      "loadingPdf": "PDF 로딩 중...",
+      "generatingPdf": "PDF 생성 중..."
+    }
+  }
+}
