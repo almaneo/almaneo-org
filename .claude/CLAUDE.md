@@ -2719,52 +2719,74 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 57+)
+### ✅ 완료된 작업 (2026-01-31 - Session 57: 피치덱 한국어 음성 생성)
+
+#### 1. **한국어 TTS 음성 생성 완료**
+   - Google Gemini TTS API 연동 (gemini-2.5-flash-preview-tts)
+   - **Voice**: Aoede (신뢰감 있는 여성 목소리, 사용자 요청)
+   - **68개 음성 파일** 생성: `web/public/audio/proposals/polygon-grant/ko/`
+   - 총 용량: 15.94 MB
+   - TTS 스크립트: `web/scripts/generate-voice-ko.ts`
+
+#### 2. **Duration 값 업데이트**
+   - 실제 WAV 파일 크기 기반 정확한 duration 계산
+   - 공식: `(file_size - 44) / 48 + 500` ms
+   - 16개 슬라이드 68개 자막 duration 모두 업데이트
+
+#### 3. **iOS 오디오 호환성 수정**
+   - `SlideViewer.tsx` iOS Safari 지원 개선
+   - 단일 Audio 요소 재사용 (iOS 요구사항)
+   - `audio.load()` 호출 추가 (iOS 필수)
+   - 첫 인터랙션 시 무음 재생으로 오디오 잠금 해제
+
+#### 4. **커밋**
+   - `9afc9dc` - feat(web): Generate Korean TTS audio for pitch deck
+   - `6c94378` - fix(web): Add iOS audio compatibility for pitch deck
+
+---
+
+### 🔲 다음 세션 작업 (Session 58+)
 
 #### 🔴 높은 우선순위
 
-1. **피치덱 한국어 음성 생성**
-   - 한국어 TTS 스크립트 실행
-   - 현재 영어 음성 복사본 → 실제 한국어 음성으로 교체
-
-2. **GAII 페이지 i18n 완성**
+1. **GAII 페이지 i18n 완성**
    - 나머지 12개 언어에 `platform.json` 번역 파일 추가
    - 대상 언어: zh, ja, es, fr, ar, pt, id, ms, th, vi, km, sw
 
-3. **피치덱 UX 개선**
+2. **피치덱 UX 개선**
    - 볼륨 조절 슬라이더
    - 재생 속도 조절 (0.75x, 1x, 1.25x)
    - 자막 크기 조절
 
 #### 🟡 중간 우선순위
 
-4. **Governance 실제 제안 로드**
+3. **Governance 실제 제안 로드**
    - ProposalCreated 이벤트 조회
    - Mock 데이터 제거, 온체인 데이터로 교체
 
-5. **Staking 페이지 테스트**
+4. **Staking 페이지 테스트**
    - 실제 스테이킹 트랜잭션 테스트
    - UI 오류 수정
 
-6. **모바일 실기기 QA 테스트**
+5. **모바일 실기기 QA 테스트**
    - Chrome DevTools 320px, 375px, 390px, 428px 뷰포트 확인
    - 수평 스크롤바 없음 확인
    - 모든 터치 타겟 44px 이상 확인
 
 #### 🟢 낮은 우선순위
 
-7. **Grant 프로그램 신청**
+6. **Grant 프로그램 신청**
    - Google for Nonprofits 신청
    - Polygon Grants 신청
    - Vercel Pro (오픈소스) 신청
 
-8. **메인넷 배포 준비**
+7. **메인넷 배포 준비**
    - 스마트 컨트랙트 감사 검토
    - 메인넷 배포 스크립트 준비
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 56 기준)
+### 📊 페이지별 상태 요약 (Session 57 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2779,7 +2801,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Staking | ⚠️ | 테스트 미진행 |
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
-| **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어, 음성 지원, PDF 다운로드) |
+| **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어 음성 TTS, iOS 호환, PDF 다운로드) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
