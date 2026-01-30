@@ -20,8 +20,8 @@ export const polygonGrantSlides: Slide[] = [
     titleHighlight: 'Cold Code, Warm Soul',
     subtitle: 'Polygon Grant Season 4 | AI & DePIN Track',
     script: [
-      { text: '안녕하세요, AlmaNEO입니다.', duration: 3300 },
-      { text: '차가운 코드 위에 따뜻한 정을 심습니다.', duration: 3900 },
+      { text: '안녕하세요, AlmaNEO입니다.', duration: 3031 },
+      { text: '차가운 코드 위에 따뜻한 정을 심습니다.', duration: 4671 },
     ],
     autoAdvanceDelay: 9000,
   },
@@ -35,12 +35,12 @@ export const polygonGrantSlides: Slide[] = [
     imageAlt: 'AI 시대의 질문',
     title: 'AI 시대, 누가 지능을 소유하는가?',
     script: [
-      { text: '여러분, 질문 하나 드리겠습니다.', duration: 2600 },
-      { text: 'AI 시대, 과연 누가 지능을 소유하고 있을까요?', duration: 5400 },
-      { text: 'AI는 이미 글을 쓰고, 코드를 짜고, 진단까지 내립니다.', duration: 5600 },
-      { text: '그런데 이 강력한 도구, 모두가 쓸 수 있나요?', duration: 5100, highlight: true },
+      { text: '여러분, 질문 하나 드리겠습니다.', duration: 3551 },
+      { text: 'AI 시대, 과연 누가 지능을 소유하고 있을까요?', duration: 5071 },
+      { text: 'AI는 이미 글을 쓰고, 코드를 짜고, 진단까지 내립니다.', duration: 5751 },
+      { text: '그런데 이 강력한 도구, 모두가 쓸 수 있나요?', duration: 5751, highlight: true },
     ],
-    autoAdvanceDelay: 20000,
+    autoAdvanceDelay: 21000,
   },
 
   // 슬라이드 3: 문제 - 디지털 식민주의
@@ -61,10 +61,10 @@ export const polygonGrantSlides: Slide[] = [
       highlightColumn: 1,
     },
     script: [
-      { text: '이건 21세기 디지털 식민주의입니다.', duration: 4600 },
-      { text: 'AI 연산 자원? 상위 1%가 90%를 가져갑니다.', duration: 5400 },
-      { text: 'ChatGPT 월 20달러가 개발도상국에선 월급의 10~30%예요.', duration: 7800 },
-      { text: '한 쪽은 AI로 과제하고, 한 쪽은 AI 데이터 레이블링 알바를 합니다.', duration: 8900, highlight: true },
+      { text: '이건 21세기 디지털 식민주의입니다.', duration: 4671 },
+      { text: 'AI 연산 자원? 상위 1%가 90%를 가져갑니다.', duration: 6231 },
+      { text: 'ChatGPT 월 20달러가 개발도상국에선 월급의 10~30%예요.', duration: 7311 },
+      { text: '한 쪽은 AI로 과제하고, 한 쪽은 AI 데이터 레이블링 알바를 합니다.', duration: 7671, highlight: true },
     ],
     autoAdvanceDelay: 27000,
   },
@@ -86,12 +86,12 @@ export const polygonGrantSlides: Slide[] = [
       ],
     },
     script: [
-      { text: '똑같이 24살, 똑같은 꿈을 꾸는 두 청년이 있습니다.', duration: 4100 },
-      { text: '한 명은 ChatGPT로 이력서 쓰고, 한 명은 무료 한도 끝.', duration: 5200 },
-      { text: '한 명은 Copilot으로 코딩하고, 한 명은 느린 인터넷에서 검색만.', duration: 5600 },
-      { text: '1년 뒤, 5년 뒤... 이 격차 어떻게 될까요?', duration: 7100, highlight: true },
+      { text: '똑같이 24살, 똑같은 꿈을 꾸는 두 청년이 있습니다.', duration: 5471 },
+      { text: '한 명은 ChatGPT로 이력서 쓰고, 한 명은 무료 한도 끝.', duration: 5591 },
+      { text: '한 명은 Copilot으로 코딩하고, 한 명은 느린 인터넷에서 검색만.', duration: 5831 },
+      { text: '1년 뒤, 5년 뒤... 이 격차 어떻게 될까요?', duration: 5711, highlight: true },
     ],
-    autoAdvanceDelay: 22000,
+    autoAdvanceDelay: 24000,
   },
 
   // 슬라이드 5: 문제의 핵심
@@ -113,10 +113,10 @@ export const polygonGrantSlides: Slide[] = [
     `,
     quote: '"지능이 화폐화되는 순간, 기회의 평등은 신화가 됩니다."',
     script: [
-      { text: '문제를 정리해볼게요.', duration: 2800 },
-      { text: '자본이 지능을 독점하면, 기회의 불평등이 생깁니다.', duration: 5600 },
-      { text: '기회가 없으면 희망도 없어요.', duration: 4000 },
-      { text: '희망 잃은 청년이 늘면, 우리 모두의 미래가 어두워집니다.', duration: 6600, highlight: true },
+      { text: '문제를 정리해볼게요.', duration: 2551 },
+      { text: '자본이 지능을 독점하면, 기회의 불평등이 생깁니다.', duration: 5591 },
+      { text: '기회가 없으면 희망도 없어요.', duration: 3351 },
+      { text: '희망 잃은 청년이 늘면, 우리 모두의 미래가 어두워집니다.', duration: 6951, highlight: true },
     ],
     autoAdvanceDelay: 19000,
   },
@@ -132,12 +132,12 @@ export const polygonGrantSlides: Slide[] = [
     titleHighlight: '한국에서 세계로',
     quote: '정은 시간이 걸립니다. 정은 때때로 비효율적입니다. 그래서 정은 AI가 대체할 수 없는 인간 고유의 가치입니다.',
     script: [
-      { text: '한국엔 "정"이라는 말이 있어요.', duration: 4000 },
-      { text: '그냥 친절함이 아니라, 시간이 쌓여야 생기는 깊은 유대감이에요.', duration: 6000 },
-      { text: 'AI가 모든 걸 최적화하지만, 정은 최적화할 수 없습니다.', duration: 4900 },
-      { text: '이게 바로 AI가 대체 못하는 인간의 가치입니다.', duration: 6400, highlight: true },
+      { text: '한국엔 "정"이라는 말이 있어요.', duration: 4031 },
+      { text: '그냥 친절함이 아니라, 시간이 쌓여야 생기는 깊은 유대감이에요.', duration: 6311 },
+      { text: 'AI가 모든 걸 최적화하지만, 정은 최적화할 수 없습니다.', duration: 5711 },
+      { text: '이게 바로 AI가 대체 못하는 인간의 가치입니다.', duration: 5751, highlight: true },
     ],
-    autoAdvanceDelay: 22000,
+    autoAdvanceDelay: 23000,
   },
 
   // 슬라이드 7: 3대 원칙
@@ -161,12 +161,12 @@ AlmaNEO는 통계가 아닌 개인을 봅니다.
 AI가 아무리 발전해도, 최종 결정은 인간이 해야 합니다.
     `,
     script: [
-      { text: 'AlmaNEO가 지키는 세 가지 원칙입니다.', duration: 4000 },
-      { text: '첫째, 정치가 아닌 사람. 어느 나라든 청년은 같은 꿈을 꿀 자격이 있어요.', duration: 6700 },
-      { text: '둘째, 통계가 아닌 개인. GDP 말고 사람을 봅니다.', duration: 6000 },
-      { text: '셋째, 기술은 도구일 뿐. 결정은 인간이 합니다.', duration: 7500, highlight: true },
+      { text: 'AlmaNEO가 지키는 세 가지 원칙입니다.', duration: 4391 },
+      { text: '첫째, 정치가 아닌 사람. 어느 나라든 청년은 같은 꿈을 꿀 자격이 있어요.', duration: 7591 },
+      { text: '둘째, 통계가 아닌 개인. GDP 말고 사람을 봅니다.', duration: 6231 },
+      { text: '셋째, 기술은 도구일 뿐. 결정은 인간이 합니다.', duration: 6511, highlight: true },
     ],
-    autoAdvanceDelay: 25000,
+    autoAdvanceDelay: 26000,
   },
 
   // 슬라이드 8: 솔루션 개요
@@ -187,12 +187,12 @@ AI가 아무리 발전해도, 최종 결정은 인간이 해야 합니다.
       ],
     },
     script: [
-      { text: '자, 이제 솔루션 얘기할게요. The Ethical Bridge.', duration: 4700 },
-      { text: '우린 빅테크와 싸우지 않아요. 그들을 자원 공급자로 끌어들입니다.', duration: 5600 },
-      { text: 'GAII로 ESG 압박을 만들고, AI Hub로 자원을 교환합니다.', duration: 6600 },
-      { text: 'Kindness Protocol로 진짜 사람을 증명하고 보상해요.', duration: 6900, highlight: true },
+      { text: '자, 이제 솔루션 얘기할게요. The Ethical Bridge.', duration: 5471 },
+      { text: '우린 빅테크와 싸우지 않아요. 그들을 자원 공급자로 끌어들입니다.', duration: 6791 },
+      { text: 'GAII로 ESG 압박을 만들고, AI Hub로 자원을 교환합니다.', duration: 6151 },
+      { text: 'Kindness Protocol로 진짜 사람을 증명하고 보상해요.', duration: 6871, highlight: true },
     ],
-    autoAdvanceDelay: 24000,
+    autoAdvanceDelay: 26000,
   },
 
   // 슬라이드 9: GAII Dashboard
@@ -218,12 +218,12 @@ ESG 표준으로 작용하여 기업들이 이미지 제고를 위해 자원을 
 ✅ Report v1.0 발행 준비 완료
     `,
     script: [
-      { text: 'GAII Dashboard. 글로벌 AI 불평등 지수입니다.', duration: 6100 },
-      { text: '측정 안 되면 해결도 안 됩니다. 그래서 측정합니다.', duration: 4900 },
-      { text: '국가별 AI 격차, 기업별 포용성을 실시간 랭킹해요.', duration: 6200 },
-      { text: '50개국 데이터 확보, 리포트 v1.0 준비 끝났습니다.', duration: 7900, highlight: true },
+      { text: 'GAII Dashboard. 글로벌 AI 불평등 지수입니다.', duration: 5951 },
+      { text: '측정 안 되면 해결도 안 됩니다. 그래서 측정합니다.', duration: 5871 },
+      { text: '국가별 AI 격차, 기업별 포용성을 실시간 랭킹해요.', duration: 6791 },
+      { text: '50개국 데이터 확보, 리포트 v1.0 준비 끝났습니다.', duration: 8151, highlight: true },
     ],
-    autoAdvanceDelay: 26000,
+    autoAdvanceDelay: 28000,
   },
 
   // 슬라이드 10: AI Hub & Kindness Protocol
@@ -251,12 +251,12 @@ ESG 표준으로 작용하여 기업들이 이미지 제고를 위해 자원을 
       rightColor: 'cold',
     },
     script: [
-      { text: '핵심은 "교환"입니다.', duration: 3000 },
-      { text: '우리가 14개 언어 데이터와 윤리적 피드백을 주면,', duration: 4900 },
-      { text: '빅테크가 GPU 클라우드와 API 크레딧을 줍니다.', duration: 5300 },
-      { text: '이걸 착한 일 한 사람들에게 우선 재분배합니다.', duration: 6800, highlight: true },
+      { text: '핵심은 "교환"입니다.', duration: 3351 },
+      { text: '우리가 14개 언어 데이터와 윤리적 피드백을 주면,', duration: 5551 },
+      { text: '빅테크가 GPU 클라우드와 API 크레딧을 줍니다.', duration: 5471 },
+      { text: '이걸 착한 일 한 사람들에게 우선 재분배합니다.', duration: 5751, highlight: true },
     ],
-    autoAdvanceDelay: 20000,
+    autoAdvanceDelay: 21000,
   },
 
   // 슬라이드 11: 차별화
@@ -279,10 +279,10 @@ ESG 표준으로 작용하여 기업들이 이미지 제고를 위해 자원을 
       highlightColumn: 2,
     },
     script: [
-      { text: '다른 DePIN 프로젝트와 뭐가 다르냐고요?', duration: 3700 },
-      { text: '그들은 GPU 모아서 빅테크랑 싸웁니다. 규모의 경제에서 집니다.', duration: 7000 },
-      { text: '우린 싸우지 않아요. 데이터로 자원을 교환해요. 윈윈이죠.', duration: 6000 },
-      { text: '우리 타겟은 기업이 아니라, AI 접근 못 하는 청년들입니다.', duration: 7600, highlight: true },
+      { text: '다른 DePIN 프로젝트와 뭐가 다르냐고요?', duration: 3631 },
+      { text: '그들은 GPU 모아서 빅테크랑 싸웁니다. 규모의 경제에서 집니다.', duration: 6791 },
+      { text: '우린 싸우지 않아요. 데이터로 자원을 교환해요. 윈윈이죠.', duration: 5991 },
+      { text: '우리 타겟은 기업이 아니라, AI 접근 못 하는 청년들입니다.', duration: 7351, highlight: true },
     ],
     autoAdvanceDelay: 25000,
   },
@@ -306,12 +306,12 @@ ESG 표준으로 작용하여 기업들이 이미지 제고를 위해 자원을 
     },
     quote: '"기업 협력 모델에 가장 친화적인 블록체인"',
     script: [
-      { text: '왜 Polygon이냐고요?', duration: 2000 },
-      { text: '수백만 건 마이크로 트랜잭션을 싸게 처리할 수 있어요.', duration: 5100 },
-      { text: 'zkEVM으로 데이터 검증 투명하고요.', duration: 5300 },
-      { text: '스타벅스, 나이키가 선택한 체인입니다. 기업 협력에 최적이에요.', duration: 9200, highlight: true },
+      { text: '왜 Polygon이냐고요?', duration: 2471 },
+      { text: '수백만 건 마이크로 트랜잭션을 싸게 처리할 수 있어요.', duration: 5431 },
+      { text: 'zkEVM으로 데이터 검증 투명하고요.', duration: 4551 },
+      { text: '스타벅스, 나이키가 선택한 체인입니다. 기업 협력에 최적이에요.', duration: 7511, highlight: true },
     ],
-    autoAdvanceDelay: 22000,
+    autoAdvanceDelay: 21000,
   },
 
   // 슬라이드 13: 기술적 성숙도
@@ -339,13 +339,13 @@ ALMAN Token, JeongSBT, AmbassadorSBT, Staking, Governor (DAO), Airdrop, NFT Mark
 ✅ Web3Auth (소셜 로그인) | ✅ Biconomy (가스비 제거) | ✅ 14개 언어
     `,
     script: [
-      { text: '아이디어만 있는 게 아닙니다.', duration: 2800 },
-      { text: '지금 바로 체험하실 수 있어요.', duration: 3400 },
-      { text: 'almaneo.org, nft.almaneo.org, game.almaneo.org 모두 라이브입니다.', duration: 7400 },
-      { text: 'Polygon Amoy에 11개 컨트랙트 배포 완료.', duration: 4100 },
-      { text: 'Web3Auth로 소셜 로그인, Biconomy로 가스비 제로. 14개 언어 지원해요.', duration: 9000, highlight: true },
+      { text: '아이디어만 있는 게 아닙니다.', duration: 2671 },
+      { text: '지금 바로 체험하실 수 있어요.', duration: 3031 },
+      { text: 'almaneo.org, nft.almaneo.org, game.almaneo.org 모두 라이브입니다.', duration: 10351 },
+      { text: 'Polygon Amoy에 11개 컨트랙트 배포 완료.', duration: 4831 },
+      { text: 'Web3Auth로 소셜 로그인, Biconomy로 가스비 제로. 14개 언어 지원해요.', duration: 9631, highlight: true },
     ],
-    autoAdvanceDelay: 27000,
+    autoAdvanceDelay: 31000,
   },
 
   // 슬라이드 14: ALMAN 토큰
@@ -378,13 +378,13 @@ ALMAN Token, JeongSBT, AmbassadorSBT, Staking, Governor (DAO), Airdrop, NFT Mark
 **커뮤니티 최대 배분 | 팀 4년 베스팅**
     `,
     script: [
-      { text: 'ALMAN 토큰을 소개합니다.', duration: 3300 },
-      { text: '80억 토큰, 80억 인류를 위해.', duration: 4300 },
-      { text: 'Polygon 네트워크, ERC-20 표준이에요.', duration: 4200 },
-      { text: '커뮤니티에 40% 배분. 가장 큰 비율을 사용자가 가져갑니다.', duration: 5800 },
-      { text: '팀은 4년 베스팅, 1년 클리프. 롱텀 비전으로 함께합니다.', duration: 8100, highlight: true },
+      { text: 'ALMAN 토큰을 소개합니다.', duration: 2631 },
+      { text: '80억 토큰, 80억 인류를 위해.', duration: 4471 },
+      { text: 'Polygon 네트워크, ERC-20 표준이에요.', duration: 4911 },
+      { text: '커뮤니티에 40% 배분. 가장 큰 비율을 사용자가 가져갑니다.', duration: 7391 },
+      { text: '팀은 4년 베스팅, 1년 클리프. 롱텀 비전으로 함께합니다.', duration: 8791, highlight: true },
     ],
-    autoAdvanceDelay: 26000,
+    autoAdvanceDelay: 29000,
   },
 
   // 슬라이드 15: 로드맵 & 예산
@@ -415,13 +415,13 @@ ALMAN Token, JeongSBT, AmbassadorSBT, Staking, Governor (DAO), Airdrop, NFT Mark
 | 인프라 운영 | $3K ~ $5K |
     `,
     script: [
-      { text: '로드맵입니다.', duration: 2600 },
-      { text: '2025년, 인프라 구축과 Amoy 배포 완료했어요.', duration: 5400 },
-      { text: '지금은 2026년 Q1, 보안 감사와 메인넷 배포를 앞두고 있습니다.', duration: 6300 },
-      { text: 'Grant 활용 계획은요,', duration: 2300 },
-      { text: '보안 감사, Paymaster 가스비, 초기 유동성, 마케팅, 인프라에 투명하게 사용합니다.', duration: 10900, highlight: true },
+      { text: '로드맵입니다.', duration: 1911 },
+      { text: '2025년, 인프라 구축과 Amoy 배포 완료했어요.', duration: 5391 },
+      { text: '지금은 2026년 Q1, 보안 감사와 메인넷 배포를 앞두고 있습니다.', duration: 7671 },
+      { text: 'Grant 활용 계획은요,', duration: 2551 },
+      { text: '보안 감사, Paymaster 가스비, 초기 유동성, 마케팅, 인프라에 투명하게 사용합니다.', duration: 10471, highlight: true },
     ],
-    autoAdvanceDelay: 28000,
+    autoAdvanceDelay: 29000,
   },
 
   // 슬라이드 16: 맺음말 & CTA
@@ -435,13 +435,13 @@ ALMAN Token, JeongSBT, AmbassadorSBT, Staking, Governor (DAO), Airdrop, NFT Mark
     quote: '"80억 인류에게 AI의 혜택을."',
     subtitle: 'Polygon의 "Value Layer for Everyone"과 AlmaNEO의 "AI 민주화"는 완벽하게 공명합니다.',
     script: [
-      { text: '마지막으로 말씀드리고 싶은 게 있어요.', duration: 2600 },
-      { text: '거대 자본과 싸워 이기는 다윗은 멋지죠. 하지만 현실에서는 드물어요.', duration: 6000 },
-      { text: 'AlmaNEO는 다른 방법을 택했습니다.', duration: 4000 },
-      { text: '골리앗의 힘을 이용해 세상을 이롭게 만드는, 지혜로운 솔로몬이 되고자 합니다.', duration: 6600 },
-      { text: '80억 인류에게 AI의 혜택을.', duration: 5500, highlight: true },
-      { text: 'Polygon의 "Value Layer for Everyone"과 완벽하게 맞닿아 있어요.', duration: 5100 },
-      { text: 'Cold Code, Warm Soul. 함께 해주세요.', duration: 6000, highlight: true },
+      { text: '마지막으로 말씀드리고 싶은 게 있어요.', duration: 3711 },
+      { text: '거대 자본과 싸워 이기는 다윗은 멋지죠. 하지만 현실에서는 드물어요.', duration: 7111 },
+      { text: 'AlmaNEO는 다른 방법을 택했습니다.', duration: 4391 },
+      { text: '골리앗의 힘을 이용해 세상을 이롭게 만드는, 지혜로운 솔로몬이 되고자 합니다.', duration: 6831 },
+      { text: '80억 인류에게 AI의 혜택을.', duration: 5311, highlight: true },
+      { text: 'Polygon의 "Value Layer for Everyone"과 완벽하게 맞닿아 있어요.', duration: 5911 },
+      { text: 'Cold Code, Warm Soul. 함께 해주세요.', duration: 4991, highlight: true },
     ],
     autoAdvanceDelay: 36000,
   },
