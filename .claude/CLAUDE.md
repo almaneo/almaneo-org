@@ -2690,23 +2690,51 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 🔲 다음 세션 작업 (Session 56+)
+### ✅ 완료된 작업 (2026-01-30 - Session 56: 피치덱 음성 지원 & 영어 버전)
 
-#### 🔴 높은 우선순위 (피치덱 완성)
+#### 1. **피치덱 영어 버전 구현**
+   - `web/src/data/proposals/polygon-grant-en.ts` 생성 (16개 슬라이드)
+   - 영어 자막 스크립트 작성 (`SCRIPT_EN.md`)
+   - 언어 선택 UI 추가 (한국어/English 토글)
 
-1. **피치덱 영어 버전** ⭐ 다음 세션 주제
-   - `polygon-grant-en.ts` 영어 슬라이드 데이터 생성
-   - 영어 자막 스크립트 작성
-   - 언어 선택 UI 추가
+#### 2. **피치덱 음성 지원 구현**
+   - Google Gemini TTS API 연동 (Fenrir 보이스)
+   - 영어 음성 62개 파일 생성 (`public/audio/proposals/polygon-grant/en/`)
+   - 한국어 음성 폴더 생성 (영어 음성 복사, 추후 업데이트 예정)
+   - 음성 재생 토글 UI (Volume2/VolumeX 아이콘)
+   - 자막 변경 시 음성 자동 재생
 
-2. **피치덱 음성 지원**
-   - TTS 또는 사전 녹음 음성 파일
-   - 음성 + 자막 동기화
-   - 음소거/볼륨 조절 UI
+#### 3. **음성 duration 값 정확도 개선**
+   - WAV 파일 크기 기반 duration 자동 계산
+   - 공식: `(file_size - 44) / 48000 * 1000 + 500ms`
+   - 16개 슬라이드 62개 자막 duration 값 업데이트
 
-3. **GAII 페이지 i18n 완성**
+#### 4. **Footer에 Pitch Deck 링크 추가**
+   - Legal Links 섹션에 "Pitch Deck" 링크 추가
+   - `/proposals/polygon-grant` 경로
+
+#### 5. **커밋**
+   - 커밋: `1d01117` - feat(web): Add Polygon Grant pitch deck with audio support
+   - 185개 파일, +4,971줄 변경
+
+---
+
+### 🔲 다음 세션 작업 (Session 57+)
+
+#### 🔴 높은 우선순위
+
+1. **피치덱 한국어 음성 생성**
+   - 한국어 TTS 스크립트 실행
+   - 현재 영어 음성 복사본 → 실제 한국어 음성으로 교체
+
+2. **GAII 페이지 i18n 완성**
    - 나머지 12개 언어에 `platform.json` 번역 파일 추가
    - 대상 언어: zh, ja, es, fr, ar, pt, id, ms, th, vi, km, sw
+
+3. **피치덱 UX 개선**
+   - 볼륨 조절 슬라이더
+   - 재생 속도 조절 (0.75x, 1x, 1.25x)
+   - 자막 크기 조절
 
 #### 🟡 중간 우선순위
 
@@ -2736,7 +2764,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 55 기준)
+### 📊 페이지별 상태 요약 (Session 56 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2751,7 +2779,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Staking | ⚠️ | 테스트 미진행 |
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
-| **Proposal** | ✅ | 🆕 피치덱 뷰어 (한국어, PDF 다운로드) |
+| **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어, 음성 지원, PDF 다운로드) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 

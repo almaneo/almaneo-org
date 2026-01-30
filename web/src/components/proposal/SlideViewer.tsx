@@ -63,7 +63,18 @@ export default function SlideViewer({
     return `/audio/proposals/${proposal.meta.id}/${currentLanguage}/${slideStr}-${subtitleStr}.wav`;
   }, [proposal.meta.id, currentLanguage]);
 
-  // Play audio file
+  // Initialize audio element (iOS requires reusing the same Audio object)
+  const initializeAudio = useCallback(() => {
+    if (!audioRef.current) {
+      console.log('[Audio] Creating new Audio element for iOS compatibility');
+      const audio = new Audio();
+      audio.volume = 1.0;
+      audioRef.current = audio;
+    }
+    return audioRef.current;
+  }, []);
+
+  // Play audio file (iOS: reuse Audio object, only change src)
   const playAudio = useCallback((slideNumber: number, subtitleIndex: number) => {
     console.log('[Audio] playAudio called:', { slideNumber, subtitleIndex, isAudioEnabled, currentLanguage });
 
@@ -72,17 +83,22 @@ export default function SlideViewer({
       return;
     }
 
-    // Stop current audio
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    const audio = audioRef.current;
+    if (!audio) {
+      console.log('[Audio] No audio element available');
+      return;
     }
+
+    // Stop current playback
+    audio.pause();
+    audio.currentTime = 0;
 
     const audioPath = getAudioPath(slideNumber, subtitleIndex);
     console.log('[Audio] Loading:', audioPath);
 
-    const audio = new Audio(audioPath);
-    audio.volume = 1.0;
+    // Change src and play (iOS compatible)
+    audio.src = audioPath;
+    audio.load(); // Required for iOS
 
     audio.play()
       .then(() => {
@@ -91,30 +107,36 @@ export default function SlideViewer({
       .catch((error) => {
         console.error('[Audio] Error:', audioPath, error.message);
       });
-
-    audioRef.current = audio;
   }, [isAudioEnabled, getAudioPath, currentLanguage]);
 
-  // Stop audio
+  // Stop audio (don't destroy the element for iOS)
   const stopAudio = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      audioRef.current = null;
+      // Don't set to null - keep the element for iOS reuse
     }
   }, []);
 
-  // Handle audio toggle
+  // Handle audio toggle (iOS: create Audio on user gesture)
   const handleAudioToggle = useCallback(() => {
     console.log('[Audio] Toggle clicked, current state:', isAudioEnabled);
-    if (isAudioEnabled) {
+
+    if (!isAudioEnabled) {
+      // iOS: Initialize audio element on first user interaction
+      const audio = initializeAudio();
+      // Play a silent sound to unlock audio on iOS
+      audio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      audio.play().catch(() => {});
+    } else {
       stopAudio();
     }
+
     setIsAudioEnabled((prev) => {
       console.log('[Audio] New state:', !prev);
       return !prev;
     });
-  }, [isAudioEnabled, stopAudio]);
+  }, [isAudioEnabled, stopAudio, initializeAudio]);
 
   // Handle subtitle index change for audio playback
   const handleSubtitleIndexChange = useCallback((subtitleIndex: number) => {
