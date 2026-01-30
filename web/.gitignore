@@ -31,3 +31,9 @@ firebase-debug.log
 *.local
 
 .vercel
+
+# Voice generation scripts
+scripts/
+
+# Audio script files (voice generation reference)
+public/audio/proposals/*/SCRIPT_*.md

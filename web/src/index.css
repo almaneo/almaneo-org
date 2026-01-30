@@ -786,4 +786,163 @@
   .whitepaper-content .important {
     @apply bg-orange-950/30 border border-orange-800/50 rounded-lg p-4 my-4;
   }
+
+  /* =============================================
+     Proposal Viewer - Slide Presentation Styles
+     ============================================= */
+
+  /* Main slide viewer container (fullscreen) */
+  .slide-viewer {
+    @apply fixed inset-0 z-50 bg-slate-950;
+  }
+
+  /* Slide content area (전체 화면 배경) */
+  .slide-content-fullscreen {
+    @apply absolute inset-0 overflow-hidden;
+  }
+
+  /* 오버레이 헤더 (상단 고정) */
+  .slide-overlay-header {
+    @apply absolute top-0 left-0 right-0 z-30;
+    @apply transition-opacity duration-300;
+  }
+
+  /* 오버레이 컨트롤 (하단 고정) */
+  .slide-overlay-controls {
+    @apply absolute bottom-0 left-0 right-0 z-30;
+    @apply transition-opacity duration-300;
+  }
+
+  /* Proposal header bar */
+  .proposal-header {
+    @apply flex items-center justify-between px-4 py-2 bg-gradient-to-b from-black/80 to-transparent;
+    @apply h-12;
+  }
+
+  /* Subtitle container (컨트롤 바 바로 위) */
+  .subtitle-container {
+    @apply absolute bottom-28 left-1/2 -translate-x-1/2;
+    @apply w-full max-w-3xl px-4 z-10;
+  }
+
+  /* Subtitle text bubble */
+  .subtitle-text {
+    @apply text-center text-base sm:text-lg md:text-xl text-white;
+    @apply bg-black/70 backdrop-blur-sm rounded-lg px-4 sm:px-6 py-3;
+    @apply shadow-lg;
+  }
+
+  /* Typing cursor */
+  .typing-cursor {
+    @apply inline-block w-0.5 h-5 sm:h-6 bg-white ml-0.5;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Subtitle fade animations */
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-8px); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+
+  .animate-fade-out {
+    animation: fade-out 0.3s ease-out forwards;
+  }
+
+  /* Slide controls bar (bottom) */
+  .slide-controls {
+    @apply px-4 py-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent;
+    @apply pt-8;
+  }
+
+  /* Progress bar */
+  .slide-progress {
+    @apply h-1 bg-slate-700 rounded-full overflow-hidden cursor-pointer;
+  }
+
+  .slide-progress-fill {
+    @apply h-full bg-neos-blue transition-all duration-300 ease-out;
+  }
+
+  /* Control buttons */
+  .slide-control-btn {
+    @apply p-2 sm:p-2.5 rounded-lg text-slate-400 transition-all;
+    @apply hover:text-white hover:bg-slate-800;
+    @apply disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-slate-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-neos-blue/50;
+  }
+
+  .slide-control-btn-primary {
+    @apply p-2.5 sm:p-3 rounded-full bg-neos-blue text-white transition-all;
+    @apply hover:bg-neos-blue/80 hover:scale-105;
+    @apply focus:outline-none focus:ring-2 focus:ring-neos-blue/50 focus:ring-offset-2 focus:ring-offset-slate-950;
+  }
+
+  /* Slide transitions */
+  .slide-enter {
+    @apply opacity-0;
+  }
+
+  .slide-enter-active {
+    @apply opacity-100 transition-opacity duration-500;
+  }
+
+  .slide-exit {
+    @apply opacity-100;
+  }
+
+  .slide-exit-active {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  /* =============================================
+     Slide Layout Classes (전체 화면 배경)
+     ============================================= */
+
+  /* 전체 화면 배경 컨테이너 */
+  .slide-fullscreen-bg {
+    @apply absolute inset-0 overflow-hidden;
+  }
+
+  /* 콘텐츠 오버레이 (화면 중앙) */
+  .slide-content-overlay {
+    @apply relative z-10 h-full flex flex-col items-center justify-center;
+    @apply py-16 px-6 sm:px-8 lg:px-12;
+  }
+
+  /* 슬라이드 타이틀 */
+  .slide-title {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center;
+    @apply drop-shadow-lg mb-4;
+  }
+
+  /* 타이틀 하이라이트 */
+  .slide-title-highlight {
+    @apply block text-xl sm:text-2xl md:text-3xl gradient-text mt-2;
+    @apply drop-shadow-md;
+  }
+
+  /* 슬라이드 서브타이틀 */
+  .slide-subtitle {
+    @apply text-lg sm:text-xl md:text-2xl text-slate-200 italic text-center;
+    @apply drop-shadow;
+  }
+
+  /* 슬라이드 인용문 */
+  .slide-quote {
+    @apply text-center;
+  }
 }

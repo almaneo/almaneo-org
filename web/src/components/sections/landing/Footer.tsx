@@ -131,6 +131,12 @@ export function Footer() {
               >
                 Whitepaper
               </Link>
+              <Link
+                to="/proposals/polygon-grant"
+                className="text-text-subtle hover:text-text-primary transition-colors"
+              >
+                Pitch Deck
+              </Link>
             </div>
 
             {/* Tagline & Copyright */}

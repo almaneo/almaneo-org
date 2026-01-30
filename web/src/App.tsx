@@ -25,6 +25,7 @@ import {
   MeetupDetail,
   MeetupCreate,
   AIHub,
+  Proposal,
 } from './pages';
 
 // Loading component for i18n
@@ -47,6 +48,9 @@ function App() {
           <WalletProvider>
             <BrowserRouter>
               <Routes>
+                {/* Proposal Viewer (풀스크린, MainLayout 외부) */}
+                <Route path="/proposals/:proposalId" element={<Proposal />} />
+
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Home />} />
                   <Route path="/dashboard" element={<Dashboard />} />

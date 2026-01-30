@@ -35,3 +35,5 @@ export type {
 } from './useAmbassadorSBT';
 
 export { useAirdrop } from './useAirdrop';
+
+export { useSlideNavigation } from './useSlideNavigation';

@@ -21,3 +21,6 @@ export { default as MeetupCreate } from './MeetupCreate';
 
 // AI Hub
 export { default as AIHub } from './AIHub';
+
+// Proposals
+export { default as Proposal } from './Proposal';
