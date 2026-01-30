@@ -16,7 +16,7 @@ export default function QuoteSlide({ slide }: QuoteSlideProps) {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(/src/assets/images/proposal/${slide.image})`,
+          backgroundImage: `url(/images/proposal/${slide.image})`,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />

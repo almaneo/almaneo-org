@@ -18,7 +18,7 @@ export default function StatsSlide({ slide }: StatsSlideProps) {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(/src/assets/images/proposal/${slide.image})`,
+          backgroundImage: `url(/images/proposal/${slide.image})`,
         }}
       />
       {/* 그라디언트 오버레이 */}
