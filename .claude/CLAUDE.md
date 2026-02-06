@@ -2786,7 +2786,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 57 기준)
+### 📊 페이지별 상태 요약 (Session 59 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -3319,6 +3319,23 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - Etherscan V1 → V2 API 마이그레이션
    - `apiKey`를 단일 문자열로 변경
    - `customChains` 네트워크명 `polygonAmoy` → `amoy`로 통일
+
+#### 6. **Hero 섹션 리디자인 ("8B 인류" 오해 방지)**
+   - 문제: "8B tokens for 8B humans" 통계가 1인 1토큰 배분으로 오해될 수 있음
+   - 해결: 숫자 기반 통계 → 동사형 미션 필라로 변경
+   - **Measure** (측정) | **Connect** (연결) | **Democratize** (민주화)
+   - AnimatedCounter 제거, Lucide 아이콘 + 동사 헤딩 + 설명 추가
+   - `hero.mission` 번역 키 14개 언어 추가
+
+#### 7. **Tokenomics 섹션 리디자인**
+   - 타이틀: `"80억 인류, 80억 Tokens"` → `"8B ALMAN — AI 평등의 화폐"` (다국어)
+   - Token Info: "For All" 필드 제거, 그리드 5열 → 4열로 변경
+   - `tokenomics.titleMission` 번역 키 14개 언어 추가
+
+#### 8. **Footer 컨트랙트 주소 업데이트**
+   - Core Contracts 6개 → 9개로 확장 (AmbassadorSBT, TokenVesting, MiningPool 추가)
+   - 모든 주소를 TGE 배포 주소로 업데이트
+   - 커밋: `18dcb9d` (28개 파일, +1,884줄)
 
 ---
 
