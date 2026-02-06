@@ -4,6 +4,7 @@
  */
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Vote, Plus, Clock, CheckCircle, XCircle, AlertCircle, Users, Loader2, RefreshCw, Lock } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useGovernance } from '../hooks';
@@ -17,10 +18,10 @@ function formatNumber(value: string | number, decimals = 0): string {
 }
 
 // 시간 포맷팅
-function formatDuration(seconds: number): string {
-  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours`;
-  return `${Math.floor(seconds / 86400)} days`;
+function formatDuration(seconds: number, t: (key: string) => string): string {
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} ${t('governance.minutes')}`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} ${t('governance.hours')}`;
+  return `${Math.floor(seconds / 86400)} ${t('governance.days')}`;
 }
 
 // 제안 상태별 스타일
@@ -50,18 +51,17 @@ const getStateStyle = (state: ProposalState | string) => {
 };
 
 // 제안 제목 추출 (description에서 첫 줄 또는 첫 문장)
-function extractProposalTitle(description: string): string {
-  if (!description) return 'Untitled Proposal';
-  // 첫 줄 추출
+function extractProposalTitle(description: string, fallback: string): string {
+  if (!description) return fallback;
   const firstLine = description.split('\n')[0].trim();
-  // 너무 길면 자르기
   if (firstLine.length > 80) {
     return firstLine.substring(0, 77) + '...';
   }
-  return firstLine || 'Untitled Proposal';
+  return firstLine || fallback;
 }
 
 export default function Governance() {
+  const { t } = useTranslation('common');
   const { isConnected, connect: login, address } = useWallet();
   const {
     proposals,
@@ -103,12 +103,12 @@ export default function Governance() {
           {/* Header */}
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">Governance</h1>
-              <p className="text-slate-400">Participate in AlmaNEO DAO decisions</p>
+              <h1 className="text-3xl font-bold text-white mb-2">{t('governance.title')}</h1>
+              <p className="text-slate-400">{t('governance.subtitle')}</p>
             </div>
             <button className="btn-primary flex items-center gap-2 opacity-50 cursor-not-allowed" disabled>
               <Plus className="w-5 h-5" />
-              Create Proposal
+              {t('governance.createProposal')}
             </button>
           </div>
 
@@ -117,10 +117,8 @@ export default function Governance() {
             <div className="flex items-center gap-3">
               <AlertCircle className="w-6 h-6 text-yellow-400" />
               <div>
-                <h2 className="text-lg font-semibold text-white">Contract Not Deployed</h2>
-                <p className="text-slate-400 text-sm">
-                  The governance contract has not been deployed yet. Below is a preview of the governance interface.
-                </p>
+                <h2 className="text-lg font-semibold text-white">{t('governance.contractNotDeployed')}</h2>
+                <p className="text-slate-400 text-sm">{t('governance.contractNotDeployedDesc')}</p>
               </div>
             </div>
           </div>
@@ -128,31 +126,29 @@ export default function Governance() {
           {/* Preview Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
             <div className="card p-6 text-center">
-              <p className="text-3xl font-bold text-white mb-1">1 day</p>
-              <p className="text-slate-400 text-sm">Voting Delay</p>
+              <p className="text-3xl font-bold text-white mb-1">1 {t('governance.days')}</p>
+              <p className="text-slate-400 text-sm">{t('governance.votingDelay')}</p>
             </div>
             <div className="card p-6 text-center">
-              <p className="text-3xl font-bold text-white mb-1">7 days</p>
-              <p className="text-slate-400 text-sm">Voting Period</p>
+              <p className="text-3xl font-bold text-white mb-1">7 {t('governance.days')}</p>
+              <p className="text-slate-400 text-sm">{t('governance.votingPeriod')}</p>
             </div>
             <div className="card p-6 text-center">
               <p className="text-3xl font-bold text-white mb-1">100,000</p>
-              <p className="text-slate-400 text-sm">Proposal Threshold</p>
+              <p className="text-slate-400 text-sm">{t('governance.proposalThreshold')}</p>
             </div>
             <div className="card p-6 text-center">
               <p className="text-3xl font-bold text-white mb-1">4%</p>
-              <p className="text-slate-400 text-sm">Quorum</p>
+              <p className="text-slate-400 text-sm">{t('governance.currentQuorum')}</p>
             </div>
           </div>
 
           {/* Preview Proposals */}
-          <h2 className="text-xl font-semibold text-white mb-4">Proposals</h2>
+          <h2 className="text-xl font-semibold text-white mb-4">{t('governance.proposals')}</h2>
           <div className="card p-12 text-center">
             <Vote className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Coming Soon</h3>
-            <p className="text-slate-400">
-              Governance proposals will be available once the contract is deployed.
-            </p>
+            <h3 className="text-xl font-semibold text-white mb-2">{t('governance.comingSoon')}</h3>
+            <p className="text-slate-400">{t('governance.comingSoonDesc')}</p>
           </div>
         </div>
       </div>
@@ -165,16 +161,16 @@ export default function Governance() {
       <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="mb-10">
-            <h1 className="text-3xl font-bold text-white mb-2">Governance</h1>
-            <p className="text-slate-400">Participate in AlmaNEO DAO decisions</p>
+            <h1 className="text-3xl font-bold text-white mb-2">{t('governance.title')}</h1>
+            <p className="text-slate-400">{t('governance.subtitle')}</p>
           </div>
 
           <div className="card p-8 text-center">
             <Lock className="w-16 h-16 text-neos-blue mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Connect Wallet</h2>
-            <p className="text-slate-400 mb-6">Connect your wallet to participate in governance</p>
+            <h2 className="text-xl font-semibold text-white mb-2">{t('governance.connectWallet')}</h2>
+            <p className="text-slate-400 mb-6">{t('governance.connectWalletDesc')}</p>
             <button onClick={login} className="btn-primary px-8 py-3">
-              Connect Wallet
+              {t('governance.connectWallet')}
             </button>
           </div>
         </div>
@@ -188,8 +184,8 @@ export default function Governance() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Governance</h1>
-            <p className="text-slate-400">Participate in AlmaNEO DAO decisions</p>
+            <h1 className="text-3xl font-bold text-white mb-2">{t('governance.title')}</h1>
+            <p className="text-slate-400">{t('governance.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -198,15 +194,15 @@ export default function Governance() {
               className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 hover:bg-slate-700/50 transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              {t('governance.refresh')}
             </button>
             <button
               className="btn-primary flex items-center gap-2 opacity-50 cursor-not-allowed"
               disabled
-              title="Coming soon - Governance proposals will be enabled after mainnet launch"
+              title={t('governance.comingSoonTooltip')}
             >
               <Plus className="w-5 h-5" />
-              Create Proposal
+              {t('governance.createProposal')}
             </button>
           </div>
         </div>
@@ -227,12 +223,12 @@ export default function Governance() {
                 <Users className="w-6 h-6 text-neos-blue" />
               </div>
               <div>
-                <p className="text-slate-400 text-sm">Your Voting Power</p>
+                <p className="text-slate-400 text-sm">{t('governance.yourVotingPower')}</p>
                 <p className="text-2xl font-bold text-white">
                   {isLoading ? (
-                    <span className="text-slate-500">Loading...</span>
+                    <span className="text-slate-500">{t('common.loading')}</span>
                   ) : (
-                    `${formatNumber(votingPower?.votes || '0')} AlmaNEO`
+                    `${formatNumber(votingPower?.votes || '0')} ALMAN`
                   )}
                 </p>
               </div>
@@ -246,17 +242,17 @@ export default function Governance() {
                 {actionLoading === 'delegate' ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Activating...
+                    {t('governance.activating')}
                   </>
                 ) : (
-                  'Activate Voting Power'
+                  t('governance.activateVotingPower')
                 )}
               </button>
             )}
           </div>
           {votingPower && votingPower.delegated && votingPower.delegated !== address && (
             <p className="text-slate-400 text-sm mt-2">
-              Delegated to: {votingPower.delegated.slice(0, 6)}...{votingPower.delegated.slice(-4)}
+              {t('governance.delegatedTo')}: {votingPower.delegated.slice(0, 6)}...{votingPower.delegated.slice(-4)}
             </p>
           )}
         </div>
@@ -265,37 +261,37 @@ export default function Governance() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
           <div className="card p-6 text-center">
             <p className="text-2xl font-bold text-white mb-1">
-              {isLoading ? '...' : formatDuration(governanceStats?.votingDelay || 86400)}
+              {isLoading ? '...' : formatDuration(governanceStats?.votingDelay || 86400, t)}
             </p>
-            <p className="text-slate-400 text-sm">Voting Delay</p>
+            <p className="text-slate-400 text-sm">{t('governance.votingDelay')}</p>
           </div>
           <div className="card p-6 text-center">
             <p className="text-2xl font-bold text-white mb-1">
-              {isLoading ? '...' : formatDuration(governanceStats?.votingPeriod || 604800)}
+              {isLoading ? '...' : formatDuration(governanceStats?.votingPeriod || 604800, t)}
             </p>
-            <p className="text-slate-400 text-sm">Voting Period</p>
+            <p className="text-slate-400 text-sm">{t('governance.votingPeriod')}</p>
           </div>
           <div className="card p-6 text-center">
             <p className="text-2xl font-bold text-white mb-1">
               {isLoading ? '...' : formatNumber(governanceStats?.proposalThreshold || '100000')}
             </p>
-            <p className="text-slate-400 text-sm">Proposal Threshold</p>
+            <p className="text-slate-400 text-sm">{t('governance.proposalThreshold')}</p>
           </div>
           <div className="card p-6 text-center">
             <p className="text-2xl font-bold text-white mb-1">
               {isLoading ? '...' : formatNumber(governanceStats?.quorum || '0')}
             </p>
-            <p className="text-slate-400 text-sm">Current Quorum</p>
+            <p className="text-slate-400 text-sm">{t('governance.currentQuorum')}</p>
           </div>
         </div>
 
         {/* Proposals List */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">Proposals</h2>
+          <h2 className="text-xl font-semibold text-white">{t('governance.proposals')}</h2>
           {proposalsLoading && (
             <span className="text-slate-400 text-sm flex items-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin" />
-              Loading proposals...
+              {t('governance.loadingProposals')}
             </span>
           )}
         </div>
@@ -306,7 +302,7 @@ export default function Governance() {
             const totalVotes = parseFloat(proposal.forVotes) + parseFloat(proposal.againstVotes);
             const forPercent = totalVotes > 0 ? (parseFloat(proposal.forVotes) / totalVotes) * 100 : 50;
             const isVoting = votingProposalId === proposal.id;
-            const proposalTitle = extractProposalTitle(proposal.description);
+            const proposalTitle = extractProposalTitle(proposal.description, t('governance.untitledProposal'));
             const shortProposer = `${proposal.proposer.slice(0, 6)}...${proposal.proposer.slice(-4)}`;
 
             return (
@@ -320,22 +316,22 @@ export default function Governance() {
                       </span>
                       {proposal.deadline && proposal.state === ProposalState.Active && (
                         <span className="text-slate-500 text-sm">
-                          Ends: {proposal.deadline.toLocaleDateString()}
+                          {t('governance.ends')}: {proposal.deadline.toLocaleDateString()}
                         </span>
                       )}
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">{proposalTitle}</h3>
                     <p className="text-slate-400 text-sm mb-3 line-clamp-2">{proposal.description}</p>
-                    <p className="text-slate-500 text-xs">Proposed by {shortProposer}</p>
+                    <p className="text-slate-500 text-xs">{t('governance.proposedBy')} {shortProposer}</p>
                   </div>
                 </div>
 
                 {/* Vote Progress */}
                 <div className="mt-4 pt-4 border-t border-slate-700/50">
                   <div className="flex items-center justify-between text-sm mb-2">
-                    <span className="text-green-400">For: {formatNumber(proposal.forVotes)}</span>
-                    <span className="text-slate-400">Abstain: {formatNumber(proposal.abstainVotes)}</span>
-                    <span className="text-red-400">Against: {formatNumber(proposal.againstVotes)}</span>
+                    <span className="text-green-400">{t('governance.voteFor')}: {formatNumber(proposal.forVotes)}</span>
+                    <span className="text-slate-400">{t('governance.abstain')}: {formatNumber(proposal.abstainVotes)}</span>
+                    <span className="text-red-400">{t('governance.voteAgainst')}: {formatNumber(proposal.againstVotes)}</span>
                   </div>
                   <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
                     <div
@@ -357,7 +353,7 @@ export default function Governance() {
                         ) : (
                           <Vote className="w-4 h-4" />
                         )}
-                        Vote For
+                        {t('governance.voteFor')}
                       </button>
                       <button
                         onClick={() => handleVote(proposal.id, VoteSupport.Against)}
@@ -369,7 +365,7 @@ export default function Governance() {
                         ) : (
                           <Vote className="w-4 h-4" />
                         )}
-                        Vote Against
+                        {t('governance.voteAgainst')}
                       </button>
                     </div>
                   )}
@@ -378,7 +374,7 @@ export default function Governance() {
                     <div className="mt-4 text-center">
                       <span className="text-slate-400 text-sm flex items-center justify-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-400" />
-                        You have voted on this proposal
+                        {t('governance.alreadyVoted')}
                       </span>
                     </div>
                   )}
@@ -392,16 +388,14 @@ export default function Governance() {
         {!proposalsLoading && proposals.length === 0 && (
           <div className="card p-12 text-center">
             <Vote className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No Proposals Yet</h3>
-            <p className="text-slate-400 mb-6">
-              Be the first to create a proposal for the AlmaNEO community!
-            </p>
+            <h3 className="text-xl font-semibold text-white mb-2">{t('governance.noProposals')}</h3>
+            <p className="text-slate-400 mb-6">{t('governance.noProposalsDesc')}</p>
             <button
               className="btn-primary px-6 py-3 opacity-50 cursor-not-allowed"
               disabled
-              title="Coming soon - Governance proposals will be enabled after mainnet launch"
+              title={t('governance.comingSoonTooltip')}
             >
-              Create First Proposal
+              {t('governance.createFirstProposal')}
             </button>
           </div>
         )}

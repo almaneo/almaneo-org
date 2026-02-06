@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Calendar,
   MapPin,
@@ -20,6 +21,7 @@ import { useMeetups } from '../hooks/useMeetups';
 import { MEETUP_POINTS } from '../services/meetup';
 
 export default function MeetupCreate() {
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const { isConnected, isLoading: authLoading, connect: login } = useWallet();
   const { createNewMeetup, isLoading } = useMeetups();
@@ -38,34 +40,34 @@ export default function MeetupCreate() {
     const newErrors: Record<string, string> = {};
 
     if (!title.trim()) {
-      newErrors.title = '밋업 제목을 입력해주세요';
+      newErrors.title = t('meetup.errors.titleRequired');
     } else if (title.length < 5) {
-      newErrors.title = '제목은 5자 이상이어야 합니다';
+      newErrors.title = t('meetup.errors.titleMinLength');
     }
 
     if (!location.trim()) {
-      newErrors.location = '장소를 입력해주세요';
+      newErrors.location = t('meetup.errors.locationRequired');
     }
 
     if (!meetingDate) {
-      newErrors.meetingDate = '날짜를 선택해주세요';
+      newErrors.meetingDate = t('meetup.errors.dateRequired');
     } else {
       const selectedDate = new Date(meetingDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (selectedDate < today) {
-        newErrors.meetingDate = '과거 날짜는 선택할 수 없습니다';
+        newErrors.meetingDate = t('meetup.errors.datePast');
       }
     }
 
     if (!meetingTime) {
-      newErrors.meetingTime = '시간을 선택해주세요';
+      newErrors.meetingTime = t('meetup.errors.timeRequired');
     }
 
     if (maxParticipants < 3) {
-      newErrors.maxParticipants = '최소 3명 이상이어야 합니다';
+      newErrors.maxParticipants = t('meetup.errors.participantsMin');
     } else if (maxParticipants > 100) {
-      newErrors.maxParticipants = '최대 100명까지 가능합니다';
+      newErrors.maxParticipants = t('meetup.errors.participantsMax');
     }
 
     setErrors(newErrors);
@@ -104,10 +106,10 @@ export default function MeetupCreate() {
             <Wallet className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-4">
-            밋업 만들기
+            {t('meetup.connectTitle')}
           </h1>
           <p className="text-slate-400 mb-8">
-            밋업을 만들려면 지갑을 먼저 연결해주세요.
+            {t('meetup.connectDescription')}
           </p>
           <button
             onClick={login}
@@ -117,10 +119,10 @@ export default function MeetupCreate() {
             {authLoading ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Connecting...
+                {t('wallet.connect')}...
               </span>
             ) : (
-              'Connect Wallet'
+              t('wallet.connect')
             )}
           </button>
         </div>
@@ -137,14 +139,14 @@ export default function MeetupCreate() {
           className="flex items-center gap-2 text-slate-400 hover:text-white mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          밋업 목록으로
+          {t('meetup.backToList')}
         </Link>
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">새 밋업 만들기</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('meetup.createTitle')}</h1>
           <p className="text-slate-400">
-            오프라인에서 AlmaNEO 커뮤니티와 만나보세요
+            {t('meetup.createSubtitle')}
           </p>
         </div>
 
@@ -155,10 +157,12 @@ export default function MeetupCreate() {
               🎉
             </div>
             <div>
-              <p className="text-white font-medium">밋업 주최 보상</p>
+              <p className="text-white font-medium">{t('meetup.hostReward')}</p>
               <p className="text-slate-400 text-sm">
-                밋업 완료 시 <span className="text-jeong-orange">+{MEETUP_POINTS.HOST}점</span>,
-                10명 이상 참가 시 <span className="text-jeong-orange">+{MEETUP_POINTS.HOST_LARGE}점</span>
+                {t('meetup.hostRewardDesc', {
+                  host: MEETUP_POINTS.HOST,
+                  hostLarge: MEETUP_POINTS.HOST_LARGE,
+                }).replace(/<1>/g, '').replace(/<\/1>/g, '')}
               </p>
             </div>
           </div>
@@ -170,13 +174,13 @@ export default function MeetupCreate() {
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <FileText className="w-4 h-4 inline mr-2" />
-              밋업 제목 *
+              {t('meetup.fieldTitle')} *
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="예: 서울 AlmaNEO 첫 번째 밋업"
+              placeholder={t('meetup.fieldTitlePlaceholder')}
               className={`w-full p-4 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-neos-blue ${
                 errors.title ? 'border-red-500' : 'border-slate-700'
               }`}
@@ -193,12 +197,12 @@ export default function MeetupCreate() {
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              설명 (선택)
+              {t('meetup.fieldDescription')}
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="밋업에 대한 간단한 설명을 입력해주세요"
+              placeholder={t('meetup.fieldDescriptionPlaceholder')}
               rows={4}
               className="w-full p-4 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-neos-blue resize-none"
               maxLength={500}
@@ -212,13 +216,13 @@ export default function MeetupCreate() {
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <MapPin className="w-4 h-4 inline mr-2" />
-              장소 *
+              {t('meetup.fieldLocation')} *
             </label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="예: 서울시 강남구 카페 OOO"
+              placeholder={t('meetup.fieldLocationPlaceholder')}
               className={`w-full p-4 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-neos-blue ${
                 errors.location ? 'border-red-500' : 'border-slate-700'
               }`}
@@ -236,7 +240,7 @@ export default function MeetupCreate() {
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 <Calendar className="w-4 h-4 inline mr-2" />
-                날짜 *
+                {t('meetup.fieldDate')} *
               </label>
               <input
                 type="date"
@@ -257,7 +261,7 @@ export default function MeetupCreate() {
 
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                시간 *
+                {t('meetup.fieldTime')} *
               </label>
               <input
                 type="time"
@@ -280,7 +284,7 @@ export default function MeetupCreate() {
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               <Users className="w-4 h-4 inline mr-2" />
-              최대 참가자 수 *
+              {t('meetup.fieldMaxParticipants')} *
             </label>
             <input
               type="number"
@@ -299,7 +303,7 @@ export default function MeetupCreate() {
               </p>
             )}
             <p className="text-slate-500 text-xs mt-1">
-              10명 이상 참가 시 추가 보너스 점수!
+              {t('meetup.bonusNote')}
             </p>
           </div>
 
@@ -309,7 +313,7 @@ export default function MeetupCreate() {
               to="/meetup"
               className="flex-1 btn-secondary py-4 text-center"
             >
-              취소
+              {t('meetup.cancel')}
             </Link>
             <button
               type="submit"
@@ -319,10 +323,10 @@ export default function MeetupCreate() {
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  생성 중...
+                  {t('meetup.creating')}
                 </>
               ) : (
-                '밋업 만들기'
+                t('meetup.create')
               )}
             </button>
           </div>
@@ -330,12 +334,12 @@ export default function MeetupCreate() {
 
         {/* Tips */}
         <div className="mt-8 p-4 bg-slate-800/50 rounded-lg">
-          <h3 className="text-sm font-medium text-slate-300 mb-2">💡 밋업 팁</h3>
+          <h3 className="text-sm font-medium text-slate-300 mb-2">💡 {t('meetup.tipsTitle')}</h3>
           <ul className="text-slate-400 text-sm space-y-1">
-            <li>• 명확하고 구체적인 제목을 사용하세요</li>
-            <li>• 찾기 쉬운 장소를 선택하세요</li>
-            <li>• 밋업 후 24시간 내에 인증을 완료해주세요</li>
-            <li>• 3명 이상의 단체 사진을 찍어주세요</li>
+            <li>• {t('meetup.tips.tip1')}</li>
+            <li>• {t('meetup.tips.tip2')}</li>
+            <li>• {t('meetup.tips.tip3')}</li>
+            <li>• {t('meetup.tips.tip4')}</li>
           </ul>
         </div>
       </div>

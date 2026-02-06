@@ -5,6 +5,7 @@
 
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Heart,
   Users,
@@ -35,42 +36,42 @@ function shortenAddress(address: string, chars = 6): string {
   return `${address.slice(0, chars + 2)}...${address.slice(-chars)}`;
 }
 
-// 활동 타입 라벨
-const ACTIVITY_LABELS: Record<string, { label: string; icon: string }> = {
-  first_meetup: { label: '첫 밋업 참가', icon: '🎉' },
-  meetup_attend: { label: '밋업 참가', icon: '👥' },
-  meetup_host: { label: '밋업 주최', icon: '🏠' },
-  meetup_host_large: { label: '대규모 밋업 주최', icon: '🎊' },
-  onboarding: { label: '신규 사용자 온보딩', icon: '🤝' },
-  mentoring: { label: '멘토링', icon: '🎓' },
-  education_content: { label: '교육 콘텐츠 제작', icon: '📚' },
-  workshop: { label: '워크샵 진행', icon: '🎤' },
-  translation: { label: '번역 기여', icon: '🌍' },
-  community_leader: { label: '커뮤니티 리더', icon: '👑' },
-  volunteer: { label: '봉사 활동', icon: '❤️' },
-  donation: { label: '기부', icon: '💝' },
-  twitter_share: { label: 'Twitter 공유', icon: '🐦' },
-  discord_help: { label: 'Discord 도움', icon: '💬' },
-  governance_vote: { label: '거버넌스 투표', icon: '🗳️' },
-  referral: { label: '친구 초대', icon: '👋' },
-  daily_quest: { label: '일일 퀘스트', icon: '✅' },
-  weekly_mission: { label: '주간 미션', icon: '🎯' },
-  monthly_challenge: { label: '월간 챌린지', icon: '🏆' },
+// 활동 타입 아이콘
+const ACTIVITY_ICONS: Record<string, string> = {
+  first_meetup: '🎉',
+  meetup_attend: '👥',
+  meetup_host: '🏠',
+  meetup_host_large: '🎊',
+  onboarding: '🤝',
+  mentoring: '🎓',
+  education_content: '📚',
+  workshop: '🎤',
+  translation: '🌍',
+  community_leader: '👑',
+  volunteer: '❤️',
+  donation: '💝',
+  twitter_share: '🐦',
+  discord_help: '💬',
+  governance_vote: '🗳️',
+  referral: '👋',
+  daily_quest: '✅',
+  weekly_mission: '🎯',
+  monthly_challenge: '🏆',
 };
 
-// 날짜 포맷
-function formatDate(dateString: string): string {
+// 날짜 포맷 (i18n 언어 기반)
+function formatDate(dateString: string, locale: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
 }
 
-function formatDateTime(dateString: string): string {
+function formatDateTime(dateString: string, locale: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
+  return date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -78,7 +79,18 @@ function formatDateTime(dateString: string): string {
   });
 }
 
+// 밋업 상태 라벨
+function getMeetupStatusLabel(status: string, t: (key: string) => string): string {
+  switch (status) {
+    case 'completed': return t('kindness.statusCompleted');
+    case 'upcoming': return t('kindness.statusUpcoming');
+    case 'cancelled': return t('kindness.statusCancelled');
+    default: return status;
+  }
+}
+
 export default function Kindness() {
+  const { t, i18n } = useTranslation('common');
   const { address, isConnected, isLoading: authLoading, connect: login, getExplorerUrl } = useWallet();
   const {
     kindnessStats,
@@ -104,6 +116,7 @@ export default function Kindness() {
   } = useAmbassadorSBT();
 
   const isLoading = authLoading || kindnessLoading || meetupsLoading || sbtLoading;
+  const locale = i18n.language;
 
   // 리더보드 로드
   useEffect(() => {
@@ -119,11 +132,10 @@ export default function Kindness() {
             <Heart className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-4">
-            Kindness Protocol
+            {t('kindness.title')}
           </h1>
           <p className="text-slate-400 mb-8">
-            지갑을 연결하여 Kindness Score를 확인하고
-            밋업에 참여하세요. 따뜻한 연결이 시작됩니다.
+            {t('kindness.connectDescription')}
           </p>
           <button
             onClick={login}
@@ -133,10 +145,10 @@ export default function Kindness() {
             {authLoading ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Connecting...
+                {t('kindness.connecting')}
               </span>
             ) : (
-              'Connect Wallet'
+              t('kindness.connectWallet')
             )}
           </button>
         </div>
@@ -150,7 +162,7 @@ export default function Kindness() {
       <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-jeong-orange animate-spin mx-auto mb-4" />
-          <p className="text-slate-400">Loading your Kindness data...</p>
+          <p className="text-slate-400">{t('kindness.loading')}</p>
         </div>
       </div>
     );
@@ -162,9 +174,9 @@ export default function Kindness() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Kindness Protocol</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">{t('kindness.title')}</h1>
             <p className="text-slate-400">
-              따뜻한 연결을 통해 Kindness Score를 쌓아가세요
+              {t('kindness.subtitle')}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -173,13 +185,13 @@ export default function Kindness() {
               className="btn-primary flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              밋업 만들기
+              {t('kindness.createMeetup')}
             </Link>
             <button
               onClick={refreshKindnessData}
               disabled={isLoading}
               className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
-              title="Refresh data"
+              title={t('kindness.refresh')}
             >
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
@@ -195,7 +207,7 @@ export default function Kindness() {
                   {getTierIcon(kindnessStats.tier)}
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm mb-1">Kindness Score</p>
+                  <p className="text-slate-400 text-sm mb-1">{t('kindness.kindnessScore')}</p>
                   <p className="text-4xl font-bold text-white mb-2">
                     {kindnessStats.score.toLocaleString()}
                   </p>
@@ -205,7 +217,7 @@ export default function Kindness() {
                     </span>
                     {kindnessStats.nextTier && (
                       <span className="text-xs text-slate-500">
-                        → {kindnessStats.nextTierLabel}까지 {kindnessStats.pointsToNextTier}점
+                        → {t('kindness.pointsToNextTier', { tierLabel: kindnessStats.nextTierLabel, points: kindnessStats.pointsToNextTier })}
                       </span>
                     )}
                   </div>
@@ -216,7 +228,7 @@ export default function Kindness() {
               {kindnessStats.nextTier && (
                 <div className="w-full md:w-64">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-400">다음 티어 진행률</span>
+                    <span className="text-slate-400">{t('kindness.nextTierProgress')}</span>
                     <span className="text-white">{kindnessStats.progress}%</span>
                   </div>
                   <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
@@ -237,16 +249,16 @@ export default function Kindness() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Shield className="w-6 h-6 text-purple-400" />
-                <h2 className="text-xl font-semibold text-white">Ambassador SBT</h2>
+                <h2 className="text-xl font-semibold text-white">{t('kindness.ambassadorSbt')}</h2>
                 <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded">
-                  On-chain
+                  {t('kindness.onChain')}
                 </span>
               </div>
               <button
                 onClick={refreshSBT}
                 disabled={sbtLoading}
                 className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
-                title="Refresh onchain data"
+                title={t('kindness.refresh')}
               >
                 <RefreshCw className={`w-4 h-4 ${sbtLoading ? 'animate-spin' : ''}`} />
               </button>
@@ -284,15 +296,15 @@ export default function Kindness() {
                           </p>
                           {ambassadorData.mintedAt && (
                             <p className="text-slate-500 text-xs">
-                              발급일: {ambassadorData.mintedAt.toLocaleDateString('ko-KR')}
+                              {t('kindness.issuedDate')}: {ambassadorData.mintedAt.toLocaleDateString(locale)}
                             </p>
                           )}
                         </>
                       ) : (
                         <>
-                          <p className="text-lg font-medium text-slate-300">SBT 미보유</p>
+                          <p className="text-lg font-medium text-slate-300">{t('kindness.noSbt')}</p>
                           <p className="text-slate-400 text-sm">
-                            밋업에 참가하면 자동으로 발급됩니다
+                            {t('kindness.noSbtDesc')}
                           </p>
                         </>
                       )}
@@ -306,7 +318,7 @@ export default function Kindness() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-sm text-neos-blue hover:underline"
                     >
-                      Explorer에서 보기
+                      {t('kindness.viewOnExplorer')}
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
@@ -315,19 +327,19 @@ export default function Kindness() {
                 {/* 온체인 통계 */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div className="bg-slate-800/50 rounded-lg p-3">
-                    <p className="text-slate-400 text-xs mb-1">밋업 참가</p>
+                    <p className="text-slate-400 text-xs mb-1">{t('kindness.meetupsAttended')}</p>
                     <p className="text-xl font-bold text-white">{ambassadorData.meetupsAttended}</p>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-3">
-                    <p className="text-slate-400 text-xs mb-1">밋업 주최</p>
+                    <p className="text-slate-400 text-xs mb-1">{t('kindness.meetupsHosted')}</p>
                     <p className="text-xl font-bold text-white">{ambassadorData.meetupsHosted}</p>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-3">
-                    <p className="text-slate-400 text-xs mb-1">Kindness Score</p>
+                    <p className="text-slate-400 text-xs mb-1">{t('kindness.kindnessScore')}</p>
                     <p className="text-xl font-bold text-jeong-orange">{ambassadorData.kindnessScore}</p>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-3">
-                    <p className="text-slate-400 text-xs mb-1">추천인</p>
+                    <p className="text-slate-400 text-xs mb-1">{t('kindness.referrals')}</p>
                     <p className="text-xl font-bold text-white">{ambassadorData.referralCount}</p>
                   </div>
                 </div>
@@ -336,7 +348,7 @@ export default function Kindness() {
                 {nextTierRequirements && (
                   <div className="bg-slate-800/30 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-slate-300 text-sm">다음 티어</span>
+                      <span className="text-slate-300 text-sm">{t('kindness.nextTier')}</span>
                       <span className={`font-medium ${getOnchainTierColor(nextTierRequirements.nextTier)}`}>
                         {getOnchainTierIcon(nextTierRequirements.nextTier)} {nextTierRequirements.nextTierName}
                       </span>
@@ -344,26 +356,26 @@ export default function Kindness() {
                     <div className="space-y-2 text-sm">
                       {nextTierRequirements.meetupsNeeded > 0 && (
                         <div className="flex justify-between text-slate-400">
-                          <span>밋업 참가 필요</span>
-                          <span className="text-white">{nextTierRequirements.meetupsNeeded}회</span>
+                          <span>{t('kindness.meetupsNeeded')}</span>
+                          <span className="text-white">{t('kindness.timesUnit', { count: nextTierRequirements.meetupsNeeded })}</span>
                         </div>
                       )}
                       {nextTierRequirements.hostingsNeeded > 0 && (
                         <div className="flex justify-between text-slate-400">
-                          <span>밋업 주최 필요</span>
-                          <span className="text-white">{nextTierRequirements.hostingsNeeded}회</span>
+                          <span>{t('kindness.hostingsNeeded')}</span>
+                          <span className="text-white">{t('kindness.timesUnit', { count: nextTierRequirements.hostingsNeeded })}</span>
                         </div>
                       )}
                       {nextTierRequirements.scoreNeeded > 0 && (
                         <div className="flex justify-between text-slate-400">
-                          <span>Kindness Score 필요</span>
-                          <span className="text-white">{nextTierRequirements.scoreNeeded}점</span>
+                          <span>{t('kindness.scoreNeeded')}</span>
+                          <span className="text-white">{t('kindness.pointsUnit', { count: nextTierRequirements.scoreNeeded })}</span>
                         </div>
                       )}
                       {nextTierRequirements.referralsNeeded > 0 && (
                         <div className="flex justify-between text-slate-400">
-                          <span>추천인 필요</span>
-                          <span className="text-white">{nextTierRequirements.referralsNeeded}명</span>
+                          <span>{t('kindness.referralsNeeded')}</span>
+                          <span className="text-white">{t('kindness.peopleUnit', { count: nextTierRequirements.referralsNeeded })}</span>
                         </div>
                       )}
                     </div>
@@ -373,8 +385,8 @@ export default function Kindness() {
                 {/* 컨트랙트 통계 */}
                 {contractConstants && (
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-700/50">
-                    <span>총 발급된 Ambassador SBT</span>
-                    <span className="text-slate-300">{contractConstants.totalSupply}개</span>
+                    <span>{t('kindness.totalSbtIssued')}</span>
+                    <span className="text-slate-300">{t('kindness.countUnit', { count: contractConstants.totalSupply })}</span>
                   </div>
                 )}
               </div>
@@ -387,7 +399,7 @@ export default function Kindness() {
           <div className="card p-4">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-neos-blue" />
-              <span className="text-slate-400 text-sm">참가한 밋업</span>
+              <span className="text-slate-400 text-sm">{t('kindness.statsAttended')}</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {activityStats?.meetupsAttended || 0}
@@ -397,7 +409,7 @@ export default function Kindness() {
           <div className="card p-4">
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-5 h-5 text-cyan-400" />
-              <span className="text-slate-400 text-sm">주최한 밋업</span>
+              <span className="text-slate-400 text-sm">{t('kindness.statsHosted')}</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {activityStats?.meetupsHosted || 0}
@@ -407,7 +419,7 @@ export default function Kindness() {
           <div className="card p-4">
             <div className="flex items-center gap-3 mb-2">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
-              <span className="text-slate-400 text-sm">인증된 활동</span>
+              <span className="text-slate-400 text-sm">{t('kindness.statsVerified')}</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {activityStats?.verifiedActivities || 0}
@@ -417,7 +429,7 @@ export default function Kindness() {
           <div className="card p-4">
             <div className="flex items-center gap-3 mb-2">
               <Clock className="w-5 h-5 text-yellow-400" />
-              <span className="text-slate-400 text-sm">대기 중</span>
+              <span className="text-slate-400 text-sm">{t('kindness.statsPending')}</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {activityStats?.pendingActivities || 0}
@@ -431,18 +443,18 @@ export default function Kindness() {
             {/* My Hosted Meetups */}
             <div className="card p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">내가 주최한 밋업</h2>
+                <h2 className="text-xl font-semibold text-white">{t('kindness.myHostedMeetups')}</h2>
                 <Link to="/meetup" className="text-sm text-neos-blue hover:underline flex items-center gap-1">
-                  전체 보기 <ChevronRight className="w-4 h-4" />
+                  {t('kindness.viewAll')} <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
 
               {myHostedMeetups.length === 0 ? (
                 <div className="text-center py-8">
                   <Users className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                  <p className="text-slate-400 mb-4">아직 주최한 밋업이 없습니다</p>
+                  <p className="text-slate-400 mb-4">{t('kindness.noHostedMeetups')}</p>
                   <Link to="/meetup/new" className="btn-secondary text-sm">
-                    첫 밋업 만들기
+                    {t('kindness.createFirstMeetup')}
                   </Link>
                 </div>
               ) : (
@@ -457,7 +469,7 @@ export default function Kindness() {
                         <div>
                           <h3 className="text-white font-medium">{meetup.title}</h3>
                           <p className="text-slate-400 text-sm">
-                            {meetup.location} · {formatDate(meetup.meeting_date)}
+                            {meetup.location} · {formatDate(meetup.meeting_date, locale)}
                           </p>
                         </div>
                         <span className={`px-2 py-1 rounded text-xs ${
@@ -467,7 +479,7 @@ export default function Kindness() {
                               ? 'bg-neos-blue/20 text-neos-blue'
                               : 'bg-red-500/20 text-red-400'
                         }`}>
-                          {meetup.status === 'completed' ? '완료' : meetup.status === 'upcoming' ? '예정' : '취소'}
+                          {getMeetupStatusLabel(meetup.status, t)}
                         </span>
                       </div>
                     </Link>
@@ -478,20 +490,18 @@ export default function Kindness() {
 
             {/* Recent Activities */}
             <div className="card p-6">
-              <h2 className="text-xl font-semibold text-white mb-6">최근 활동</h2>
+              <h2 className="text-xl font-semibold text-white mb-6">{t('kindness.recentActivities')}</h2>
 
               {activities.length === 0 ? (
                 <div className="text-center py-8">
                   <Heart className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                  <p className="text-slate-400">아직 기록된 활동이 없습니다</p>
+                  <p className="text-slate-400">{t('kindness.noActivities')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {activities.slice(0, 5).map((activity) => {
-                    const activityInfo = ACTIVITY_LABELS[activity.activity_type] || {
-                      label: activity.activity_type,
-                      icon: '📝',
-                    };
+                    const icon = ACTIVITY_ICONS[activity.activity_type] || '📝';
+                    const label = t(`kindness.activities.${activity.activity_type}`, { defaultValue: activity.activity_type });
 
                     return (
                       <div
@@ -499,11 +509,11 @@ export default function Kindness() {
                         className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-xl">{activityInfo.icon}</span>
+                          <span className="text-xl">{icon}</span>
                           <div>
-                            <p className="text-white text-sm">{activityInfo.label}</p>
+                            <p className="text-white text-sm">{label}</p>
                             <p className="text-slate-500 text-xs">
-                              {formatDateTime(activity.created_at)}
+                              {formatDateTime(activity.created_at, locale)}
                             </p>
                           </div>
                         </div>
@@ -527,7 +537,7 @@ export default function Kindness() {
           <div className="space-y-8">
             {/* Ambassador Tiers */}
             <div className="card p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Ambassador 티어</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">{t('kindness.ambassadorTiers')}</h2>
               <div className="space-y-3">
                 {Object.entries(AMBASSADOR_TIERS).map(([key, tier]) => {
                   const tierKey = key as keyof typeof AMBASSADOR_TIERS;
@@ -551,7 +561,7 @@ export default function Kindness() {
                         </div>
                         {isCurrentTier && (
                           <span className="text-xs bg-jeong-orange/30 text-jeong-orange px-2 py-0.5 rounded">
-                            현재
+                            {t('kindness.currentTier')}
                           </span>
                         )}
                       </div>
@@ -564,7 +574,7 @@ export default function Kindness() {
 
             {/* Leaderboard */}
             <div className="card p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Kindness 리더보드</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">{t('kindness.leaderboard')}</h2>
               <div className="space-y-2">
                 {leaderboard.slice(0, 10).map((entry) => (
                   <div

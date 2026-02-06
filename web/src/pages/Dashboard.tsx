@@ -4,6 +4,7 @@
  */
 
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Wallet, Coins, Heart, TrendingUp, Award, ArrowUpRight, RefreshCw, Loader2 } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useUserData, STAKING_TIERS, useTokenBalance } from '../hooks';
@@ -22,6 +23,7 @@ const TIER_COLORS = {
 };
 
 export default function Dashboard() {
+  const { t } = useTranslation('common');
   const { address, balance, isConnected, isLoading: authLoading, connect: login } = useWallet();
   const { user, isLoading: userLoading, refreshUser } = useUserData();
   const { formattedBalance: almanBalance, refresh: refreshToken, isLoading: tokenLoading } = useTokenBalance();
@@ -37,11 +39,10 @@ export default function Dashboard() {
             <Wallet className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-4">
-            Connect Your Wallet
+            {t('dashboard.connectWallet')}
           </h1>
           <p className="text-slate-400 mb-8">
-            지갑을 연결하여 AlmaNEO 대시보드에 접근하세요.
-            토큰 잔액, 스테이킹, Kindness Score를 확인할 수 있습니다.
+            {t('dashboard.connectDescription')}
           </p>
           <button
             onClick={login}
@@ -51,10 +52,10 @@ export default function Dashboard() {
             {authLoading ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Connecting...
+                {t('dashboard.connecting')}
               </span>
             ) : (
-              'Connect Wallet'
+              t('dashboard.connectButton')
             )}
           </button>
         </div>
@@ -68,7 +69,7 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-neos-blue animate-spin mx-auto mb-4" />
-          <p className="text-slate-400">Loading your dashboard...</p>
+          <p className="text-slate-400">{t('dashboard.loading')}</p>
         </div>
       </div>
     );
@@ -95,9 +96,9 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">{t('dashboard.title')}</h1>
             <p className="text-slate-400">
-              Welcome back, <span className="text-neos-blue">{userData.nickname}</span>
+              {t('dashboard.welcomeBack')}, <span className="text-neos-blue">{userData.nickname}</span>
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {shortenAddress(userData.walletAddress)}
@@ -107,7 +108,7 @@ export default function Dashboard() {
             onClick={() => { refreshUser(); refreshToken(); }}
             disabled={isLoading}
             className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50"
-            title="Refresh data"
+            title={t('dashboard.refreshData')}
           >
             <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
@@ -115,7 +116,7 @@ export default function Dashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {/* NEOS Balance */}
+          {/* ALMAN Balance */}
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 rounded-xl bg-neos-blue/20 flex items-center justify-center">
@@ -123,7 +124,7 @@ export default function Dashboard() {
               </div>
               <ArrowUpRight className="w-5 h-5 text-green-400" />
             </div>
-            <p className="text-slate-400 text-sm mb-1">ALMAN Balance</p>
+            <p className="text-slate-400 text-sm mb-1">{t('dashboard.almanBalance')}</p>
             <p className="text-2xl font-bold text-white">
               {userData.almanBalance}
               <span className="text-sm text-slate-500 ml-2">ALMAN</span>
@@ -143,7 +144,7 @@ export default function Dashboard() {
                 {userData.stakingTier}
               </span>
             </div>
-            <p className="text-slate-400 text-sm mb-1">Staked</p>
+            <p className="text-slate-400 text-sm mb-1">{t('dashboard.staked')}</p>
             <p className="text-2xl font-bold text-white">
               {userData.stakedAmount.toLocaleString()}
               <span className="text-sm text-slate-500 ml-2">ALMAN</span>
@@ -163,10 +164,10 @@ export default function Dashboard() {
                 +{tierInfo.weight}x
               </span>
             </div>
-            <p className="text-slate-400 text-sm mb-1">Kindness Score</p>
+            <p className="text-slate-400 text-sm mb-1">{t('dashboard.kindnessScore')}</p>
             <p className="text-2xl font-bold text-white">{userData.kindnessScore.toLocaleString()}</p>
             <p className="text-xs text-slate-500 mt-2">
-              Total Points: {userData.totalPoints.toLocaleString()}
+              {t('dashboard.totalPoints')}: {userData.totalPoints.toLocaleString()}
             </p>
           </div>
 
@@ -177,7 +178,7 @@ export default function Dashboard() {
                 <Award className="w-6 h-6 text-purple-400" />
               </div>
             </div>
-            <p className="text-slate-400 text-sm mb-1">Level</p>
+            <p className="text-slate-400 text-sm mb-1">{t('dashboard.level')}</p>
             <p className="text-2xl font-bold text-white">{userData.level}</p>
             <div className="mt-2">
               <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -194,24 +195,24 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Actions */}
-        <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold text-white mb-4">{t('dashboard.quickActions')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Link to="/staking" className="card card-hover p-6 text-center">
             <TrendingUp className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-2">Staking</h3>
-            <p className="text-slate-400 text-sm">Stake ALMAN to earn rewards</p>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('dashboard.stakingAction')}</h3>
+            <p className="text-slate-400 text-sm">{t('dashboard.stakingDescription')}</p>
           </Link>
 
           <Link to="/governance" className="card card-hover p-6 text-center">
             <Award className="w-8 h-8 text-neos-blue mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-2">Governance</h3>
-            <p className="text-slate-400 text-sm">Participate in DAO voting</p>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('dashboard.governanceAction')}</h3>
+            <p className="text-slate-400 text-sm">{t('dashboard.governanceDescription')}</p>
           </Link>
 
           <Link to="/airdrop" className="card card-hover p-6 text-center">
             <Coins className="w-8 h-8 text-jeong-orange mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-2">Airdrop</h3>
-            <p className="text-slate-400 text-sm">Claim your ALMAN tokens</p>
+            <h3 className="text-lg font-semibold text-white mb-2">{t('dashboard.airdropAction')}</h3>
+            <p className="text-slate-400 text-sm">{t('dashboard.airdropDescription')}</p>
           </Link>
         </div>
       </div>

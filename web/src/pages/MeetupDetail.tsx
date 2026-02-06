@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Calendar,
   MapPin,
@@ -25,9 +26,9 @@ import { submitMeetupVerification, MEETUP_POINTS } from '../services/meetup';
 import { validateImageFile, createPreviewUrl, revokePreviewUrl } from '../services/storage';
 
 // 날짜 포맷
-function formatDateTime(dateString: string): string {
+function formatDateTime(dateString: string, locale: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -43,6 +44,7 @@ function shortenAddress(address: string, chars = 6): string {
 }
 
 export default function MeetupDetail() {
+  const { t, i18n } = useTranslation('common');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { address, isConnected } = useWallet();
@@ -81,7 +83,7 @@ export default function MeetupDetail() {
   // 참가 신청
   const handleJoin = async () => {
     if (!isConnected) {
-      alert('지갑을 먼저 연결해주세요.');
+      alert(t('meetup.detail.connectFirst'));
       return;
     }
 
@@ -90,27 +92,27 @@ export default function MeetupDetail() {
     setIsSubmitting(false);
 
     if (!success) {
-      alert('참가 신청에 실패했습니다.');
+      alert(t('meetup.detail.joinFailed'));
     }
   };
 
   // 참가 취소
   const handleLeave = async () => {
-    if (!confirm('정말 참가를 취소하시겠습니까?')) return;
+    if (!confirm(t('meetup.detail.confirmLeave'))) return;
 
     setIsSubmitting(true);
     const success = await leaveCurrentMeetup();
     setIsSubmitting(false);
 
     if (!success) {
-      alert('참가 취소에 실패했습니다.');
+      alert(t('meetup.detail.leaveFailed'));
     }
   };
 
   // 인증 제출
   const handleVerification = async () => {
     if (!id || !address || !selectedPhoto || selectedParticipants.length === 0) {
-      alert('사진과 참가자를 선택해주세요.');
+      alert(t('meetup.detail.selectPhotoAndParticipants'));
       return;
     }
 
@@ -124,15 +126,15 @@ export default function MeetupDetail() {
       );
 
       if (success) {
-        alert('인증이 완료되었습니다! 참가자들에게 점수가 지급됩니다.');
+        alert(t('meetup.detail.verifySuccess'));
         setShowVerificationForm(false);
         loadMeetupDetail(id);
       } else {
-        alert('인증 제출에 실패했습니다.');
+        alert(t('meetup.detail.verifyFailed'));
       }
     } catch (err) {
       console.error(err);
-      alert('오류가 발생했습니다.');
+      alert(t('common.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -155,7 +157,7 @@ export default function MeetupDetail() {
     // 유효성 검사
     const validation = validateImageFile(file);
     if (!validation.valid) {
-      setPhotoError(validation.error || '파일 검증에 실패했습니다.');
+      setPhotoError(validation.error || t('meetup.errors.fileValidationFailed'));
       return;
     }
 
@@ -185,8 +187,18 @@ export default function MeetupDetail() {
     } catch {
       // 공유 API 미지원 시 URL 복사
       await navigator.clipboard.writeText(window.location.href);
-      alert('링크가 복사되었습니다!');
+      alert(t('meetup.detail.linkCopied'));
     }
+  };
+
+  // 상태 라벨
+  const getStatusLabel = (status: string) => {
+    const map: Record<string, string> = {
+      completed: t('meetup.statusCompleted'),
+      upcoming: t('meetup.statusUpcoming'),
+      cancelled: t('meetup.statusCancelled'),
+    };
+    return map[status] || status;
   };
 
   // 로딩
@@ -204,10 +216,10 @@ export default function MeetupDetail() {
       <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-2">밋업을 찾을 수 없습니다</h1>
-          <p className="text-slate-400 mb-6">{error || '요청하신 밋업이 존재하지 않습니다.'}</p>
+          <h1 className="text-2xl font-bold text-white mb-2">{t('meetup.detail.notFound')}</h1>
+          <p className="text-slate-400 mb-6">{error || t('meetup.detail.notFoundDesc')}</p>
           <Link to="/meetup" className="btn-primary">
-            밋업 목록으로
+            {t('meetup.backToList')}
           </Link>
         </div>
       </div>
@@ -223,7 +235,7 @@ export default function MeetupDetail() {
           className="flex items-center gap-2 text-slate-400 hover:text-white mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          돌아가기
+          {t('meetup.detail.back')}
         </button>
 
         {/* Header */}
@@ -240,11 +252,7 @@ export default function MeetupDetail() {
                       : 'bg-red-500/20 text-red-400'
                 }`}
               >
-                {currentMeetup.status === 'completed'
-                  ? '완료'
-                  : currentMeetup.status === 'upcoming'
-                    ? '예정'
-                    : '취소'}
+                {getStatusLabel(currentMeetup.status)}
               </span>
               <button
                 onClick={handleShare}
@@ -276,45 +284,48 @@ export default function MeetupDetail() {
           <div className="card p-4">
             <div className="flex items-center gap-3 text-slate-400 mb-1">
               <Calendar className="w-5 h-5" />
-              <span className="text-sm">일시</span>
+              <span className="text-sm">{t('meetup.detail.dateTime')}</span>
             </div>
-            <p className="text-white">{formatDateTime(currentMeetup.meeting_date)}</p>
+            <p className="text-white">{formatDateTime(currentMeetup.meeting_date, i18n.language)}</p>
           </div>
 
           <div className="card p-4">
             <div className="flex items-center gap-3 text-slate-400 mb-1">
               <MapPin className="w-5 h-5" />
-              <span className="text-sm">장소</span>
+              <span className="text-sm">{t('meetup.detail.location')}</span>
             </div>
-            <p className="text-white">{currentMeetup.location || '미정'}</p>
+            <p className="text-white">{currentMeetup.location || t('meetup.detail.locationUndefined')}</p>
           </div>
 
           <div className="card p-4">
             <div className="flex items-center gap-3 text-slate-400 mb-1">
               <Users className="w-5 h-5" />
-              <span className="text-sm">참가자</span>
+              <span className="text-sm">{t('meetup.detail.participants')}</span>
             </div>
             <p className="text-white">
-              {currentMeetup.participantCount} / {currentMeetup.max_participants}명
+              {t('meetup.detail.participantCount', {
+                current: currentMeetup.participantCount,
+                max: currentMeetup.max_participants,
+              })}
             </p>
           </div>
         </div>
 
         {/* Points Info */}
         <div className="card p-6 mb-8 bg-gradient-to-r from-jeong-orange/10 to-amber-500/10 border-jeong-orange/30">
-          <h3 className="text-lg font-semibold text-white mb-4">획득 가능 점수</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('meetup.detail.earnablePoints')}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div>
-              <p className="text-slate-400 text-sm">첫 밋업 참가</p>
-              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.FIRST_MEETUP}점</p>
+              <p className="text-slate-400 text-sm">{t('meetup.detail.firstMeetup')}</p>
+              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.FIRST_MEETUP}{i18n.language === 'ko' ? '점' : ' pts'}</p>
             </div>
             <div>
-              <p className="text-slate-400 text-sm">밋업 참가</p>
-              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.ATTEND}점</p>
+              <p className="text-slate-400 text-sm">{t('meetup.detail.meetupAttend')}</p>
+              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.ATTEND}{i18n.language === 'ko' ? '점' : ' pts'}</p>
             </div>
             <div>
-              <p className="text-slate-400 text-sm">밋업 주최</p>
-              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.HOST}점</p>
+              <p className="text-slate-400 text-sm">{t('meetup.detail.meetupHost')}</p>
+              <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.HOST}{i18n.language === 'ko' ? '점' : ' pts'}</p>
             </div>
           </div>
         </div>
@@ -322,11 +333,11 @@ export default function MeetupDetail() {
         {/* Participants */}
         <div className="card p-6 mb-8">
           <h3 className="text-lg font-semibold text-white mb-4">
-            참가자 ({currentMeetup.participantCount}명)
+            {t('meetup.detail.participantList', { count: currentMeetup.participantCount })}
           </h3>
 
           {currentMeetup.participants.length === 0 ? (
-            <p className="text-slate-400 text-center py-4">아직 참가자가 없습니다</p>
+            <p className="text-slate-400 text-center py-4">{t('meetup.detail.noParticipants')}</p>
           ) : (
             <div className="space-y-2">
               {currentMeetup.participants.map((participant) => (
@@ -346,17 +357,17 @@ export default function MeetupDetail() {
                     {participant.attended ? (
                       <span className="flex items-center gap-1 text-green-400 text-sm">
                         <CheckCircle2 className="w-4 h-4" />
-                        참가 완료
+                        {t('meetup.detail.attended')}
                       </span>
                     ) : (
                       <span className="flex items-center gap-1 text-slate-500 text-sm">
                         <Clock className="w-4 h-4" />
-                        대기 중
+                        {t('meetup.detail.waiting')}
                       </span>
                     )}
                     {participant.points_earned > 0 && (
                       <span className="text-jeong-orange text-sm">
-                        +{participant.points_earned}점
+                        +{participant.points_earned}{i18n.language === 'ko' ? '점' : ' pts'}
                       </span>
                     )}
                   </div>
@@ -382,7 +393,7 @@ export default function MeetupDetail() {
                   ) : (
                     <>
                       <UserMinus className="w-5 h-5" />
-                      참가 취소
+                      {t('meetup.detail.leave')}
                     </>
                   )}
                 </button>
@@ -400,7 +411,7 @@ export default function MeetupDetail() {
                   ) : (
                     <>
                       <UserPlus className="w-5 h-5" />
-                      참가 신청
+                      {t('meetup.detail.join')}
                     </>
                   )}
                 </button>
@@ -417,16 +428,16 @@ export default function MeetupDetail() {
                   className="w-full btn-primary flex items-center justify-center gap-2 py-3"
                 >
                   <Camera className="w-5 h-5" />
-                  밋업 인증하기
+                  {t('meetup.detail.verify')}
                 </button>
               ) : (
                 <div className="card p-6 space-y-6">
-                  <h3 className="text-lg font-semibold text-white">밋업 인증</h3>
+                  <h3 className="text-lg font-semibold text-white">{t('meetup.detail.verifyTitle')}</h3>
 
                   {/* Photo Upload */}
                   <div>
                     <label className="block text-sm text-slate-400 mb-2">
-                      단체 사진 업로드 (최대 5MB, JPG/PNG/WebP/GIF)
+                      {t('meetup.detail.photoUpload')}
                     </label>
                     <input
                       type="file"
@@ -448,7 +459,7 @@ export default function MeetupDetail() {
                       <div className="mt-3 rounded-lg overflow-hidden border border-slate-700">
                         <img
                           src={photoPreview}
-                          alt="미리보기"
+                          alt={t('meetup.detail.preview')}
                           className="w-full h-48 object-cover"
                         />
                       </div>
@@ -458,7 +469,7 @@ export default function MeetupDetail() {
                   {/* Participant Selection */}
                   <div>
                     <label className="block text-sm text-slate-400 mb-2">
-                      실제 참가자 선택 ({selectedParticipants.length}명)
+                      {t('meetup.detail.selectParticipants', { count: selectedParticipants.length })}
                     </label>
                     <div className="space-y-2 max-h-48 overflow-y-auto">
                       {currentMeetup.participants.map((p) => (
@@ -488,7 +499,7 @@ export default function MeetupDetail() {
                       onClick={() => setShowVerificationForm(false)}
                       className="flex-1 btn-secondary py-3"
                     >
-                      취소
+                      {t('meetup.cancel')}
                     </button>
                     <button
                       onClick={handleVerification}
@@ -502,7 +513,7 @@ export default function MeetupDetail() {
                       {isSubmitting ? (
                         <Loader2 className="w-5 h-5 animate-spin mx-auto" />
                       ) : (
-                        '인증 완료'
+                        t('meetup.detail.verifyComplete')
                       )}
                     </button>
                   </div>
@@ -515,7 +526,7 @@ export default function MeetupDetail() {
           {currentMeetup.status === 'completed' && (
             <div className="card p-6 text-center bg-green-500/10 border-green-500/30">
               <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-3" />
-              <p className="text-green-400 font-medium">이 밋업은 완료되었습니다</p>
+              <p className="text-green-400 font-medium">{t('meetup.detail.meetupCompleted')}</p>
             </div>
           )}
         </div>

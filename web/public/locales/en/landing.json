@@ -532,6 +532,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "daysAgo": "{{days}} days ago",
+    "selectModel": "Select AI Model",
     "quota": {
       "used": "{{used}}/{{limit}} used",
       "exceeded": "Daily quota exceeded",

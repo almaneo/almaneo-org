@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Calendar,
   MapPin,
@@ -19,9 +20,9 @@ import type { DbMeetup } from '../supabase';
 type MeetupFilter = 'all' | 'upcoming' | 'completed';
 
 // 날짜 포맷
-function formatDate(dateString: string): string {
+function formatDate(dateString: string, locale: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('ko-KR', {
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -29,36 +30,37 @@ function formatDate(dateString: string): string {
   });
 }
 
-function formatTime(dateString: string): string {
+function formatTime(dateString: string, locale: string): string {
   const date = new Date(dateString);
-  return date.toLocaleTimeString('ko-KR', {
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
   });
 }
 
 // 상태 뱃지
-function StatusBadge({ status }: { status: DbMeetup['status'] }) {
+function StatusBadge({ status, t }: { status: DbMeetup['status']; t: (key: string) => string }) {
   const styles = {
     upcoming: 'bg-neos-blue/20 text-neos-blue',
     completed: 'bg-green-500/20 text-green-400',
     cancelled: 'bg-red-500/20 text-red-400',
   };
 
-  const labels = {
-    upcoming: '예정',
-    completed: '완료',
-    cancelled: '취소',
+  const labelKeys: Record<string, string> = {
+    upcoming: 'meetup.statusUpcoming',
+    completed: 'meetup.statusCompleted',
+    cancelled: 'meetup.statusCancelled',
   };
 
   return (
     <span className={`px-2 py-1 rounded text-xs font-medium ${styles[status]}`}>
-      {labels[status]}
+      {t(labelKeys[status])}
     </span>
   );
 }
 
 export default function MeetupList() {
+  const { t, i18n } = useTranslation('common');
   const { meetups, isLoading, loadMeetups } = useMeetups();
   const [filter, setFilter] = useState<MeetupFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,20 +95,26 @@ export default function MeetupList() {
     return groups;
   }, {} as Record<string, DbMeetup[]>);
 
+  const filterLabels: Record<MeetupFilter, string> = {
+    all: t('meetup.filterAll'),
+    upcoming: t('meetup.filterUpcoming'),
+    completed: t('meetup.filterCompleted'),
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">밋업</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">{t('meetup.title')}</h1>
             <p className="text-slate-400">
-              오프라인에서 만나 따뜻한 연결을 만들어보세요
+              {t('meetup.subtitle')}
             </p>
           </div>
           <Link to="/meetup/new" className="btn-primary flex items-center gap-2">
             <Plus className="w-4 h-4" />
-            밋업 만들기
+            {t('meetup.create')}
           </Link>
         </div>
 
@@ -116,7 +124,7 @@ export default function MeetupList() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
             <input
               type="text"
-              placeholder="밋업 검색..."
+              placeholder={t('meetup.search')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:border-neos-blue focus:outline-none"
@@ -134,7 +142,7 @@ export default function MeetupList() {
                     : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                 }`}
               >
-                {f === 'all' ? '전체' : f === 'upcoming' ? '예정' : '완료'}
+                {filterLabels[f]}
               </button>
             ))}
           </div>
@@ -144,7 +152,7 @@ export default function MeetupList() {
         {isLoading && (
           <div className="text-center py-12">
             <Loader2 className="w-8 h-8 text-neos-blue animate-spin mx-auto mb-3" />
-            <p className="text-slate-400">밋업을 불러오는 중...</p>
+            <p className="text-slate-400">{t('meetup.loading')}</p>
           </div>
         )}
 
@@ -153,15 +161,15 @@ export default function MeetupList() {
           <div className="text-center py-16">
             <Calendar className="w-16 h-16 text-slate-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">
-              {searchQuery ? '검색 결과가 없습니다' : '아직 등록된 밋업이 없습니다'}
+              {searchQuery ? t('meetup.emptySearchTitle') : t('meetup.emptyTitle')}
             </h3>
             <p className="text-slate-400 mb-6">
               {searchQuery
-                ? '다른 검색어로 시도해보세요'
-                : '첫 번째 밋업을 만들어보세요!'}
+                ? t('meetup.emptySearchDescription')
+                : t('meetup.emptyDescription')}
             </p>
             <Link to="/meetup/new" className="btn-primary">
-              밋업 만들기
+              {t('meetup.create')}
             </Link>
           </div>
         )}
@@ -172,7 +180,7 @@ export default function MeetupList() {
             {Object.entries(groupedMeetups).map(([date, dayMeetups]) => (
               <div key={date}>
                 <h2 className="text-sm font-medium text-slate-400 mb-4">
-                  {formatDate(dayMeetups[0].meeting_date)}
+                  {formatDate(dayMeetups[0].meeting_date, i18n.language)}
                 </h2>
                 <div className="space-y-4">
                   {dayMeetups.map((meetup) => (
@@ -187,7 +195,7 @@ export default function MeetupList() {
                             <h3 className="text-lg font-semibold text-white">
                               {meetup.title}
                             </h3>
-                            <StatusBadge status={meetup.status} />
+                            <StatusBadge status={meetup.status} t={t} />
                           </div>
 
                           {meetup.description && (
@@ -199,7 +207,7 @@ export default function MeetupList() {
                           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
                             <div className="flex items-center gap-1.5">
                               <Calendar className="w-4 h-4" />
-                              <span>{formatTime(meetup.meeting_date)}</span>
+                              <span>{formatTime(meetup.meeting_date, i18n.language)}</span>
                             </div>
                             {meetup.location && (
                               <div className="flex items-center gap-1.5">
@@ -209,7 +217,7 @@ export default function MeetupList() {
                             )}
                             <div className="flex items-center gap-1.5">
                               <Users className="w-4 h-4" />
-                              <span>최대 {meetup.max_participants}명</span>
+                              <span>{t('meetup.maxParticipants', { count: meetup.max_participants })}</span>
                             </div>
                           </div>
                         </div>
