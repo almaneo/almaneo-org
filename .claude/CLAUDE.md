@@ -3339,7 +3339,43 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 60+)
+### ✅ 완료된 작업 (2026-02-06 - Session 60~61: 페이지 i18n 적용 완료)
+
+#### 목표: 하드코딩된 한글/영문 페이지를 i18n으로 전환 (ko/en 우선, 12개 추가 언어는 나중에)
+
+#### 1. **완료된 페이지 (Session 60)**
+   - `Dashboard.tsx`: ~18 translation keys (dashboard.*)
+   - `Staking.tsx`: ~35 keys (staking.*), `formatTimeRemaining(date, t)` 패턴
+   - `Governance.tsx`: ~30 keys (governance.*), `formatDuration(seconds, t)` 패턴
+   - `Airdrop.tsx`: ~40 keys (airdrop.*), `taskCategoryDefs` nameKey/titleKey 패턴
+   - `Kindness.tsx`: ~55 keys (kindness.*), 19개 활동 타입 라벨
+
+#### 2. **완료된 페이지 (Session 61)** ✅
+   - `MeetupCreate.tsx`: 폼 라벨, 유효성 검증 메시지, 팁 등 (~30 keys)
+   - `MeetupList.tsx`: 검색, 필터, 상태 라벨, 날짜 locale
+   - `MeetupDetail.tsx`: 참가/검증 UI, 알림 메시지, 점수 표시
+   - `AIHub.tsx`: selectModel 키 추가 (기존 fallback 패턴 유지)
+   - `meetup` 번역 섹션 신설 (ko/en common.json, ~80 keys)
+   - 빌드 테스트 성공 (33.81초)
+   - 커밋: `6ec39ce`
+
+#### 3. **남은 페이지** (낮은 우선순위)
+   | 페이지 | 상태 | 비고 |
+   |--------|------|------|
+   | PrivacyPolicy.tsx | 🔲 | 영어 하드코딩 법적 텍스트 (번역 불필요) |
+   | TermsOfService.tsx | 🔲 | 영어 하드코딩 법적 텍스트 (번역 불필요) |
+
+#### 4. **i18n 적용 패턴 요약** (일관성을 위해)
+   - 네임스페이스: `common` (모든 페이지)
+   - 번역 키 구조: `{pageName}.{elementName}` (예: `kindness.title`)
+   - 날짜 locale: `i18n.language` 직접 사용 (toLocaleDateString이 2자리 코드 지원)
+   - 데이터 배열: ID 기반 + `t('section.items.{id}')` 패턴
+   - 헬퍼 함수: `t` 파라미터 전달 (예: `formatDuration(sec, t)`)
+   - 단위 표시: `{{count}}회`, `{{count}}점` 등 interpolation 사용
+
+---
+
+### 🔲 다음 세션 작업 (Session 62+)
 
 #### 🔴 높은 우선순위
 
@@ -3348,26 +3384,26 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - MiningPool.claimForUser() 호출 로직
    - CLAIMER_ROLE 부여 (Verifier 지갑 또는 별도 Claimer 지갑)
 
-2. **토크노믹스 대시보드**
+3. **토크노믹스 대시보드**
    - 온체인 잔액 실시간 표시 UI
    - Vesting 진행률, Mining 소진율
    - 카테고리별 분배 현황
 
-3. **GAII 페이지 i18n 완성**
+4. **GAII 페이지 i18n 완성**
    - 나머지 12개 언어에 `platform.json` 번역 파일 추가
 
 #### 🟡 중간 우선순위
 
-4. **토큰 로고 AI 생성**
+5. **토큰 로고 AI 생성**
    - 프롬프트 활용하여 256x256 PNG 생성
 
-5. **Governance 실제 제안 로드**
+6. **Governance 실제 제안 로드**
    - ProposalCreated 이벤트 조회
    - Mock 데이터 제거, 온체인 데이터로 교체
 
-6. **모바일 실기기 QA 테스트**
+7. **모바일 실기기 QA 테스트**
 
 #### 🟢 낮은 우선순위
 
-7. **Grant 프로그램 신청**
-8. **메인넷 배포 준비** (Multi-sig 설정, 감사)
+8. **Grant 프로그램 신청**
+9. **메인넷 배포 준비** (Multi-sig 설정, 감사)
