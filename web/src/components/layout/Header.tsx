@@ -51,6 +51,7 @@ const platformItems: NavItem[] = [
 ];
 
 const ecosystemItems: NavItem[] = [
+  { nameKey: 'nav.tokenomics', path: '/tokenomics', icon: BarChart3, badgeKey: 'common.new' },
   { nameKey: 'nav.staking', path: '/staking', icon: Coins },
   { nameKey: 'nav.airdrop', path: '/airdrop', icon: Gift },
   { nameKey: 'nav.nftMarketplace', path: 'https://nft.almaneo.org', icon: Image, external: true },

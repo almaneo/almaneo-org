@@ -24,3 +24,6 @@ export { default as AIHub } from './AIHub';
 
 // Proposals
 export { default as Proposal } from './Proposal';
+
+// Tokenomics
+export { default as Tokenomics } from './Tokenomics';

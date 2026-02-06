@@ -26,6 +26,7 @@ import {
   MeetupCreate,
   AIHub,
   Proposal,
+  Tokenomics,
 } from './pages';
 
 // Loading component for i18n
@@ -69,6 +70,8 @@ function App() {
                   <Route path="/meetup/:id" element={<MeetupDetail />} />
                   {/* AI Hub */}
                   <Route path="/ai-hub" element={<AIHub />} />
+                  {/* Tokenomics */}
+                  <Route path="/tokenomics" element={<Tokenomics />} />
                 </Route>
               </Routes>
             </BrowserRouter>

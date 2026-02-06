@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "Dasbor GAII",
+      "subtitle": "Indeks Ketimpangan AI Global - Pemantauan waktu nyata",
+      "loading": "Memuat data GAII...",
+      "error": "Gagal memuat data GAII. Silakan coba lagi.",
+      "refresh": "Segarkan",
+      "lastUpdated": "Terakhir diperbarui",
+      "dataSources": "Sumber data"
+    },
+    "grades": {
+      "low": "Ketimpangan rendah",
+      "moderate": "Sedang",
+      "high": "Ketimpangan tinggi",
+      "critical": "Kritis"
+    },
+    "trend": {
+      "stable": "Stabil",
+      "vsLastMonth": "vs bulan lalu"
+    },
+    "globalIndex": {
+      "title": "Skor GAII Global",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "Tingkat Adopsi Global",
+        "description": "Rata-rata adopsi AI di semua negara"
+      },
+      "inequalityGap": {
+        "title": "Kesenjangan Ketimpangan",
+        "description": "Kesenjangan adopsi Utara-Selatan Global"
+      },
+      "countriesTracked": {
+        "title": "Negara Terpantau",
+        "description": "Negara dengan data GAII"
+      },
+      "totalPopulation": {
+        "title": "Total Populasi",
+        "description": "Populasi yang tercakup"
+      }
+    },
+    "about": {
+      "title": "Tentang GAII",
+      "description": "GAII (Indeks Ketimpangan AI Global) mengukur ketimpangan aksesibilitas AI. 0 berarti kesetaraan sempurna, 100 berarti ketimpangan ekstrem. Sumber: Microsoft Global AI Adoption Report 2025"
+    },
+    "worldMap": {
+      "title": "Peta GAII Global",
+      "description": "Klik pada negara untuk melihat detail. Semakin merah warnanya, semakin parah ketimpangan AI. Negara abu-abu tidak memiliki data."
+    },
+    "topCountries": {
+      "title": "5 Negara Teratas",
+      "subtitle": "(GAII Terendah)"
+    },
+    "bottomCountries": {
+      "title": "5 Negara Terbawah",
+      "subtitle": "(GAII Tertinggi)"
+    },
+    "regional": {
+      "title": "Analisis Regional",
+      "sortBy": "Urutkan berdasarkan",
+      "options": {
+        "gaii": "Skor GAII",
+        "population": "Populasi",
+        "name": "Nama"
+      },
+      "avgAdoption": "Rata-rata Adopsi AI",
+      "avgGaii": "Rata-rata GAII",
+      "population": "Populasi",
+      "countries": "negara"
+    },
+    "comparison": {
+      "title": "Perbandingan Regional"
+    },
+    "adoption": "adopsi"
+  },
+  "gaiiReport": {
+    "version": "Versi",
+    "reportTitle": "Laporan Indeks Ketimpangan AI Global",
+    "reportSubtitle": "Mengukur akses, keterjangkauan, dukungan bahasa, dan keterampilan AI di 50 negara",
+    "header": {
+      "publishedBy": "Diterbitkan oleh",
+      "keyFindings": "Temuan utama dari Laporan GAII v1.0"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "Ketimpangan AI nyata dan terukur",
+        "description": "Skor GAII rata-rata adalah {{score}}, menunjukkan ketimpangan AI yang signifikan secara global."
+      },
+      "northSouthGap": {
+        "title": "Kesenjangan Utara-Selatan Global",
+        "description": "Adopsi AI di negara maju ({{north}}%) adalah {{ratio}}x lebih tinggi dari wilayah berkembang ({{south}}%)."
+      },
+      "affordability": {
+        "title": "Keterjangkauan adalah hambatan terbesar",
+        "description": "Skor keterjangkauan rata-rata global hanya {{score}}/100, dengan biaya AI menghabiskan hingga 30% pendapatan di negara termiskin."
+      },
+      "language": {
+        "title": "Dukungan bahasa sangat penting",
+        "description": "Bahasa yang digunakan miliaran orang memiliki dukungan AI terbatas, dengan skor bahasa rata-rata {{score}}/100."
+      }
+    },
+    "callToAction": "Perusahaan AI, pemerintah, dan organisasi internasional harus bekerja sama untuk menutup kesenjangan ketimpangan AI. Yayasan AlmaNEO menyerukan penetapan harga bertingkat, pengembangan AI multibahasa, dan investasi infrastruktur digital untuk memastikan AI bermanfaat bagi seluruh umat manusia.",
+    "insights": {
+      "globalDivide": {
+        "title": "Kesenjangan digital AI global semakin melebar",
+        "description": "Adopsi AI di Utara Global (33,2%) adalah 3,5x lebih tinggi dari Selatan Global (9,5%), menciptakan kesenjangan digital yang memperkuat ketimpangan yang ada.",
+        "recommendation": "Prioritaskan investasi infrastruktur dan akses AI yang terjangkau di wilayah berkembang."
+      },
+      "affordabilityCosts": {
+        "title": "Biaya AI membebani negara berpenghasilan rendah",
+        "description": "Di negara seperti Bangladesh dan Pakistan, biaya langganan AI merupakan 25-28% dari pendapatan bulanan rata-rata, membuat alat AI tidak dapat diakses oleh sebagian besar warga.",
+        "recommendation": "Kembangkan model harga bertingkat dan tingkat gratis untuk wilayah berpenghasilan rendah."
+      },
+      "languageBarrier": {
+        "title": "Hambatan bahasa mengecualikan miliaran orang",
+        "description": "Lebih dari 3 miliar orang berbicara bahasa dengan dukungan AI terbatas. Kualitas AI bahasa lokal rata-rata hanya 35/100 di Asia Selatan dan 28/100 di Afrika Sub-Sahara.",
+        "recommendation": "Investasi dalam model AI multibahasa dan upaya penerjemahan berbasis komunitas."
+      },
+      "infrastructureGap": {
+        "title": "Kesenjangan infrastruktur di daerah pedesaan",
+        "description": "Kesenjangan digital kota-desa tetap ada bahkan di negara berpendapatan menengah. Penetrasi internet turun 30-40% di daerah pedesaan.",
+        "recommendation": "Perluas konektivitas seluler dan aplikasi AI yang dapat bekerja offline."
+      },
+      "aiLiteracy": {
+        "title": "Krisis literasi AI",
+        "description": "Skor literasi AI rata-rata global hanya 42/100. Bahkan di negara maju, lebih dari 60% populasi kurang memahami AI dasar.",
+        "recommendation": "Integrasikan pendidikan AI ke dalam kurikulum sekolah dan program pelatihan kerja."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "Terapkan harga bertingkat untuk pasar berkembang",
+        "description": "Perusahaan AI harus menawarkan tingkat harga yang disesuaikan dengan pendapatan, memungkinkan pengguna di negara berpenghasilan rendah mengakses alat AI dengan $1-5/bulan alih-alih $20+.",
+        "impact": "Dapat meningkatkan akses AI untuk lebih dari 2 miliar orang di Selatan Global."
+      },
+      "nationalInfrastructure": {
+        "title": "Investasi infrastruktur AI nasional",
+        "description": "Pemerintah harus memprioritaskan perluasan broadband, pengembangan pusat data, dan sumber daya komputasi AI publik.",
+        "impact": "Persyaratan dasar untuk demokratisasi AI."
+      },
+      "multilingualSupport": {
+        "title": "Perluas dukungan AI multibahasa",
+        "description": "Prioritaskan pengembangan kemampuan AI dalam bahasa yang kurang terlayani termasuk Hindi, Bengali, Swahili, dan Vietnam.",
+        "impact": "Akan melayani lebih dari 2,5 miliar penutur bahasa yang kurang terlayani."
+      },
+      "aiLiteracyPrograms": {
+        "title": "Luncurkan program literasi AI",
+        "description": "Bermitra dengan organisasi lokal untuk memberikan pendidikan AI melalui pusat komunitas, perpustakaan, dan unit bergerak.",
+        "impact": "Membangun kemampuan AI dasar di komunitas yang kurang terlayani."
+      },
+      "equityFund": {
+        "title": "Dirikan dana kesetaraan AI global",
+        "description": "Buat mekanisme pendanaan internasional untuk mensubsidi akses AI di negara-negara kurang berkembang.",
+        "impact": "Pendekatan sistematis untuk mengatasi ketimpangan AI."
+      },
+      "gaiiMetric": {
+        "title": "Masukkan GAII dalam metrik pembangunan nasional",
+        "description": "Adopsi GAII sebagai indikator resmi bersama HDI dan GDP untuk melacak ketimpangan AI.",
+        "impact": "Meningkatkan visibilitas dan akuntabilitas untuk kesetaraan AI."
+      }
+    },
+    "regionalInsights": {
+      "NA": "Amerika Utara menunjukkan adopsi AI tinggi tetapi hambatan biaya signifikan untuk populasi berpenghasilan rendah.",
+      "EU": "Eropa menunjukkan infrastruktur yang kuat tetapi bervariasi dalam literasi AI di antara negara anggota.",
+      "EA": "Asia Timur memimpin dalam kualitas infrastruktur dengan Korea Selatan dan Singapura sebagai pemimpin global.",
+      "SA": "Asia Selatan menghadapi tantangan keterjangkauan yang serius dengan langganan AI yang menghabiskan hingga 28% pendapatan bulanan.",
+      "SEA": "Asia Tenggara menunjukkan potensi pertumbuhan cepat dengan Singapura sebagai pusat regional.",
+      "LA": "Amerika Latin diuntungkan oleh dukungan AI berbahasa Spanyol tetapi menghadapi kesenjangan infrastruktur.",
+      "ME": "Timur Tengah menunjukkan perkembangan yang terpolarisasi dengan UEA memimpin sementara zona konflik tertinggal.",
+      "SSA": "Afrika Sub-Sahara memiliki kesenjangan infrastruktur dan keterjangkauan yang kritis yang memerlukan intervensi mendesak.",
+      "OC": "Oseania mencapai akses hampir universal dengan Australia dan Selandia Baru sebagai tolak ukur.",
+      "CA": "Asia Tengah menunjukkan perkembangan moderat dengan investasi yang meningkat di infrastruktur digital."
+    },
+    "targets": {
+      "governments": "Pemerintah",
+      "corporations": "Korporasi",
+      "ngos": "LSM",
+      "international": "Internasional"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "Ringkasan Eksekutif",
+        "subtitle": "Temuan utama dari Laporan GAII v1.0"
+      },
+      "countryRankings": {
+        "title": "Peringkat Negara",
+        "subtitle": "Skor GAII 50 negara (lebih rendah lebih baik)"
+      },
+      "regionalAnalysis": {
+        "title": "Analisis Regional",
+        "subtitle": "Rincian GAII berdasarkan wilayah dunia"
+      },
+      "keyInsights": {
+        "title": "Wawasan Utama",
+        "subtitle": "Temuan dan pengamatan kritis"
+      },
+      "recommendations": {
+        "title": "Rekomendasi Kebijakan",
+        "subtitle": "Tindakan bagi pemangku kepentingan untuk mengatasi ketimpangan AI"
+      },
+      "methodology": {
+        "title": "Metodologi",
+        "subtitle": "Cara menghitung skor GAII"
+      },
+      "dataSources": {
+        "title": "Sumber Data",
+        "subtitle": "Sumber data utama yang digunakan dalam laporan ini"
+      }
+    },
+    "stats": {
+      "globalGaii": "Skor GAII Global",
+      "countriesAnalyzed": "Negara Dianalisis",
+      "populationCovered": "Populasi Tercakup",
+      "inequalityGap": "Kesenjangan Ketimpangan"
+    },
+    "indicators": {
+      "access": "Akses",
+      "affordability": "Keterjangkauan",
+      "language": "Bahasa",
+      "skill": "Keterampilan",
+      "globalAverage": "Rata-rata Global per Indikator"
+    },
+    "table": {
+      "rank": "Peringkat",
+      "country": "Negara",
+      "gaii": "GAII",
+      "grade": "Tingkat",
+      "showLess": "Tampilkan lebih sedikit",
+      "showAll": "Lihat semua {{count}} negara"
+    },
+    "region": {
+      "countries": "negara",
+      "top": "Teratas",
+      "bottom": "Terbawah"
+    },
+    "methodology": {
+      "formula": "Rumus",
+      "weights": "Bobot Indikator",
+      "thresholds": "Ambang Batas Tingkat",
+      "thresholdDesc": {
+        "low": "Kesetaraan AI terbaik",
+        "moderate": "Ada ruang untuk perbaikan",
+        "high": "Ketimpangan signifikan",
+        "critical": "Perlu intervensi mendesak"
+      }
+    },
+    "priority": {
+      "high": "tinggi",
+      "medium": "sedang",
+      "low": "rendah"
+    },
+    "impact": "Dampak",
+    "cta": {
+      "title": "Bergabunglah dalam gerakan kesetaraan AI",
+      "learnMore": "Pelajari lebih lanjut tentang AlmaNEO",
+      "downloadPdf": "Unduh laporan lengkap (PDF)",
+      "loadingPdf": "Memuat PDF...",
+      "generatingPdf": "Menghasilkan PDF..."
+    }
+  }
+}

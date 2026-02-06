@@ -19,7 +19,8 @@
     "blog": "Blog",
     "discord": "Discord",
     "twitter": "Twitter",
-    "github": "GitHub"
+    "github": "GitHub",
+    "tokenomics": "Tokenomics"
   },
   "wallet": {
     "connect": "Connect Wallet",

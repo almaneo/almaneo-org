@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "GAIIダッシュボード",
+      "subtitle": "グローバルAI不平等指数 - AI不平等のリアルタイム監視",
+      "loading": "GAIIデータを読み込み中...",
+      "error": "GAIIデータの読み込みに失敗しました。もう一度お試しください。",
+      "refresh": "更新",
+      "lastUpdated": "最終更新",
+      "dataSources": "データソース"
+    },
+    "grades": {
+      "low": "低い不平等",
+      "moderate": "中程度",
+      "high": "高い不平等",
+      "critical": "深刻"
+    },
+    "trend": {
+      "stable": "安定",
+      "vsLastMonth": "先月比"
+    },
+    "globalIndex": {
+      "title": "グローバルGAIIスコア",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "グローバルAI採用率",
+        "description": "全国の平均AI採用率"
+      },
+      "inequalityGap": {
+        "title": "不平等格差",
+        "description": "グローバル北部と南部の採用率格差"
+      },
+      "countriesTracked": {
+        "title": "追跡国数",
+        "description": "GAIIデータのある国"
+      },
+      "totalPopulation": {
+        "title": "総人口",
+        "description": "データ対象人口"
+      }
+    },
+    "about": {
+      "title": "GAIIについて",
+      "description": "GAII（グローバルAI不平等指数）はAIアクセスの不平等を測定します。0は完全な平等、100は極端な不平等を意味します。データソース：Microsoft グローバルAI採用レポート2025"
+    },
+    "worldMap": {
+      "title": "グローバルGAIIマップ",
+      "description": "国をクリックして詳細を確認できます。赤色が濃いほどAI不平等が深刻です。灰色の国はデータがありません。"
+    },
+    "topCountries": {
+      "title": "上位5か国",
+      "subtitle": "（低いGAII）"
+    },
+    "bottomCountries": {
+      "title": "下位5か国",
+      "subtitle": "（高いGAII）"
+    },
+    "regional": {
+      "title": "地域分析",
+      "sortBy": "並べ替え",
+      "options": {
+        "gaii": "GAIIスコア",
+        "population": "人口",
+        "name": "名前"
+      },
+      "avgAdoption": "平均AI採用率",
+      "avgGaii": "平均GAII",
+      "population": "人口",
+      "countries": "か国"
+    },
+    "comparison": {
+      "title": "地域比較"
+    },
+    "adoption": "採用率"
+  },
+  "gaiiReport": {
+    "version": "バージョン",
+    "reportTitle": "グローバルAI不平等指数レポート",
+    "reportSubtitle": "50か国のAIアクセス、コスト適正性、言語サポート、スキルの測定",
+    "header": {
+      "publishedBy": "発行者",
+      "keyFindings": "GAIIレポートv1.0の主要な発見"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "AI不平等は現実であり測定可能です",
+        "description": "平均GAIIスコアは{{score}}であり、世界的に顕著なAI不平等が存在することを示しています。"
+      },
+      "northSouthGap": {
+        "title": "グローバル北部と南部の格差",
+        "description": "先進国のAI採用率({{north}}%)は開発途上地域({{south}}%)の{{ratio}}倍です。"
+      },
+      "affordability": {
+        "title": "コストが最大の障壁です",
+        "description": "グローバル平均の適正性スコアは{{score}}/100にすぎず、最貧国ではAIコストが所得の30%を占めています。"
+      },
+      "language": {
+        "title": "言語サポートが重要です",
+        "description": "数十億人が使用する言語のAIサポートは限定的で、平均言語スコアは{{score}}/100です。"
+      }
+    },
+    "callToAction": "AI企業、政府、国際機関は、AI不平等の格差を解消するために協力しなければなりません。AlmaNEO財団は、段階的価格設定、多言語AI開発、デジタルインフラへの投資を通じて、AIの恩恵がすべての人類に届くよう呼びかけます。",
+    "insights": {
+      "globalDivide": {
+        "title": "グローバルAI格差が拡大しています",
+        "description": "グローバル北部(33.2%)のAI採用率はグローバル南部(9.5%)の3.5倍であり、既存の不平等を強化するデジタル格差を生んでいます。",
+        "recommendation": "開発途上地域でのインフラ投資と手頃なAIアクセスを優先すべきです。"
+      },
+      "affordabilityCosts": {
+        "title": "AIコストが低所得国の負担に",
+        "description": "バングラデシュやパキスタンなどの国では、AIサブスクリプション費用が平均月収の25-28%を占め、ほとんどの市民がAIツールにアクセスできません。",
+        "recommendation": "低所得地域向けの段階的価格モデルと無料ティアを開発すべきです。"
+      },
+      "languageBarrier": {
+        "title": "言語障壁が数十億人を排除しています",
+        "description": "30億人以上がAIサポートが限定的な言語を使用しています。現地語のAI品質は南アジアで平均35/100、サブサハラアフリカで28/100です。",
+        "recommendation": "多言語AIモデルとコミュニティ主導の翻訳活動に投資すべきです。"
+      },
+      "infrastructureGap": {
+        "title": "農村部のインフラ格差",
+        "description": "中所得国でも都市と農村のデジタル格差が続いています。農村部のインターネット普及率は30-40%低くなっています。",
+        "recommendation": "モバイル接続とオフライン対応のAIアプリケーションを拡大すべきです。"
+      },
+      "aiLiteracy": {
+        "title": "AIリテラシー危機",
+        "description": "グローバル平均AIリテラシースコアは42/100にすぎません。先進国でも人口の60%以上が基本的なAI理解に欠けています。",
+        "recommendation": "AI教育を学校のカリキュラムと職業訓練プログラムに統合すべきです。"
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "新興市場向け段階的価格設定の導入",
+        "description": "AI企業は所得に応じた価格ティアを提供し、低所得国のユーザーが月額20ドル以上ではなく1-5ドルでAIツールにアクセスできるようにすべきです。",
+        "impact": "グローバル南部の20億人以上のAIアクセスを向上させる可能性があります。"
+      },
+      "nationalInfrastructure": {
+        "title": "国家AIインフラへの投資",
+        "description": "政府はブロードバンド拡大、データセンター開発、公共AIコンピューティングリソースを優先すべきです。",
+        "impact": "AI民主化の基本要件です。"
+      },
+      "multilingualSupport": {
+        "title": "多言語AIサポートの拡大",
+        "description": "ヒンディー語、ベンガル語、スワヒリ語、ベトナム語など未対応言語のAI機能開発を優先すべきです。",
+        "impact": "未対応言語を使用する25億人以上にサービスを提供できます。"
+      },
+      "aiLiteracyPrograms": {
+        "title": "AIリテラシープログラムの開始",
+        "description": "地域組織と連携して、コミュニティセンター、図書館、移動ユニットを通じてAI教育を提供します。",
+        "impact": "恵まれないコミュニティで基本的なAI能力を構築します。"
+      },
+      "equityFund": {
+        "title": "グローバルAI平等基金の設立",
+        "description": "最貧国のAIアクセスを補助するための国際的な資金メカニズムを創設します。",
+        "impact": "AI不平等に対処するための体系的なアプローチです。"
+      },
+      "gaiiMetric": {
+        "title": "GAIIを国家開発指標に組み込む",
+        "description": "HDIやGDPと並ぶ公式指標としてGAIIを採用し、AI不平等を追跡します。",
+        "impact": "AI平等に対する可視性と説明責任を向上させます。"
+      }
+    },
+    "regionalInsights": {
+      "NA": "北米はAI採用率が高いですが、低所得層には大きなコスト障壁があります。",
+      "EU": "欧州は強固なインフラを示していますが、加盟国間でAIリテラシーに大きな差があります。",
+      "EA": "東アジアは韓国とシンガポールをグローバルリーダーとしてインフラ品質でリードしています。",
+      "SA": "南アジアはAIサブスクリプションが月収の28%を占めるという深刻なコスト問題に直面しています。",
+      "SEA": "東南アジアはシンガポールを地域ハブとして急速な成長潜在力を示しています。",
+      "LA": "ラテンアメリカはスペイン語AIサポートの恩恵を受けていますが、インフラ格差があります。",
+      "ME": "中東はUAEがリードする一方で紛争地域が遅れをとるという二極化した発展を示しています。",
+      "SSA": "サブサハラアフリカは緊急な介入が必要な深刻なインフラとコスト格差を抱えています。",
+      "OC": "オセアニアはオーストラリアとニュージーランドをベンチマークとしてほぼ普遍的なアクセスを達成しています。",
+      "CA": "中央アジアはデジタルインフラへの投資が増加しており、中程度の発展を示しています。"
+    },
+    "targets": {
+      "governments": "政府",
+      "corporations": "企業",
+      "ngos": "NGO",
+      "international": "国際機関"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "エグゼクティブサマリー",
+        "subtitle": "GAIIレポートv1.0の主要な発見"
+      },
+      "countryRankings": {
+        "title": "国別ランキング",
+        "subtitle": "50か国のGAIIスコア（低いほど良い）"
+      },
+      "regionalAnalysis": {
+        "title": "地域分析",
+        "subtitle": "世界地域別のGAII分析"
+      },
+      "keyInsights": {
+        "title": "主要インサイト",
+        "subtitle": "重要な発見と考察"
+      },
+      "recommendations": {
+        "title": "政策提言",
+        "subtitle": "AI不平等に対処するためのステークホルダー行動計画"
+      },
+      "methodology": {
+        "title": "方法論",
+        "subtitle": "GAIIスコアの算出方法"
+      },
+      "dataSources": {
+        "title": "データソース",
+        "subtitle": "本レポートで使用された主要データソース"
+      }
+    },
+    "stats": {
+      "globalGaii": "グローバルGAIIスコア",
+      "countriesAnalyzed": "分析国数",
+      "populationCovered": "対象人口",
+      "inequalityGap": "不平等格差"
+    },
+    "indicators": {
+      "access": "アクセス",
+      "affordability": "適正性",
+      "language": "言語",
+      "skill": "スキル",
+      "globalAverage": "グローバル指標平均"
+    },
+    "table": {
+      "rank": "順位",
+      "country": "国",
+      "gaii": "GAII",
+      "grade": "等級",
+      "showLess": "折りたたむ",
+      "showAll": "全{{count}}か国を表示"
+    },
+    "region": {
+      "countries": "か国",
+      "top": "上位",
+      "bottom": "下位"
+    },
+    "methodology": {
+      "formula": "公式",
+      "weights": "指標ウェイト",
+      "thresholds": "等級基準",
+      "thresholdDesc": {
+        "low": "AI平等最良",
+        "moderate": "改善の余地あり",
+        "high": "顕著な不平等",
+        "critical": "緊急介入が必要"
+      }
+    },
+    "priority": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "impact": "影響",
+    "cta": {
+      "title": "AI平等運動に参加しましょう",
+      "learnMore": "AlmaNEOについて詳しく",
+      "downloadPdf": "完全レポートをダウンロード（PDF）",
+      "loadingPdf": "PDF読み込み中...",
+      "generatingPdf": "PDF生成中..."
+    }
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "Bảng điều khiển GAII",
+      "subtitle": "Chỉ số Bất bình đẳng AI Toàn cầu - Giám sát thời gian thực",
+      "loading": "Đang tải dữ liệu GAII...",
+      "error": "Không thể tải dữ liệu GAII. Vui lòng thử lại.",
+      "refresh": "Làm mới",
+      "lastUpdated": "Cập nhật lần cuối",
+      "dataSources": "Nguồn dữ liệu"
+    },
+    "grades": {
+      "low": "Bất bình đẳng thấp",
+      "moderate": "Trung bình",
+      "high": "Bất bình đẳng cao",
+      "critical": "Nghiêm trọng"
+    },
+    "trend": {
+      "stable": "Ổn định",
+      "vsLastMonth": "so với tháng trước"
+    },
+    "globalIndex": {
+      "title": "Điểm GAII Toàn cầu",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "Tỷ lệ áp dụng AI toàn cầu",
+        "description": "Tỷ lệ áp dụng AI trung bình tại tất cả các quốc gia"
+      },
+      "inequalityGap": {
+        "title": "Khoảng cách bất bình đẳng",
+        "description": "Khoảng cách áp dụng Bắc-Nam Toàn cầu"
+      },
+      "countriesTracked": {
+        "title": "Quốc gia được theo dõi",
+        "description": "Quốc gia có dữ liệu GAII"
+      },
+      "totalPopulation": {
+        "title": "Tổng dân số",
+        "description": "Dân số được bao phủ"
+      }
+    },
+    "about": {
+      "title": "Về GAII",
+      "description": "GAII (Chỉ số Bất bình đẳng AI Toàn cầu) đo lường sự bất bình đẳng trong việc tiếp cận AI. 0 nghĩa là bình đẳng hoàn toàn, 100 nghĩa là bất bình đẳng cực độ. Nguồn: Microsoft Global AI Adoption Report 2025"
+    },
+    "worldMap": {
+      "title": "Bản đồ GAII Toàn cầu",
+      "description": "Nhấp vào quốc gia để xem chi tiết. Màu càng đỏ, bất bình đẳng AI càng nghiêm trọng. Quốc gia màu xám không có dữ liệu."
+    },
+    "topCountries": {
+      "title": "5 Quốc gia hàng đầu",
+      "subtitle": "(GAII thấp nhất)"
+    },
+    "bottomCountries": {
+      "title": "5 Quốc gia cuối",
+      "subtitle": "(GAII cao nhất)"
+    },
+    "regional": {
+      "title": "Phân tích khu vực",
+      "sortBy": "Sắp xếp theo",
+      "options": {
+        "gaii": "Điểm GAII",
+        "population": "Dân số",
+        "name": "Tên"
+      },
+      "avgAdoption": "Tỷ lệ áp dụng AI trung bình",
+      "avgGaii": "GAII trung bình",
+      "population": "Dân số",
+      "countries": "quốc gia"
+    },
+    "comparison": {
+      "title": "So sánh khu vực"
+    },
+    "adoption": "áp dụng"
+  },
+  "gaiiReport": {
+    "version": "Phiên bản",
+    "reportTitle": "Báo cáo Chỉ số Bất bình đẳng AI Toàn cầu",
+    "reportSubtitle": "Đo lường khả năng tiếp cận, chi phí hợp lý, hỗ trợ ngôn ngữ và kỹ năng AI tại 50 quốc gia",
+    "header": {
+      "publishedBy": "Xuất bản bởi",
+      "keyFindings": "Phát hiện chính từ Báo cáo GAII v1.0"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "Bất bình đẳng AI là thực tế và có thể đo lường",
+        "description": "Điểm GAII trung bình là {{score}}, cho thấy sự bất bình đẳng AI đáng kể trên toàn cầu."
+      },
+      "northSouthGap": {
+        "title": "Khoảng cách Bắc-Nam Toàn cầu",
+        "description": "Tỷ lệ áp dụng AI ở các nước phát triển ({{north}}%) cao gấp {{ratio}} lần so với các khu vực đang phát triển ({{south}}%)."
+      },
+      "affordability": {
+        "title": "Chi phí là rào cản lớn nhất",
+        "description": "Điểm chi phí hợp lý trung bình toàn cầu chỉ đạt {{score}}/100, với chi phí AI chiếm tới 30% thu nhập ở các nước nghèo nhất."
+      },
+      "language": {
+        "title": "Hỗ trợ ngôn ngữ rất quan trọng",
+        "description": "Các ngôn ngữ được hàng tỷ người sử dụng có hỗ trợ AI hạn chế, với điểm ngôn ngữ trung bình {{score}}/100."
+      }
+    },
+    "callToAction": "Các công ty AI, chính phủ và tổ chức quốc tế phải hợp tác để thu hẹp khoảng cách bất bình đẳng AI. Quỹ AlmaNEO kêu gọi định giá phân tầng, phát triển AI đa ngôn ngữ và đầu tư vào hạ tầng số để đảm bảo AI mang lại lợi ích cho toàn nhân loại.",
+    "insights": {
+      "globalDivide": {
+        "title": "Khoảng cách số AI toàn cầu đang mở rộng",
+        "description": "Tỷ lệ áp dụng AI ở Bắc Toàn cầu (33,2%) cao gấp 3,5 lần Nam Toàn cầu (9,5%), tạo ra khoảng cách số củng cố sự bất bình đẳng hiện có.",
+        "recommendation": "Ưu tiên đầu tư hạ tầng và tiếp cận AI giá cả hợp lý tại các khu vực đang phát triển."
+      },
+      "affordabilityCosts": {
+        "title": "Chi phí AI gánh nặng cho các nước thu nhập thấp",
+        "description": "Tại các nước như Bangladesh và Pakistan, chi phí đăng ký AI chiếm 25-28% thu nhập trung bình hàng tháng, khiến công cụ AI không thể tiếp cận với đa số công dân.",
+        "recommendation": "Phát triển mô hình giá phân tầng và gói miễn phí cho các khu vực thu nhập thấp."
+      },
+      "languageBarrier": {
+        "title": "Rào cản ngôn ngữ loại trừ hàng tỷ người",
+        "description": "Hơn 3 tỷ người sử dụng ngôn ngữ có hỗ trợ AI hạn chế. Chất lượng AI ngôn ngữ địa phương trung bình chỉ 35/100 ở Nam Á và 28/100 ở châu Phi hạ Sahara.",
+        "recommendation": "Đầu tư vào mô hình AI đa ngôn ngữ và nỗ lực dịch thuật cộng đồng."
+      },
+      "infrastructureGap": {
+        "title": "Khoảng cách hạ tầng ở vùng nông thôn",
+        "description": "Khoảng cách số thành thị-nông thôn vẫn tồn tại ngay cả ở các nước thu nhập trung bình. Tỷ lệ phổ cập internet giảm 30-40% ở vùng nông thôn.",
+        "recommendation": "Mở rộng kết nối di động và ứng dụng AI có thể hoạt động ngoại tuyến."
+      },
+      "aiLiteracy": {
+        "title": "Khủng hoảng hiểu biết về AI",
+        "description": "Điểm hiểu biết AI trung bình toàn cầu chỉ đạt 42/100. Ngay cả ở các nước phát triển, hơn 60% dân số thiếu hiểu biết cơ bản về AI.",
+        "recommendation": "Tích hợp giáo dục AI vào chương trình học và đào tạo nghề."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "Triển khai giá phân tầng cho thị trường mới nổi",
+        "description": "Các công ty AI nên cung cấp các mức giá phù hợp thu nhập, cho phép người dùng ở các nước thu nhập thấp tiếp cận công cụ AI với $1-5/tháng thay vì $20+.",
+        "impact": "Có thể tăng khả năng tiếp cận AI cho hơn 2 tỷ người ở Nam Toàn cầu."
+      },
+      "nationalInfrastructure": {
+        "title": "Đầu tư hạ tầng AI quốc gia",
+        "description": "Chính phủ nên ưu tiên mở rộng băng thông rộng, phát triển trung tâm dữ liệu và tài nguyên điện toán AI công cộng.",
+        "impact": "Yêu cầu nền tảng cho dân chủ hóa AI."
+      },
+      "multilingualSupport": {
+        "title": "Mở rộng hỗ trợ AI đa ngôn ngữ",
+        "description": "Ưu tiên phát triển khả năng AI trong các ngôn ngữ thiếu phục vụ bao gồm Hindi, Bengal, Swahili và Việt Nam.",
+        "impact": "Sẽ phục vụ hơn 2,5 tỷ người nói các ngôn ngữ thiếu phục vụ."
+      },
+      "aiLiteracyPrograms": {
+        "title": "Khởi động chương trình hiểu biết AI",
+        "description": "Hợp tác với các tổ chức địa phương để cung cấp giáo dục AI qua trung tâm cộng đồng, thư viện và đơn vị lưu động.",
+        "impact": "Xây dựng năng lực AI cơ bản trong cộng đồng thiếu phục vụ."
+      },
+      "equityFund": {
+        "title": "Thành lập Quỹ Bình đẳng AI Toàn cầu",
+        "description": "Tạo cơ chế tài trợ quốc tế để trợ cấp tiếp cận AI cho các nước kém phát triển nhất.",
+        "impact": "Cách tiếp cận có hệ thống để giải quyết bất bình đẳng AI."
+      },
+      "gaiiMetric": {
+        "title": "Đưa GAII vào chỉ số phát triển quốc gia",
+        "description": "Áp dụng GAII như chỉ số chính thức bên cạnh HDI và GDP để theo dõi bất bình đẳng AI.",
+        "impact": "Tăng tính minh bạch và trách nhiệm giải trình về bình đẳng AI."
+      }
+    },
+    "regionalInsights": {
+      "NA": "Bắc Mỹ cho thấy tỷ lệ áp dụng AI cao nhưng có rào cản chi phí đáng kể cho dân số thu nhập thấp.",
+      "EU": "Châu Âu thể hiện hạ tầng mạnh mẽ nhưng khác biệt lớn về hiểu biết AI giữa các quốc gia thành viên.",
+      "EA": "Đông Á dẫn đầu về chất lượng hạ tầng với Hàn Quốc và Singapore là những nhà lãnh đạo toàn cầu.",
+      "SA": "Nam Á đối mặt với thách thức chi phí nghiêm trọng với đăng ký AI chiếm tới 28% thu nhập hàng tháng.",
+      "SEA": "Đông Nam Á cho thấy tiềm năng tăng trưởng nhanh với Singapore là trung tâm khu vực.",
+      "LA": "Mỹ Latinh hưởng lợi từ hỗ trợ AI tiếng Tây Ban Nha nhưng đối mặt khoảng cách hạ tầng.",
+      "ME": "Trung Đông cho thấy phát triển phân cực với UAE dẫn đầu trong khi các vùng xung đột tụt hậu.",
+      "SSA": "Châu Phi hạ Sahara có khoảng cách hạ tầng và chi phí nghiêm trọng cần can thiệp khẩn cấp.",
+      "OC": "Châu Đại Dương đạt tiếp cận gần như phổ quát với Úc và New Zealand làm chuẩn.",
+      "CA": "Trung Á cho thấy phát triển vừa phải với đầu tư ngày càng tăng vào hạ tầng số."
+    },
+    "targets": {
+      "governments": "Chính phủ",
+      "corporations": "Doanh nghiệp",
+      "ngos": "Tổ chức phi chính phủ",
+      "international": "Quốc tế"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "Tóm tắt điều hành",
+        "subtitle": "Phát hiện chính từ Báo cáo GAII v1.0"
+      },
+      "countryRankings": {
+        "title": "Xếp hạng quốc gia",
+        "subtitle": "Điểm GAII của 50 quốc gia (thấp hơn tốt hơn)"
+      },
+      "regionalAnalysis": {
+        "title": "Phân tích khu vực",
+        "subtitle": "Phân tích GAII theo khu vực thế giới"
+      },
+      "keyInsights": {
+        "title": "Thông tin chính",
+        "subtitle": "Phát hiện và quan sát quan trọng"
+      },
+      "recommendations": {
+        "title": "Khuyến nghị chính sách",
+        "subtitle": "Hành động cho các bên liên quan để giải quyết bất bình đẳng AI"
+      },
+      "methodology": {
+        "title": "Phương pháp luận",
+        "subtitle": "Cách tính điểm GAII"
+      },
+      "dataSources": {
+        "title": "Nguồn dữ liệu",
+        "subtitle": "Nguồn dữ liệu chính được sử dụng trong báo cáo này"
+      }
+    },
+    "stats": {
+      "globalGaii": "Điểm GAII Toàn cầu",
+      "countriesAnalyzed": "Quốc gia phân tích",
+      "populationCovered": "Dân số bao phủ",
+      "inequalityGap": "Khoảng cách bất bình đẳng"
+    },
+    "indicators": {
+      "access": "Tiếp cận",
+      "affordability": "Chi phí hợp lý",
+      "language": "Ngôn ngữ",
+      "skill": "Kỹ năng",
+      "globalAverage": "Trung bình toàn cầu theo chỉ số"
+    },
+    "table": {
+      "rank": "Hạng",
+      "country": "Quốc gia",
+      "gaii": "GAII",
+      "grade": "Mức",
+      "showLess": "Thu gọn",
+      "showAll": "Xem tất cả {{count}} quốc gia"
+    },
+    "region": {
+      "countries": "quốc gia",
+      "top": "Hàng đầu",
+      "bottom": "Cuối"
+    },
+    "methodology": {
+      "formula": "Công thức",
+      "weights": "Trọng số chỉ số",
+      "thresholds": "Ngưỡng xếp hạng",
+      "thresholdDesc": {
+        "low": "Bình đẳng AI tốt nhất",
+        "moderate": "Còn chỗ để cải thiện",
+        "high": "Bất bình đẳng đáng kể",
+        "critical": "Cần can thiệp khẩn cấp"
+      }
+    },
+    "priority": {
+      "high": "cao",
+      "medium": "trung bình",
+      "low": "thấp"
+    },
+    "impact": "Tác động",
+    "cta": {
+      "title": "Tham gia phong trào vì bình đẳng AI",
+      "learnMore": "Tìm hiểu thêm về AlmaNEO",
+      "downloadPdf": "Tải báo cáo đầy đủ (PDF)",
+      "loadingPdf": "Đang tải PDF...",
+      "generatingPdf": "Đang tạo PDF..."
+    }
+  }
+}

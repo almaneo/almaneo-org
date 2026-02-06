@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "GAII 仪表板",
+      "subtitle": "全球AI不平等指数 - 实时AI不平等监测",
+      "loading": "正在加载GAII数据...",
+      "error": "加载GAII数据失败，请重试。",
+      "refresh": "刷新",
+      "lastUpdated": "最后更新",
+      "dataSources": "数据来源"
+    },
+    "grades": {
+      "low": "低不平等",
+      "moderate": "中等",
+      "high": "高不平等",
+      "critical": "严重"
+    },
+    "trend": {
+      "stable": "稳定",
+      "vsLastMonth": "环比"
+    },
+    "globalIndex": {
+      "title": "全球GAII得分",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "全球AI采用率",
+        "description": "所有国家的平均AI采用率"
+      },
+      "inequalityGap": {
+        "title": "不平等差距",
+        "description": "全球北方与南方的采用率差距"
+      },
+      "countriesTracked": {
+        "title": "追踪国家",
+        "description": "拥有GAII数据的国家"
+      },
+      "totalPopulation": {
+        "title": "总人口",
+        "description": "数据覆盖人口"
+      }
+    },
+    "about": {
+      "title": "关于GAII",
+      "description": "GAII（全球AI不平等指数）衡量AI可访问性的不平等。0表示完全平等，100表示极端不平等。数据来源：微软全球AI采用报告2025"
+    },
+    "worldMap": {
+      "title": "全球GAII地图",
+      "description": "点击国家查看详情。颜色越红，AI不平等越严重。灰色国家没有数据。"
+    },
+    "topCountries": {
+      "title": "前5名国家",
+      "subtitle": "（最低GAII）"
+    },
+    "bottomCountries": {
+      "title": "后5名国家",
+      "subtitle": "（最高GAII）"
+    },
+    "regional": {
+      "title": "区域分析",
+      "sortBy": "排序方式",
+      "options": {
+        "gaii": "GAII得分",
+        "population": "人口",
+        "name": "名称"
+      },
+      "avgAdoption": "平均AI采用率",
+      "avgGaii": "平均GAII",
+      "population": "人口",
+      "countries": "个国家"
+    },
+    "comparison": {
+      "title": "区域比较"
+    },
+    "adoption": "采用率"
+  },
+  "gaiiReport": {
+    "version": "版本",
+    "reportTitle": "全球AI不平等指数报告",
+    "reportSubtitle": "衡量50个国家的AI访问、成本可承受性、语言支持和技能",
+    "header": {
+      "publishedBy": "发布者",
+      "keyFindings": "GAII报告v1.0主要发现"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "AI不平等是真实且可衡量的",
+        "description": "平均GAII得分为{{score}}，表明全球存在显著的AI不平等。"
+      },
+      "northSouthGap": {
+        "title": "全球北方与南方的差距",
+        "description": "发达国家的AI采用率({{north}}%)是发展中地区({{south}}%)的{{ratio}}倍。"
+      },
+      "affordability": {
+        "title": "成本是最大的障碍",
+        "description": "全球平均可承受性得分仅为{{score}}/100，最贫穷国家的AI成本占收入的30%。"
+      },
+      "language": {
+        "title": "语言支持至关重要",
+        "description": "数十亿人使用的语言的AI支持有限，平均语言得分为{{score}}/100。"
+      }
+    },
+    "callToAction": "AI企业、政府和国际组织必须合作缩小AI不平等差距。AlmaNEO基金会呼吁实施差异化定价、多语言AI开发和数字基础设施投资，确保AI惠及全人类。",
+    "insights": {
+      "globalDivide": {
+        "title": "全球AI鸿沟正在加深",
+        "description": "全球北方(33.2%)的AI采用率是全球南方(9.5%)的3.5倍，形成了加剧现有不平等的数字鸿沟。",
+        "recommendation": "优先在发展中地区投资基础设施和提供可负担的AI访问。"
+      },
+      "affordabilityCosts": {
+        "title": "AI成本给低收入国家造成负担",
+        "description": "在孟加拉国、巴基斯坦等国家，AI订阅费用占月均收入的25-28%，使大多数公民无法使用AI工具。",
+        "recommendation": "为低收入地区开发差异化定价模式和免费层级。"
+      },
+      "languageBarrier": {
+        "title": "语言障碍排斥了数十亿人",
+        "description": "超过30亿人使用AI支持有限的语言。南亚的本地语言AI质量平均仅为35/100，撒哈拉以南非洲为28/100。",
+        "recommendation": "投资多语言AI模型和社区驱动的翻译工作。"
+      },
+      "infrastructureGap": {
+        "title": "农村地区的基础设施差距",
+        "description": "即使在中等收入国家，城乡数字鸿沟仍然存在。农村地区的互联网普及率低30-40%。",
+        "recommendation": "扩大移动连接和支持离线的AI应用。"
+      },
+      "aiLiteracy": {
+        "title": "AI素养危机",
+        "description": "全球平均AI素养得分仅为42/100。即使在发达国家，超过60%的人口缺乏基本的AI理解。",
+        "recommendation": "将AI教育纳入学校课程和职业培训项目。"
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "为新兴市场实施差异化定价",
+        "description": "AI企业应提供与收入匹配的价格层级，使低收入国家的用户能以每月1-5美元而非20+美元使用AI工具。",
+        "impact": "可为全球南方20多亿人提高AI可访问性。"
+      },
+      "nationalInfrastructure": {
+        "title": "投资国家AI基础设施",
+        "description": "政府应优先扩展宽带、发展数据中心和公共AI计算资源。",
+        "impact": "AI民主化的基础要求。"
+      },
+      "multilingualSupport": {
+        "title": "扩大多语言AI支持",
+        "description": "优先开发印地语、孟加拉语、斯瓦希里语和越南语等欠缺语言的AI功能。",
+        "impact": "可服务25亿以上使用欠缺语言的人口。"
+      },
+      "aiLiteracyPrograms": {
+        "title": "启动AI素养项目",
+        "description": "与当地组织合作，通过社区中心、图书馆和流动设施提供AI教育。",
+        "impact": "在欠发达社区建立基础AI能力。"
+      },
+      "equityFund": {
+        "title": "设立全球AI平等基金",
+        "description": "建立国际资金机制，为最不发达国家补贴AI访问。",
+        "impact": "解决AI不平等的系统性方法。"
+      },
+      "gaiiMetric": {
+        "title": "将GAII纳入国家发展指标",
+        "description": "将GAII作为与HDI和GDP并列的官方指标，追踪AI不平等。",
+        "impact": "提高AI平等的可见性和责任感。"
+      }
+    },
+    "regionalInsights": {
+      "NA": "北美显示出高AI采用率，但低收入人群面临重大成本障碍。",
+      "EU": "欧洲展示了强大的基础设施，但成员国之间的AI素养差异很大。",
+      "EA": "东亚在基础设施质量方面领先，韩国和新加坡是全球领导者。",
+      "SA": "南亚面临严重的成本问题，AI订阅费用占月收入的28%。",
+      "SEA": "东南亚以新加坡为区域枢纽，展现出快速增长潜力。",
+      "LA": "拉丁美洲受益于西班牙语AI支持，但面临基础设施差距。",
+      "ME": "中东发展两极化，阿联酋领先而冲突地区落后。",
+      "SSA": "撒哈拉以南非洲存在严重的基础设施和成本差距，需要紧急干预。",
+      "OC": "大洋洲以澳大利亚和新西兰为基准，实现了几乎普遍的访问。",
+      "CA": "中亚显示出中等水平的发展，数字基础设施投资不断增加。"
+    },
+    "targets": {
+      "governments": "政府",
+      "corporations": "企业",
+      "ngos": "非政府组织",
+      "international": "国际组织"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "执行摘要",
+        "subtitle": "GAII报告v1.0主要发现"
+      },
+      "countryRankings": {
+        "title": "国家排名",
+        "subtitle": "50个国家的GAII得分（越低越好）"
+      },
+      "regionalAnalysis": {
+        "title": "区域分析",
+        "subtitle": "按世界区域划分的GAII分析"
+      },
+      "keyInsights": {
+        "title": "主要见解",
+        "subtitle": "关键发现和观察"
+      },
+      "recommendations": {
+        "title": "政策建议",
+        "subtitle": "利益相关方应对AI不平等的行动方案"
+      },
+      "methodology": {
+        "title": "方法论",
+        "subtitle": "GAII得分的计算方式"
+      },
+      "dataSources": {
+        "title": "数据来源",
+        "subtitle": "本报告使用的主要数据来源"
+      }
+    },
+    "stats": {
+      "globalGaii": "全球GAII得分",
+      "countriesAnalyzed": "分析国家",
+      "populationCovered": "覆盖人口",
+      "inequalityGap": "不平等差距"
+    },
+    "indicators": {
+      "access": "访问性",
+      "affordability": "可承受性",
+      "language": "语言",
+      "skill": "技能",
+      "globalAverage": "全球指标平均值"
+    },
+    "table": {
+      "rank": "排名",
+      "country": "国家",
+      "gaii": "GAII",
+      "grade": "等级",
+      "showLess": "收起",
+      "showAll": "查看全部{{count}}个国家"
+    },
+    "region": {
+      "countries": "个国家",
+      "top": "前",
+      "bottom": "后"
+    },
+    "methodology": {
+      "formula": "公式",
+      "weights": "指标权重",
+      "thresholds": "等级标准",
+      "thresholdDesc": {
+        "low": "AI平等最佳",
+        "moderate": "有改进空间",
+        "high": "显著不平等",
+        "critical": "需要紧急干预"
+      }
+    },
+    "priority": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "impact": "影响",
+    "cta": {
+      "title": "加入AI平等运动",
+      "learnMore": "了解更多关于AlmaNEO",
+      "downloadPdf": "下载完整报告（PDF）",
+      "loadingPdf": "正在加载PDF...",
+      "generatingPdf": "正在生成PDF..."
+    }
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "Dashibodi ya GAII",
+      "subtitle": "Fahirisi ya Ukosefu wa Usawa wa AI Duniani - Ufuatiliaji wa wakati halisi",
+      "loading": "Inapakia data ya GAII...",
+      "error": "Imeshindwa kupakia data ya GAII. Tafadhali jaribu tena.",
+      "refresh": "Sasisha",
+      "lastUpdated": "Ilisasishwa mwisho",
+      "dataSources": "Vyanzo vya data"
+    },
+    "grades": {
+      "low": "Ukosefu wa usawa mdogo",
+      "moderate": "Wastani",
+      "high": "Ukosefu wa usawa mkubwa",
+      "critical": "Mbaya sana"
+    },
+    "trend": {
+      "stable": "Thabiti",
+      "vsLastMonth": "dhidi ya mwezi uliopita"
+    },
+    "globalIndex": {
+      "title": "Alama ya GAII Duniani",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "Kiwango cha Kupitishwa AI Duniani",
+        "description": "Wastani wa kupitishwa AI katika nchi zote"
+      },
+      "inequalityGap": {
+        "title": "Pengo la Ukosefu wa Usawa",
+        "description": "Pengo la kupitishwa Kaskazini-Kusini Duniani"
+      },
+      "countriesTracked": {
+        "title": "Nchi Zinazofuatiliwa",
+        "description": "Nchi zenye data ya GAII"
+      },
+      "totalPopulation": {
+        "title": "Jumla ya Watu",
+        "description": "Watu wanaoshughulikiwa"
+      }
+    },
+    "about": {
+      "title": "Kuhusu GAII",
+      "description": "GAII (Fahirisi ya Ukosefu wa Usawa wa AI Duniani) hupima ukosefu wa usawa katika upatikanaji wa AI. 0 inamaanisha usawa kamili, 100 inamaanisha ukosefu wa usawa mkubwa. Chanzo: Microsoft Global AI Adoption Report 2025"
+    },
+    "worldMap": {
+      "title": "Ramani ya GAII Duniani",
+      "description": "Bofya nchi kuona maelezo. Rangi inavyokuwa nyekundu zaidi, ukosefu wa usawa wa AI unakuwa mkubwa zaidi. Nchi za kijivu hazina data."
+    },
+    "topCountries": {
+      "title": "Nchi 5 Bora",
+      "subtitle": "(GAII ya Chini Zaidi)"
+    },
+    "bottomCountries": {
+      "title": "Nchi 5 za Mwisho",
+      "subtitle": "(GAII ya Juu Zaidi)"
+    },
+    "regional": {
+      "title": "Uchambuzi wa Kikanda",
+      "sortBy": "Panga kwa",
+      "options": {
+        "gaii": "Alama ya GAII",
+        "population": "Watu",
+        "name": "Jina"
+      },
+      "avgAdoption": "Wastani wa Kupitishwa AI",
+      "avgGaii": "Wastani wa GAII",
+      "population": "Watu",
+      "countries": "nchi"
+    },
+    "comparison": {
+      "title": "Ulinganisho wa Kikanda"
+    },
+    "adoption": "kupitishwa"
+  },
+  "gaiiReport": {
+    "version": "Toleo",
+    "reportTitle": "Ripoti ya Fahirisi ya Ukosefu wa Usawa wa AI Duniani",
+    "reportSubtitle": "Kupima upatikanaji, gharama nafuu, msaada wa lugha, na ujuzi wa AI katika nchi 50",
+    "header": {
+      "publishedBy": "Imechapishwa na",
+      "keyFindings": "Matokeo muhimu kutoka Ripoti ya GAII v1.0"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "Ukosefu wa usawa wa AI ni wa kweli na unaopimika",
+        "description": "Alama ya wastani ya GAII ni {{score}}, inayoonyesha ukosefu mkubwa wa usawa wa AI duniani."
+      },
+      "northSouthGap": {
+        "title": "Pengo la Kaskazini-Kusini Duniani",
+        "description": "Kupitishwa kwa AI katika nchi zilizoendelea ({{north}}%) ni mara {{ratio}} zaidi ya maeneo yanayoendelea ({{south}}%)."
+      },
+      "affordability": {
+        "title": "Gharama ni kikwazo kikubwa zaidi",
+        "description": "Alama ya wastani ya gharama nafuu duniani ni {{score}}/100 tu, na gharama za AI zinachukua hadi 30% ya mapato katika nchi maskini zaidi."
+      },
+      "language": {
+        "title": "Msaada wa lugha ni muhimu sana",
+        "description": "Lugha zinazozungumzwa na mabilioni ya watu zina msaada mdogo wa AI, na alama ya wastani ya lugha ni {{score}}/100."
+      }
+    },
+    "callToAction": "Makampuni ya AI, serikali, na mashirika ya kimataifa lazima yashirikiane kufunga pengo la ukosefu wa usawa wa AI. Taasisi ya AlmaNEO inatoa wito wa bei ya ngazi, maendeleo ya AI ya lugha nyingi, na uwekezaji katika miundombinu ya kidijitali ili kuhakikisha AI inanufaisha binadamu wote.",
+    "insights": {
+      "globalDivide": {
+        "title": "Pengo la kidijitali la AI duniani linakua",
+        "description": "Kupitishwa kwa AI katika Kaskazini ya Ulimwengu (33.2%) ni mara 3.5 zaidi ya Kusini (9.5%), kuunda pengo la kidijitali linaloimarisha ukosefu wa usawa uliopo.",
+        "recommendation": "Tanguliza uwekezaji wa miundombinu na upatikanaji wa AI kwa bei nafuu katika maeneo yanayoendelea."
+      },
+      "affordabilityCosts": {
+        "title": "Gharama za AI zinazidisha mzigo kwa nchi za mapato ya chini",
+        "description": "Katika nchi kama Bangladesh na Pakistan, gharama za kujisajili kwa AI zinawakilisha 25-28% ya mapato ya wastani ya kila mwezi, kufanya zana za AI kutokupatikana kwa wananchi wengi.",
+        "recommendation": "Tengeneza mifumo ya bei ya ngazi na viwango vya bure kwa maeneo ya mapato ya chini."
+      },
+      "languageBarrier": {
+        "title": "Kikwazo cha lugha kinatoa mabilioni ya watu nje",
+        "description": "Zaidi ya watu bilioni 3 wanazungumza lugha zenye msaada mdogo wa AI. Ubora wa AI wa lugha za ndani una wastani wa 35/100 tu katika Asia Kusini na 28/100 katika Afrika Kusini mwa Sahara.",
+        "recommendation": "Wekeza katika mifumo ya AI ya lugha nyingi na juhudi za kutafsiri zinazodaishwa na jamii."
+      },
+      "infrastructureGap": {
+        "title": "Pengo la miundombinu katika maeneo ya vijijini",
+        "description": "Pengo la kidijitali kati ya miji na vijijini linaendelea hata katika nchi za mapato ya kati. Upatikanaji wa intaneti hupungua kwa 30-40% katika maeneo ya vijijini.",
+        "recommendation": "Panua muunganisho wa simu za mkononi na programu za AI zinazoweza kufanya kazi nje ya mtandao."
+      },
+      "aiLiteracy": {
+        "title": "Mgogoro wa elimu ya AI",
+        "description": "Alama ya wastani ya elimu ya AI duniani ni 42/100 tu. Hata katika nchi zilizoendelea, zaidi ya 60% ya watu hawana uelewa wa msingi wa AI.",
+        "recommendation": "Jumuisha elimu ya AI katika mitaala ya shule na programu za mafunzo ya kazi."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "Tekeleza bei ya ngazi kwa masoko yanayoibuka",
+        "description": "Makampuni ya AI yanapaswa kutoa viwango vya bei vilivyorekebishwa kulingana na mapato, kuruhusu watumiaji katika nchi za mapato ya chini kupata zana za AI kwa $1-5/mwezi badala ya $20+.",
+        "impact": "Inaweza kuongeza upatikanaji wa AI kwa zaidi ya watu bilioni 2 katika Kusini ya Ulimwengu."
+      },
+      "nationalInfrastructure": {
+        "title": "Wekeza katika miundombinu ya AI ya kitaifa",
+        "description": "Serikali zinapaswa kutanguliza upanuzi wa broadband, maendeleo ya vituo vya data, na rasilimali za kompyuta za AI za umma.",
+        "impact": "Sharti la msingi kwa demokrasia ya AI."
+      },
+      "multilingualSupport": {
+        "title": "Panua msaada wa AI wa lugha nyingi",
+        "description": "Tanguliza maendeleo ya uwezo wa AI katika lugha zisizohudumika ikiwa ni pamoja na Kihindi, Kibengali, Kiswahili, na Kivietinamu.",
+        "impact": "Itahudumia zaidi ya watu bilioni 2.5 wanaozungumza lugha zisizohudumika."
+      },
+      "aiLiteracyPrograms": {
+        "title": "Anzisha programu za elimu ya AI",
+        "description": "Shirikiana na mashirika ya ndani kutoa elimu ya AI kupitia vituo vya jamii, maktaba, na vitengo vya simu.",
+        "impact": "Jenga uwezo wa msingi wa AI katika jamii zisizohudumika."
+      },
+      "equityFund": {
+        "title": "Anzisha Mfuko wa Usawa wa AI Duniani",
+        "description": "Unda utaratibu wa ufadhili wa kimataifa kwa ruzuku ya upatikanaji wa AI katika nchi zilizo chini zaidi za maendeleo.",
+        "impact": "Njia ya utaratibu ya kushughulikia ukosefu wa usawa wa AI."
+      },
+      "gaiiMetric": {
+        "title": "Jumuisha GAII katika viashiria vya maendeleo ya kitaifa",
+        "description": "Pitisha GAII kama kiashiria rasmi pamoja na HDI na GDP kufuatilia ukosefu wa usawa wa AI.",
+        "impact": "Huongeza mwonekano na uwajibikaji kwa usawa wa AI."
+      }
+    },
+    "regionalInsights": {
+      "NA": "Amerika Kaskazini inaonyesha kupitishwa kwa AI kwa kiwango cha juu lakini vikwazo vikubwa vya gharama kwa watu wa mapato ya chini.",
+      "EU": "Ulaya inaonyesha miundombinu imara lakini inatofautiana sana katika elimu ya AI kati ya nchi wanachama.",
+      "EA": "Asia Mashariki inaongoza katika ubora wa miundombinu na Korea Kusini na Singapore kama viongozi wa kimataifa.",
+      "SA": "Asia Kusini inakabiliwa na changamoto kubwa za gharama na usajili wa AI unaochukua hadi 28% ya mapato ya kila mwezi.",
+      "SEA": "Asia ya Kusini-mashariki inaonyesha uwezo wa ukuaji wa haraka na Singapore kama kituo cha kikanda.",
+      "LA": "Amerika ya Kilatini inanufaika na msaada wa AI wa Kihispania lakini inakabiliwa na mapengo ya miundombinu.",
+      "ME": "Mashariki ya Kati inaonyesha maendeleo yaliyogawanyika na UAE ikiongoza wakati maeneo ya migogoro yanasalia nyuma.",
+      "SSA": "Afrika Kusini mwa Sahara ina mapengo muhimu ya miundombinu na gharama yanayohitaji kuingiliwa haraka.",
+      "OC": "Oceania inafikia upatikanaji wa karibu kote na Australia na New Zealand kama vigezo.",
+      "CA": "Asia ya Kati inaonyesha maendeleo ya wastani na uwekezaji unaokua katika miundombinu ya kidijitali."
+    },
+    "targets": {
+      "governments": "Serikali",
+      "corporations": "Makampuni",
+      "ngos": "NGO",
+      "international": "Kimataifa"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "Muhtasari wa Utekelezaji",
+        "subtitle": "Matokeo muhimu kutoka Ripoti ya GAII v1.0"
+      },
+      "countryRankings": {
+        "title": "Viwango vya Nchi",
+        "subtitle": "Alama za GAII za nchi 50 (ndogo ni bora)"
+      },
+      "regionalAnalysis": {
+        "title": "Uchambuzi wa Kikanda",
+        "subtitle": "Uchambuzi wa GAII kwa eneo la ulimwengu"
+      },
+      "keyInsights": {
+        "title": "Maarifa Muhimu",
+        "subtitle": "Matokeo na uchunguzi muhimu"
+      },
+      "recommendations": {
+        "title": "Mapendekezo ya Sera",
+        "subtitle": "Hatua kwa wadau kushughulikia ukosefu wa usawa wa AI"
+      },
+      "methodology": {
+        "title": "Mbinu",
+        "subtitle": "Jinsi alama za GAII zinavyohesabiwa"
+      },
+      "dataSources": {
+        "title": "Vyanzo vya Data",
+        "subtitle": "Vyanzo vya data vya msingi vilivyotumika katika ripoti hii"
+      }
+    },
+    "stats": {
+      "globalGaii": "Alama ya GAII Duniani",
+      "countriesAnalyzed": "Nchi Zilizochambuliwa",
+      "populationCovered": "Watu Walioshughulikiwa",
+      "inequalityGap": "Pengo la Ukosefu wa Usawa"
+    },
+    "indicators": {
+      "access": "Upatikanaji",
+      "affordability": "Gharama Nafuu",
+      "language": "Lugha",
+      "skill": "Ujuzi",
+      "globalAverage": "Wastani wa Duniani kwa Kiashiria"
+    },
+    "table": {
+      "rank": "Nafasi",
+      "country": "Nchi",
+      "gaii": "GAII",
+      "grade": "Daraja",
+      "showLess": "Onyesha kidogo",
+      "showAll": "Angalia nchi zote {{count}}"
+    },
+    "region": {
+      "countries": "nchi",
+      "top": "Juu",
+      "bottom": "Chini"
+    },
+    "methodology": {
+      "formula": "Fomula",
+      "weights": "Uzito wa Viashiria",
+      "thresholds": "Vizingiti vya Daraja",
+      "thresholdDesc": {
+        "low": "Usawa bora wa AI",
+        "moderate": "Nafasi ya kuboresha",
+        "high": "Ukosefu mkubwa wa usawa",
+        "critical": "Kuingiliwa haraka kunahitajika"
+      }
+    },
+    "priority": {
+      "high": "juu",
+      "medium": "wastani",
+      "low": "chini"
+    },
+    "impact": "Athari",
+    "cta": {
+      "title": "Jiunge na harakati za usawa wa AI",
+      "learnMore": "Jifunze zaidi kuhusu AlmaNEO",
+      "downloadPdf": "Pakua ripoti kamili (PDF)",
+      "loadingPdf": "Inapakia PDF...",
+      "generatingPdf": "Inaunda PDF..."
+    }
+  }
+}

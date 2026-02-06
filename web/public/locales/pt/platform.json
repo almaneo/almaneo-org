@@ -1,0 +1,263 @@
+{
+  "gaii": {
+    "dashboard": {
+      "title": "Painel GAII",
+      "subtitle": "Índice Global de Desigualdade em IA - Monitoramento em tempo real",
+      "loading": "Carregando dados GAII...",
+      "error": "Falha ao carregar dados GAII. Tente novamente.",
+      "refresh": "Atualizar",
+      "lastUpdated": "Última atualização",
+      "dataSources": "Fontes de dados"
+    },
+    "grades": {
+      "low": "Baixa desigualdade",
+      "moderate": "Moderada",
+      "high": "Alta desigualdade",
+      "critical": "Crítica"
+    },
+    "trend": {
+      "stable": "Estável",
+      "vsLastMonth": "vs mês anterior"
+    },
+    "globalIndex": {
+      "title": "Pontuação GAII Global",
+      "outOf": "/ 100"
+    },
+    "metrics": {
+      "adoptionRate": {
+        "title": "Taxa de Adoção Global",
+        "description": "Adoção média de IA em todos os países"
+      },
+      "inequalityGap": {
+        "title": "Brecha de Desigualdade",
+        "description": "Brecha de adoção Norte-Sul Global"
+      },
+      "countriesTracked": {
+        "title": "Países Monitorados",
+        "description": "Países com dados GAII"
+      },
+      "totalPopulation": {
+        "title": "População Total",
+        "description": "População coberta"
+      }
+    },
+    "about": {
+      "title": "Sobre o GAII",
+      "description": "GAII (Índice Global de Desigualdade em IA) mede a desigualdade no acesso à IA. 0 significa igualdade total, 100 significa desigualdade extrema. Fonte: Microsoft Global AI Adoption Report 2025"
+    },
+    "worldMap": {
+      "title": "Mapa GAII Global",
+      "description": "Clique em um país para ver detalhes. Quanto mais vermelha a cor, mais grave a desigualdade em IA. Países cinzas não têm dados."
+    },
+    "topCountries": {
+      "title": "Top 5 Países",
+      "subtitle": "(Menor GAII)"
+    },
+    "bottomCountries": {
+      "title": "Últimos 5 Países",
+      "subtitle": "(Maior GAII)"
+    },
+    "regional": {
+      "title": "Análise Regional",
+      "sortBy": "Ordenar por",
+      "options": {
+        "gaii": "Pontuação GAII",
+        "population": "População",
+        "name": "Nome"
+      },
+      "avgAdoption": "Adoção IA média",
+      "avgGaii": "GAII médio",
+      "population": "População",
+      "countries": "países"
+    },
+    "comparison": {
+      "title": "Comparação Regional"
+    },
+    "adoption": "adoção"
+  },
+  "gaiiReport": {
+    "version": "Versão",
+    "reportTitle": "Relatório do Índice Global de Desigualdade em IA",
+    "reportSubtitle": "Medindo acesso, acessibilidade, suporte linguístico e habilidades em IA em 50 países",
+    "header": {
+      "publishedBy": "Publicado por",
+      "keyFindings": "Principais descobertas do Relatório GAII v1.0"
+    },
+    "keyFindings": {
+      "aiInequality": {
+        "title": "A desigualdade em IA é real e mensurável",
+        "description": "A pontuação média do GAII é {{score}}, indicando desigualdade significativa em IA globalmente."
+      },
+      "northSouthGap": {
+        "title": "Brecha Norte-Sul Global",
+        "description": "A adoção de IA em países desenvolvidos ({{north}}%) é {{ratio}}x maior que em regiões em desenvolvimento ({{south}}%)."
+      },
+      "affordability": {
+        "title": "A acessibilidade é a maior barreira",
+        "description": "A pontuação média global de acessibilidade é apenas {{score}}/100, com custos de IA consumindo até 30% da renda nos países mais pobres."
+      },
+      "language": {
+        "title": "O suporte linguístico é crítico",
+        "description": "Idiomas falados por bilhões têm suporte limitado de IA, com pontuação média linguística de {{score}}/100."
+      }
+    },
+    "callToAction": "Empresas de IA, governos e organizações internacionais devem trabalhar juntos para fechar a lacuna de desigualdade em IA. A Fundação AlmaNEO defende preços escalonados, desenvolvimento de IA multilíngue e investimento em infraestrutura digital para garantir que a IA beneficie toda a humanidade.",
+    "insights": {
+      "globalDivide": {
+        "title": "A divisão digital em IA está se ampliando",
+        "description": "A adoção de IA no Norte Global (33,2%) é 3,5x maior que no Sul Global (9,5%), criando uma divisão digital que reforça as desigualdades existentes.",
+        "recommendation": "Priorizar investimento em infraestrutura e acesso acessível à IA em regiões em desenvolvimento."
+      },
+      "affordabilityCosts": {
+        "title": "Custos de IA pesam sobre países de baixa renda",
+        "description": "Em países como Bangladesh e Paquistão, os custos de assinatura de IA representam 25-28% da renda mensal média, tornando as ferramentas de IA inacessíveis para a maioria dos cidadãos.",
+        "recommendation": "Desenvolver modelos de preços escalonados e níveis gratuitos para regiões de baixa renda."
+      },
+      "languageBarrier": {
+        "title": "A barreira linguística exclui bilhões",
+        "description": "Mais de 3 bilhões de pessoas falam idiomas com suporte limitado de IA. A qualidade da IA em idiomas locais é em média 35/100 no Sul da Ásia e 28/100 na África Subsaariana.",
+        "recommendation": "Investir em modelos de IA multilíngues e esforços de tradução comunitária."
+      },
+      "infrastructureGap": {
+        "title": "Lacuna de infraestrutura em áreas rurais",
+        "description": "A divisão digital urbano-rural persiste mesmo em países de renda média. A penetração da internet cai 30-40% em áreas rurais.",
+        "recommendation": "Expandir a conectividade móvel e aplicações de IA que funcionam offline."
+      },
+      "aiLiteracy": {
+        "title": "Crise de alfabetização em IA",
+        "description": "A pontuação média global de alfabetização em IA é apenas 42/100. Mesmo em países desenvolvidos, mais de 60% da população carece de compreensão básica de IA.",
+        "recommendation": "Integrar educação em IA nos currículos escolares e programas de treinamento profissional."
+      }
+    },
+    "recommendations": {
+      "tieredPricing": {
+        "title": "Implementar preços escalonados para mercados emergentes",
+        "description": "Empresas de IA devem oferecer níveis de preços ajustados à renda, permitindo que usuários em países de baixa renda acessem ferramentas de IA por $1-5/mês em vez de $20+.",
+        "impact": "Poderia aumentar o acesso à IA para mais de 2 bilhões de pessoas no Sul Global."
+      },
+      "nationalInfrastructure": {
+        "title": "Investir em infraestrutura nacional de IA",
+        "description": "Governos devem priorizar expansão de banda larga, desenvolvimento de data centers e recursos públicos de computação de IA.",
+        "impact": "Requisito fundamental para a democratização da IA."
+      },
+      "multilingualSupport": {
+        "title": "Expandir suporte multilíngue de IA",
+        "description": "Priorizar o desenvolvimento de capacidades de IA em idiomas subatendidos, incluindo hindi, bengali, suaíli e vietnamita.",
+        "impact": "Atenderia mais de 2,5 bilhões de falantes de idiomas subatendidos."
+      },
+      "aiLiteracyPrograms": {
+        "title": "Lançar programas de alfabetização em IA",
+        "description": "Fazer parcerias com organizações locais para oferecer educação em IA através de centros comunitários, bibliotecas e unidades móveis.",
+        "impact": "Construir capacidade básica em IA em comunidades carentes."
+      },
+      "equityFund": {
+        "title": "Estabelecer fundo global de equidade em IA",
+        "description": "Criar mecanismo de financiamento internacional para subsidiar o acesso à IA nos países menos desenvolvidos.",
+        "impact": "Abordagem sistemática para enfrentar a desigualdade em IA."
+      },
+      "gaiiMetric": {
+        "title": "Incluir GAII em métricas de desenvolvimento nacional",
+        "description": "Adotar GAII como indicador oficial junto com IDH e PIB para rastrear desigualdade em IA.",
+        "impact": "Aumenta a visibilidade e a responsabilização sobre equidade em IA."
+      }
+    },
+    "regionalInsights": {
+      "NA": "A América do Norte mostra alta adoção de IA mas barreiras de custo significativas para populações de baixa renda.",
+      "EU": "A Europa demonstra infraestrutura sólida mas varia amplamente em alfabetização em IA entre estados membros.",
+      "EA": "O Leste Asiático lidera em qualidade de infraestrutura com Coreia do Sul e Singapura como líderes globais.",
+      "SA": "O Sul da Ásia enfrenta graves desafios de acessibilidade com assinaturas de IA custando até 28% da renda mensal.",
+      "SEA": "O Sudeste Asiático mostra rápido potencial de crescimento com Singapura como hub regional.",
+      "LA": "A América Latina se beneficia do suporte de IA em espanhol mas enfrenta lacunas de infraestrutura.",
+      "ME": "O Oriente Médio mostra desenvolvimento polarizado com os EAU liderando enquanto zonas de conflito ficam para trás.",
+      "SSA": "A África Subsaariana tem lacunas críticas de infraestrutura e acessibilidade que requerem intervenção urgente.",
+      "OC": "A Oceania alcança acesso quase universal com Austrália e Nova Zelândia como referências.",
+      "CA": "A Ásia Central mostra desenvolvimento moderado com investimento crescente em infraestrutura digital."
+    },
+    "targets": {
+      "governments": "Governos",
+      "corporations": "Empresas",
+      "ngos": "ONGs",
+      "international": "Internacional"
+    },
+    "sections": {
+      "executiveSummary": {
+        "title": "Resumo Executivo",
+        "subtitle": "Principais descobertas do Relatório GAII v1.0"
+      },
+      "countryRankings": {
+        "title": "Classificação por País",
+        "subtitle": "Pontuações GAII de 50 países (menor é melhor)"
+      },
+      "regionalAnalysis": {
+        "title": "Análise Regional",
+        "subtitle": "Detalhamento GAII por região mundial"
+      },
+      "keyInsights": {
+        "title": "Perspectivas Chave",
+        "subtitle": "Descobertas e observações críticas"
+      },
+      "recommendations": {
+        "title": "Recomendações de Política",
+        "subtitle": "Ações para partes interessadas enfrentarem a desigualdade em IA"
+      },
+      "methodology": {
+        "title": "Metodologia",
+        "subtitle": "Como as pontuações GAII são calculadas"
+      },
+      "dataSources": {
+        "title": "Fontes de Dados",
+        "subtitle": "Fontes de dados primárias usadas neste relatório"
+      }
+    },
+    "stats": {
+      "globalGaii": "Pontuação GAII Global",
+      "countriesAnalyzed": "Países Analisados",
+      "populationCovered": "População Coberta",
+      "inequalityGap": "Brecha de Desigualdade"
+    },
+    "indicators": {
+      "access": "Acesso",
+      "affordability": "Acessibilidade",
+      "language": "Idioma",
+      "skill": "Habilidades",
+      "globalAverage": "Média Global por Indicador"
+    },
+    "table": {
+      "rank": "Posição",
+      "country": "País",
+      "gaii": "GAII",
+      "grade": "Grau",
+      "showLess": "Mostrar menos",
+      "showAll": "Ver todos os {{count}} países"
+    },
+    "region": {
+      "countries": "países",
+      "top": "Top",
+      "bottom": "Últimos"
+    },
+    "methodology": {
+      "formula": "Fórmula",
+      "weights": "Pesos dos Indicadores",
+      "thresholds": "Limiares de Grau",
+      "thresholdDesc": {
+        "low": "Melhor igualdade em IA",
+        "moderate": "Margem para melhoria",
+        "high": "Desigualdade significativa",
+        "critical": "Intervenção urgente necessária"
+      }
+    },
+    "priority": {
+      "high": "alta",
+      "medium": "média",
+      "low": "baixa"
+    },
+    "impact": "Impacto",
+    "cta": {
+      "title": "Junte-se ao movimento pela igualdade em IA",
+      "learnMore": "Saiba mais sobre AlmaNEO",
+      "downloadPdf": "Baixar relatório completo (PDF)",
+      "loadingPdf": "Carregando PDF...",
+      "generatingPdf": "Gerando PDF..."
+    }
+  }
+}

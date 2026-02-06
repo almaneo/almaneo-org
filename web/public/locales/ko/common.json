@@ -19,7 +19,8 @@
     "blog": "블로그",
     "discord": "디스코드",
     "twitter": "트위터",
-    "github": "깃허브"
+    "github": "깃허브",
+    "tokenomics": "토크노믹스"
   },
   "wallet": {
     "connect": "지갑 연결",

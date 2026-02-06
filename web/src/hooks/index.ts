@@ -37,3 +37,9 @@ export type {
 export { useAirdrop } from './useAirdrop';
 
 export { useSlideNavigation } from './useSlideNavigation';
+
+export { useMiningPool } from './useMiningPool';
+export type { MiningPoolState } from './useMiningPool';
+
+export { useTokenVesting } from './useTokenVesting';
+export type { VestingInfo, BeneficiaryVesting } from './useTokenVesting';
