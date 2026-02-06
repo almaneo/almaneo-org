@@ -13,6 +13,14 @@
       "forHumans": "لـ 8 مليارات شخص",
       "countries": "الدول المدعومة",
       "communityMembers": "أعضاء المجتمع"
+    },
+    "mission": {
+      "measure": "قياس",
+      "measureDesc": "قياس عدم المساواة في الذكاء الاصطناعي",
+      "connect": "ربط",
+      "connectDesc": "ربط الناس عبر الجونغ",
+      "democratize": "دمقرطة",
+      "democratizeDesc": "فتح الذكاء الاصطناعي للجميع"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "إجمالي العرض",
     "forHumans": "البشرية، رموز",
     "forHumansCount": "8 مليارات",
+    "titleMission": "عملة المساواة في الذكاء الاصطناعي",
     "tokenInfo": {
       "token": "الرمز",
       "network": "الشبكة",

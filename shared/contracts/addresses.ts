@@ -7,23 +7,27 @@ import type { ContractAddresses, ContractAddress, SupportedChainId } from '../ty
 
 /**
  * Polygon Amoy Testnet (80002) 컨트랙트 주소
- * Deployed: 2026-01-20
+ * TGE Deployed: 2026-02-06
  */
 const AMOY_ADDRESSES: ContractAddresses = {
   // 토큰
-  ALMANToken: '0x261d686c9ea66a8404fBAC978d270a47eFa764bA' as ContractAddress,
+  ALMANToken: '0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63' as ContractAddress,
 
   // 거버넌스
-  ALMANGovernor: '0xA42A1386a84b146D36a8AF431D5E1d6e845268b8' as ContractAddress,
-  ALMANTimelock: '0xB73532c01CCCE4Ad6e8816fa4CB0E2aeDfe9C8C2' as ContractAddress,
+  ALMANGovernor: '0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33' as ContractAddress,
+  ALMANTimelock: '0x464bca66C5B53b2163A89088213B1f832F0dF7c0' as ContractAddress,
 
   // 스테이킹 & 에어드롭
-  ALMANStaking: '0x86777d1834c07E1B08E22FE3E8Ec0AD25a5451ce' as ContractAddress,
-  KindnessAirdrop: '0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538' as ContractAddress,
+  ALMANStaking: '0xB691a0DF657A06209A3a4EF1A06a139B843b945B' as ContractAddress,
+  KindnessAirdrop: '0xfb89843F5a36A5E7E48A727225334E7b68fE22ac' as ContractAddress,
 
   // Kindness Protocol
-  JeongSBT: '0x8d8eECb2072Df7547C22e12C898cB9e2326f827D' as ContractAddress,
+  JeongSBT: '0x41588D71373A6cf9E6f848250Ff7322d67Bb393c' as ContractAddress,
   AmbassadorSBT: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B' as ContractAddress,
+
+  // TGE
+  TokenVesting: '0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E' as ContractAddress,
+  MiningPool: '0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9' as ContractAddress,
 
   // NFT
   AlmaNFT721: '0xbFbE2b1eDB0f7F0675D5E449E508adE3697B8dfa' as ContractAddress,
@@ -52,6 +56,10 @@ const MAINNET_ADDRESSES: ContractAddresses = {
   // Kindness Protocol
   JeongSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
   AmbassadorSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
+
+  // TGE
+  TokenVesting: '0x0000000000000000000000000000000000000000' as ContractAddress,
+  MiningPool: '0x0000000000000000000000000000000000000000' as ContractAddress,
 
   // NFT
   AlmaNFT721: '0x0000000000000000000000000000000000000000' as ContractAddress,

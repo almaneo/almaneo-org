@@ -13,6 +13,14 @@
       "forHumans": "សម្រាប់មនុស្ស ៨ ពាន់លាននាក់",
       "countries": "ប្រទេសដែលគាំទ្រ",
       "communityMembers": "សមាជិកសហគមន៍"
+    },
+    "mission": {
+      "measure": "វាស់វែង",
+      "measureDesc": "វាស់វែងអសមភាព AI",
+      "connect": "តភ្ជាប់",
+      "connectDesc": "តភ្ជាប់មនុស្សតាមរយៈ Jeong",
+      "democratize": "ប្រជាធិបតេយ្យ",
+      "democratizeDesc": "បើក AI សម្រាប់អ្នកទាំងអស់"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "ការផ្គត់ផ្គង់សរុប",
     "forHumans": "មនុស្ស, Token",
     "forHumansCount": "៨ ពាន់លាន",
+    "titleMission": "រូបិយប័ណ្ណនៃសមភាព AI",
     "tokenInfo": {
       "token": "Token",
       "network": "បណ្តាញ",

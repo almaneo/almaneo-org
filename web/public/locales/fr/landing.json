@@ -13,6 +13,14 @@
       "forHumans": "Pour 8 milliards de personnes",
       "countries": "Pays Supportés",
       "communityMembers": "Membres de la Communauté"
+    },
+    "mission": {
+      "measure": "Mesurer",
+      "measureDesc": "Quantifier l'inégalité de l'IA",
+      "connect": "Connecter",
+      "connectDesc": "Unir les gens par le Jeong",
+      "democratize": "Démocratiser",
+      "democratizeDesc": "Ouvrir l'accès à l'IA pour tous"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Offre Totale",
     "forHumans": "Humanité, Tokens",
     "forHumansCount": "8 milliards",
+    "titleMission": "La Monnaie de l'Égalité en IA",
     "tokenInfo": {
       "token": "Token",
       "network": "Réseau",

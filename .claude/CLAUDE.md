@@ -2907,15 +2907,17 @@ VITE_WEB3AUTH_CLIENT_ID=BI8Q1xvlSCu52eYqU2lhkxuvIghBW6LSkXvQXZmbEvTv4PVZe97eUdML
 
 ### 현재 완료된 배포
 
-**Polygon Amoy Testnet - Core (2026-01-25 업데이트 - AmbassadorSBT 추가):**
+**Polygon Amoy Testnet - Core TGE (2026-02-06 TGE 배포 - 8B ALMAN):**
 ```
-ALMANToken:       0x261d686c9ea66a8404fBAC978d270a47eFa764bA
-JeongSBT:         0x8d8eECb2072Df7547C22e12C898cB9e2326f827D
-AmbassadorSBT:    0xf368d239a0b756533ff5688021A04Bc62Ab3c27B  # 🆕 Session 26
-ALMANStaking:     0x86777d1834c07E1B08E22FE3E8Ec0AD25a5451ce
-ALMANTimelock:    0xB73532c01CCCE4Ad6e8816fa4CB0E2aeDfe9C8C2
-ALMANGovernor:    0xA42A1386a84b146D36a8AF431D5E1d6e845268b8
-KindnessAirdrop:  0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538
+ALMANToken:       0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63  # 8B Total Supply
+JeongSBT:         0x41588D71373A6cf9E6f848250Ff7322d67Bb393c
+AmbassadorSBT:    0xf368d239a0b756533ff5688021A04Bc62Ab3c27B  # Session 26 (별도)
+ALMANStaking:     0xB691a0DF657A06209A3a4EF1A06a139B843b945B  # 1B ALMAN 보유
+ALMANTimelock:    0x464bca66C5B53b2163A89088213B1f832F0dF7c0
+ALMANGovernor:    0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33
+KindnessAirdrop:  0xfb89843F5a36A5E7E48A727225334E7b68fE22ac  # 600M ALMAN 보유
+TokenVesting:     0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E  # 800M ALMAN (Team, 12개월 cliff + 3년)
+MiningPool:       0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9  # 800M ALMAN (게임 마이닝)
 ```
 
 **Polygon Amoy Testnet - NFT (2026-01-20 재배포 - AlmaNEO 브랜딩):**
@@ -3115,3 +3117,240 @@ public/locales/
 │   └── landing.json
 └── ... (12개 추가 언어)
 ```
+
+---
+
+## ALMAN 토큰 PolygonScan 등록 (Session 58)
+
+### 컨트랙트 검증 상태
+- **ALMANToken**: ✅ Verified (Polygon Amoy)
+- **주소**: `0x261d686c9ea66a8404fBAC978d270a47eFa764bA`
+- **Explorer**: https://amoy.polygonscan.com/address/0x261d686c9ea66a8404fBAC978d270a47eFa764bA
+
+### 토큰 설명 (확정)
+```
+ALMAN is the governance token of AlmaNEO, an AI democratization platform bridging technology and humanity.
+```
+(98자, 영문)
+
+### 토큰 로고 디자인 (Option C 선택)
+
+**컨셉**: 하트 + 네트워크 융합 (정(情) + 블록체인)
+
+**AI 이미지 생성 프롬프트:**
+```
+Design a cryptocurrency token logo for "ALMAN" token.
+
+Requirements:
+- Size: 256x256 pixels, perfect square
+- Background: Transparent or solid dark navy (#0A0F1A)
+- Style: Modern, minimalist, professional crypto token design
+
+Design Concept - "Heart + Network Fusion":
+- Central element: A stylized heart shape
+- The heart is formed by interconnected blockchain/network nodes and lines
+- Left side of heart: Electric blue (#0052FF) representing technology/AI (Cold Code)
+- Right side of heart: Terracotta orange (#FF6B00) representing humanity/warmth (Warm Soul)
+- The two colors meet and blend in the center, symbolizing the fusion of technology and humanity
+- Small dots/nodes at connection points suggesting blockchain network
+- A subtle heartbeat/pulse line running through the center
+- Clean, vector-style design that scales well at small sizes
+
+Color Palette:
+- Primary Blue: #0052FF (Electric Blue - technology)
+- Primary Orange: #FF6B00 (Terracotta - humanity/Jeong 情)
+- Accent Cyan: #06b6d4 (highlights)
+- Background: Transparent or #0A0F1A (Deep Navy)
+
+Do NOT include:
+- Any text or letters
+- Complex gradients that don't scale well
+- Thin lines that disappear at small sizes
+- Generic coin/currency symbols
+
+The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technology meets human connection through the Korean concept of Jeong (情, deep emotional bonds).
+```
+
+### 등록 필요 정보 (메인넷 배포 시)
+
+| 항목 | 값 | 상태 |
+|------|-----|------|
+| Token Name | AlmaNEO | ✅ |
+| Symbol | ALMAN | ✅ |
+| Decimals | 18 | ✅ |
+| Description | (위 영문 설명) | ✅ |
+| Logo | 256x256 PNG | 🔲 디자인 필요 |
+| Website | https://almaneo.org | ✅ |
+| Email | contact@almaneo.org | ✅ |
+| Twitter | https://x.com/almaneo_org | ✅ |
+| Discord | https://discord.gg/JkRNuj7aYd | ✅ |
+| GitHub | https://github.com/almaneo | ✅ |
+
+### 메인넷 등록 플랫폼 (우선순위)
+
+| 플랫폼 | 용도 | 우선순위 | 상태 |
+|--------|------|----------|------|
+| PolygonScan | 블록 익스플로러 | 🔴 필수 | 🔲 메인넷 후 |
+| CoinGecko | 가격 추적 | 🟡 높음 | 🔲 메인넷 후 |
+| CoinMarketCap | 가격 추적 | 🟡 높음 | 🔲 메인넷 후 |
+| DeFiLlama | TVL 추적 | 🟢 중간 | 🔲 TVL 발생 후 |
+| Token Lists | DEX 연동 | 🟢 중간 | 🔲 메인넷 후 |
+
+---
+
+## 토큰 발행 전략 (Session 58 확정)
+
+### 핵심 결정사항
+
+1. **전량 발행 + 락업 (Option C)**: TGE 시점에 8B 전량 민팅 후 카테고리별 분배
+2. **게임 마이닝 하이브리드 (방법 3)**: MiningPool 컨트랙트에 800M 사전 민팅, 클레임 시 transfer
+3. **Vesting**: Team & Advisors 12개월 cliff + 3년 선형 베스팅
+4. **Community 배분**: Mining 0.8B / Staking 1.0B / Airdrop 0.6B / DAO Reserve 0.8B
+5. **Multi-sig**: Gnosis Safe 2-of-3 (Co-Founder 3명, 메인넷 전용)
+
+### 토크노믹스 최종 배분 (8B ALMAN)
+
+| 카테고리 | 수량 | 비율 | 수신처 | 락업 |
+|----------|------|------|--------|------|
+| Foundation Reserve | 2.0B | 25% | Foundation Multi-sig | 없음 |
+| Community - Mining | 0.8B | 10% | MiningPool 컨트랙트 | 게임 클레임 시 해제 |
+| Community - Staking | 1.0B | 12.5% | ALMANStaking 컨트랙트 | 보상으로 해제 |
+| Community - Airdrop | 0.6B | 7.5% | KindnessAirdrop 컨트랙트 | 활동 기반 클레임 |
+| Community - DAO Reserve | 0.8B | 10% | DAO Multi-sig | 거버넌스 투표 |
+| Liquidity & Exchange | 1.2B | 15% | DEX LP + CEX | 없음 |
+| Team & Advisors | 0.8B | 10% | TokenVesting 컨트랙트 | 12개월 cliff + 3년 |
+| Kindness Grants | 0.8B | 10% | Grants Multi-sig | 없음 |
+
+### 신규 컨트랙트
+
+| 컨트랙트 | 용도 | 상태 |
+|----------|------|------|
+| `TokenVesting.sol` | Team 0.8B 락업 (12개월 cliff + 3년) | ✅ 개발 완료 |
+| `MiningPool.sol` | 게임 마이닝 800M 풀 | ✅ 개발 완료 |
+
+### 배포 스크립트
+- `blockchain/scripts/deploy-mainnet.js` - TGE 전체 배포 (8B 민팅 + 분배)
+- ✅ 로컬 Hardhat 테스트 성공 (8B 민팅, 8개 컨트랙트 배포, 분배 검증)
+- Amoy 테스트 시 Multi-sig 대신 단일 지갑 시뮬레이션
+
+### PolygonScan API Key
+- **API Key**: 설정 완료 (`blockchain/.env`)
+- **발급 사이트**: https://polygonscan.com/myapikey
+
+---
+
+### ✅ 완료된 작업 (2026-02-06 - Session 58: 토큰 발행 전략 & TGE 준비)
+
+#### 1. **PolygonScan 등록 준비**
+   - ALMANToken 컨트랙트 Verify 상태 확인 (✅ 이미 완료)
+   - PolygonScan API Key 발급 및 `.env` 설정
+   - 토큰 설명 확정 (영문 98자)
+   - 토큰 로고 프롬프트 작성 (Option C: 하트 + 네트워크 융합)
+
+#### 2. **토큰 발행 전략 확정**
+   - **전량 발행 + 락업** (Option C): TGE 시점에 8B 전량 민팅
+   - **게임 마이닝 하이브리드** (방법 3): MiningPool 컨트랙트에 사전 민팅
+   - **Vesting**: 12개월 cliff + 3년 선형 베스팅
+   - **Community 배분**: Mining 0.8B / Staking 1.0B / Airdrop 0.6B / DAO 0.8B
+   - **Multi-sig**: Gnosis Safe 2-of-3 (메인넷 전용)
+
+#### 3. **TokenVesting.sol 컨트랙트 개발**
+   - UUPS Upgradeable + AccessControl + ReentrancyGuard
+   - 수혜자별 개별 베스팅 스케줄
+   - `release()`, `vestedAmount()`, `releasableAmount()`, `vestingProgress()`
+   - `revokeVesting()` - 미귀속 토큰 회수
+
+#### 4. **MiningPool.sol 컨트랙트 개발**
+   - 800M ALMAN 보관 + CLAIMER_ROLE 기반 전송
+   - 4단계 반감기 에포크 온체인 추적
+   - 일일 클레임 한도 (전체 500K, 사용자별 1K)
+   - `claimForUser()`, `getCurrentEpoch()`, `remainingPool()`, `miningProgress()`
+
+#### 5. **deploy-mainnet.js TGE 배포 스크립트 작성**
+   - 5단계 배포: 컨트랙트 → 민팅 → 분배 → 역할 → 검증
+   - 8개 컨트랙트 배포 (기존 6 + TokenVesting + MiningPool)
+   - 로컬 Hardhat 테스트 ✅ 성공 (8B 민팅, 카테고리별 한도 소진 확인)
+
+#### 6. **컴파일 성공**
+   - TokenVesting.sol + MiningPool.sol 컴파일 완료
+   - Solidity 0.8.24, OpenZeppelin 5.x 호환
+
+---
+
+### ✅ 완료된 작업 (2026-02-06 - Session 59: Amoy TGE 배포 & Verify)
+
+#### 1. **Amoy 테스트넷 TGE 배포 완료**
+   - `deploy-mainnet.js`로 8개 UUPS Proxy 컨트랙트 배포
+   - **Total Supply: 8,000,000,000 ALMAN** (8B) 확인
+   - Team 카테고리 수동 민팅 보정 (스크립트 await 이슈)
+   - 배포 결과: `blockchain/deployments/amoy-tge-deployment.json`
+
+#### 2. **토큰 분배 완료**
+   | 카테고리 | 수량 | 수신처 | 상태 |
+   |----------|------|--------|------|
+   | Foundation | 2.0B | deployer (테스트넷) | ✅ |
+   | Mining | 0.8B | MiningPool 컨트랙트 | ✅ |
+   | Staking | 1.0B | ALMANStaking 컨트랙트 | ✅ |
+   | Airdrop | 0.6B | KindnessAirdrop 컨트랙트 | ✅ |
+   | DAO Reserve | 0.8B | deployer (테스트넷) | ✅ |
+   | Liquidity | 1.2B | deployer (테스트넷) | ✅ |
+   | Team | 0.8B | TokenVesting 컨트랙트 | ✅ |
+   | Grants | 0.8B | deployer (테스트넷) | ✅ |
+
+#### 3. **프론트엔드 주소 업데이트**
+   - `web/src/contracts/addresses.ts` - TGE 주소 반영 + TokenVesting, MiningPool 추가
+   - `shared/contracts/addresses.ts` - 동일 업데이트
+   - `shared/types/contracts.ts` - ContractAddresses에 TokenVesting, MiningPool 추가
+   - TypeScript 빌드 확인 ✅
+
+#### 4. **PolygonScan 컨트랙트 Verify (7/8)**
+   | 컨트랙트 | 상태 | 비고 |
+   |----------|------|------|
+   | ALMANToken | ✅ Verified | |
+   | JeongSBT | ✅ Verified | |
+   | ALMANStaking | ✅ Verified | |
+   | ALMANTimelock | ✅ Verified | |
+   | ALMANGovernor | ⚠️ Failed | viaIR 바이트코드 불일치 |
+   | KindnessAirdrop | ✅ Verified | |
+   | TokenVesting | ✅ Verified | |
+   | MiningPool | ✅ Verified | |
+
+#### 5. **Hardhat Config 업데이트**
+   - Etherscan V1 → V2 API 마이그레이션
+   - `apiKey`를 단일 문자열로 변경
+   - `customChains` 네트워크명 `polygonAmoy` → `amoy`로 통일
+
+---
+
+### 🔲 다음 세션 작업 (Session 60+)
+
+#### 🔴 높은 우선순위
+
+1. **게임 서버 MiningPool 연동**
+   - `web/api/mining-claim.ts` 엔드포인트 생성
+   - MiningPool.claimForUser() 호출 로직
+   - CLAIMER_ROLE 부여 (Verifier 지갑 또는 별도 Claimer 지갑)
+
+2. **토크노믹스 대시보드**
+   - 온체인 잔액 실시간 표시 UI
+   - Vesting 진행률, Mining 소진율
+   - 카테고리별 분배 현황
+
+3. **GAII 페이지 i18n 완성**
+   - 나머지 12개 언어에 `platform.json` 번역 파일 추가
+
+#### 🟡 중간 우선순위
+
+4. **토큰 로고 AI 생성**
+   - 프롬프트 활용하여 256x256 PNG 생성
+
+5. **Governance 실제 제안 로드**
+   - ProposalCreated 이벤트 조회
+   - Mock 데이터 제거, 온체인 데이터로 교체
+
+6. **모바일 실기기 QA 테스트**
+
+#### 🟢 낮은 우선순위
+
+7. **Grant 프로그램 신청**
+8. **메인넷 배포 준비** (Multi-sig 설정, 감사)

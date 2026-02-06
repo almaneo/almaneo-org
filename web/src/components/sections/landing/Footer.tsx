@@ -5,15 +5,18 @@ import logoImg from '../../../assets/logo.png';
 import { Container } from '../../layout';
 import { ChevronDown, ChevronUp, ExternalLink, Shield } from 'lucide-react';
 
-// Deployed Contract Addresses - Polygon Amoy Testnet (2026-01-20 재배포)
+// Deployed Contract Addresses - Polygon Amoy Testnet (TGE 2026-02-06)
 const CONTRACTS = {
   core: [
-    { name: 'ALMAN Token', address: '0x261d686c9ea66a8404fBAC978d270a47eFa764bA', description: 'ERC-20 Governance Token' },
-    { name: 'Jeong SBT', address: '0x8d8eECb2072Df7547C22e12C898cB9e2326f827D', description: 'Soulbound Token (Kindness Score)' },
-    { name: 'AlmaNEO Staking', address: '0x86777d1834c07E1B08E22FE3E8Ec0AD25a5451ce', description: '4-Tier Staking System' },
-    { name: 'AlmaNEO Governor', address: '0xA42A1386a84b146D36a8AF431D5E1d6e845268b8', description: 'DAO Governance' },
-    { name: 'AlmaNEO Timelock', address: '0xB73532c01CCCE4Ad6e8816fa4CB0E2aeDfe9C8C2', description: 'Execution Delay (2 days)' },
-    { name: 'Kindness Airdrop', address: '0xadB3e6Ef342E3aDa2e31a2638d5D9566c26fb538', description: 'Merkle Proof Airdrop' },
+    { name: 'ALMAN Token', address: '0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63', description: 'ERC-20 Governance Token (8B)' },
+    { name: 'Jeong SBT', address: '0x41588D71373A6cf9E6f848250Ff7322d67Bb393c', description: 'Soulbound Token (Kindness Score)' },
+    { name: 'Ambassador SBT', address: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B', description: 'Kindness Ambassador Badge' },
+    { name: 'AlmaNEO Staking', address: '0xB691a0DF657A06209A3a4EF1A06a139B843b945B', description: '4-Tier Staking System' },
+    { name: 'AlmaNEO Governor', address: '0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33', description: 'DAO Governance' },
+    { name: 'AlmaNEO Timelock', address: '0x464bca66C5B53b2163A89088213B1f832F0dF7c0', description: 'Execution Delay (2 days)' },
+    { name: 'Kindness Airdrop', address: '0xfb89843F5a36A5E7E48A727225334E7b68fE22ac', description: 'Merkle Proof Airdrop' },
+    { name: 'Token Vesting', address: '0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E', description: 'Team Vesting (12mo cliff + 3yr)' },
+    { name: 'Mining Pool', address: '0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9', description: 'Game Mining Rewards (800M)' },
   ],
   nft: [
     { name: 'AlmaNEO NFT (ERC-721)', address: '0xbFbE2b1eDB0f7F0675D5E449E508adE3697B8dfa', description: 'Single NFT Contract' },

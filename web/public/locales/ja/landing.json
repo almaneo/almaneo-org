@@ -13,6 +13,14 @@
       "forHumans": "80億人のために",
       "countries": "対応国",
       "communityMembers": "コミュニティメンバー"
+    },
+    "mission": {
+      "measure": "測定",
+      "measureDesc": "AI格差を定量化する",
+      "connect": "つなぐ",
+      "connectDesc": "情(ジョン)で人をつなぐ",
+      "democratize": "民主化",
+      "democratizeDesc": "すべての人にAIを開放する"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "総供給量",
     "forHumans": "人類、Tokens",
     "forHumansCount": "80億",
+    "titleMission": "AI平等の通貨",
     "tokenInfo": {
       "token": "Token",
       "network": "Network",

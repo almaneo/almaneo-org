@@ -13,6 +13,14 @@
       "forHumans": "Untuk 8 Miliar Manusia",
       "countries": "Negara Didukung",
       "communityMembers": "Anggota Komunitas"
+    },
+    "mission": {
+      "measure": "Ukur",
+      "measureDesc": "Mengukur ketimpangan AI",
+      "connect": "Hubungkan",
+      "connectDesc": "Menghubungkan orang melalui Jeong",
+      "democratize": "Demokratisasi",
+      "democratizeDesc": "Membuka akses AI untuk semua"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Total Pasokan",
     "forHumans": "Manusia, Token",
     "forHumansCount": "8 Miliar",
+    "titleMission": "Mata Uang Kesetaraan AI",
     "tokenInfo": {
       "token": "Token",
       "network": "Jaringan",

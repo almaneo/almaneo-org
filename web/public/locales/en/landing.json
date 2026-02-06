@@ -15,6 +15,14 @@
       "countries": "Countries Supported",
       "communityMembers": "Community Members"
     },
+    "mission": {
+      "measure": "Measure",
+      "measureDesc": "Quantify AI inequality",
+      "connect": "Connect",
+      "connectDesc": "Unite people through Jeong",
+      "democratize": "Democratize",
+      "democratizeDesc": "Open AI access for all"
+    },
     "snsModal": {
       "title": "Join Our Community",
       "description": "Stay updated with the latest from AlmaNEO"
@@ -143,6 +151,7 @@
     "totalSupply": "Total Supply",
     "forHumans": "Humans, Tokens",
     "forHumansCount": "8B",
+    "titleMission": "Currency of AI Equality",
     "tokenInfo": {
       "token": "Token",
       "network": "Network",

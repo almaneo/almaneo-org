@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Gamepad2, Globe, FileText, ChevronDown, X } from 'lucide-react';
+import { Gamepad2, Globe, FileText, ChevronDown, X, BarChart3, Heart, Unlock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { HeartbeatLine, AnimatedCounter, Button } from '../ui';
+import { HeartbeatLine, Button } from '../ui';
 import heroBackground from '../../assets/images/01.webp';
 
 // SNS Icons (Brand icons as SVG)
@@ -192,25 +192,28 @@ export const HeroSection = () => {
           </Link>
         </div>
 
-        {/* Stats */}
+        {/* Mission Pillars */}
         <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-lg mx-auto">
           <div className="text-center">
-            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-blue-400">
-              <AnimatedCounter end={8} suffix="B" />
+            <BarChart3 className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400 mx-auto mb-1" strokeWidth={1.5} />
+            <div className="text-base sm:text-xl md:text-2xl font-bold text-blue-400">
+              {t('hero.mission.measure')}
             </div>
-            <div className="text-xs mt-1 text-slate-500">{t('hero.stats.totalSupply')}</div>
+            <div className="text-xs mt-1 text-slate-500">{t('hero.mission.measureDesc')}</div>
           </div>
           <div className="text-center">
-            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-jeong-orange">
-              <AnimatedCounter end={8} suffix="B" />
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-jeong-orange mx-auto mb-1" strokeWidth={1.5} />
+            <div className="text-base sm:text-xl md:text-2xl font-bold text-jeong-orange">
+              {t('hero.mission.connect')}
             </div>
-            <div className="text-xs mt-1 text-slate-500">{t('hero.stats.forHumans')}</div>
+            <div className="text-xs mt-1 text-slate-500">{t('hero.mission.connectDesc')}</div>
           </div>
           <div className="text-center">
-            <div className="text-xl sm:text-3xl md:text-4xl font-bold text-green-400">
-              100+
+            <Unlock className="w-6 h-6 sm:w-8 sm:h-8 text-green-400 mx-auto mb-1" strokeWidth={1.5} />
+            <div className="text-base sm:text-xl md:text-2xl font-bold text-green-400">
+              {t('hero.mission.democratize')}
             </div>
-            <div className="text-xs mt-1 text-slate-500">{t('hero.stats.countries')}</div>
+            <div className="text-xs mt-1 text-slate-500">{t('hero.mission.democratizeDesc')}</div>
           </div>
         </div>
 

@@ -13,6 +13,14 @@
       "forHumans": "Para 8 bilhões de pessoas",
       "countries": "Países Suportados",
       "communityMembers": "Membros da Comunidade"
+    },
+    "mission": {
+      "measure": "Medir",
+      "measureDesc": "Quantificar a desigualdade de IA",
+      "connect": "Conectar",
+      "connectDesc": "Unir pessoas pelo Jeong",
+      "democratize": "Democratizar",
+      "democratizeDesc": "Abrir o acesso à IA para todos"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Fornecimento Total",
     "forHumans": "Humanidade, Tokens",
     "forHumansCount": "8 bilhões",
+    "titleMission": "A Moeda da Igualdade em IA",
     "tokenInfo": {
       "token": "Token",
       "network": "Rede",

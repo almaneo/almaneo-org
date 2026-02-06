@@ -165,6 +165,46 @@
       "address": "0xf368d239a0b756533ff5688021A04Bc62Ab3c27B",
       "txHash": "0x0f01f6fd01d4b74e988671be2f87a912447ea5db6c73b58ffb75b155ae1a31dd",
       "kind": "uups"
+    },
+    {
+      "address": "0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63",
+      "txHash": "0x4c869e154270785387a0c8e8852feb45518484629101b796c1b1d58da6018b8a",
+      "kind": "uups"
+    },
+    {
+      "address": "0x41588D71373A6cf9E6f848250Ff7322d67Bb393c",
+      "txHash": "0x14c5bec5593e4c0d05305318371fd5e461dd9a101ec6d8b1cd73b816ce816400",
+      "kind": "uups"
+    },
+    {
+      "address": "0xB691a0DF657A06209A3a4EF1A06a139B843b945B",
+      "txHash": "0x46de512776b3f15d11c23335e9a4098d7fed8768cbd4be73e37daa7ece40d56e",
+      "kind": "uups"
+    },
+    {
+      "address": "0x464bca66C5B53b2163A89088213B1f832F0dF7c0",
+      "txHash": "0x76c6ef26e98371a815e01b1d64a81cdbf7ca971ca3448992f26946f4dfcc4c2c",
+      "kind": "uups"
+    },
+    {
+      "address": "0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33",
+      "txHash": "0x59a2bcc5d3e33062b3c0d05eb57586c43cc36b6818f0364e3c89f8e05c6c1bb3",
+      "kind": "uups"
+    },
+    {
+      "address": "0xfb89843F5a36A5E7E48A727225334E7b68fE22ac",
+      "txHash": "0x7c90d5390c740601fb1ac1881948ca7028e17d47b030c49ed1e85422b80efb1b",
+      "kind": "uups"
+    },
+    {
+      "address": "0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E",
+      "txHash": "0xc8427a72aa759f5e57fc87902357ab0a12ef788615489ad3c4a7fa19c6efd887",
+      "kind": "uups"
+    },
+    {
+      "address": "0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9",
+      "txHash": "0xadd553e69e49d13f4bcb3800e657cf1630bc0dbfe5b45f6cb01c03d97d4d2432",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -11122,6 +11162,458 @@
               "src": "@openzeppelin\\contracts-upgradeable\\token\\ERC721\\ERC721Upgradeable.sol:38",
               "offset": 0,
               "slot": "5"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "91ddd1a2c21dbad187ad76560a065132b7eab2ba8261c34afe2b21b92fe325fe": {
+      "address": "0x2D424Ad5d72580d91156E93C739cB80DFef851cD",
+      "txHash": "0x268aa4c43cd66df98b64ce6838d6bab3ee4cf5c6c0f5309fa1bfb02fbb8e4cd8",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "token",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IERC20)1615",
+            "contract": "TokenVesting",
+            "src": "contracts\\TokenVesting.sol:53"
+          },
+          {
+            "label": "vestingSchedules",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_struct(VestingSchedule)3075_storage)",
+            "contract": "TokenVesting",
+            "src": "contracts\\TokenVesting.sol:55"
+          },
+          {
+            "label": "beneficiaries",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "TokenVesting",
+            "src": "contracts\\TokenVesting.sol:56"
+          },
+          {
+            "label": "totalAllocated",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "TokenVesting",
+            "src": "contracts\\TokenVesting.sol:57"
+          },
+          {
+            "label": "totalReleased",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256",
+            "contract": "TokenVesting",
+            "src": "contracts\\TokenVesting.sol:59"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)26_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(AccessControlStorage)36_storage": {
+            "label": "struct AccessControlUpgradeable.AccessControlStorage",
+            "members": [
+              {
+                "label": "_roles",
+                "type": "t_mapping(t_bytes32,t_struct(RoleData)26_storage)",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(InitializableStorage)147_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)300_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoleData)26_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "hasRole",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IERC20)1615": {
+            "label": "contract IERC20",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_struct(VestingSchedule)3075_storage)": {
+            "label": "mapping(address => struct TokenVesting.VestingSchedule)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(VestingSchedule)3075_storage": {
+            "label": "struct TokenVesting.VestingSchedule",
+            "members": [
+              {
+                "label": "totalAmount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "releasedAmount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "cliffDuration",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "vestingDuration",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "revoked",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "5"
+              }
+            ],
+            "numberOfBytes": "192"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.AccessControl": [
+            {
+              "contract": "AccessControlUpgradeable",
+              "label": "_roles",
+              "type": "t_mapping(t_bytes32,t_struct(RoleData)26_storage)",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:62",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "82aff8b9d5a995a0faabfa4b950c0708c995d19c377bb995c024cfaa4a9a5ea3": {
+      "address": "0xf72baBaA7836dC66242983951365C00321Fd4fD0",
+      "txHash": "0x7c7adc1998ac3d2fb5b7c54a275781a3b6d928e9121181e898117e308ba62d9a",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "token",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IERC20)1615",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:50"
+          },
+          {
+            "label": "totalClaimed",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:51"
+          },
+          {
+            "label": "dailyClaimLimit",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:53"
+          },
+          {
+            "label": "userDailyClaimLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:54"
+          },
+          {
+            "label": "userTotalClaimed",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:55"
+          },
+          {
+            "label": "userDailyClaimed",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:58"
+          },
+          {
+            "label": "userLastClaimDay",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:60"
+          },
+          {
+            "label": "dailyTotalClaimed",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:62"
+          },
+          {
+            "label": "currentClaimDay",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_uint256",
+            "contract": "MiningPool",
+            "src": "contracts\\MiningPool.sol:63"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)26_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(AccessControlStorage)36_storage": {
+            "label": "struct AccessControlUpgradeable.AccessControlStorage",
+            "members": [
+              {
+                "label": "_roles",
+                "type": "t_mapping(t_bytes32,t_struct(RoleData)26_storage)",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(InitializableStorage)147_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)300_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoleData)26_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "hasRole",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_contract(IERC20)1615": {
+            "label": "contract IERC20",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.AccessControl": [
+            {
+              "contract": "AccessControlUpgradeable",
+              "label": "_roles",
+              "type": "t_mapping(t_bytes32,t_struct(RoleData)26_storage)",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:62",
+              "offset": 0,
+              "slot": "0"
             }
           ],
           "erc7201:openzeppelin.storage.Initializable": [

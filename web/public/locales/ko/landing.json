@@ -15,6 +15,14 @@
       "countries": "지원 국가",
       "communityMembers": "커뮤니티 멤버"
     },
+    "mission": {
+      "measure": "측정",
+      "measureDesc": "AI 불평등을 측정합니다",
+      "connect": "연결",
+      "connectDesc": "정(情)으로 사람을 연결합니다",
+      "democratize": "민주화",
+      "democratizeDesc": "AI를 모두에게 열어줍니다"
+    },
     "snsModal": {
       "title": "커뮤니티에 참여하세요",
       "description": "AlmaNEO의 최신 소식을 받아보세요"
@@ -143,6 +151,7 @@
     "totalSupply": "총 공급량",
     "forHumans": "인류, Tokens",
     "forHumansCount": "80억",
+    "titleMission": "AI 평등의 화폐",
     "tokenInfo": {
       "token": "Token",
       "network": "Network",

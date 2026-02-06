@@ -32,6 +32,10 @@ export interface ContractAddresses {
   JeongSBT: ContractAddress;
   AmbassadorSBT: ContractAddress;
 
+  // TGE
+  TokenVesting: ContractAddress;
+  MiningPool: ContractAddress;
+
   // NFT
   AlmaNFT721: ContractAddress;
   AlmaNFT1155: ContractAddress;

@@ -19,8 +19,7 @@ const tokenInfoData: TokenInfo[] = [
   { labelKey: 'token', value: 'ALMAN', termKey: 'alman' },
   { labelKey: 'network', value: 'Polygon', termKey: 'polygon' },
   { labelKey: 'standard', value: 'ERC-20', termKey: 'token' },
-  { labelKey: 'supply', value: '8B', termKey: 'totalSupply' },
-  { labelKey: 'forAll', value: '', termKey: undefined },
+  { labelKey: 'supply', value: '8,000,000,000', termKey: 'totalSupply' },
 ];
 
 const distributionData: Distribution[] = [
@@ -42,22 +41,20 @@ export function TokenomicsSection() {
           tagColor="cold"
           title={
             <>
-              <span className="text-jeong-orange">{t('tokenomics.forHumansCount')}</span> {t('tokenomics.forHumans').split(',')[0]},{' '}
-              <span className="text-cold-blue-300">{t('tokenomics.forHumansCount')}</span> {t('tokenomics.forHumans').split(',')[1]}
+              <span className="text-jeong-orange">8B ALMAN</span>{' '}
+              <span className="text-cold-blue-300">— {t('tokenomics.titleMission')}</span>
             </>
           }
         />
 
         {/* Token Info */}
         <GlassCard padding="lg" className="mb-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
             {tokenInfoData.map((info) => (
               <div key={info.labelKey}>
                 <div className="text-xs mb-1 text-text-subtle">{t(`tokenomics.tokenInfo.${info.labelKey}`)}</div>
                 <div className="font-bold">
-                  {info.labelKey === 'forAll' ? (
-                    t('tokenomics.tokenInfo.forAllValue')
-                  ) : info.termKey ? (
+                  {info.termKey ? (
                     <KindnessTerm termKey={info.termKey}>{info.value}</KindnessTerm>
                   ) : (
                     info.value

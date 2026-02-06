@@ -1,0 +1,38 @@
+{
+  "network": "amoy",
+  "chainId": "80002",
+  "deployer": "0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE",
+  "timestamp": "2026-02-06T02:13:33.143Z",
+  "type": "TGE",
+  "contracts": {
+    "ALMANToken": "0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63",
+    "JeongSBT": "0x41588D71373A6cf9E6f848250Ff7322d67Bb393c",
+    "ALMANStaking": "0xB691a0DF657A06209A3a4EF1A06a139B843b945B",
+    "ALMANTimelock": "0x464bca66C5B53b2163A89088213B1f832F0dF7c0",
+    "ALMANGovernor": "0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33",
+    "KindnessAirdrop": "0xfb89843F5a36A5E7E48A727225334E7b68fE22ac",
+    "TokenVesting": "0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E",
+    "MiningPool": "0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9"
+  },
+  "wallets": {
+    "foundation": "0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE",
+    "liquidity": "0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE",
+    "grants": "0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE",
+    "daoReserve": "0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE"
+  },
+  "distribution": {
+    "foundation": "2,000,000,000",
+    "communityMining": "800,000,000",
+    "communityStaking": "1,000,000,000",
+    "communityAirdrop": "600,000,000",
+    "communityDAO": "800,000,000",
+    "liquidity": "1,200,000,000",
+    "team": "800,000,000",
+    "kindnessGrants": "800,000,000",
+    "total": "8,000,000,000"
+  },
+  "vesting": {
+    "cliff": "12 months (365 days)",
+    "duration": "3 years (1095 days)"
+  }
+}

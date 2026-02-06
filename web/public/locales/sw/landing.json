@@ -13,6 +13,14 @@
       "forHumans": "Kwa Binadamu Bilioni 8",
       "countries": "Nchi Zinazotumika",
       "communityMembers": "Wanachama wa Jamii"
+    },
+    "mission": {
+      "measure": "Pima",
+      "measureDesc": "Kupima ukosefu wa usawa wa AI",
+      "connect": "Unganisha",
+      "connectDesc": "Kuunganisha watu kupitia Jeong",
+      "democratize": "Demokrasia",
+      "democratizeDesc": "Kufungua AI kwa wote"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Jumla ya Ugavi",
     "forHumans": "Binadamu, Tokeni",
     "forHumansCount": "Bilioni 8",
+    "titleMission": "Sarafu ya Usawa wa AI",
     "tokenInfo": {
       "token": "Tokeni",
       "network": "Mtandao",

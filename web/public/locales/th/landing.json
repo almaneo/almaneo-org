@@ -13,6 +13,14 @@
       "forHumans": "สำหรับ 8 พันล้านคน",
       "countries": "ประเทศที่รองรับ",
       "communityMembers": "สมาชิกชุมชน"
+    },
+    "mission": {
+      "measure": "วัดผล",
+      "measureDesc": "วัดความเหลื่อมล้ำด้าน AI",
+      "connect": "เชื่อมต่อ",
+      "connectDesc": "เชื่อมผู้คนด้วยจอง (情)",
+      "democratize": "ประชาธิปไตย",
+      "democratizeDesc": "เปิด AI ให้ทุกคนเข้าถึง"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "จำนวนทั้งหมด",
     "forHumans": "คน, โทเค็น",
     "forHumansCount": "8 พันล้าน",
+    "titleMission": "สกุลเงินแห่งความเท่าเทียมด้าน AI",
     "tokenInfo": {
       "token": "โทเค็น",
       "network": "เครือข่าย",

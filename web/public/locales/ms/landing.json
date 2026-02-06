@@ -13,6 +13,14 @@
       "forHumans": "Untuk 8 Bilion Manusia",
       "countries": "Negara Disokong",
       "communityMembers": "Ahli Komuniti"
+    },
+    "mission": {
+      "measure": "Ukur",
+      "measureDesc": "Mengukur ketidaksamaan AI",
+      "connect": "Hubungkan",
+      "connectDesc": "Menyatukan orang melalui Jeong",
+      "democratize": "Demokratisasi",
+      "democratizeDesc": "Membuka akses AI untuk semua"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Jumlah Bekalan",
     "forHumans": "Manusia, Token",
     "forHumansCount": "8 Bilion",
+    "titleMission": "Mata Wang Kesaksamaan AI",
     "tokenInfo": {
       "token": "Token",
       "network": "Rangkaian",

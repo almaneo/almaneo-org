@@ -13,6 +13,14 @@
       "forHumans": "为80亿人类",
       "countries": "支持国家",
       "communityMembers": "社区成员"
+    },
+    "mission": {
+      "measure": "测量",
+      "measureDesc": "量化AI不平等",
+      "connect": "连接",
+      "connectDesc": "以情(情)连接人们",
+      "democratize": "民主化",
+      "democratizeDesc": "让所有人获得AI"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "总供应量",
     "forHumans": "人类, 代币",
     "forHumansCount": "80亿",
+    "titleMission": "AI平等的货币",
     "tokenInfo": {
       "token": "代币",
       "network": "网络",

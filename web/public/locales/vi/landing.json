@@ -13,6 +13,14 @@
       "forHumans": "Cho 8 tỷ người",
       "countries": "Quốc gia hỗ trợ",
       "communityMembers": "Thành viên cộng đồng"
+    },
+    "mission": {
+      "measure": "Đo lường",
+      "measureDesc": "Đo lường bất bình đẳng AI",
+      "connect": "Kết nối",
+      "connectDesc": "Kết nối con người qua Jeong",
+      "democratize": "Dân chủ hóa",
+      "democratizeDesc": "Mở AI cho tất cả mọi người"
     }
   },
   "problem": {
@@ -138,6 +146,7 @@
     "totalSupply": "Tổng cung",
     "forHumans": "Người, Token",
     "forHumansCount": "8 tỷ",
+    "titleMission": "Tiền Tệ của Bình Đẳng AI",
     "tokenInfo": {
       "token": "Token",
       "network": "Mạng lưới",
