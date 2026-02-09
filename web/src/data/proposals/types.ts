@@ -156,7 +156,7 @@ export const statusLabelsKo: Record<ProposalStatus, string> = {
 };
 
 // 지원 언어
-export type ProposalLanguage = 'ko' | 'en';
+export type ProposalLanguage = 'ko' | 'en' | 'zh';
 
 export interface LanguageOption {
   code: ProposalLanguage;
@@ -167,12 +167,24 @@ export interface LanguageOption {
 export const supportedLanguages: LanguageOption[] = [
   { code: 'ko', label: 'Korean', nativeLabel: '한국어' },
   { code: 'en', label: 'English', nativeLabel: 'English' },
+  { code: 'zh', label: 'Chinese', nativeLabel: '中文' },
 ];
+
+// 상태별 중국어 라벨
+export const statusLabelsZh: Record<ProposalStatus, string> = {
+  draft: '草稿',
+  submitted: '已提交',
+  'under-review': '审核中',
+  approved: '已批准',
+  rejected: '已拒绝',
+  funded: '已资助',
+};
 
 // 상태 라벨 다국어
 export const statusLabelsByLanguage: Record<ProposalLanguage, Record<ProposalStatus, string>> = {
   ko: statusLabelsKo,
   en: statusLabels,
+  zh: statusLabelsZh,
 };
 
 // 다국어 제안서 레지스트리 타입

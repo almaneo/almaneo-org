@@ -12,9 +12,13 @@ export { polygonGrantProposal, polygonGrantSlides } from './polygon-grant';
 // Proposals - English
 export { polygonGrantProposalEn, polygonGrantSlidesEn } from './polygon-grant-en';
 
+// Proposals - Chinese
+export { polygonGrantProposalZh, polygonGrantSlidesZh } from './polygon-grant-zh';
+
 // Imports for registry
 import { polygonGrantProposal } from './polygon-grant';
 import { polygonGrantProposalEn } from './polygon-grant-en';
+import { polygonGrantProposalZh } from './polygon-grant-zh';
 import type { Proposal, ProposalLanguage, ProposalRegistry } from './types';
 
 // Multi-language Proposal Registry
@@ -22,6 +26,7 @@ export const proposalRegistry: ProposalRegistry = {
   'polygon-grant': {
     ko: polygonGrantProposal,
     en: polygonGrantProposalEn,
+    zh: polygonGrantProposalZh,
   },
 };
 

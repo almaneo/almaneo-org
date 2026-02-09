@@ -462,7 +462,7 @@ export const polygonGrantProposal: Proposal = {
     requestedAmount: '$30,000 ~ $50,000',
     documentUrl: '/proposals/POLYGON_GRANT_PROPOSAL.md',
     pdfUrl: '/pdf/proposals/polygon-grant/Polygon_Grant_Proposal_en.pdf',
-    availableLanguages: ['ko'],
+    availableLanguages: ['ko', 'en', 'zh'],
   },
   slides: polygonGrantSlides,
 };
