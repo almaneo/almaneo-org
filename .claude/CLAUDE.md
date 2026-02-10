@@ -3432,15 +3432,54 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 64+)
+### ✅ 완료된 작업 (2026-02-10 - Session 64: Vercel AI Gateway 멀티모델 연동)
 
-#### 🔴 최우선 (Vercel 지원서 제출 전 필수)
+#### 1. **AI Gateway 듀얼 모드 구현** (`web/api/chat-ai.ts`)
+   - `AI_GATEWAY_API_KEY` 환경변수로 Gateway/Direct 모드 자동 감지
+   - Gateway 모드: `gateway('provider/model')` → Vercel 프록시 경유, BYOK 지원
+   - Direct 모드: `google()`, `groq()` → 직접 API 호출 (기존 동작 유지)
+   - AI SDK v6 변경 반영: `maxTokens` → `maxOutputTokens`, `toTextStreamResponse()`
 
-1. **Vercel AI Gateway 연동** ⭐
-   - Session 63에서 SDK 연동 완료 → 이제 Gateway 플랫폼 서비스 연동
-   - Vercel 대시보드에서 AI Gateway API 키 생성
-   - `chat-ai.ts`에 gateway URL/키 설정 추가
-   - Gateway 경유 시 캐싱, 사용량 추적, 레이트 리밋 자동 적용
+#### 2. **멀티모델 카탈로그** (`web/src/services/aiHub.ts`)
+   - `DIRECT_MODELS` (2개): Gemini 2.5 Flash Lite, Llama 3.3 70B
+   - `GATEWAY_MODELS` (11개, 7 프로바이더):
+
+   | Provider | Models | Tier |
+   |----------|--------|------|
+   | Google | Gemini 2.5 Flash Lite, Gemini 3 Flash, Gemini 2.5 Pro | free/free/standard |
+   | Anthropic | Claude Sonnet 4.5, Claude Haiku 4.5 | premium/standard |
+   | OpenAI | GPT-4o Mini, GPT-4o | free/premium |
+   | Meta | Llama 3.3 70B | free |
+   | DeepSeek | DeepSeek V3.2 | free |
+   | Mistral | Mistral Large 3 | standard |
+   | xAI | Grok 3 | standard |
+
+#### 3. **듀얼 모델 리스트 전환** (`web/src/hooks/useAIHub.ts`)
+   - Gateway 토글 시 `GATEWAY_MODELS` ↔ `DIRECT_MODELS` 자동 전환
+   - 모드 전환 시 기본 모델 자동 리셋 (Gateway: `google/gemini-2.5-flash-lite`, Direct: `gemini-2.5-flash-lite`)
+   - Plain text stream 파싱 (Vercel AI SDK v6: `toTextStreamResponse()`)
+
+#### 4. **프로바이더별 그룹 드롭다운** (`web/src/pages/AIHub.tsx`)
+   - Gateway 모드: 프로바이더별 그룹 헤더 + 모델 수 표시
+   - 티어 배지: PRO (premium, 금색), STD (standard, 파란색)
+   - 스크롤 가능한 드롭다운 (max-h-70vh)
+
+#### 5. **환경변수 설정**
+   - `AI_GATEWAY_API_KEY` → 로컬 `.env`에 설정 완료
+   - Vercel 프로덕션에는 아직 미설정 (다음 세션에서 설정)
+
+#### 6. **커밋**: `65dc180` - feat(web): Add Vercel AI Gateway with multi-model support
+
+---
+
+### 🔲 다음 세션 작업 (Session 65+)
+
+#### 🔴 최우선
+
+1. **Gateway 실기기 테스트** ⭐
+   - 로컬 dev 서버에서 Gateway 토글 ON → 각 모델 응답 확인
+   - Vercel 프로덕션 환경변수 `AI_GATEWAY_API_KEY` 설정
+   - Gateway 모델 확장 검토 (Vercel 문서에 더 많은 모델 지원)
 
 2. **Vercel AI Accelerator 온라인 지원서 제출** (마감 **2/16**)
    - 지원 URL: https://vercel.com/ai-accelerator
