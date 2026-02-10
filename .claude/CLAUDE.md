@@ -3375,35 +3375,100 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 62+)
+### ✅ 완료된 작업 (2026-02-10 - Session 62: Grant 다중 제안서 생성)
 
-#### 🔴 높은 우선순위
+#### 1. **5개 Grant 프로그램 제안서 작성 (영어 + 한국어, 11개 파일)**
+   - 커밋: `9343283` - docs: Add 5 grant proposals (EN+KO) and grant tracker
+   - 11개 파일, +2,648줄
 
-1. **게임 서버 MiningPool 연동**
+#### 2. **생성된 제안서 목록**
+
+   | 프로그램 | 영어 | 한국어 | 금액 | 마감 |
+   |:---------|:-----|:-------|:-----|:-----|
+   | Vercel AI Accelerator | `VERCEL_AI_ACCELERATOR.md` | `_KO.md` | $100K+ 크레딧 | **2026-02-16** |
+   | Anthropic Economic Futures | `ANTHROPIC_ECONOMIC_FUTURES.md` | `_KO.md` | $35K + API | Rolling |
+   | Mozilla Democracy x AI | `MOZILLA_DEMOCRACY_AI.md` | `_KO.md` | $50K~$250K | Early 2026 |
+   | Optimism RetroPGF | `OPTIMISM_RETROPGF.md` | `_KO.md` | OP 토큰 | 상시 |
+   | Gitcoin GG25 | `GITCOIN_GG25.md` | `_KO.md` | QF 매칭 | Q2 2026 |
+
+#### 3. **GRANT_TRACKER.md 생성**
+   - 9개 프로그램 전체 현황 관리 (제출됨, 작성완료, 모니터링)
+   - 프로그램별 강조점 가이드 (톤/어휘 매트릭스)
+   - 다음 액션 체크리스트 (긴급도별 분류)
+
+#### 4. **프로그램별 프레이밍 전략**
+   | 프로그램 | AlmaNEO 호칭 | 강조 | 최소화 |
+   |:---------|:------------|:-----|:------|
+   | Vercel | AI 프로덕트 | Edge Functions, AI SDK | 블록체인, 토큰 |
+   | Anthropic | 연구 도구 | 학술 방법론, GAII 데이터 | 블록체인, 토큰 |
+   | Mozilla | 시민 기술 | 민주적 거버넌스, 커뮤니티 | 암호화폐 용어 |
+   | Optimism | 공공재 | 오픈소스, 임팩트 메트릭 | 토큰 경제 |
+   | Gitcoin | 오픈소스 도구 | 이미 만든 것, 커뮤니티 | 미래 계획 |
+
+---
+
+### ✅ 완료된 작업 (2026-02-10 - Session 63: Vercel AI SDK 연동)
+
+#### 1. **Vercel AI SDK 라이브러리 연동 완료**
+   - `web/api/chat-ai.ts` 신규 생성 (Vercel AI SDK 엔드포인트)
+   - `streamText` + `toDataStreamResponse`로 Vercel AI Data Stream 프로토콜 구현
+   - 지원 모델: Gemini 2.5 Flash Lite (`@ai-sdk/google`), Llama 3.3 70B (`@ai-sdk/groq`)
+
+#### 2. **듀얼 모드 아키텍처**
+   - 기존 `/api/chat` (커스텀 SSE) 100% 보존
+   - 신규 `/api/chat-ai` (Vercel AI SDK) 별도 엔드포인트
+   - `useAIHub.ts`에 `useVercelAI` 토글 + 듀얼 스트림 파싱 분기
+   - `AIHub.tsx`에 Zap 아이콘 토글 버튼 (AI SDK ON/OFF)
+
+#### 3. **패키지 추가**
+   - `ai@^6.0.78`, `@ai-sdk/google@^3.0.23`, `@ai-sdk/groq@^3.0.22`, `@ai-sdk/react@^3.0.80`
+
+#### 4. **Vercel AI SDK vs Gateway 구분 확인**
+   - **이번 세션**: AI SDK (오픈소스 라이브러리, Vercel 키 불필요) ✅
+   - **다음 세션**: AI Gateway (Vercel 플랫폼 서비스, API 키 필요, 프록시/캐싱/사용량추적)
+   - 사용자 Vercel Pro 계정, AI Gateway $5.00 Free Credit 확인됨
+
+#### 5. **커밋**: `66ede5a` - feat(web): Add Vercel AI SDK integration alongside existing SSE
+
+---
+
+### 🔲 다음 세션 작업 (Session 64+)
+
+#### 🔴 최우선 (Vercel 지원서 제출 전 필수)
+
+1. **Vercel AI Gateway 연동** ⭐
+   - Session 63에서 SDK 연동 완료 → 이제 Gateway 플랫폼 서비스 연동
+   - Vercel 대시보드에서 AI Gateway API 키 생성
+   - `chat-ai.ts`에 gateway URL/키 설정 추가
+   - Gateway 경유 시 캐싱, 사용량 추적, 레이트 리밋 자동 적용
+
+2. **Vercel AI Accelerator 온라인 지원서 제출** (마감 **2/16**)
+   - 지원 URL: https://vercel.com/ai-accelerator
+   - 제안서: `VERCEL_AI_ACCELERATOR.md` 내용 기반
+
+3. **Anthropic Economic Futures 온라인 지원서 제출** (Rolling)
+   - 지원 URL: https://www.anthropic.com/economic-futures
+   - 제안서: `ANTHROPIC_ECONOMIC_FUTURES.md` 내용 기반
+
+#### 🟠 높은 우선순위
+
+4. **게임 서버 MiningPool 연동**
    - `web/api/mining-claim.ts` 엔드포인트 생성
    - MiningPool.claimForUser() 호출 로직
-   - CLAIMER_ROLE 부여 (Verifier 지갑 또는 별도 Claimer 지갑)
 
-3. **토크노믹스 대시보드**
+5. **토크노믹스 대시보드**
    - 온체인 잔액 실시간 표시 UI
    - Vesting 진행률, Mining 소진율
-   - 카테고리별 분배 현황
 
-4. **GAII 페이지 i18n 완성**
+6. **GAII 페이지 i18n 완성**
    - 나머지 12개 언어에 `platform.json` 번역 파일 추가
 
 #### 🟡 중간 우선순위
 
-5. **토큰 로고 AI 생성**
-   - 프롬프트 활용하여 256x256 PNG 생성
-
-6. **Governance 실제 제안 로드**
-   - ProposalCreated 이벤트 조회
-   - Mock 데이터 제거, 온체인 데이터로 교체
-
-7. **모바일 실기기 QA 테스트**
+7. **토큰 로고 AI 생성**
+8. **Governance 실제 제안 로드**
+9. **모바일 실기기 QA 테스트**
 
 #### 🟢 낮은 우선순위
 
-8. **Grant 프로그램 신청**
-9. **메인넷 배포 준비** (Multi-sig 설정, 감사)
+10. **메인넷 배포 준비** (Multi-sig 설정, 감사)
