@@ -3,11 +3,12 @@
  * AlmaNEO AI Hub 채팅 인터페이스
  */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertCircle, Menu, X, Wallet, ChevronDown, Check, Zap } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useAIHub } from '../hooks/useAIHub';
+import type { AIModelInfo } from '../services/aiHub';
 import {
   ChatMessage,
   ChatInput,
@@ -52,6 +53,16 @@ export function AIHub() {
 
   // 메시지 스크롤 참조
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 모델을 프로바이더별로 그룹화
+  const groupedModels = useMemo(() => {
+    const groups: Record<string, AIModelInfo[]> = {};
+    for (const model of Object.values(availableModels)) {
+      if (!groups[model.provider]) groups[model.provider] = [];
+      groups[model.provider].push(model);
+    }
+    return groups;
+  }, [availableModels]);
 
   // 새 메시지 시 자동 스크롤
   useEffect(() => {
@@ -155,8 +166,8 @@ export function AIHub() {
               onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-sm text-slate-200 transition-colors"
             >
-              <span>{availableModels[currentModel].icon}</span>
-              <span className="hidden sm:inline">{availableModels[currentModel].name}</span>
+              <span>{availableModels[currentModel]?.icon ?? '🤖'}</span>
+              <span className="hidden sm:inline">{availableModels[currentModel]?.name ?? currentModel}</span>
               <ChevronDown className={`w-4 h-4 transition-transform ${isModelDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -169,38 +180,64 @@ export function AIHub() {
                   onClick={() => setIsModelDropdownOpen(false)}
                 />
                 {/* 메뉴 */}
-                <div className="absolute right-0 mt-2 w-72 rounded-lg bg-slate-800 border border-slate-600 shadow-xl z-20 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-80 max-h-[70vh] rounded-lg bg-slate-800 border border-slate-600 shadow-xl z-20 overflow-hidden flex flex-col">
                   <div className="p-2 border-b border-slate-700">
                     <p className="text-xs text-slate-400 px-2">
                       {t('aiHub.selectModel', 'AI 모델 선택')}
+                      {useVercelAI && (
+                        <span className="ml-2 text-emerald-400">
+                          — Gateway ({Object.keys(availableModels).length} models)
+                        </span>
+                      )}
                     </p>
                   </div>
-                  <div className="p-1">
-                    {Object.values(availableModels).map((model) => (
-                      <button
-                        key={model.id}
-                        onClick={() => {
-                          setModel(model.id);
-                          setIsModelDropdownOpen(false);
-                        }}
-                        className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors ${
-                          currentModel === model.id
-                            ? 'bg-neos-blue/20 text-white'
-                            : 'hover:bg-slate-700 text-slate-300'
-                        }`}
-                      >
-                        <span className="text-xl">{model.icon}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{model.name}</span>
-                            {currentModel === model.id && (
-                              <Check className="w-4 h-4 text-neos-blue" />
-                            )}
+                  <div className="p-1 overflow-y-auto">
+                    {Object.entries(groupedModels).map(([provider, models]) => (
+                      <div key={provider}>
+                        {/* 프로바이더 그룹 헤더 (Gateway 모드에서만 표시) */}
+                        {useVercelAI && (
+                          <div className="px-3 pt-2 pb-1">
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                              {provider}
+                            </span>
                           </div>
-                          <p className="text-xs text-slate-400 mt-0.5">{model.provider}</p>
-                          <p className="text-xs text-slate-500 mt-1">{model.description}</p>
-                        </div>
-                      </button>
+                        )}
+                        {models.map((model) => (
+                          <button
+                            key={model.id}
+                            onClick={() => {
+                              setModel(model.id);
+                              setIsModelDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-start gap-3 p-2.5 rounded-lg text-left transition-colors ${
+                              currentModel === model.id
+                                ? 'bg-neos-blue/20 text-white'
+                                : 'hover:bg-slate-700 text-slate-300'
+                            }`}
+                          >
+                            <span className="text-lg mt-0.5">{model.icon}</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium text-sm">{model.name}</span>
+                                {model.tier === 'premium' && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-medium">
+                                    PRO
+                                  </span>
+                                )}
+                                {model.tier === 'standard' && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-medium">
+                                    STD
+                                  </span>
+                                )}
+                                {currentModel === model.id && (
+                                  <Check className="w-3.5 h-3.5 text-neos-blue ml-auto flex-shrink-0" />
+                                )}
+                              </div>
+                              <p className="text-xs text-slate-500 mt-0.5">{model.description}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -208,7 +245,7 @@ export function AIHub() {
             )}
           </div>
 
-          {/* Vercel AI SDK 토글 */}
+          {/* Vercel AI Gateway 토글 */}
           <button
             onClick={() => setUseVercelAI(!useVercelAI)}
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
@@ -216,10 +253,10 @@ export function AIHub() {
                 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
                 : 'bg-slate-800 text-slate-400 border-slate-600 hover:text-slate-200'
             }`}
-            title={useVercelAI ? 'Vercel AI SDK ON' : 'Vercel AI SDK OFF'}
+            title={useVercelAI ? 'AI Gateway ON — Access 11+ models from 7 providers' : 'Direct Mode — Gemini + Groq only'}
           >
             <Zap className={`w-3.5 h-3.5 ${useVercelAI ? 'fill-emerald-400' : ''}`} />
-            <span className="hidden sm:inline">AI SDK</span>
+            <span className="hidden sm:inline">Gateway</span>
           </button>
 
           {/* 새로고침 버튼 */}

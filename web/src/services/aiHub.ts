@@ -8,14 +8,25 @@ import { supabase, type DbConversation, type DbMessage, type DbQuota, type Quota
 // 상수
 export const DAILY_QUOTA_LIMIT = 50;
 
-// 지원 모델 목록
-export const AI_MODELS = {
+// ── 모델 타입 정의 ──
+export interface AIModelInfo {
+  id: string;
+  name: string;
+  provider: string;
+  description: string;
+  icon: string;
+  tier: 'free' | 'standard' | 'premium';
+}
+
+// ── Direct 모델 (Gateway 없이 사용, 자체 API 키 필요) ──
+export const DIRECT_MODELS: Record<string, AIModelInfo> = {
   'gemini-2.5-flash-lite': {
     id: 'gemini-2.5-flash-lite',
     name: 'Gemini 2.5 Flash Lite',
     provider: 'Google',
     description: 'Fast and efficient for everyday tasks',
     icon: '✨',
+    tier: 'free',
   },
   'llama-3.3-70b-versatile': {
     id: 'llama-3.3-70b-versatile',
@@ -23,11 +34,117 @@ export const AI_MODELS = {
     provider: 'Groq',
     description: 'Powerful open-source model with excellent multilingual support',
     icon: '🦙',
+    tier: 'free',
   },
-} as const;
+};
 
-export type AIModelId = keyof typeof AI_MODELS;
-export const AI_MODEL_LIST = Object.values(AI_MODELS);
+// ── Gateway 모델 (Vercel AI Gateway 경유, 단일 API 키로 모든 모델 접근) ──
+export const GATEWAY_MODELS: Record<string, AIModelInfo> = {
+  // Google
+  'google/gemini-2.5-flash-lite': {
+    id: 'google/gemini-2.5-flash-lite',
+    name: 'Gemini 2.5 Flash Lite',
+    provider: 'Google',
+    description: 'Ultra-fast, most cost-effective',
+    icon: '✨',
+    tier: 'free',
+  },
+  'google/gemini-3-flash': {
+    id: 'google/gemini-3-flash',
+    name: 'Gemini 3 Flash',
+    provider: 'Google',
+    description: 'Latest Gemini, strong multilingual',
+    icon: '⚡',
+    tier: 'free',
+  },
+  'google/gemini-2.5-pro': {
+    id: 'google/gemini-2.5-pro',
+    name: 'Gemini 2.5 Pro',
+    provider: 'Google',
+    description: '1M context, deep reasoning',
+    icon: '💎',
+    tier: 'standard',
+  },
+  // Anthropic
+  'anthropic/claude-sonnet-4-5-20250929': {
+    id: 'anthropic/claude-sonnet-4-5-20250929',
+    name: 'Claude Sonnet 4.5',
+    provider: 'Anthropic',
+    description: '#1 most popular, excellent quality',
+    icon: '🟠',
+    tier: 'premium',
+  },
+  'anthropic/claude-haiku-4-5-20251001': {
+    id: 'anthropic/claude-haiku-4-5-20251001',
+    name: 'Claude Haiku 4.5',
+    provider: 'Anthropic',
+    description: 'Fast & affordable Claude',
+    icon: '🟡',
+    tier: 'standard',
+  },
+  // OpenAI
+  'openai/gpt-4o-mini': {
+    id: 'openai/gpt-4o-mini',
+    name: 'GPT-4o Mini',
+    provider: 'OpenAI',
+    description: 'Most cost-effective GPT',
+    icon: '🟢',
+    tier: 'free',
+  },
+  'openai/gpt-4o': {
+    id: 'openai/gpt-4o',
+    name: 'GPT-4o',
+    provider: 'OpenAI',
+    description: 'Powerful multimodal GPT',
+    icon: '🔵',
+    tier: 'premium',
+  },
+  // Meta
+  'meta/llama-3.3-70b': {
+    id: 'meta/llama-3.3-70b',
+    name: 'Llama 3.3 70B',
+    provider: 'Meta',
+    description: 'Open-source, great multilingual',
+    icon: '🦙',
+    tier: 'free',
+  },
+  // DeepSeek
+  'deepseek/deepseek-v3.2': {
+    id: 'deepseek/deepseek-v3.2',
+    name: 'DeepSeek V3.2',
+    provider: 'DeepSeek',
+    description: 'Cheapest, strong bilingual EN/ZH',
+    icon: '🐋',
+    tier: 'free',
+  },
+  // Mistral
+  'mistral/mistral-large-3': {
+    id: 'mistral/mistral-large-3',
+    name: 'Mistral Large 3',
+    provider: 'Mistral',
+    description: 'European AI, 256K context',
+    icon: '🔷',
+    tier: 'standard',
+  },
+  // xAI
+  'xai/grok-3': {
+    id: 'xai/grok-3',
+    name: 'Grok 3',
+    provider: 'xAI',
+    description: '131K context, versatile',
+    icon: '🤖',
+    tier: 'standard',
+  },
+};
+
+// ── 하위 호환성 (기존 코드에서 AI_MODELS 사용) ──
+export const AI_MODELS = DIRECT_MODELS;
+export type AIModelId = string;
+export const AI_MODEL_LIST = Object.values(DIRECT_MODELS);
+
+// Default 모델
+export const DEFAULT_DIRECT_MODEL = 'gemini-2.5-flash-lite';
+export const DEFAULT_GATEWAY_MODEL = 'google/gemini-2.5-flash-lite';
 
 // Vercel AI SDK 엔드포인트 (기존 /api/chat 와 별도)
 export const API_ENDPOINT_LEGACY = '/api/chat';
@@ -75,7 +192,7 @@ export async function ensureUserExists(userAddress: string): Promise<void> {
     throw new Error('사용자 정보를 생성하는데 실패했습니다.');
   }
 }
-export const DEFAULT_MODEL: AIModelId = 'gemini-2.5-flash-lite';
+export const DEFAULT_MODEL = DEFAULT_DIRECT_MODEL;
 export const CONVERSATION_RETENTION_DAYS = 30;
 
 // ============================================

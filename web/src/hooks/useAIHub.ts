@@ -17,9 +17,12 @@ import {
   generateTitleFromMessage,
   DAILY_QUOTA_LIMIT,
   DEFAULT_MODEL,
-  AI_MODELS,
+  DIRECT_MODELS,
+  GATEWAY_MODELS,
+  DEFAULT_DIRECT_MODEL,
+  DEFAULT_GATEWAY_MODEL,
   API_ENDPOINT_AI_SDK,
-  type AIModelId,
+  type AIModelInfo,
 } from '../services/aiHub';
 import type { DbConversation, DbMessage } from '../supabase';
 
@@ -58,10 +61,10 @@ export interface UseAIHubReturn {
   quota: QuotaInfo;
 
   // 모델
-  currentModel: AIModelId;
-  availableModels: typeof AI_MODELS;
+  currentModel: string;
+  availableModels: Record<string, AIModelInfo>;
 
-  // Vercel AI SDK 모드
+  // Vercel AI Gateway 모드
   useVercelAI: boolean;
   setUseVercelAI: (value: boolean) => void;
 
@@ -80,7 +83,7 @@ export interface UseAIHubReturn {
   stopStreaming: () => void;
   clearError: () => void;
   refreshQuota: () => Promise<void>;
-  setModel: (modelId: AIModelId) => void;
+  setModel: (modelId: string) => void;
 }
 
 // API URL (기존 레거시 엔드포인트, useVercelAI=false 일 때 사용)
@@ -125,10 +128,20 @@ export function useAIHub(): UseAIHubReturn {
   });
 
   // 모델 상태
-  const [currentModel, setCurrentModel] = useState<AIModelId>(DEFAULT_MODEL);
+  const [currentModel, setCurrentModel] = useState<string>(DEFAULT_MODEL);
 
-  // Vercel AI SDK 모드 (false = 기존 커스텀 SSE, true = Vercel AI Data Stream)
-  const [useVercelAI, setUseVercelAI] = useState(false);
+  // Vercel AI Gateway 모드 (false = 기존 커스텀 SSE + Direct 모델, true = Gateway + 다양한 모델)
+  const [useVercelAI, setUseVercelAIState] = useState(false);
+
+  // Gateway 토글 시 모델 목록과 기본 모델 전환
+  const setUseVercelAI = useCallback((value: boolean) => {
+    setUseVercelAIState(value);
+    // 모드 전환 시 해당 모드의 기본 모델로 리셋
+    setCurrentModel(value ? DEFAULT_GATEWAY_MODEL : DEFAULT_DIRECT_MODEL);
+  }, []);
+
+  // 현재 모드에 따른 모델 목록
+  const availableModels = useVercelAI ? GATEWAY_MODELS : DIRECT_MODELS;
 
   // UI 상태
   const [isLoading, setIsLoading] = useState(false);
@@ -340,38 +353,20 @@ export function useAIHub(): UseAIHubReturn {
             if (done) break;
 
             const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
 
-            for (const line of lines) {
-              if (useVercelAI) {
-                // ── Vercel AI Data Stream 형식 ──
-                // 텍스트 청크: 0:"text chunk"
-                if (line.startsWith('0:')) {
-                  try {
-                    const text = JSON.parse(line.slice(2));
-                    if (text) {
-                      fullContent += text;
-                      setMessages((prev) =>
-                        prev.map((m) =>
-                          m.id === assistantMsgId ? { ...m, content: fullContent } : m
-                        )
-                      );
-                    }
-                  } catch {
-                    // 파싱 실패 무시
-                  }
-                }
-                // 에러: 3:"error message"
-                if (line.startsWith('3:')) {
-                  try {
-                    const errorMsg = JSON.parse(line.slice(2));
-                    throw new Error(errorMsg);
-                  } catch {
-                    // 파싱 실패 무시
-                  }
-                }
-              } else {
-                // ── 기존 커스텀 SSE 형식 ──
+            if (useVercelAI) {
+              // ── Vercel AI SDK: Plain Text Stream ──
+              // toTextStreamResponse()는 순수 텍스트 청크를 반환
+              fullContent += chunk;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantMsgId ? { ...m, content: fullContent } : m
+                )
+              );
+            } else {
+              // ── 기존 커스텀 SSE 형식 ──
+              const lines = chunk.split('\n');
+              for (const line of lines) {
                 if (line.startsWith('data: ')) {
                   try {
                     const data = JSON.parse(line.slice(6));
@@ -381,7 +376,6 @@ export function useAIHub(): UseAIHubReturn {
                     if (data.text) {
                       fullContent += data.text;
 
-                      // 메시지 업데이트
                       setMessages((prev) =>
                         prev.map((m) =>
                           m.id === assistantMsgId ? { ...m, content: fullContent } : m
@@ -477,7 +471,7 @@ export function useAIHub(): UseAIHubReturn {
   /**
    * 모델 변경
    */
-  const setModel = useCallback((modelId: AIModelId) => {
+  const setModel = useCallback((modelId: string) => {
     setCurrentModel(modelId);
   }, []);
 
@@ -500,7 +494,7 @@ export function useAIHub(): UseAIHubReturn {
     messages,
     quota,
     currentModel,
-    availableModels: AI_MODELS,
+    availableModels,
     useVercelAI,
     setUseVercelAI,
     isLoading,

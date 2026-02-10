@@ -1,21 +1,30 @@
 /**
- * AI Hub Chat API — Vercel AI SDK Edition
- * 기존 /api/chat (커스텀 SSE) 와 별개로 작동하는 Vercel AI Gateway 엔드포인트
+ * AI Hub Chat API — Vercel AI SDK + AI Gateway
  *
  * POST /api/chat-ai
  * Request: { messages, model? }
- * Response: Vercel AI Data Stream (0:"text"\n 형식, @ai-sdk/react useChat 호환)
+ * Response: Plain text stream (toTextStreamResponse)
  *
- * Supported Models:
- * - gemini-2.5-flash-lite (Google Gemini via @ai-sdk/google)
- * - llama-3.3-70b-versatile (Groq Llama via @ai-sdk/groq)
+ * Mode Selection:
+ * - AI_GATEWAY_API_KEY set → Gateway mode (any provider/model, caching, fallback, BYOK)
+ * - AI_GATEWAY_API_KEY not set → Direct provider mode (Gemini + Groq only)
+ *
+ * Gateway Models (provider/model format):
+ *   google/*, anthropic/*, openai/*, meta/*, deepseek/*, mistral/*, xai/*
+ *
+ * Direct Models (legacy):
+ *   gemini-2.5-flash-lite, llama-3.3-70b-versatile
  */
 
-import { streamText } from 'ai';
+import { streamText, gateway } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createGroq } from '@ai-sdk/groq';
 
-// Provider 초기화
+// ── Gateway Detection ──
+const GATEWAY_API_KEY = process.env.AI_GATEWAY_API_KEY;
+const USE_GATEWAY = !!GATEWAY_API_KEY;
+
+// ── Direct Provider (when gateway not configured) ──
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || '',
 });
@@ -24,15 +33,14 @@ const groq = createGroq({
   apiKey: process.env.GROQ_API_KEY || '',
 });
 
-// 모델 → Provider 매핑
-const MODEL_MAP: Record<string, () => ReturnType<typeof google> | ReturnType<typeof groq>> = {
+const DIRECT_MODEL_MAP: Record<string, () => ReturnType<typeof google> | ReturnType<typeof groq>> = {
   'gemini-2.5-flash-lite': () => google('gemini-2.5-flash-lite'),
   'llama-3.3-70b-versatile': () => groq('llama-3.3-70b-versatile'),
 };
 
-const DEFAULT_MODEL = 'gemini-2.5-flash-lite';
+const DEFAULT_DIRECT_MODEL = 'gemini-2.5-flash-lite';
+const DEFAULT_GATEWAY_MODEL = 'google/gemini-2.5-flash-lite';
 
-// 시스템 프롬프트 (기존 chat.ts와 동일)
 const SYSTEM_PROMPT = `You are AlmaNEO AI Hub assistant, helping users with various tasks.
 You are part of the AlmaNEO project that aims to democratize AI access globally.
 Be helpful, concise, and friendly. Support multiple languages based on user's input.
@@ -64,7 +72,7 @@ export default async function handler(request: Request): Promise<Response> {
 
   try {
     const body = await request.json();
-    const { messages, model = DEFAULT_MODEL } = body as {
+    const { messages, model } = body as {
       messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
       model?: string;
     };
@@ -76,38 +84,81 @@ export default async function handler(request: Request): Promise<Response> {
       });
     }
 
-    // API 키 확인
-    const isGemini = model.startsWith('gemini');
-    if (isGemini && !process.env.GEMINI_API_KEY) {
-      return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not configured' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    if (USE_GATEWAY) {
+      // ── Gateway Mode ──
+      // Accept any provider/model ID and route through Vercel AI Gateway
+      const gatewayModelId = (model && model.includes('/'))
+        ? model
+        : DEFAULT_GATEWAY_MODEL;
+
+      // Build BYOK config (use existing API keys for zero markup)
+      const byok: Record<string, Array<{ apiKey: string }>> = {};
+      if (process.env.GEMINI_API_KEY) {
+        byok.google = [{ apiKey: process.env.GEMINI_API_KEY }];
+      }
+      if (process.env.GROQ_API_KEY) {
+        byok.groq = [{ apiKey: process.env.GROQ_API_KEY }];
+      }
+
+      console.log(`[Chat AI Gateway] model=${gatewayModelId}, byok=${Object.keys(byok).join(',')}`);
+
+      const result = streamText({
+        model: gateway(gatewayModelId),
+        system: SYSTEM_PROMPT,
+        messages,
+        temperature: 0.7,
+        maxOutputTokens: 2048,
+        providerOptions: {
+          gateway: {
+            ...(Object.keys(byok).length > 0 ? { byok } : {}),
+            tags: ['aihub'],
+          },
+        },
+      });
+
+      return result.toTextStreamResponse({
+        headers: {
+          ...corsHeaders,
+          'X-AI-Gateway': 'true',
+          'X-AI-Model': gatewayModelId,
+        },
+      });
+    } else {
+      // ── Direct Provider Mode (Gemini + Groq only) ──
+      const directModel = model || DEFAULT_DIRECT_MODEL;
+      const isGemini = directModel.startsWith('gemini');
+
+      if (isGemini && !process.env.GEMINI_API_KEY) {
+        return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not configured' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      if (!isGemini && !process.env.GROQ_API_KEY) {
+        return new Response(JSON.stringify({ error: 'GROQ_API_KEY not configured' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const getModel = DIRECT_MODEL_MAP[directModel] || DIRECT_MODEL_MAP[DEFAULT_DIRECT_MODEL];
+
+      console.log(`[Chat AI Direct] model=${directModel}`);
+
+      const result = streamText({
+        model: getModel(),
+        system: SYSTEM_PROMPT,
+        messages,
+        temperature: 0.7,
+        maxOutputTokens: 2048,
+      });
+
+      return result.toTextStreamResponse({
+        headers: corsHeaders,
       });
     }
-    if (!isGemini && !process.env.GROQ_API_KEY) {
-      return new Response(JSON.stringify({ error: 'GROQ_API_KEY not configured' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Provider 모델 가져오기
-    const getModel = MODEL_MAP[model] || MODEL_MAP[DEFAULT_MODEL];
-
-    // Vercel AI SDK streamText → Data Stream Response
-    const result = streamText({
-      model: getModel(),
-      system: SYSTEM_PROMPT,
-      messages,
-      temperature: 0.7,
-      maxTokens: 2048,
-    });
-
-    return result.toDataStreamResponse({
-      headers: corsHeaders,
-    });
   } catch (error) {
-    console.error('[Chat AI SDK] Error:', error);
+    console.error('[Chat AI] Error:', error);
 
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     const status = errorMessage.includes('rate') || errorMessage.includes('quota') ? 429 : 500;
