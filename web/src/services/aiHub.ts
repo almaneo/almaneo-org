@@ -29,6 +29,10 @@ export const AI_MODELS = {
 export type AIModelId = keyof typeof AI_MODELS;
 export const AI_MODEL_LIST = Object.values(AI_MODELS);
 
+// Vercel AI SDK 엔드포인트 (기존 /api/chat 와 별도)
+export const API_ENDPOINT_LEGACY = '/api/chat';
+export const API_ENDPOINT_AI_SDK = '/api/chat-ai';
+
 // ============================================
 // 사용자 관리
 // ============================================

@@ -5,7 +5,7 @@
 
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, Menu, X, Wallet, ChevronDown, Check } from 'lucide-react';
+import { AlertCircle, Menu, X, Wallet, ChevronDown, Check, Zap } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useAIHub } from '../hooks/useAIHub';
 import {
@@ -40,6 +40,8 @@ export function AIHub() {
     clearError,
     refreshQuota,
     setModel,
+    useVercelAI,
+    setUseVercelAI,
   } = useAIHub();
 
   // 모바일 사이드바 상태
@@ -205,6 +207,20 @@ export function AIHub() {
               </>
             )}
           </div>
+
+          {/* Vercel AI SDK 토글 */}
+          <button
+            onClick={() => setUseVercelAI(!useVercelAI)}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+              useVercelAI
+                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                : 'bg-slate-800 text-slate-400 border-slate-600 hover:text-slate-200'
+            }`}
+            title={useVercelAI ? 'Vercel AI SDK ON' : 'Vercel AI SDK OFF'}
+          >
+            <Zap className={`w-3.5 h-3.5 ${useVercelAI ? 'fill-emerald-400' : ''}`} />
+            <span className="hidden sm:inline">AI SDK</span>
+          </button>
 
           {/* 새로고침 버튼 */}
           <button

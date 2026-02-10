@@ -18,6 +18,7 @@ import {
   DAILY_QUOTA_LIMIT,
   DEFAULT_MODEL,
   AI_MODELS,
+  API_ENDPOINT_AI_SDK,
   type AIModelId,
 } from '../services/aiHub';
 import type { DbConversation, DbMessage } from '../supabase';
@@ -60,6 +61,10 @@ export interface UseAIHubReturn {
   currentModel: AIModelId;
   availableModels: typeof AI_MODELS;
 
+  // Vercel AI SDK 모드
+  useVercelAI: boolean;
+  setUseVercelAI: (value: boolean) => void;
+
   // 상태
   isLoading: boolean;
   isSending: boolean;
@@ -78,7 +83,7 @@ export interface UseAIHubReturn {
   setModel: (modelId: AIModelId) => void;
 }
 
-// API URL
+// API URL (기존 레거시 엔드포인트, useVercelAI=false 일 때 사용)
 const API_URL = '/api/chat';
 
 /**
@@ -121,6 +126,9 @@ export function useAIHub(): UseAIHubReturn {
 
   // 모델 상태
   const [currentModel, setCurrentModel] = useState<AIModelId>(DEFAULT_MODEL);
+
+  // Vercel AI SDK 모드 (false = 기존 커스텀 SSE, true = Vercel AI Data Stream)
+  const [useVercelAI, setUseVercelAI] = useState(false);
 
   // UI 상태
   const [isLoading, setIsLoading] = useState(false);
@@ -284,20 +292,34 @@ export function useAIHub(): UseAIHubReturn {
         // API 호출 (스트리밍)
         abortControllerRef.current = new AbortController();
 
-        const response = await fetch(API_URL, {
+        // Vercel AI SDK 모드 vs 레거시 모드: 엔드포인트 + 요청 형식 분기
+        const apiUrl = useVercelAI ? API_ENDPOINT_AI_SDK : API_URL;
+        const requestBody = useVercelAI
+          ? {
+              // Vercel AI SDK 표준 형식: messages 배열 (history + 새 메시지)
+              messages: [
+                ...messages.map((m) => ({ role: m.role, content: m.content })),
+                { role: 'user' as const, content },
+              ],
+              model: currentModel,
+            }
+          : {
+              // 기존 레거시 형식: message + history 분리
+              conversationId,
+              message: content,
+              model: currentModel,
+              history: messages.map((m) => ({
+                role: m.role,
+                content: m.content,
+              })),
+            };
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            conversationId,
-            message: content,
-            model: currentModel,
-            history: messages.map((m) => ({
-              role: m.role,
-              content: m.content,
-            })),
-          }),
+          body: JSON.stringify(requestBody),
           signal: abortControllerRef.current.signal,
         });
 
@@ -321,28 +343,58 @@ export function useAIHub(): UseAIHubReturn {
             const lines = chunk.split('\n');
 
             for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                try {
-                  const data = JSON.parse(line.slice(6));
-
-                  if (data.done) continue;
-
-                  if (data.text) {
-                    fullContent += data.text;
-
-                    // 메시지 업데이트
-                    setMessages((prev) =>
-                      prev.map((m) =>
-                        m.id === assistantMsgId ? { ...m, content: fullContent } : m
-                      )
-                    );
+              if (useVercelAI) {
+                // ── Vercel AI Data Stream 형식 ──
+                // 텍스트 청크: 0:"text chunk"
+                if (line.startsWith('0:')) {
+                  try {
+                    const text = JSON.parse(line.slice(2));
+                    if (text) {
+                      fullContent += text;
+                      setMessages((prev) =>
+                        prev.map((m) =>
+                          m.id === assistantMsgId ? { ...m, content: fullContent } : m
+                        )
+                      );
+                    }
+                  } catch {
+                    // 파싱 실패 무시
                   }
-
-                  if (data.error) {
-                    throw new Error(data.error);
+                }
+                // 에러: 3:"error message"
+                if (line.startsWith('3:')) {
+                  try {
+                    const errorMsg = JSON.parse(line.slice(2));
+                    throw new Error(errorMsg);
+                  } catch {
+                    // 파싱 실패 무시
                   }
-                } catch {
-                  // JSON 파싱 실패는 무시
+                }
+              } else {
+                // ── 기존 커스텀 SSE 형식 ──
+                if (line.startsWith('data: ')) {
+                  try {
+                    const data = JSON.parse(line.slice(6));
+
+                    if (data.done) continue;
+
+                    if (data.text) {
+                      fullContent += data.text;
+
+                      // 메시지 업데이트
+                      setMessages((prev) =>
+                        prev.map((m) =>
+                          m.id === assistantMsgId ? { ...m, content: fullContent } : m
+                        )
+                      );
+                    }
+
+                    if (data.error) {
+                      throw new Error(data.error);
+                    }
+                  } catch {
+                    // JSON 파싱 실패는 무시
+                  }
                 }
               }
             }
@@ -383,7 +435,7 @@ export function useAIHub(): UseAIHubReturn {
         abortControllerRef.current = null;
       }
     },
-    [address, currentConversation, messages, quota.remaining, currentModel]
+    [address, currentConversation, messages, quota.remaining, currentModel, useVercelAI]
   );
 
   /**
@@ -449,6 +501,8 @@ export function useAIHub(): UseAIHubReturn {
     quota,
     currentModel,
     availableModels: AI_MODELS,
+    useVercelAI,
+    setUseVercelAI,
     isLoading,
     isSending,
     isStreaming,
