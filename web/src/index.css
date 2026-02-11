@@ -788,6 +788,18 @@
   }
 
   /* =============================================
+     AI Hub - Chat Markdown Styles
+     ============================================= */
+
+  .chat-markdown > *:first-child {
+    margin-top: 0;
+  }
+
+  .chat-markdown > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* =============================================
      Proposal Viewer - Slide Presentation Styles
      ============================================= */
 

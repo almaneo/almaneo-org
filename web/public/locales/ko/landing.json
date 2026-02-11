@@ -572,6 +572,16 @@
       "button": "지갑 연결",
       "connecting": "연결 중..."
     },
+    "you": "나",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "도움이 됐어요",
+      "notHelpful": "도움이 안 됐어요"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — 7개 프로바이더의 11+ 모델 접근",
+      "offTitle": "Direct 모드 — Gemini + Groq만 사용"
+    },
     "errors": {
       "quotaExceeded": "일일 쿼터를 초과했습니다. 내일 다시 시도해주세요.",
       "networkError": "네트워크 오류가 발생했습니다.",

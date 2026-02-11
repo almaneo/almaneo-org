@@ -572,6 +572,16 @@
       "button": "Connect Wallet",
       "connecting": "Connecting..."
     },
+    "you": "You",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Helpful",
+      "notHelpful": "Not helpful"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Access 11+ models from 7 providers",
+      "offTitle": "Direct Mode — Gemini + Groq only"
+    },
     "errors": {
       "quotaExceeded": "Daily quota exceeded. Please try again tomorrow.",
       "networkError": "A network error occurred.",

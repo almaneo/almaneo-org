@@ -27,36 +27,38 @@
 
 ## 기술 아키텍처
 
-```
-사용자 요청 (14개 언어 지원)
-  │
-  ▼
-Vercel Edge Function (/api/chat)  [서울 리전: icn1]
-  │
-  ├─ 모델 라우터 (사용자 선택 기반)
-  │   ├─ Gemini 2.5 Flash Lite  (Google — 빠르고 효율적)
-  │   └─ Llama 3.3 70B          (Groq — 강력, 다국어 우수)
-  │
-  ├─ SSE 스트리밍 응답 (TransformStream API)
-  │
-  ▼
-Supabase (PostgreSQL)
-  ├─ 대화 기록
-  ├─ 메시지 저장
-  ├─ 일일 쿼터 추적 (50쿼리/일/사용자)
-  └─ 사용자 관리
+**요청 흐름**: 사용자 (14개 언어) → Vercel Edge Function `/api/chat-ai` [서울 `icn1`] → AI 모델 → 스트리밍 응답 → 사용자
 
-추가 Edge Functions:
-  ├─ /api/ambassador  — 온체인 밋업 검증 (Polygon)
-  └─ /api/mining-claim — 토큰 분배
-```
+| 레이어 | 구성 요소 | 세부사항 |
+|:------|:----------|:--------|
+| **AI 프레임워크** | Vercel AI SDK v6 | `streamText()` + `toTextStreamResponse()` |
+| **모드 선택** | 자동 감지 | `AI_GATEWAY_API_KEY` 환경변수 → Gateway / Direct |
+| **Gateway 모델** | Google | Gemini 2.5 Flash Lite, Gemini 3 Flash, Gemini 2.5 Pro |
+| | Anthropic | Claude Sonnet 4.5, Claude Haiku 4.5 |
+| | OpenAI | GPT-4o Mini, GPT-4o |
+| | Meta | Llama 3.3 70B |
+| | DeepSeek | DeepSeek V3.2 |
+| | Mistral | Mistral Large 3 |
+| | xAI | Grok 3 |
+| **Direct 모델** | Google, Groq | Gemini 2.5 Flash Lite, Llama 3.3 70B |
+| **과금** | BYOK | Bring Your Own Key — 마크업 제로 |
+| **데이터베이스** | Supabase (PostgreSQL) | 대화, 메시지, 일일 쿼터 (50/일), 사용자 |
+
+| 엔드포인트 | 용도 |
+|:---------|:--------|
+| `/api/chat-ai` | AI Hub 메인 (Vercel AI SDK + Gateway) |
+| `/api/chat` | 레거시 SSE (하위 호환) |
+| `/api/ambassador` | 온체인 밋업 검증 (Polygon) |
+| `/api/mining-claim` | 토큰 분배 |
 
 ### 현재 구현 세부사항
 
 - **런타임**: Vercel Edge Functions (`runtime: 'edge'`)
 - **리전**: 서울 (`icn1`) — 아시아 사용자 저지연 대응
-- **스트리밍**: `TransformStream` 기반 커스텀 SSE 구현
-- **모델 라우팅**: 제공자 무관 핸들러 패턴 (Gemini vs OpenAI 호환 API)
+- **AI SDK**: Vercel AI SDK v6 (`ai`, `@ai-sdk/google`, `@ai-sdk/groq`)
+- **AI Gateway**: Vercel AI Gateway + BYOK 지원 (11개 모델, 7개 프로바이더)
+- **스트리밍**: `streamText()` + `toTextStreamResponse()` (AI SDK v6 plain text 스트림)
+- **모델 라우팅**: 듀얼 모드 — Gateway (모든 프로바이더) / Direct (자체 API 키)
 - **프론트엔드**: Vite 7 + React 19 + TypeScript + Tailwind CSS 3.x
 - **백엔드**: Supabase (PostgreSQL) 실시간 구독
 - **인증**: Web3Auth 소셜 로그인 (Google, Facebook, Twitter) — 마찰 제로
@@ -64,31 +66,49 @@ Supabase (PostgreSQL)
 
 ---
 
+## Vercel AI로 이미 구현한 것
+
+### ✅ 완료: Vercel AI SDK + Gateway 연동
+- **Vercel AI SDK v6**: `streamText()` + `toTextStreamResponse()` 통합 스트리밍
+- **Vercel AI Gateway**: `gateway()` 함수 하나로 7개 프로바이더의 11개 모델 접근
+- **듀얼 모드 아키텍처**: Gateway 모드 (모든 프로바이더) / Direct 모드 (자체 키)
+- **BYOK 지원**: 기존 API 키를 Gateway 경유 → 마크업 제로 과금
+- **프로바이더별 그룹 UI**: 드롭다운에 프로바이더 헤더, 티어 배지 (PRO/STD/FREE)
+- **모델 카탈로그**: Google (3), Anthropic (2), OpenAI (2), Meta (1), DeepSeek (1), Mistral (1), xAI (1)
+
+### ✅ 완료: 레거시 SSE 호환
+- 기존 `/api/chat` 엔드포인트 100% 보존 (하위 호환)
+- 신규 `/api/chat-ai` 엔드포인트에서 Vercel AI SDK 사용
+- 프론트엔드에서 Gateway ↔ Direct 모드 토글 전환
+
+---
+
 ## 가속기에서 만들 것 (6주)
 
-### 1-2주차: Vercel AI SDK 마이그레이션
-- 커스텀 SSE 구현을 `@vercel/ai` SDK로 교체
-- `streamText()`, `generateText()`를 활용한 통합 스트리밍
-- **Claude 3.5 Sonnet**, **Mistral Large** 모델 추가 (AI SDK 프로바이더)
-- 에러 바운더리 및 재시도 로직 구현
-
-### 3-4주차: 지능형 모델 라우팅
-- 언어 인식 모델 선택 (예: 베트남어/태국어 → Qwen, 한국어 → Gemini)
-- 비용 최적화 라우팅: 단순 쿼리 → 경량 모델, 복잡 작업 → 고성능 모델
+### 1-2주차: 지능형 모델 라우팅 & 최적화
+- 언어 인식 모델 선택 (예: DeepSeek → 중국어, Gemini → 한국어)
+- 비용 최적화 라우팅: 단순 쿼리 → 무료 모델, 복잡 작업 → 프리미엄 모델
 - 사용자 선호 학습: 언어/작업별 최적 모델 추적
-- Vercel AI Gateway 통합으로 통합 API 관리
+- Gateway 캐싱 및 폴백 설정
 
-### 5주차: v0 기반 UI 리디자인
+### 3-4주차: v0 기반 UI 리디자인
 - v0를 활용한 AI Hub 채팅 인터페이스 리디자인
 - 모바일 퍼스트 대화형 UI
-- 모델 비교 뷰 (나란히 응답 비교)
+- 모델 비교 뷰 (여러 프로바이더 응답 나란히 비교)
 - 스트리밍 마크다운 렌더링 개선
+- 대화 분기 (같은 프롬프트로 다른 모델 시도)
 
-### 6주차: 프로덕션 안정화
+### 5주차: 프로덕션 안정화
 - Vercel KV를 활용한 레이트 리미팅
-- 자주 묻는 질문에 대한 응답 캐싱
-- 분석 대시보드 (모델 사용량, 언어 분포, 응답 품질)
+- AI Gateway를 통한 자주 묻는 질문 응답 캐싱
+- 분석 대시보드 (모델 사용량, 언어 분포, 쿼리당 비용)
 - Edge Middleware를 활용한 지리적 라우팅 최적화
+
+### 6주차: 확장 & 커뮤니티
+- 모델 카탈로그 확장 (Cohere, AWS Bedrock 모델 Gateway 경유)
+- 커뮤니티 기여 언어별 모델 벤치마크
+- GAII 리포트 연동 — AI 접근 데이터와 모델 가용성 함께 표시
+- 멀티모델 게이트웨이 아키텍처 오픈소스화 (다른 비영리 단체 활용)
 
 ---
 
@@ -123,7 +143,9 @@ GAII = 100 - (0.4 × Access + 0.3 × Affordability + 0.2 × Language + 0.1 × Sk
 | Vercel 배포 | 3개 (web, nft, game) |
 | 소스 파일 | 670+ |
 | 코드 라인 | 178,000+ |
-| 배포된 스마트 컨트랙트 | 18개 (Polygon Amoy, 9개 PolygonScan Verified) |
+| 사용 가능 AI 모델 | 11개 (Vercel AI Gateway 경유, 7개 프로바이더) |
+| AI SDK 연동 | Vercel AI SDK v6 + AI Gateway |
+| 배포된 스마트 컨트랙트 | 18개 (Polygon Amoy, 8개 PolygonScan Verified) |
 | 지원 언어 | 14개 |
 | GAII 데이터셋 국가 | 50개국 |
 | 배포된 토큰 | 80억 ALMAN (TGE 2026-02-06) |
@@ -137,9 +159,9 @@ GAII = 100 - (0.4 × Access + 0.3 × Affordability + 0.2 × Language + 0.1 × Sk
 |:-------|:-----|
 | **Vercel Pro 크레딧** | 3개 프로젝트 Hobby 한도 초과 확장 |
 | **v0 크레딧** | AI Hub 채팅 인터페이스 리디자인 |
-| **AI 플랫폼 크레딧** | Claude, Mistral 모델 게이트웨이 추가 |
+| **AI Gateway 크레딧** | Global South 사용자 대상 11개 모델 게이트웨이 확장 |
 | **AWS 크레딧** | 백엔드 용량 확장 |
-| **멘토링** | Edge Functions 스케일링, AI SDK 모범 사례 |
+| **멘토링** | AI Gateway 최적화, 캐싱 전략, 비용 관리 |
 
 ---
 
@@ -149,8 +171,10 @@ GAII = 100 - (0.4 × Access + 0.3 × Affordability + 0.2 × Language + 0.1 × Sk
 |:------|:------|
 | 프론트엔드 | Vite 7 + React 19 + TypeScript |
 | 스타일링 | Tailwind CSS 3.x + class-variance-authority |
-| API | Vercel Edge Functions (3개 엔드포인트) |
-| 스트리밍 | Edge Runtime TransformStream SSE |
+| AI 프레임워크 | Vercel AI SDK v6 (`ai`, `@ai-sdk/google`, `@ai-sdk/groq`) |
+| AI 게이트웨이 | Vercel AI Gateway (11개 모델, 7개 프로바이더, BYOK) |
+| API | Vercel Edge Functions (4개 엔드포인트) |
+| 스트리밍 | `streamText()` + `toTextStreamResponse()` (AI SDK v6) |
 | 백엔드 | Supabase (PostgreSQL + Realtime + Storage) |
 | 인증 | Web3Auth (소셜 로그인 — Google/Facebook/Twitter) |
 | 블록체인 | Polygon (ethers.js — 온체인 검증) |

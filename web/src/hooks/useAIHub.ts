@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useWallet } from '../components/wallet';
 import {
   getConversations,
@@ -112,6 +113,7 @@ function dbMessageToClient(msg: DbMessage): Message {
 }
 
 export function useAIHub(): UseAIHubReturn {
+  const { t } = useTranslation('landing');
   const { address, isConnected } = useWallet();
 
   // 대화 상태
@@ -249,7 +251,7 @@ export function useAIHub(): UseAIHubReturn {
 
       // 쿼터 체크
       if (quota.remaining <= 0) {
-        setError('일일 쿼터를 초과했습니다. 내일 다시 시도해주세요.');
+        setError(t('aiHub.errors.quotaExceeded', '일일 쿼터를 초과했습니다. 내일 다시 시도해주세요.'));
         return;
       }
 
@@ -277,7 +279,7 @@ export function useAIHub(): UseAIHubReturn {
         // 쿼터 증가
         const quotaResult = await incrementQuotaManually(address);
         if (!quotaResult.success) {
-          setError('일일 쿼터를 초과했습니다.');
+          setError(t('aiHub.errors.quotaExceeded', '일일 쿼터를 초과했습니다.'));
           setIsSending(false);
           setIsStreaming(false);
           return;
@@ -338,7 +340,7 @@ export function useAIHub(): UseAIHubReturn {
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'AI 응답을 받는데 실패했습니다.');
+          throw new Error(errorData.error || t('aiHub.errors.modelError', 'AI 응답을 받는데 실패했습니다.'));
         }
 
         // 스트리밍 응답 처리
@@ -422,14 +424,14 @@ export function useAIHub(): UseAIHubReturn {
           // 사용자가 중단함
           return;
         }
-        setError(err instanceof Error ? err.message : 'AI 응답을 받는데 실패했습니다.');
+        setError(err instanceof Error ? err.message : t('aiHub.errors.modelError', 'AI 응답을 받는데 실패했습니다.'));
       } finally {
         setIsSending(false);
         setIsStreaming(false);
         abortControllerRef.current = null;
       }
     },
-    [address, currentConversation, messages, quota.remaining, currentModel, useVercelAI]
+    [address, currentConversation, messages, quota.remaining, currentModel, useVercelAI, t]
   );
 
   /**

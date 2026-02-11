@@ -456,5 +456,77 @@
     "title": "Jom Mula Bersama",
     "description": "Penyertaan anda mengubah dunia. Sertai komuniti AlmaNEO hari ini.",
     "button": "Mula Sekarang"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI untuk semua orang di dunia",
+    "newChat": "Perbualan baharu",
+    "deleteChat": "Padam perbualan",
+    "placeholder": "Taip mesej anda...",
+    "send": "Hantar",
+    "stop": "Berhenti",
+    "newLine": "Baris baharu",
+    "thinking": "Sedang berfikir...",
+    "refresh": "Muat semula",
+    "dismiss": "Tutup",
+    "noConversations": "Tiada perbualan",
+    "today": "Hari ini",
+    "yesterday": "Semalam",
+    "daysAgo": "{{days}} hari lalu",
+    "selectModel": "Pilih model AI",
+    "quota": {
+      "used": "{{used}}/{{limit}} digunakan",
+      "exceeded": "Kuota harian habis",
+      "low": "Baki kuota {{remaining}} kali",
+      "resetTime": "Set semula dalam {{hours}} jam",
+      "resettingSoon": "Set semula tidak lama lagi",
+      "refresh": "Muat semula"
+    },
+    "welcome": {
+      "title": "Apa yang boleh saya bantu?",
+      "description": "Selamat datang ke AlmaNEO AI Hub. Anda boleh berbual dengan AI sehingga 50 kali sehari secara percuma."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Sokongan Pelbagai Bahasa",
+        "description": "Berbual dalam pelbagai bahasa termasuk Bahasa Melayu dan Inggeris."
+      },
+      "free": {
+        "title": "Percuma",
+        "description": "Berbual dengan AI sehingga 50 kali sehari secara percuma."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Menghubungkan semua orang di dunia dengan AI yang mesra."
+      }
+    },
+    "suggestions": {
+      "title": "Cuba tanyakan ini",
+      "coding": "Bantu saya menulis kod",
+      "explain": "Terangkan konsep ini dengan mudah",
+      "translate": "Terjemahkan ayat ini",
+      "brainstorm": "Sumbang saran idea"
+    },
+    "connectWallet": {
+      "title": "Sambungkan Dompet",
+      "description": "Untuk menggunakan AI Hub, anda perlu menyambungkan dompet. Mulakan dengan mudah menggunakan log masuk sosial.",
+      "button": "Sambungkan Dompet",
+      "connecting": "Menyambung..."
+    },
+    "you": "Saya",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Membantu",
+      "notHelpful": "Tidak membantu"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Akses 11+ model daripada 7 pembekal",
+      "offTitle": "Mod Direct — Hanya Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "Kuota harian habis. Sila cuba lagi esok.",
+      "networkError": "Ralat rangkaian berlaku.",
+      "modelError": "Ralat model AI berlaku."
+    }
   }
 }

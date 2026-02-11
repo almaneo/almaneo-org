@@ -481,5 +481,65 @@
     "subtitle": "加入AI民主化的旅程",
     "button": "立即开始",
     "description": "您的参与改变世界。立即加入AlmaNEO社区。"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "为全世界每个人提供AI",
+    "newChat": "新对话",
+    "deleteChat": "删除对话",
+    "placeholder": "请输入消息...",
+    "send": "发送",
+    "stop": "停止",
+    "newLine": "换行",
+    "thinking": "思考中...",
+    "refresh": "刷新",
+    "dismiss": "关闭",
+    "noConversations": "暂无对话",
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{{days}}天前",
+    "selectModel": "选择AI模型",
+    "quota": {
+      "used": "已使用 {{used}}/{{limit}}",
+      "exceeded": "每日配额已用完",
+      "low": "还剩{{remaining}}次",
+      "resetTime": "{{hours}}小时后重置",
+      "resettingSoon": "即将重置",
+      "refresh": "刷新"
+    },
+    "welcome": {
+      "title": "有什么可以帮您的？",
+      "description": "欢迎来到AlmaNEO AI Hub。每天可免费与AI对话50次。"
+    },
+    "features": {
+      "multilingual": { "title": "多语言支持", "description": "支持中文、英语等多种语言对话。" },
+      "free": { "title": "免费使用", "description": "每天可免费与AI对话50次。" },
+      "kindness": { "title": "Kindness Protocol", "description": "用友善的AI连接世界上的每一个人。" }
+    },
+    "suggestions": {
+      "title": "试试这些问题",
+      "coding": "帮我写一段代码",
+      "explain": "用简单的方式解释这个概念",
+      "translate": "帮我翻译这句话",
+      "brainstorm": "帮我头脑风暴一些想法"
+    },
+    "connectWallet": {
+      "title": "请连接钱包",
+      "description": "使用AI Hub需要连接钱包。通过社交登录轻松开始。",
+      "button": "连接钱包",
+      "connecting": "连接中..."
+    },
+    "you": "你",
+    "aiName": "AlmaNEO AI",
+    "feedback": { "helpful": "有帮助", "notHelpful": "没有帮助" },
+    "gateway": {
+      "onTitle": "AI Gateway 已开启 — 访问7个提供商的11+个模型",
+      "offTitle": "直连模式 — 仅Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "每日配额已用完，请明天再试。",
+      "networkError": "网络错误。",
+      "modelError": "AI模型发生错误。"
+    }
   }
 }

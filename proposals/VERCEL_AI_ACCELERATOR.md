@@ -27,36 +27,38 @@
 
 ## Technical Architecture
 
-```
-User Request (14 languages)
-  │
-  ▼
-Vercel Edge Function (/api/chat)  [Seoul Region: icn1]
-  │
-  ├─ Model Router (by user selection)
-  │   ├─ Gemini 2.5 Flash Lite  (Google — fast, efficient)
-  │   └─ Llama 3.3 70B          (Groq — powerful, multilingual)
-  │
-  ├─ SSE Streaming Response (TransformStream API)
-  │
-  ▼
-Supabase (PostgreSQL)
-  ├─ Conversation history
-  ├─ Message storage
-  ├─ Daily quota tracking (50 queries/day per user)
-  └─ User management
+**Request Flow**: User (14 languages) → Vercel Edge Function `/api/chat-ai` [Seoul `icn1`] → AI Model → Streaming Response → User
 
-Additional Edge Functions:
-  ├─ /api/ambassador  — On-chain verification (Polygon)
-  └─ /api/mining-claim — Token distribution
-```
+| Layer | Component | Details |
+|:------|:----------|:--------|
+| **AI Framework** | Vercel AI SDK v6 | `streamText()` + `toTextStreamResponse()` |
+| **Mode Selection** | Auto-detected | `AI_GATEWAY_API_KEY` env → Gateway / Direct |
+| **Gateway Models** | Google | Gemini 2.5 Flash Lite, Gemini 3 Flash, Gemini 2.5 Pro |
+| | Anthropic | Claude Sonnet 4.5, Claude Haiku 4.5 |
+| | OpenAI | GPT-4o Mini, GPT-4o |
+| | Meta | Llama 3.3 70B |
+| | DeepSeek | DeepSeek V3.2 |
+| | Mistral | Mistral Large 3 |
+| | xAI | Grok 3 |
+| **Direct Models** | Google, Groq | Gemini 2.5 Flash Lite, Llama 3.3 70B |
+| **Billing** | BYOK | Bring Your Own Key — zero markup |
+| **Database** | Supabase (PostgreSQL) | Conversations, messages, daily quota (50/day), users |
+
+| Endpoint | Purpose |
+|:---------|:--------|
+| `/api/chat-ai` | AI Hub main (Vercel AI SDK + Gateway) |
+| `/api/chat` | Legacy SSE (backward compatible) |
+| `/api/ambassador` | On-chain meetup verification (Polygon) |
+| `/api/mining-claim` | Token distribution |
 
 ### Current Implementation Details
 
 - **Runtime**: Vercel Edge Functions (`runtime: 'edge'`)
 - **Region**: Seoul (`icn1`) for low latency to Asian users
-- **Streaming**: Custom SSE implementation via `TransformStream`
-- **Model Routing**: Provider-agnostic handler pattern (Gemini vs OpenAI-compatible APIs)
+- **AI SDK**: Vercel AI SDK v6 (`ai`, `@ai-sdk/google`, `@ai-sdk/groq`)
+- **AI Gateway**: Vercel AI Gateway with BYOK support (11 models, 7 providers)
+- **Streaming**: `streamText()` + `toTextStreamResponse()` (AI SDK v6 plain text stream)
+- **Model Routing**: Dual-mode — Gateway (any provider) or Direct (self-hosted keys)
 - **Frontend**: Vite 7 + React 19 + TypeScript + Tailwind CSS 3.x
 - **Backend**: Supabase (PostgreSQL) with real-time subscriptions
 - **Auth**: Web3Auth social login (Google, Facebook, Twitter) — zero friction
@@ -64,31 +66,49 @@ Additional Edge Functions:
 
 ---
 
+## What We've Already Built with Vercel AI
+
+### ✅ Completed: Vercel AI SDK + Gateway Integration
+- **Vercel AI SDK v6**: `streamText()` + `toTextStreamResponse()` for unified streaming
+- **Vercel AI Gateway**: 11 models from 7 providers via single `gateway()` function
+- **Dual-mode architecture**: Gateway mode (any provider) / Direct mode (self-hosted keys)
+- **BYOK support**: Bring Your Own Key for zero markup — users' existing API keys routed through Gateway
+- **Provider-grouped UI**: Dropdown with provider headers, tier badges (PRO/STD/FREE)
+- **Model catalog**: Google (3), Anthropic (2), OpenAI (2), Meta (1), DeepSeek (1), Mistral (1), xAI (1)
+
+### ✅ Completed: Legacy SSE Compatibility
+- Original `/api/chat` endpoint preserved for backward compatibility
+- New `/api/chat-ai` endpoint using Vercel AI SDK
+- Frontend toggle to switch between Gateway and Direct modes
+
+---
+
 ## What We'd Build in the Accelerator (6 Weeks)
 
-### Week 1-2: Vercel AI SDK Migration
-- Replace custom SSE implementation with `@vercel/ai` SDK
-- Unified streaming with `streamText()` and `generateText()`
-- Add **Claude 3.5 Sonnet** and **Mistral Large** models via AI SDK providers
-- Implement proper error boundaries and retry logic
-
-### Week 3-4: Intelligent Model Routing
-- Language-aware model selection (e.g., Qwen for Vietnamese/Thai, Gemini for Korean)
-- Cost-optimized routing: lightweight models for simple queries, powerful models for complex tasks
+### Week 1-2: Intelligent Model Routing & Optimization
+- Language-aware model selection (e.g., DeepSeek for Chinese, Gemini for Korean)
+- Cost-optimized routing: free-tier models for simple queries, premium for complex tasks
 - User preference learning: track which models produce best results per language/task
-- Vercel AI Gateway integration for unified API management
+- Gateway caching and fallback configuration
 
-### Week 5: v0-Assisted UI Redesign
+### Week 3-4: v0-Assisted UI Redesign
 - Use v0 to redesign the AI Hub chat interface
 - Mobile-first conversational UI
-- Model comparison view (side-by-side responses)
+- Model comparison view (side-by-side responses from different providers)
 - Streaming markdown rendering improvements
+- Conversation branching (try same prompt with different models)
 
-### Week 6: Production Hardening
+### Week 5: Production Hardening
 - Rate limiting with Vercel KV
-- Response caching for common queries
-- Analytics dashboard (model usage, language distribution, response quality)
+- Response caching for common queries via AI Gateway
+- Analytics dashboard (model usage, language distribution, cost per query)
 - Edge Middleware for geographic routing optimization
+
+### Week 6: Scale & Community
+- Expand model catalog (Cohere, AWS Bedrock models via Gateway)
+- Community-contributed model benchmarks per language
+- GAII Report integration — show AI access data alongside model availability
+- Open-source the multi-model gateway architecture for other nonprofits
 
 ---
 
@@ -123,7 +143,9 @@ This data creates ESG leverage for partnerships with AI providers, enabling us t
 | Vercel deployments | 3 (web, nft, game) |
 | Source files | 670+ |
 | Lines of code | 178,000+ |
-| Smart contracts deployed | 18 (Polygon Amoy, 9 verified on PolygonScan) |
+| AI models available | 11 (via Vercel AI Gateway, 7 providers) |
+| AI SDK integration | Vercel AI SDK v6 + AI Gateway |
+| Smart contracts deployed | 18 (Polygon Amoy, 8 verified on PolygonScan) |
 | Languages supported | 14 |
 | Countries in GAII dataset | 50 |
 | Token supply deployed | 8 billion ALMAN (TGE Feb 6, 2026) |
@@ -137,9 +159,9 @@ This data creates ESG leverage for partnerships with AI providers, enabling us t
 |:---------|:--------|
 | **Vercel Pro credits** | Scale 3 projects beyond hobby limits |
 | **v0 credits** | Redesign AI Hub chat interface |
-| **AI platform credits** | Add Claude, Mistral to model gateway |
+| **AI Gateway credits** | Scale 11-model gateway for Global South users |
 | **AWS credits** | Expanded backend capacity |
-| **Mentorship** | Scaling Edge Functions, AI SDK best practices |
+| **Mentorship** | AI Gateway optimization, caching strategies, cost management |
 
 ---
 
@@ -149,8 +171,10 @@ This data creates ESG leverage for partnerships with AI providers, enabling us t
 |:------|:-----------|
 | Frontend | Vite 7 + React 19 + TypeScript |
 | Styling | Tailwind CSS 3.x + class-variance-authority |
-| API | Vercel Edge Functions (3 endpoints) |
-| Streaming | SSE via Edge Runtime TransformStream |
+| AI Framework | Vercel AI SDK v6 (`ai`, `@ai-sdk/google`, `@ai-sdk/groq`) |
+| AI Gateway | Vercel AI Gateway (11 models, 7 providers, BYOK) |
+| API | Vercel Edge Functions (4 endpoints) |
+| Streaming | `streamText()` + `toTextStreamResponse()` (AI SDK v6) |
 | Backend | Supabase (PostgreSQL + Realtime + Storage) |
 | Auth | Web3Auth (social login — Google/Facebook/Twitter) |
 | Blockchain | Polygon (ethers.js — on-chain verification) |

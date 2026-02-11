@@ -481,5 +481,77 @@
     "subtitle": "Rejoignez le voyage de la démocratisation de l'IA",
     "button": "Commencer Maintenant",
     "description": "Votre participation change le monde. Rejoignez la communauté AlmaNEO aujourd'hui."
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "L'IA pour tous dans le monde",
+    "newChat": "Nouvelle conversation",
+    "deleteChat": "Supprimer la conversation",
+    "placeholder": "Écrivez un message...",
+    "send": "Envoyer",
+    "stop": "Arrêter",
+    "newLine": "Nouvelle ligne",
+    "thinking": "Réflexion en cours...",
+    "refresh": "Actualiser",
+    "dismiss": "Fermer",
+    "noConversations": "Aucune conversation",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "daysAgo": "Il y a {{days}} jours",
+    "selectModel": "Sélectionner un modèle d'IA",
+    "quota": {
+      "used": "{{used}}/{{limit}} utilisés",
+      "exceeded": "Quota journalier dépassé",
+      "low": "{{remaining}} utilisations restantes",
+      "resetTime": "Réinitialisation dans {{hours}} heures",
+      "resettingSoon": "Réinitialisation imminente",
+      "refresh": "Actualiser"
+    },
+    "welcome": {
+      "title": "Comment puis-je vous aider ?",
+      "description": "Bienvenue sur AlmaNEO AI Hub. Vous pouvez discuter avec l'IA gratuitement jusqu'à 50 fois par jour."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Support multilingue",
+        "description": "Discutez dans plusieurs langues, y compris le français et l'anglais."
+      },
+      "free": {
+        "title": "Gratuit",
+        "description": "Discutez avec l'IA gratuitement jusqu'à 50 fois par jour."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Connecter tout le monde dans le monde avec une IA bienveillante."
+      }
+    },
+    "suggestions": {
+      "title": "Essayez ces questions",
+      "coding": "Aidez-moi à écrire du code",
+      "explain": "Expliquez ce concept simplement",
+      "translate": "Traduisez cette phrase",
+      "brainstorm": "Faisons un brainstorming"
+    },
+    "connectWallet": {
+      "title": "Connecter le portefeuille",
+      "description": "Vous devez connecter un portefeuille pour utiliser AI Hub. Commencez facilement avec la connexion sociale.",
+      "button": "Connecter le portefeuille",
+      "connecting": "Connexion..."
+    },
+    "you": "Moi",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Utile",
+      "notHelpful": "Pas utile"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Accès à 11+ modèles de 7 fournisseurs",
+      "offTitle": "Mode Direct — Gemini + Groq uniquement"
+    },
+    "errors": {
+      "quotaExceeded": "Quota journalier dépassé. Veuillez réessayer demain.",
+      "networkError": "Erreur réseau.",
+      "modelError": "Erreur du modèle d'IA."
+    }
   }
 }

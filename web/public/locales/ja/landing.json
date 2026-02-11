@@ -481,5 +481,37 @@
     "subtitle": "AIの民主化の旅に参加しよう",
     "button": "今すぐ始める",
     "description": "あなたの参加が世界を変えます。今日からAlmaNEOコミュニティに参加しましょう。"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "世界中のすべての人のためのAI",
+    "newChat": "新しい会話",
+    "deleteChat": "会話を削除",
+    "placeholder": "メッセージを入力してください...",
+    "send": "送信",
+    "stop": "停止",
+    "newLine": "改行",
+    "thinking": "考え中...",
+    "refresh": "更新",
+    "dismiss": "閉じる",
+    "noConversations": "会話がありません",
+    "today": "今日",
+    "yesterday": "昨日",
+    "daysAgo": "{{days}}日前",
+    "selectModel": "AIモデル選択",
+    "quota": { "used": "{{used}}/{{limit}} 使用済み", "exceeded": "1日のクォータを超過", "low": "残り{{remaining}}回", "resetTime": "{{hours}}時間後にリセット", "resettingSoon": "まもなくリセット", "refresh": "更新" },
+    "welcome": { "title": "何かお手伝いできますか？", "description": "AlmaNEO AI Hubへようこそ。1日50回まで無料でAIと会話できます。" },
+    "features": {
+      "multilingual": { "title": "多言語対応", "description": "日本語、英語など様々な言語で会話できます。" },
+      "free": { "title": "無料で利用", "description": "1日50回まで無料でAIと会話できます。" },
+      "kindness": { "title": "Kindness Protocol", "description": "親切なAIで世界中の人々をつなぎます。" }
+    },
+    "suggestions": { "title": "こんな質問をしてみましょう", "coding": "コードを書くのを手伝ってください", "explain": "この概念をわかりやすく説明してください", "translate": "この文を翻訳してください", "brainstorm": "アイデアをブレインストーミングしてください" },
+    "connectWallet": { "title": "ウォレットを接続してください", "description": "AI Hubを利用するにはウォレットの接続が必要です。ソーシャルログインで簡単に始められます。", "button": "ウォレット接続", "connecting": "接続中..." },
+    "you": "あなた",
+    "aiName": "AlmaNEO AI",
+    "feedback": { "helpful": "役に立った", "notHelpful": "役に立たなかった" },
+    "gateway": { "onTitle": "AI Gateway ON — 7プロバイダーの11+モデルにアクセス", "offTitle": "ダイレクトモード — Gemini + Groqのみ" },
+    "errors": { "quotaExceeded": "1日のクォータを超過しました。明日また試してください。", "networkError": "ネットワークエラーが発生しました。", "modelError": "AIモデルエラーが発生しました。" }
   }
 }

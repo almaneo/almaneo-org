@@ -454,5 +454,77 @@
     "title": "តោះចាប់ផ្តើមជាមួយគ្នា",
     "description": "ការចូលរួមរបស់អ្នកផ្លាស់ប្តូរពិភពលោក។ ចូលរួមសហគមន៍ AlmaNEO នៅថ្ងៃនេះ។",
     "button": "ចាប់ផ្តើមឥឡូវ"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI សម្រាប់មនុស្សគ្រប់គ្នាលើពិភពលោក",
+    "newChat": "ការសន្ទនាថ្មី",
+    "deleteChat": "លុបការសន្ទនា",
+    "placeholder": "វាយសារ...",
+    "send": "ផ្ញើ",
+    "stop": "ឈប់",
+    "newLine": "បន្ទាត់ថ្មី",
+    "thinking": "កំពុងគិត...",
+    "refresh": "ផ្ទុកឡើងវិញ",
+    "dismiss": "បិទ",
+    "noConversations": "មិនមានការសន្ទនាទេ",
+    "today": "ថ្ងៃនេះ",
+    "yesterday": "ម្សិលមិញ",
+    "daysAgo": "{{days}} ថ្ងៃមុន",
+    "selectModel": "ជ្រើសរើសម៉ូដែល AI",
+    "quota": {
+      "used": "បានប្រើ {{used}}/{{limit}}",
+      "exceeded": "កូតាប្រចាំថ្ងៃអស់ហើយ",
+      "low": "នៅសល់ {{remaining}} ដង",
+      "resetTime": "កំណត់ឡើងវិញក្នុង {{hours}} ម៉ោង",
+      "resettingSoon": "កំណត់ឡើងវិញឆាប់ៗ",
+      "refresh": "ផ្ទុកឡើងវិញ"
+    },
+    "welcome": {
+      "title": "តើខ្ញុំអាចជួយអ្វីបាន?",
+      "description": "សូមស្វាគមន៍មកកាន់ AlmaNEO AI Hub។ អ្នកអាចសន្ទនាជាមួយ AI ដោយឥតគិតថ្លៃរហូតដល់ ៥០ ដងក្នុងមួយថ្ងៃ។"
+    },
+    "features": {
+      "multilingual": {
+        "title": "គាំទ្រពហុភាសា",
+        "description": "សន្ទនាជាភាសាផ្សេងៗ រួមទាំងភាសាខ្មែរ និងអង់គ្លេស។"
+      },
+      "free": {
+        "title": "ឥតគិតថ្លៃ",
+        "description": "សន្ទនាជាមួយ AI ដោយឥតគិតថ្លៃរហូតដល់ ៥០ ដងក្នុងមួយថ្ងៃ។"
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "ភ្ជាប់មនុស្សគ្រប់គ្នាលើពិភពលោកជាមួយ AI ដែលមានមេត្តា។"
+      }
+    },
+    "suggestions": {
+      "title": "សាកល្បងសួរសំណួរទាំងនេះ",
+      "coding": "ជួយខ្ញុំសរសេរកូដ",
+      "explain": "ពន្យល់គោលគំនិតនេះឱ្យងាយស្រួល",
+      "translate": "បកប្រែប្រយោគនេះ",
+      "brainstorm": "ជួយបង្កើតគំនិត"
+    },
+    "connectWallet": {
+      "title": "ភ្ជាប់កាបូប",
+      "description": "អ្នកត្រូវភ្ជាប់កាបូបដើម្បីប្រើ AI Hub។ ចាប់ផ្តើមដោយងាយស្រួលដោយចូលតាមគណនីសង្គម។",
+      "button": "ភ្ជាប់កាបូប",
+      "connecting": "កំពុងភ្ជាប់..."
+    },
+    "you": "ខ្ញុំ",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "មានប្រយោជន៍",
+      "notHelpful": "គ្មានប្រយោជន៍"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — ចូលប្រើម៉ូដែល ១១+ ពីអ្នកផ្តល់សេវា ៧",
+      "offTitle": "មុខងារ Direct — ប្រើតែ Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "កូតាប្រចាំថ្ងៃអស់ហើយ។ សូមព្យាយាមម្តងទៀតថ្ងៃស្អែក។",
+      "networkError": "កំហុសបណ្តាញបានកើតឡើង។",
+      "modelError": "កំហុសម៉ូដែល AI បានកើតឡើង។"
+    }
   }
 }

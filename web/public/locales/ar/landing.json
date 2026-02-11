@@ -481,5 +481,77 @@
     "subtitle": "انضم إلى رحلة ديمقراطية AI",
     "button": "ابدأ الآن",
     "description": "مشاركتك تغير العالم. انضم إلى مجتمع AlmaNEO اليوم."
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "الذكاء الاصطناعي للجميع في العالم",
+    "newChat": "محادثة جديدة",
+    "deleteChat": "حذف المحادثة",
+    "placeholder": "اكتب رسالة...",
+    "send": "إرسال",
+    "stop": "إيقاف",
+    "newLine": "سطر جديد",
+    "thinking": "جاري التفكير...",
+    "refresh": "تحديث",
+    "dismiss": "إغلاق",
+    "noConversations": "لا توجد محادثات",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "daysAgo": "قبل {{days}} أيام",
+    "selectModel": "اختر نموذج الذكاء الاصطناعي",
+    "quota": {
+      "used": "{{used}}/{{limit}} مستخدم",
+      "exceeded": "تم تجاوز الحصة اليومية",
+      "low": "متبقي {{remaining}} مرة",
+      "resetTime": "إعادة التعيين خلال {{hours}} ساعات",
+      "resettingSoon": "إعادة التعيين قريباً",
+      "refresh": "تحديث"
+    },
+    "welcome": {
+      "title": "كيف يمكنني مساعدتك؟",
+      "description": "مرحباً بك في AlmaNEO AI Hub. يمكنك التحدث مع الذكاء الاصطناعي مجاناً حتى 50 مرة يومياً."
+    },
+    "features": {
+      "multilingual": {
+        "title": "دعم متعدد اللغات",
+        "description": "تحدث بلغات متعددة بما في ذلك العربية والإنجليزية."
+      },
+      "free": {
+        "title": "مجاني",
+        "description": "تحدث مع الذكاء الاصطناعي مجاناً حتى 50 مرة يومياً."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "ربط الجميع في العالم بذكاء اصطناعي ودود."
+      }
+    },
+    "suggestions": {
+      "title": "جرب هذه الأسئلة",
+      "coding": "ساعدني في كتابة الكود",
+      "explain": "اشرح هذا المفهوم ببساطة",
+      "translate": "ترجم هذه الجملة",
+      "brainstorm": "لنقم بعصف ذهني"
+    },
+    "connectWallet": {
+      "title": "ربط المحفظة",
+      "description": "تحتاج إلى ربط محفظة لاستخدام AI Hub. ابدأ بسهولة من خلال تسجيل الدخول الاجتماعي.",
+      "button": "ربط المحفظة",
+      "connecting": "جاري الاتصال..."
+    },
+    "you": "أنا",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "مفيد",
+      "notHelpful": "غير مفيد"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway مفعّل — الوصول إلى 11+ نموذج من 7 مزودين",
+      "offTitle": "الوضع المباشر — Gemini + Groq فقط"
+    },
+    "errors": {
+      "quotaExceeded": "تم تجاوز الحصة اليومية. يرجى المحاولة غداً.",
+      "networkError": "حدث خطأ في الشبكة.",
+      "modelError": "حدث خطأ في نموذج الذكاء الاصطناعي."
+    }
   }
 }

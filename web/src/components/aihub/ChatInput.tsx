@@ -1,6 +1,6 @@
 /**
  * ChatInput Component
- * 메시지 입력 및 전송
+ * 메시지 입력 및 전송 (모바일 최적화)
  */
 
 import { useState, useRef, useEffect } from 'react';
@@ -14,6 +14,8 @@ interface ChatInputProps {
   isStreaming: boolean;
   disabled?: boolean;
   placeholder?: string;
+  prefillText?: string;
+  onPrefillConsumed?: () => void;
 }
 
 export function ChatInput({
@@ -23,6 +25,8 @@ export function ChatInput({
   isStreaming,
   disabled,
   placeholder,
+  prefillText,
+  onPrefillConsumed,
 }: ChatInputProps) {
   const { t } = useTranslation('landing');
   const [input, setInput] = useState('');
@@ -36,11 +40,25 @@ export function ChatInput({
     }
   }, [input]);
 
+  // 추천 질문 삽입
+  useEffect(() => {
+    if (prefillText) {
+      setInput(prefillText);
+      onPrefillConsumed?.();
+      // 포커스
+      setTimeout(() => textareaRef.current?.focus(), 50);
+    }
+  }, [prefillText, onPrefillConsumed]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isSending && !disabled) {
       onSend(input.trim());
       setInput('');
+      // 높이 리셋
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -54,7 +72,7 @@ export function ChatInput({
 
   return (
     <form onSubmit={handleSubmit} className="relative">
-      <div className="flex items-end gap-2 p-3 bg-slate-800/50 border border-slate-700 rounded-xl">
+      <div className="flex items-end gap-2 p-2.5 sm:p-3 bg-slate-800/50 border border-slate-700 rounded-xl focus-within:border-slate-500 transition-colors">
         {/* 텍스트 입력 */}
         <textarea
           ref={textareaRef}
@@ -64,7 +82,7 @@ export function ChatInput({
           placeholder={placeholder || t('aiHub.placeholder', '메시지를 입력하세요...')}
           disabled={isSending || disabled}
           rows={1}
-          className="flex-1 bg-transparent border-none outline-none resize-none text-white placeholder-slate-400 max-h-[200px]"
+          className="flex-1 bg-transparent border-none outline-none resize-none text-white placeholder-slate-500 max-h-[200px] text-sm sm:text-base leading-relaxed py-1"
         />
 
         {/* 전송/중지 버튼 */}
@@ -81,7 +99,7 @@ export function ChatInput({
           <button
             type="submit"
             disabled={!input.trim() || isSending || disabled}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-neos-blue hover:bg-neos-blue/90 disabled:bg-slate-600 disabled:cursor-not-allowed rounded-lg transition-colors"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-neos-blue hover:bg-neos-blue/90 disabled:bg-slate-700 disabled:cursor-not-allowed rounded-lg transition-colors"
             title={t('aiHub.send', '전송')}
           >
             {isSending ? (
@@ -93,9 +111,9 @@ export function ChatInput({
         )}
       </div>
 
-      {/* 힌트 */}
-      <div className="mt-2 text-xs text-slate-500 text-center">
-        Enter: {t('aiHub.send', '전송')} | Shift+Enter: {t('aiHub.newLine', '줄바꿈')}
+      {/* 힌트 (데스크톱만) */}
+      <div className="hidden sm:block mt-1.5 text-[11px] text-slate-500 text-center">
+        Enter: {t('aiHub.send', '전송')} · Shift+Enter: {t('aiHub.newLine', '줄바꿈')}
       </div>
     </form>
   );

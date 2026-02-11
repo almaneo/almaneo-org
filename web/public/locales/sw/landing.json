@@ -454,5 +454,77 @@
     "title": "Tuanze Pamoja",
     "description": "Ushiriki wako unabadilisha ulimwengu. Jiunge na jamii ya AlmaNEO leo.",
     "button": "Anza Sasa"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI kwa kila mtu duniani",
+    "newChat": "Mazungumzo mapya",
+    "deleteChat": "Futa mazungumzo",
+    "placeholder": "Andika ujumbe...",
+    "send": "Tuma",
+    "stop": "Simama",
+    "newLine": "Mstari mpya",
+    "thinking": "Inafikiria...",
+    "refresh": "Onyesha upya",
+    "dismiss": "Funga",
+    "noConversations": "Hakuna mazungumzo",
+    "today": "Leo",
+    "yesterday": "Jana",
+    "daysAgo": "siku {{days}} zilizopita",
+    "selectModel": "Chagua modeli ya AI",
+    "quota": {
+      "used": "{{used}}/{{limit}} imetumika",
+      "exceeded": "Kiwango cha kila siku kimezidi",
+      "low": "Kiwango kimebaki {{remaining}} mara",
+      "resetTime": "Itawekwa upya baada ya saa {{hours}}",
+      "resettingSoon": "Itawekwa upya hivi karibuni",
+      "refresh": "Onyesha upya"
+    },
+    "welcome": {
+      "title": "Ninaweza kukusaidia nini?",
+      "description": "Karibu AlmaNEO AI Hub. Unaweza kuzungumza na AI bure hadi mara 50 kwa siku."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Msaada wa Lugha Nyingi",
+        "description": "Zungumza kwa lugha mbalimbali ikiwa ni pamoja na Kiswahili na Kiingereza."
+      },
+      "free": {
+        "title": "Bure",
+        "description": "Zungumza na AI bure hadi mara 50 kwa siku."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Kuunganisha kila mtu duniani kwa AI ya kirafiki."
+      }
+    },
+    "suggestions": {
+      "title": "Jaribu kuuliza maswali haya",
+      "coding": "Nisaidie kuandika msimbo",
+      "explain": "Eleza dhana hii kwa urahisi",
+      "translate": "Tafsiri sentensi hii",
+      "brainstorm": "Tufanye mazungumzo ya mawazo"
+    },
+    "connectWallet": {
+      "title": "Unganisha pochi",
+      "description": "Unahitaji kuunganisha pochi kutumia AI Hub. Anza kwa urahisi na kuingia kwa akaunti ya kijamii.",
+      "button": "Unganisha Pochi",
+      "connecting": "Inaunganisha..."
+    },
+    "you": "Mimi",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Imesaidia",
+      "notHelpful": "Haikasaidia"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Fikia modeli 11+ kutoka watoa huduma 7",
+      "offTitle": "Hali ya Direct — Gemini + Groq pekee"
+    },
+    "errors": {
+      "quotaExceeded": "Kiwango cha kila siku kimezidi. Tafadhali jaribu tena kesho.",
+      "networkError": "Hitilafu ya mtandao imetokea.",
+      "modelError": "Hitilafu ya modeli ya AI imetokea."
+    }
   }
 }

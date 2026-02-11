@@ -481,5 +481,77 @@
     "subtitle": "Junte-se à jornada de democratização da IA",
     "button": "Começar Agora",
     "description": "Sua participação muda o mundo. Junte-se à comunidade AlmaNEO hoje."
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "IA para todos no mundo",
+    "newChat": "Nova conversa",
+    "deleteChat": "Excluir conversa",
+    "placeholder": "Digite uma mensagem...",
+    "send": "Enviar",
+    "stop": "Parar",
+    "newLine": "Nova linha",
+    "thinking": "Pensando...",
+    "refresh": "Atualizar",
+    "dismiss": "Fechar",
+    "noConversations": "Nenhuma conversa",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "daysAgo": "{{days}} dias atrás",
+    "selectModel": "Selecionar modelo de IA",
+    "quota": {
+      "used": "{{used}}/{{limit}} usados",
+      "exceeded": "Cota diária esgotada",
+      "low": "Restam {{remaining}} usos",
+      "resetTime": "Reinicia em {{hours}} horas",
+      "resettingSoon": "Reinicia em breve",
+      "refresh": "Atualizar"
+    },
+    "welcome": {
+      "title": "Como posso ajudar?",
+      "description": "Bem-vindo ao AlmaNEO AI Hub. Converse com IA gratuitamente até 50 vezes por dia."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Suporte multilíngue",
+        "description": "Converse em vários idiomas, incluindo português e inglês."
+      },
+      "free": {
+        "title": "Gratuito",
+        "description": "Converse com IA gratuitamente até 50 vezes por dia."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Conectando todos no mundo com IA amigável."
+      }
+    },
+    "suggestions": {
+      "title": "Tente estas perguntas",
+      "coding": "Me ajude a escrever código",
+      "explain": "Explique este conceito de forma simples",
+      "translate": "Traduza esta frase",
+      "brainstorm": "Vamos fazer brainstorming"
+    },
+    "connectWallet": {
+      "title": "Conectar carteira",
+      "description": "Você precisa conectar uma carteira para usar o AI Hub. Comece facilmente com login social.",
+      "button": "Conectar carteira",
+      "connecting": "Conectando..."
+    },
+    "you": "Eu",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Útil",
+      "notHelpful": "Não útil"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Acesso a 11+ modelos de 7 provedores",
+      "offTitle": "Modo Direct — Apenas Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "Cota diária esgotada. Tente novamente amanhã.",
+      "networkError": "Erro de rede.",
+      "modelError": "Erro do modelo de IA."
+    }
   }
 }

@@ -456,5 +456,77 @@
     "title": "Hãy cùng bắt đầu",
     "description": "Sự tham gia của bạn thay đổi thế giới. Tham gia cộng đồng AlmaNEO ngay hôm nay.",
     "button": "Bắt đầu ngay"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI cho mọi người trên thế giới",
+    "newChat": "Cuộc trò chuyện mới",
+    "deleteChat": "Xóa cuộc trò chuyện",
+    "placeholder": "Nhập tin nhắn...",
+    "send": "Gửi",
+    "stop": "Dừng",
+    "newLine": "Dòng mới",
+    "thinking": "Đang suy nghĩ...",
+    "refresh": "Tải lại",
+    "dismiss": "Đóng",
+    "noConversations": "Không có cuộc trò chuyện nào",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "daysAgo": "{{days}} ngày trước",
+    "selectModel": "Chọn mô hình AI",
+    "quota": {
+      "used": "Đã dùng {{used}}/{{limit}}",
+      "exceeded": "Hạn mức hàng ngày đã hết",
+      "low": "Còn {{remaining}} lượt",
+      "resetTime": "Đặt lại sau {{hours}} giờ",
+      "resettingSoon": "Sắp đặt lại",
+      "refresh": "Tải lại"
+    },
+    "welcome": {
+      "title": "Tôi có thể giúp gì cho bạn?",
+      "description": "Chào mừng đến AlmaNEO AI Hub. Bạn có thể trò chuyện miễn phí với AI tối đa 50 lần mỗi ngày."
+    },
+    "features": {
+      "multilingual": {
+        "title": "Hỗ trợ đa ngôn ngữ",
+        "description": "Trò chuyện bằng nhiều ngôn ngữ bao gồm tiếng Việt và tiếng Anh."
+      },
+      "free": {
+        "title": "Miễn phí",
+        "description": "Trò chuyện miễn phí với AI tối đa 50 lần mỗi ngày."
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "Kết nối mọi người trên thế giới bằng AI thân thiện."
+      }
+    },
+    "suggestions": {
+      "title": "Hãy thử hỏi những câu này",
+      "coding": "Giúp tôi viết mã",
+      "explain": "Giải thích khái niệm này một cách đơn giản",
+      "translate": "Dịch câu này giúp tôi",
+      "brainstorm": "Cùng lên ý tưởng"
+    },
+    "connectWallet": {
+      "title": "Kết nối ví",
+      "description": "Bạn cần kết nối ví để sử dụng AI Hub. Bắt đầu dễ dàng bằng đăng nhập mạng xã hội.",
+      "button": "Kết nối ví",
+      "connecting": "Đang kết nối..."
+    },
+    "you": "Tôi",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "Hữu ích",
+      "notHelpful": "Không hữu ích"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — Truy cập 11+ mô hình từ 7 nhà cung cấp",
+      "offTitle": "Chế độ Direct — Chỉ dùng Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "Đã hết hạn mức hàng ngày. Vui lòng thử lại vào ngày mai.",
+      "networkError": "Lỗi mạng xảy ra.",
+      "modelError": "Lỗi mô hình AI."
+    }
   }
 }

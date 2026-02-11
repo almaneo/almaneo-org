@@ -456,5 +456,77 @@
     "title": "มาเริ่มต้นด้วยกัน",
     "description": "การเข้าร่วมของคุณเปลี่ยนแปลงโลก เข้าร่วมชุมชน AlmaNEO วันนี้",
     "button": "เริ่มต้นเลย"
+  },
+  "aiHub": {
+    "title": "AlmaNEO AI Hub",
+    "subtitle": "AI สำหรับทุกคนบนโลก",
+    "newChat": "สนทนาใหม่",
+    "deleteChat": "ลบสนทนา",
+    "placeholder": "พิมพ์ข้อความ...",
+    "send": "ส่ง",
+    "stop": "หยุด",
+    "newLine": "บรรทัดใหม่",
+    "thinking": "กำลังคิด...",
+    "refresh": "รีเฟรช",
+    "dismiss": "ปิด",
+    "noConversations": "ไม่มีสนทนา",
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "daysAgo": "{{days}} วันที่แล้ว",
+    "selectModel": "เลือกโมเดล AI",
+    "quota": {
+      "used": "ใช้แล้ว {{used}}/{{limit}}",
+      "exceeded": "โควตาวันนี้หมดแล้ว",
+      "low": "โควตาเหลือ {{remaining}} ครั้ง",
+      "resetTime": "รีเซ็ตใน {{hours}} ชั่วโมง",
+      "resettingSoon": "รีเซ็ตเร็วๆ นี้",
+      "refresh": "รีเฟรช"
+    },
+    "welcome": {
+      "title": "ให้ช่วยอะไรดีคะ?",
+      "description": "ยินดีต้อนรับสู่ AlmaNEO AI Hub สนทนากับ AI ได้ฟรีวันละ 50 ครั้ง"
+    },
+    "features": {
+      "multilingual": {
+        "title": "รองรับหลายภาษา",
+        "description": "สนทนาได้หลายภาษา รวมถึงภาษาไทยและอังกฤษ"
+      },
+      "free": {
+        "title": "ใช้ฟรี",
+        "description": "สนทนากับ AI ได้ฟรีวันละ 50 ครั้ง"
+      },
+      "kindness": {
+        "title": "Kindness Protocol",
+        "description": "เชื่อมต่อทุกคนบนโลกด้วย AI ที่เป็นมิตร"
+      }
+    },
+    "suggestions": {
+      "title": "ลองถามคำถามเหล่านี้",
+      "coding": "ช่วยเขียนโค้ดให้หน่อย",
+      "explain": "อธิบายแนวคิดนี้ให้เข้าใจง่ายๆ",
+      "translate": "แปลประโยคนี้ให้หน่อย",
+      "brainstorm": "ช่วยระดมความคิด"
+    },
+    "connectWallet": {
+      "title": "เชื่อมต่อกระเป๋าเงิน",
+      "description": "เชื่อมต่อกระเป๋าเงินเพื่อใช้ AI Hub เริ่มต้นง่ายๆ ด้วยการเข้าสู่ระบบผ่านบัญชีโซเชียล",
+      "button": "เชื่อมต่อกระเป๋าเงิน",
+      "connecting": "กำลังเชื่อมต่อ..."
+    },
+    "you": "ฉัน",
+    "aiName": "AlmaNEO AI",
+    "feedback": {
+      "helpful": "มีประโยชน์",
+      "notHelpful": "ไม่มีประโยชน์"
+    },
+    "gateway": {
+      "onTitle": "AI Gateway ON — เข้าถึง 11+ โมเดลจาก 7 ผู้ให้บริการ",
+      "offTitle": "โหมด Direct — ใช้เฉพาะ Gemini + Groq"
+    },
+    "errors": {
+      "quotaExceeded": "โควตาวันนี้หมดแล้ว กรุณาลองใหม่พรุ่งนี้",
+      "networkError": "เกิดข้อผิดพลาดเครือข่าย",
+      "modelError": "เกิดข้อผิดพลาดของโมเดล AI"
+    }
   }
 }
