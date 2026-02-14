@@ -22,8 +22,8 @@ const corsHeaders = {
 };
 
 export const config = {
-  runtime: 'edge',
-  regions: ['icn1'],
+  runtime: 'nodejs',
+  maxDuration: 10,
 };
 
 interface FeedbackRequest {

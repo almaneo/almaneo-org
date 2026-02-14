@@ -20,8 +20,8 @@ const corsHeaders = {
 };
 
 export const config = {
-  runtime: 'edge',
-  regions: ['icn1'],
+  runtime: 'nodejs',
+  maxDuration: 30,
 };
 
 export default async function handler(request: Request): Promise<Response> {

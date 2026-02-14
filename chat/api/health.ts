@@ -5,11 +5,9 @@
  * Returns system status and configuration check.
  */
 
-import { isStreamConfigured } from '../lib/stream-client.js';
-
 export const config = {
-  runtime: 'edge',
-  regions: ['icn1'],
+  runtime: 'nodejs',
+  maxDuration: 10,
 };
 
 export default async function handler(request: Request): Promise<Response> {
@@ -19,7 +17,7 @@ export default async function handler(request: Request): Promise<Response> {
     status: 'ok',
     timestamp: new Date().toISOString(),
     config: {
-      streamChat: isStreamConfigured(),
+      streamChat: !!(process.env.STREAM_API_KEY && process.env.STREAM_API_SECRET),
       supabase: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
       aiGateway: !!process.env.AI_GATEWAY_API_KEY,
       gemini: !!process.env.GEMINI_API_KEY,

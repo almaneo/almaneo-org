@@ -36,23 +36,19 @@ const ISO3_TO_ISO1: Record<string, string> = {
 export function detectLanguage(text: string): string {
   const trimmed = text.trim();
 
-  // Very short text: use script-based detection
-  if (trimmed.length < 10) {
-    for (const { lang, test } of SCRIPT_RANGES) {
-      if (test.test(trimmed)) return lang;
-    }
-    // Default to English for very short Latin-script text
-    return 'en';
+  // Always try script-based detection first (reliable for non-Latin scripts)
+  for (const { lang, test } of SCRIPT_RANGES) {
+    if (test.test(trimmed)) return lang;
   }
 
-  // Use franc for longer text
+  // For Latin-script text, use franc for longer text
+  if (trimmed.length < 10) {
+    return 'en'; // Default for very short Latin-script text
+  }
+
   const detected = franc(trimmed, { minLength: 3 });
 
   if (detected === 'und') {
-    // Undetermined — try script-based fallback
-    for (const { lang, test } of SCRIPT_RANGES) {
-      if (test.test(trimmed)) return lang;
-    }
     return 'en'; // Default
   }
 

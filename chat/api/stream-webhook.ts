@@ -21,8 +21,8 @@ import {
 } from '../lib/stream-client.js';
 
 export const config = {
-  runtime: 'edge',
-  regions: ['icn1'],
+  runtime: 'nodejs',
+  maxDuration: 30,
 };
 
 interface StreamWebhookEvent {
