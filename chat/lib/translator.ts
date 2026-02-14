@@ -3,7 +3,7 @@
  *
  * Translates chat messages using Vercel AI Gateway.
  * - Default: Gemini Flash Lite (~200ms, low cost)
- * - Slang detected: Claude Haiku (~400ms, better nuance)
+ * - Slang detected: Groq Llama 3.3 70B (~300ms, better nuance)
  *
  * Supports Gateway mode (BYOK) and Direct provider mode.
  */
@@ -30,7 +30,7 @@ const groq = createGroq({
 // ── Model Selection ──
 const MODELS = {
   default: USE_GATEWAY ? 'google/gemini-2.5-flash-lite' : 'gemini-2.5-flash-lite',
-  slang: USE_GATEWAY ? 'anthropic/claude-haiku-4-5' : 'gemini-2.5-flash-lite',
+  slang: USE_GATEWAY ? 'groq/llama-3.3-70b-versatile' : 'llama-3.3-70b-versatile',
   fast: USE_GATEWAY ? 'groq/llama-3.3-70b-versatile' : 'llama-3.3-70b-versatile',
 } as const;
 
@@ -155,9 +155,10 @@ export async function translateMessage(
     if (process.env.GROQ_API_KEY) {
       byok.groq = [{ apiKey: process.env.GROQ_API_KEY }];
     }
-    if (process.env.ANTHROPIC_API_KEY) {
-      byok.anthropic = [{ apiKey: process.env.ANTHROPIC_API_KEY }];
-    }
+    // Anthropic BYOK - enable when API key is available
+    // if (process.env.ANTHROPIC_API_KEY) {
+    //   byok.anthropic = [{ apiKey: process.env.ANTHROPIC_API_KEY }];
+    // }
   }
 
   // Translate
