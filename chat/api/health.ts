@@ -5,12 +5,9 @@
  * Returns system status and configuration check.
  */
 
-export const config = {
-  runtime: 'nodejs',
-  maxDuration: 10,
-};
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(request: Request): Promise<Response> {
+export default function handler(_req: VercelRequest, res: VercelResponse) {
   const status = {
     service: 'almachat-api',
     version: '1.0.0',
@@ -26,11 +23,6 @@ export default async function handler(request: Request): Promise<Response> {
     },
   };
 
-  return new Response(JSON.stringify(status, null, 2), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  });
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.status(200).json(status);
 }
