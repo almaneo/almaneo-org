@@ -11,6 +11,7 @@
  * https://dashboard.getstream.io → Chat → Webhooks
  */
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { translateParallel } from '../lib/translator.js';
 import { detectLanguage } from '../lib/language.js';
 import { getSlangContext } from '../lib/slang-detector.js';
@@ -21,7 +22,6 @@ import {
 } from '../lib/stream-client.js';
 
 export const config = {
-  runtime: 'nodejs',
   maxDuration: 30,
 };
 
@@ -42,42 +42,30 @@ interface StreamWebhookEvent {
   cid?: string; // channel_type:channel_id
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   // Stream Chat is not configured yet — return OK to avoid errors
   if (!isStreamConfigured()) {
     console.log('[Webhook] Stream Chat not configured, skipping');
-    return new Response(JSON.stringify({ status: 'skipped', reason: 'not_configured' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ status: 'skipped', reason: 'not_configured' });
   }
 
   try {
-    const event = (await request.json()) as StreamWebhookEvent;
+    const event = req.body as StreamWebhookEvent;
 
     // Only handle new messages
     if (event.type !== 'message.new') {
-      return new Response(JSON.stringify({ status: 'ignored', type: event.type }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(200).json({ status: 'ignored', type: event.type });
     }
 
     const { message, channel } = event;
 
     // Validate required fields
     if (!message?.text || !message?.id || !channel?.id) {
-      return new Response(JSON.stringify({ status: 'skipped', reason: 'missing_fields' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(200).json({ status: 'skipped', reason: 'missing_fields' });
     }
 
     const originalText = message.text;
@@ -94,13 +82,7 @@ export default async function handler(request: Request): Promise<Response> {
 
     if (targetLangs.length === 0) {
       // All participants speak the same language
-      return new Response(
-        JSON.stringify({ status: 'skipped', reason: 'same_language', sourceLang }),
-        {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      return res.status(200).json({ status: 'skipped', reason: 'same_language', sourceLang });
     }
 
     // Get slang context
@@ -131,27 +113,18 @@ export default async function handler(request: Request): Promise<Response> {
       `[Webhook] Translated message ${message.id}: ${sourceLang} → ${targetLangs.join(',')}`,
     );
 
-    return new Response(
-      JSON.stringify({
-        status: 'translated',
-        messageId: message.id,
-        sourceLang,
-        targetLangs,
-        slangDetected,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return res.status(200).json({
+      status: 'translated',
+      messageId: message.id,
+      sourceLang,
+      targetLangs,
+      slangDetected,
+    });
   } catch (error) {
     console.error('[Webhook] Error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
+    const msg = error instanceof Error ? error.message : 'Internal server error';
 
     // Return 200 to prevent Stream from retrying
-    return new Response(JSON.stringify({ status: 'error', error: message }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ status: 'error', error: msg });
   }
 }

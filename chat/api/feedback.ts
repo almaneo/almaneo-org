@@ -8,21 +8,12 @@
  * - 'good': Translation is accurate
  * - 'bad': Translation is poor
  * - 'correction': User provides a better translation
- *
- * Corrections can be used to improve the slang dictionary
- * and fine-tune translation prompts.
  */
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
-
 export const config = {
-  runtime: 'nodejs',
   maxDuration: 10,
 };
 
@@ -36,20 +27,24 @@ interface FeedbackRequest {
   feedbackType: 'good' | 'bad' | 'correction';
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders });
+function setCors(res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  setCors(res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const body = (await request.json()) as FeedbackRequest;
     const {
       userAddress,
       sourceLang,
@@ -58,37 +53,19 @@ export default async function handler(request: Request): Promise<Response> {
       machineTranslation,
       suggestedTranslation,
       feedbackType,
-    } = body;
+    } = req.body as FeedbackRequest;
 
     // Validate
     if (!userAddress || !sourceLang || !targetLang || !originalText || !machineTranslation || !feedbackType) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
     if (!['good', 'bad', 'correction'].includes(feedbackType)) {
-      return new Response(
-        JSON.stringify({ error: 'feedbackType must be good, bad, or correction' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return res.status(400).json({ error: 'feedbackType must be good, bad, or correction' });
     }
 
     if (feedbackType === 'correction' && !suggestedTranslation) {
-      return new Response(
-        JSON.stringify({ error: 'suggestedTranslation is required for correction feedback' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      );
+      return res.status(400).json({ error: 'suggestedTranslation is required for correction feedback' });
     }
 
     // Save to Supabase
@@ -96,10 +73,7 @@ export default async function handler(request: Request): Promise<Response> {
     const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      return new Response(JSON.stringify({ error: 'Database not configured' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return res.status(500).json({ error: 'Database not configured' });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -116,33 +90,20 @@ export default async function handler(request: Request): Promise<Response> {
 
     if (error) {
       console.error('[Feedback] DB error:', error.message);
-      return new Response(JSON.stringify({ error: 'Failed to save feedback' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return res.status(500).json({ error: 'Failed to save feedback' });
     }
 
-    // If it's a correction, potentially update the cache with the better translation
+    // If it's a correction, log for future processing
     if (feedbackType === 'correction' && suggestedTranslation) {
-      // TODO: Consider updating cache or adding to slang dictionary
       console.log(
         `[Feedback] Correction received: ${sourceLang}→${targetLang}, "${originalText}" → "${suggestedTranslation}"`,
       );
     }
 
-    return new Response(
-      JSON.stringify({ status: 'saved', feedbackType }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return res.status(200).json({ status: 'saved', feedbackType });
   } catch (error) {
     console.error('[Feedback] Error:', error);
     const message = error instanceof Error ? error.message : 'Internal server error';
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: message });
   }
 }

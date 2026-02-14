@@ -9,48 +9,40 @@
  * Also upserts the user in Stream Chat with AlmaNEO metadata.
  */
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import {
   isStreamConfigured,
   generateUserToken,
   upsertStreamUser,
 } from '../lib/stream-client.js';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
-
 export const config = {
-  runtime: 'nodejs',
   maxDuration: 10,
 };
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders });
+function setCors(res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  setCors(res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   if (!isStreamConfigured()) {
-    return new Response(
-      JSON.stringify({ error: 'Stream Chat not configured' }),
-      {
-        status: 503,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return res.status(503).json({ error: 'Stream Chat not configured' });
   }
 
   try {
-    const body = await request.json();
-    const { userId, name, image, preferredLanguage, walletAddress } = body as {
+    const { userId, name, image, preferredLanguage, walletAddress } = req.body as {
       userId: string;
       name?: string;
       image?: string;
@@ -59,10 +51,7 @@ export default async function handler(request: Request): Promise<Response> {
     };
 
     if (!userId) {
-      return new Response(JSON.stringify({ error: 'userId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return res.status(400).json({ error: 'userId is required' });
     }
 
     // Upsert user in Stream Chat
@@ -77,22 +66,13 @@ export default async function handler(request: Request): Promise<Response> {
     // Generate token
     const token = generateUserToken(userId);
 
-    return new Response(
-      JSON.stringify({
-        token,
-        apiKey: process.env.STREAM_API_KEY,
-      }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return res.status(200).json({
+      token,
+      apiKey: process.env.STREAM_API_KEY,
+    });
   } catch (error) {
     console.error('[StreamToken] Error:', error);
     const message = error instanceof Error ? error.message : 'Internal server error';
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: message });
   }
 }

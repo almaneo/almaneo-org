@@ -8,18 +8,18 @@
  * POST: Submit a new slang term (pending verification)
  */
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
-
 export const config = {
-  runtime: 'nodejs',
   maxDuration: 10,
 };
+
+function setCors(res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
 
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
@@ -28,41 +28,36 @@ function getSupabase() {
   return createClient(url, key);
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  setCors(res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
   try {
-    if (request.method === 'GET') {
-      return handleGet(request);
+    if (req.method === 'GET') {
+      return handleGet(req, res);
     }
-    if (request.method === 'POST') {
-      return handlePost(request);
+    if (req.method === 'POST') {
+      return handlePost(req, res);
     }
 
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     console.error('[SlangLookup] Error:', error);
     const message = error instanceof Error ? error.message : 'Internal server error';
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: message });
   }
 }
 
 /**
  * GET: Look up slang terms
  */
-async function handleGet(request: Request): Promise<Response> {
-  const url = new URL(request.url);
-  const lang = url.searchParams.get('lang');
-  const query = url.searchParams.get('q');
-  const category = url.searchParams.get('category');
+async function handleGet(req: VercelRequest, res: VercelResponse) {
+  const lang = req.query.lang as string | undefined;
+  const query = req.query.q as string | undefined;
+  const category = req.query.category as string | undefined;
 
   const supabase = getSupabase();
 
@@ -85,27 +80,17 @@ async function handleGet(request: Request): Promise<Response> {
     .limit(50);
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: error.message });
   }
 
-  return new Response(
-    JSON.stringify({ entries: data || [], count: data?.length || 0 }),
-    {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    },
-  );
+  return res.status(200).json({ entries: data || [], count: data?.length || 0 });
 }
 
 /**
  * POST: Submit a new slang term
  */
-async function handlePost(request: Request): Promise<Response> {
-  const body = await request.json();
-  const { term, lang, meaning, category, equivalent, examples, addedBy } = body as {
+async function handlePost(req: VercelRequest, res: VercelResponse) {
+  const { term, lang, meaning, category, equivalent, examples, addedBy } = req.body as {
     term: string;
     lang: string;
     meaning: string;
@@ -116,13 +101,7 @@ async function handlePost(request: Request): Promise<Response> {
   };
 
   if (!term || !lang || !meaning || !category) {
-    return new Response(
-      JSON.stringify({ error: 'term, lang, meaning, and category are required' }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return res.status(400).json({ error: 'term, lang, meaning, and category are required' });
   }
 
   const supabase = getSupabase();
@@ -144,17 +123,8 @@ async function handlePost(request: Request): Promise<Response> {
   );
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: error.message });
   }
 
-  return new Response(
-    JSON.stringify({ status: 'submitted', term, lang, verified: false }),
-    {
-      status: 201,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    },
-  );
+  return res.status(201).json({ status: 'submitted', term, lang, verified: false });
 }
