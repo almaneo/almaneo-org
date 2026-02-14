@@ -53,7 +53,14 @@ export function detectLanguage(text: string): string {
   }
 
   // Convert ISO 639-3 to ISO 639-1
-  return ISO3_TO_ISO1[detected] || detected.substring(0, 2);
+  const lang = ISO3_TO_ISO1[detected] || detected.substring(0, 2);
+
+  // Validate against supported languages — fallback to 'en' for unsupported
+  if (!SUPPORTED_LANGUAGES.includes(lang as SupportedLanguage)) {
+    return 'en';
+  }
+
+  return lang;
 }
 
 /**
