@@ -6,7 +6,9 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/env.dart';
 import '../config/theme.dart';
 import '../providers/language_provider.dart';
+import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
+import 'create_channel_screen.dart';
 import 'settings_screen.dart';
 
 class ChannelListScreen extends ConsumerWidget {
@@ -102,7 +104,7 @@ class ChannelListScreen extends ConsumerWidget {
         emptyBuilder: (context) => _buildEmptyState(context),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _createGlobalChannel(context),
+        onPressed: () => _showChannelOptions(context),
         child: const Icon(Icons.add_comment_outlined),
       ),
     );
@@ -148,6 +150,72 @@ class ChannelListScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showChannelOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AlmaTheme.slateGray,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              _BottomSheetOption(
+                icon: Icons.public,
+                iconColor: AlmaTheme.success,
+                title: 'Join Global Chat',
+                subtitle: 'Chat with people from around the world',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _createGlobalChannel(context);
+                },
+              ),
+              _BottomSheetOption(
+                icon: Icons.add_circle_outline,
+                iconColor: AlmaTheme.electricBlue,
+                title: 'Create Channel',
+                subtitle: 'Start a new conversation topic',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CreateChannelScreen()),
+                  );
+                },
+              ),
+              _BottomSheetOption(
+                icon: Icons.explore_outlined,
+                iconColor: AlmaTheme.terracottaOrange,
+                title: 'Browse Channels',
+                subtitle: 'Discover and join existing channels',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const BrowseChannelsScreen()),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -283,6 +351,58 @@ class _ConnectionDot extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// 바텀시트 옵션 타일
+class _BottomSheetOption extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _BottomSheetOption({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: iconColor.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: iconColor, size: 22),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: Colors.white.withValues(alpha: 0.4),
+          fontSize: 13,
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: Colors.white.withValues(alpha: 0.3),
+      ),
+      onTap: onTap,
     );
   }
 }
