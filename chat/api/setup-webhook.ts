@@ -32,17 +32,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const webhookUrl = 'https://chat.almaneo.org/api/stream-webhook';
 
-    await sc.updateAppSettings({
-      webhook_url: webhookUrl,
-    });
+    // Try v2 hook system first (event_hooks)
+    try {
+      await sc.updateAppSettings({
+        event_hooks: [{
+          url: webhookUrl,
+          active: true,
+          events: ['message.new'],
+        }],
+      } as Record<string, unknown>);
+    } catch (v2Err) {
+      // If v2 fails, try v1
+      try {
+        await sc.updateAppSettings({
+          webhook_url: webhookUrl,
+          webhook_events: { 'message.new': true },
+        } as Record<string, unknown>);
+      } catch (v1Err) {
+        return res.status(500).json({
+          error: 'Both v1 and v2 webhook config failed',
+          v1Error: v1Err instanceof Error ? v1Err.message : String(v1Err),
+          v2Error: v2Err instanceof Error ? v2Err.message : String(v2Err),
+        });
+      }
+    }
 
     // Verify
     const settings = await sc.getAppSettings();
-    const configuredUrl = settings.app?.webhook_url;
+    const app = settings.app as Record<string, unknown> || {};
 
     return res.status(200).json({
       success: true,
-      webhookUrl: configuredUrl,
+      webhookUrl: app.webhook_url || 'check_v2',
+      hooks: app.event_hooks || app.hooks || 'not_found',
       message: 'Webhook configured successfully',
     });
   } catch (error) {

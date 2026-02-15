@@ -36,9 +36,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       created_at: m.created_at,
     }));
 
-    // Check webhook settings
+    // Check webhook/hook settings (v1 and v2)
     const appSettings = await sc.getAppSettings();
-    const webhookUrl = appSettings.app?.webhook_url || 'not_configured';
+    const app = appSettings.app as Record<string, unknown> || {};
+    const webhookUrl = (app.webhook_url as string) || 'not_configured';
+    const webhookEvents = app.webhook_events || [];
+
+    // Look for event_hooks (v2 system)
+    const eventHooks = app.event_hooks || app.hooks || 'not_found';
 
     return res.status(200).json({
       channelId,
@@ -46,7 +51,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       memberCount: members.length,
       members,
       activeLanguages: [...new Set(members.map((m) => m.preferred_language))],
-      webhookUrl,
+      webhook: { url: webhookUrl, events: webhookEvents, hooks: eventHooks },
+      // Show relevant app keys for debugging
+      appKeys: Object.keys(app).filter(k =>
+        k.includes('hook') || k.includes('webhook') || k.includes('event') || k.includes('push')
+      ),
     });
   } catch (error) {
     console.error('[DebugChannel] Error:', error);
