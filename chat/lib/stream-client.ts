@@ -71,6 +71,7 @@ export async function upsertStreamUser(user: {
 
 /**
  * Update message metadata with translations
+ * Uses partialUpdateMessage (server-side, no user_id required)
  */
 export async function updateMessageTranslations(
   messageId: string,
@@ -80,8 +81,7 @@ export async function updateMessageTranslations(
   slangDetected: boolean,
 ): Promise<void> {
   const sc = getStreamClient();
-  await sc.updateMessage({
-    id: messageId,
+  await sc.partialUpdateMessage(messageId, {
     set: {
       original_lang: originalLang,
       translations,
