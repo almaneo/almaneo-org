@@ -101,12 +101,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const modelUsed = slangDetected ? 'claude-haiku' : 'gemini-flash-lite';
 
     // Update message metadata in Stream Chat
+    // Pass the message author's userId for server-side auth
     await updateMessageTranslations(
       message.id,
       sourceLang,
       translations,
       modelUsed,
       slangDetected,
+      message.user?.id,
     );
 
     console.log(

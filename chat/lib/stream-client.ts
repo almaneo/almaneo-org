@@ -71,7 +71,7 @@ export async function upsertStreamUser(user: {
 
 /**
  * Update message metadata with translations
- * Uses partialUpdateMessage (server-side, no user_id required)
+ * Uses partialUpdateMessage with userId for server-side auth
  */
 export async function updateMessageTranslations(
   messageId: string,
@@ -79,17 +79,22 @@ export async function updateMessageTranslations(
   translations: Record<string, string>,
   modelUsed: string,
   slangDetected: boolean,
+  userId?: string,
 ): Promise<void> {
   const sc = getStreamClient();
-  await sc.partialUpdateMessage(messageId, {
-    set: {
-      original_lang: originalLang,
-      translations,
-      translation_status: 'completed',
-      translation_model: modelUsed,
-      slang_detected: slangDetected,
+  await sc.partialUpdateMessage(
+    messageId,
+    {
+      set: {
+        original_lang: originalLang,
+        translations,
+        translation_status: 'completed',
+        translation_model: modelUsed,
+        slang_detected: slangDetected,
+      },
     },
-  });
+    userId,
+  );
 }
 
 /**
