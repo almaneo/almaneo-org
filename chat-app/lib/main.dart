@@ -46,6 +46,7 @@ class AlmaChatApp extends ConsumerStatefulWidget {
 
 class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   final _authService = AuthService();
+  final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isConnected = false;
 
   Future<void> _handleLogin(String name) async {
@@ -71,6 +72,14 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     setState(() => _isConnected = true);
   }
 
+  Future<void> _handleLogout() async {
+    // Navigator 스택의 모든 푸시된 라우트 제거 (ProfileScreen 등)
+    _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+    await widget.client.disconnectUser();
+    _authService.logout();
+    setState(() => _isConnected = false);
+  }
+
   @override
   void dispose() {
     widget.client.dispose();
@@ -80,6 +89,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       title: 'AlmaChat',
       debugShowCheckedModeBanner: false,
       theme: AlmaTheme.darkTheme,
@@ -91,7 +101,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         );
       },
       home: _isConnected
-          ? const ChannelListScreen()
+          ? ChannelListScreen(onLogout: _handleLogout)
           : LoginScreen(onLogin: _handleLogin),
     );
   }

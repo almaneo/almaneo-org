@@ -9,10 +9,13 @@ import '../providers/language_provider.dart';
 import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
 import 'create_channel_screen.dart';
+import 'profile_screen.dart';
 import 'settings_screen.dart';
 
 class ChannelListScreen extends ConsumerWidget {
-  const ChannelListScreen({super.key});
+  final VoidCallback onLogout;
+
+  const ChannelListScreen({super.key, required this.onLogout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,18 +65,28 @@ class ChannelListScreen extends ConsumerWidget {
               ),
             ),
           ),
-          // 사용자 아바타
+          // 사용자 아바타 → 프로필 화면
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: AlmaTheme.terracottaOrange,
-              child: Text(
-                (user?.name ?? '?')[0].toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfileScreen(onLogout: onLogout),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 16,
+                backgroundColor: AlmaTheme.terracottaOrange,
+                child: Text(
+                  (user?.name ?? '?')[0].toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
