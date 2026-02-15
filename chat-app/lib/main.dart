@@ -53,7 +53,8 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final langState = ref.read(languageProvider);
 
     // 게스트 토큰 발급 (언어 설정 포함)
-    final token = await _authService.loginAsGuest(name, langState.languageCode);
+    final token =
+        await _authService.loginAsGuest(name, langState.languageCode);
 
     // Stream Chat 연결
     await widget.client.connectUser(

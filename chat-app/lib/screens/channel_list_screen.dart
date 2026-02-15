@@ -19,9 +19,17 @@ class ChannelListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'AlmaChat',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'AlmaChat',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 8),
+            // 연결 상태 인디케이터
+            _ConnectionDot(),
+          ],
         ),
         actions: [
           // 언어 설정 버튼 (현재 언어 표시)
@@ -150,6 +158,17 @@ class ChannelListScreen extends ConsumerWidget {
 
     if (user == null) return;
 
+    // 로딩 다이얼로그 표시
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(
+          child: CircularProgressIndicator(color: AlmaTheme.electricBlue),
+        ),
+      );
+    }
+
     try {
       // 1. 서버 사이드에서 채널에 유저 추가
       final response = await http.post(
@@ -162,7 +181,7 @@ class ChannelListScreen extends ConsumerWidget {
       );
 
       if (response.statusCode != 200) {
-        throw Exception('Server error: ${response.body}');
+        throw Exception('Server error: ${response.statusCode}');
       }
 
       // 2. 클라이언트에서 채널 watch
@@ -170,6 +189,9 @@ class ChannelListScreen extends ConsumerWidget {
       await channel.watch();
 
       if (context.mounted) {
+        // 로딩 다이얼로그 닫기
+        Navigator.pop(context);
+        // 채팅 화면으로 이동
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -182,13 +204,85 @@ class ChannelListScreen extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
+        // 로딩 다이얼로그 닫기
+        Navigator.pop(context);
+        // 에러 스낵바
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to join: $e'),
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Failed to join channel. Please check your connection.',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
             behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.error,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            action: SnackBarAction(
+              label: 'Retry',
+              textColor: Colors.white,
+              onPressed: () => _createGlobalChannel(context),
+            ),
           ),
         );
       }
     }
+  }
+}
+
+/// 연결 상태 점 인디케이터
+class _ConnectionDot extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final client = StreamChat.of(context).client;
+
+    return StreamBuilder<ConnectionStatus>(
+      stream: client.wsConnectionStatusStream,
+      initialData: client.wsConnectionStatus,
+      builder: (context, snapshot) {
+        final status = snapshot.data ?? ConnectionStatus.disconnected;
+        final Color color;
+        final String tooltip;
+
+        switch (status) {
+          case ConnectionStatus.connected:
+            color = AlmaTheme.success;
+            tooltip = 'Connected';
+          case ConnectionStatus.connecting:
+            color = AlmaTheme.warning;
+            tooltip = 'Connecting...';
+          case ConnectionStatus.disconnected:
+            color = AlmaTheme.error;
+            tooltip = 'Disconnected';
+        }
+
+        return Tooltip(
+          message: tooltip,
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.4),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
