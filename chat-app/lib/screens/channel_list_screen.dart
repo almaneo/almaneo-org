@@ -1,14 +1,21 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import '../config/env.dart';
 import '../config/theme.dart';
+import '../providers/language_provider.dart';
 import 'chat_screen.dart';
+import 'settings_screen.dart';
 
-class ChannelListScreen extends StatelessWidget {
+class ChannelListScreen extends ConsumerWidget {
   const ChannelListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final user = StreamChat.of(context).currentUser;
+    final langState = ref.watch(languageProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -17,17 +24,33 @@ class ChannelListScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          // 언어 설정 버튼 (향후 구현)
-          IconButton(
-            icon: const Icon(Icons.translate, size: 22),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Language settings coming soon'),
-                  behavior: SnackBarBehavior.floating,
-                ),
+          // 언어 설정 버튼 (현재 언어 표시)
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
               );
             },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              margin: const EdgeInsets.only(right: 4),
+              decoration: BoxDecoration(
+                color: AlmaTheme.slateGray,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.translate, size: 16, color: Colors.white70),
+                  const SizedBox(width: 4),
+                  Text(
+                    langState.language.flag,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
           ),
           // 사용자 아바타
           Padding(
@@ -128,16 +151,22 @@ class ChannelListScreen extends StatelessWidget {
     if (user == null) return;
 
     try {
-      // AlmaChat 글로벌 채널 참가
-      final channel = client.channel(
-        'messaging',
-        id: 'alma-global',
-        extraData: const {
-          'name': 'AlmaChat Global',
-          'description': 'Chat with kindness, across languages',
-        },
+      // 1. 서버 사이드에서 채널에 유저 추가
+      final response = await http.post(
+        Uri.parse('${Env.chatApiUrl}/api/join-channel'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': user.id,
+          'channelId': 'alma-global',
+        }),
       );
 
+      if (response.statusCode != 200) {
+        throw Exception('Server error: ${response.body}');
+      }
+
+      // 2. 클라이언트에서 채널 watch
+      final channel = client.channel('messaging', id: 'alma-global');
       await channel.watch();
 
       if (context.mounted) {

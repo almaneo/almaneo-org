@@ -15,23 +15,27 @@ class AuthService {
 
   /// 게스트 로그인 (MVP용)
   /// 간단한 닉네임으로 Stream Chat 토큰 발급
-  Future<String> loginAsGuest(String name) async {
+  Future<String> loginAsGuest(String name, [String preferredLanguage = 'en']) async {
     // 고유 사용자 ID 생성
     final randomSuffix = Random().nextInt(99999).toString().padLeft(5, '0');
     _userId = 'guest_$randomSuffix';
     _userName = name;
 
-    // Stream Chat 토큰 발급 요청
-    final token = await _getStreamToken(_userId!);
+    // Stream Chat 토큰 발급 요청 (언어 설정 포함)
+    final token = await _getStreamToken(_userId!, name, preferredLanguage);
     return token;
   }
 
   /// 백엔드 API에서 Stream Chat 토큰 발급
-  Future<String> _getStreamToken(String userId) async {
+  Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
     final response = await http.post(
       Uri.parse('${Env.chatApiUrl}/api/stream-token'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'userId': userId}),
+      body: jsonEncode({
+        'userId': userId,
+        'name': name,
+        'preferredLanguage': preferredLanguage ?? 'en',
+      }),
     );
 
     if (response.statusCode == 200) {

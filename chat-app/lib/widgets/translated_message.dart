@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
+import '../providers/language_provider.dart';
 
 /// 번역된 메시지를 표시하는 위젯
 /// Stream Chat 메시지의 extraData에서 번역 정보를 읽어 표시
-class TranslatedMessage extends StatefulWidget {
+class TranslatedMessage extends ConsumerStatefulWidget {
   final Message message;
   final bool isMyMessage;
 
@@ -15,20 +17,20 @@ class TranslatedMessage extends StatefulWidget {
   });
 
   @override
-  State<TranslatedMessage> createState() => _TranslatedMessageState();
+  ConsumerState<TranslatedMessage> createState() => _TranslatedMessageState();
 }
 
-class _TranslatedMessageState extends State<TranslatedMessage> {
+class _TranslatedMessageState extends ConsumerState<TranslatedMessage> {
   bool _showOriginal = false;
 
   @override
   Widget build(BuildContext context) {
+    final langState = ref.watch(languageProvider);
+    final userLang = langState.languageCode;
+
     final translations = widget.message.extraData['translations'] as Map?;
     final originalLang = widget.message.extraData['original_lang'] as String?;
     final translationStatus = widget.message.extraData['translation_status'] as String?;
-
-    // TODO: 사용자 언어 설정에서 가져오기 (현재는 기기 언어 사용)
-    final userLang = Localizations.localeOf(context).languageCode;
 
     // 번역된 텍스트 가져오기
     final translatedText = translations?[userLang] as String?;
@@ -36,6 +38,9 @@ class _TranslatedMessageState extends State<TranslatedMessage> {
     final displayText = (_showOriginal || !hasTranslation)
         ? widget.message.text ?? ''
         : translatedText;
+
+    // 발신자 이름
+    final senderName = widget.message.user?.name ?? '';
 
     return Padding(
       padding: EdgeInsets.only(
@@ -50,6 +55,20 @@ class _TranslatedMessageState extends State<TranslatedMessage> {
           crossAxisAlignment:
               widget.isMyMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
+            // 발신자 이름 (상대방 메시지만)
+            if (!widget.isMyMessage && senderName.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 2),
+                child: Text(
+                  senderName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AlmaTheme.terracottaOrange.withValues(alpha: 0.8),
+                  ),
+                ),
+              ),
+
             // 메시지 버블
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -102,7 +121,7 @@ class _TranslatedMessageState extends State<TranslatedMessage> {
               ),
             ),
 
-            // 번역 토글 + 시간
+            // 번역 토글 + 원어 배지 + 시간
             Padding(
               padding: const EdgeInsets.only(top: 2, left: 4, right: 4),
               child: Row(
@@ -112,30 +131,59 @@ class _TranslatedMessageState extends State<TranslatedMessage> {
                   if (hasTranslation)
                     GestureDetector(
                       onTap: () => setState(() => _showOriginal = !_showOriginal),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.translate,
-                            size: 12,
-                            color: _showOriginal
-                                ? AlmaTheme.terracottaOrange
-                                : Colors.white.withValues(alpha: 0.3),
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            _showOriginal ? originalLang?.toUpperCase() ?? '' : 'Original',
-                            style: TextStyle(
-                              fontSize: 11,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: _showOriginal
+                              ? AlmaTheme.terracottaOrange.withValues(alpha: 0.15)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.translate,
+                              size: 12,
                               color: _showOriginal
                                   ? AlmaTheme.terracottaOrange
                                   : Colors.white.withValues(alpha: 0.3),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 2),
+                            Text(
+                              _showOriginal
+                                  ? originalLang?.toUpperCase() ?? ''
+                                  : 'Original',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: _showOriginal
+                                    ? AlmaTheme.terracottaOrange
+                                    : Colors.white.withValues(alpha: 0.3),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  if (hasTranslation) const SizedBox(width: 8),
+                  if (hasTranslation) const SizedBox(width: 6),
+                  // 원어 배지
+                  if (originalLang != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        originalLang.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withValues(alpha: 0.3),
+                        ),
+                      ),
+                    ),
+                  if (originalLang != null) const SizedBox(width: 6),
                   // 시간 표시
                   Text(
                     _formatTime(widget.message.createdAt),
