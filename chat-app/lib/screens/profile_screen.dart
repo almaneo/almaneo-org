@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
+import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import 'settings_screen.dart';
 
@@ -22,6 +23,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isSaving = false;
   String? _originalName;
   bool _initialized = false;
+
+  String get _lang => ref.read(languageProvider).languageCode;
 
   @override
   void initState() {
@@ -74,11 +77,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.check_circle, color: Colors.white, size: 18),
-                SizedBox(width: 8),
-                Text('Name updated'),
+                const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(tr('profile.nameUpdated', _lang)),
               ],
             ),
             behavior: SnackBarBehavior.floating,
@@ -95,11 +98,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 18),
-                SizedBox(width: 8),
-                Text('Failed to update name'),
+                const Icon(Icons.error_outline, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(tr('profile.nameUpdateFailed', _lang)),
               ],
             ),
             behavior: SnackBarBehavior.floating,
@@ -114,6 +117,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void _confirmLogout() {
+    final lang = _lang;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -121,20 +125,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
-          'Logout',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        title: Text(
+          tr('profile.logout', lang),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        content: const Text(
-          'Are you sure you want to logout? You will need to sign in again.',
-          style: TextStyle(color: Colors.white70),
+        content: Text(
+          tr('profile.logoutConfirm', lang),
+          style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white54),
+            child: Text(
+              tr('profile.cancel', lang),
+              style: const TextStyle(color: Colors.white54),
             ),
           ),
           TextButton(
@@ -142,9 +146,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               Navigator.pop(ctx);
               widget.onLogout();
             },
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: AlmaTheme.error),
+            child: Text(
+              tr('profile.logout', lang),
+              style: const TextStyle(color: AlmaTheme.error),
             ),
           ),
         ],
@@ -156,13 +160,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = StreamChat.of(context).currentUser;
     final langState = ref.watch(languageProvider);
+    final lang = langState.languageCode;
     final displayName = _originalName ?? user?.name ?? 'Guest';
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          tr('profile.title', lang),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -172,17 +177,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // --- 아바타 + 이름 ---
-          _buildAvatarSection(displayName),
+          _buildAvatarSection(displayName, lang),
           const SizedBox(height: 28),
 
-          // --- 계정 정보 ---
-          _buildSectionLabel('Account'),
+          _buildSectionLabel(tr('profile.account', lang)),
           const SizedBox(height: 8),
           _buildInfoTile(
             icon: Icons.badge_outlined,
             iconColor: AlmaTheme.electricBlue,
-            title: 'Display Name',
+            title: tr('profile.displayName', lang),
             trailing: _isEditing
                 ? _buildNameEditor()
                 : _buildNameDisplay(displayName),
@@ -196,7 +199,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           _buildInfoTile(
             icon: Icons.fingerprint,
             iconColor: Colors.white38,
-            title: 'User ID',
+            title: tr('profile.userId', lang),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -214,7 +217,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Clipboard.setData(ClipboardData(text: user?.id ?? ''));
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('User ID copied'),
+                        content: Text(tr('profile.userIdCopied', lang)),
                         behavior: SnackBarBehavior.floating,
                         duration: const Duration(seconds: 1),
                         shape: RoundedRectangleBorder(
@@ -235,13 +238,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: 24),
 
-          // --- 설정 ---
-          _buildSectionLabel('Settings'),
+          _buildSectionLabel(tr('profile.settings', lang)),
           const SizedBox(height: 8),
           _buildInfoTile(
             icon: Icons.translate,
             iconColor: AlmaTheme.terracottaOrange,
-            title: 'Translation Language',
+            title: tr('profile.translationLang', lang),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -272,15 +274,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: 24),
 
-          // --- About ---
-          _buildSectionLabel('About'),
+          _buildSectionLabel(tr('profile.about', lang)),
           const SizedBox(height: 8),
           _buildInfoTile(
             icon: Icons.info_outline,
             iconColor: AlmaTheme.cyan,
-            title: 'AlmaChat',
+            title: tr('app.name', lang),
             trailing: Text(
-              'v0.1.0 MVP',
+              tr('profile.version', lang),
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.4),
                 fontSize: 13,
@@ -291,10 +292,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           _buildInfoTile(
             icon: Icons.favorite_outline,
             iconColor: AlmaTheme.terracottaOrange,
-            title: 'Mission',
+            title: tr('profile.mission', lang),
             trailing: Flexible(
               child: Text(
-                'Connect with kindness, across languages',
+                tr('profile.missionText', lang),
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.4),
                   fontSize: 12,
@@ -306,15 +307,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: 32),
 
-          // --- 로그아웃 ---
-          _buildLogoutButton(),
+          _buildLogoutButton(lang),
 
           const SizedBox(height: 16),
 
-          // 면책
           Center(
             child: Text(
-              'Guest login • Web3Auth coming soon',
+              tr('profile.guestNote', lang),
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.2),
                 fontSize: 12,
@@ -327,10 +326,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildAvatarSection(String displayName) {
+  Widget _buildAvatarSection(String displayName, String lang) {
     return Column(
       children: [
-        // 아바타
         Container(
           width: 88,
           height: 88,
@@ -361,7 +359,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        // 이름
         Text(
           displayName,
           style: const TextStyle(
@@ -371,7 +368,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ),
         const SizedBox(height: 4),
-        // Guest 배지
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           decoration: BoxDecoration(
@@ -381,9 +377,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
             ),
           ),
-          child: const Text(
-            'Guest',
-            style: TextStyle(
+          child: Text(
+            tr('profile.guest', lang),
+            style: const TextStyle(
               color: AlmaTheme.electricBlue,
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -543,7 +539,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildLogoutButton() {
+  Widget _buildLogoutButton(String lang) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -561,9 +557,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           child: const Icon(Icons.logout, color: AlmaTheme.error, size: 20),
         ),
-        title: const Text(
-          'Logout',
-          style: TextStyle(
+        title: Text(
+          tr('profile.logout', lang),
+          style: const TextStyle(
             color: AlmaTheme.error,
             fontSize: 15,
             fontWeight: FontWeight.w500,

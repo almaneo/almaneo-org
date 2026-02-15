@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/env.dart';
 import '../config/theme.dart';
+import '../l10n/app_strings.dart';
+import '../providers/language_provider.dart';
 import 'chat_screen.dart';
 
-class BrowseChannelsScreen extends StatefulWidget {
+class BrowseChannelsScreen extends ConsumerStatefulWidget {
   const BrowseChannelsScreen({super.key});
 
   @override
-  State<BrowseChannelsScreen> createState() => _BrowseChannelsScreenState();
+  ConsumerState<BrowseChannelsScreen> createState() => _BrowseChannelsScreenState();
 }
 
-class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
+class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
   List<_ChannelInfo> _channels = [];
   bool _isLoading = true;
   String? _error;
@@ -110,10 +113,11 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final lang = ref.read(languageProvider).languageCode;
         setState(() => _joiningChannelId = null);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to join: ${e.toString().replaceFirst("Exception: ", "")}'),
+            content: Text(tr('browse.joinFailed', lang, args: {'error': e.toString().replaceFirst("Exception: ", "")})),
             backgroundColor: AlmaTheme.error,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -143,11 +147,13 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider).languageCode;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Browse Channels',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          tr('browse.title', lang),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         actions: [
           IconButton(
@@ -156,11 +162,11 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(lang),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(String lang) {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: AlmaTheme.electricBlue),
@@ -182,7 +188,7 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
             ElevatedButton.icon(
               onPressed: _loadChannels,
               icon: const Icon(Icons.refresh, size: 18),
-              label: const Text('Retry'),
+              label: Text(tr('common.retry', lang)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AlmaTheme.electricBlue,
                 foregroundColor: Colors.white,
@@ -202,12 +208,12 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
             Icon(Icons.search_off, size: 48, color: Colors.white.withValues(alpha: 0.2)),
             const SizedBox(height: 12),
             Text(
-              'No channels found',
+              tr('browse.noChannels', lang),
               style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 16),
             ),
             const SizedBox(height: 4),
             Text(
-              'Be the first to create one!',
+              tr('browse.createFirst', lang),
               style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 13),
             ),
           ],
@@ -230,6 +236,7 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
           final ch = _channels[index];
           return _ChannelTile(
             info: ch,
+            lang: lang,
             isJoining: _joiningChannelId == ch.id,
             onJoin: () => _joinChannel(ch),
             onOpen: () => _openChannel(ch),
@@ -242,12 +249,14 @@ class _BrowseChannelsScreenState extends State<BrowseChannelsScreen> {
 
 class _ChannelTile extends StatelessWidget {
   final _ChannelInfo info;
+  final String lang;
   final bool isJoining;
   final VoidCallback onJoin;
   final VoidCallback onOpen;
 
   const _ChannelTile({
     required this.info,
+    required this.lang,
     required this.isJoining,
     required this.onJoin,
     required this.onOpen,
@@ -292,9 +301,9 @@ class _ChannelTile extends StatelessWidget {
                 color: AlmaTheme.success.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const Text(
-                'Joined',
-                style: TextStyle(
+              child: Text(
+                tr('browse.joined', lang),
+                style: const TextStyle(
                   color: AlmaTheme.success,
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -326,7 +335,7 @@ class _ChannelTile extends StatelessWidget {
                 Icon(Icons.people_outline, size: 13, color: Colors.white.withValues(alpha: 0.3)),
                 const SizedBox(width: 4),
                 Text(
-                  '${info.memberCount} members',
+                  tr('browse.members', lang, args: {'count': '${info.memberCount}'}),
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.3),
                     fontSize: 12,
@@ -361,7 +370,7 @@ class _ChannelTile extends StatelessWidget {
                       ),
                       textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                     ),
-                    child: const Text('Join'),
+                    child: Text(tr('browse.join', lang)),
                   ),
                 ),
       onTap: info.isMember ? onOpen : onJoin,

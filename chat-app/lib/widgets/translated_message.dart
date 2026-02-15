@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../providers/language_provider.dart';
+import 'fullscreen_image.dart';
 
 /// 번역 로딩 텍스트 (언어별)
 const _translatingText = <String, String>{
@@ -94,6 +96,11 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     // 발신자 이름
     final senderName = widget.message.user?.name ?? '';
 
+    // 첨부파일
+    final attachments = widget.message.attachments;
+    final hasAttachments = attachments.isNotEmpty;
+    final hasText = displayText.isNotEmpty;
+
     return Padding(
       padding: EdgeInsets.only(
         left: widget.isMyMessage ? 48 : 8,
@@ -125,7 +132,10 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
 
             // 메시지 버블
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.75,
+              ),
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: widget.isMyMessage
                     ? AlmaTheme.electricBlue
@@ -139,24 +149,48 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 메시지 텍스트 (부드러운 전환)
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: Text(
-                      displayText,
-                      key: ValueKey('$_showOriginal-${widget.message.id}'),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
+                  // 첨부파일 렌더링 (이미지/비디오/파일)
+                  if (hasAttachments)
+                    _buildAttachments(attachments),
+
+                  // 텍스트 + 번역 상태
+                  if (hasText || isTranslating || isFailed)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 14,
+                        right: 14,
+                        top: hasAttachments ? 8 : 10,
+                        bottom: 10,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (hasText)
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: Text(
+                                displayText,
+                                key: ValueKey(
+                                    '$_showOriginal-${widget.message.id}'),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          if (isTranslating)
+                            _buildTranslatingIndicator(userLang),
+                          if (isFailed && !widget.isMyMessage)
+                            _buildFailedIndicator(userLang),
+                        ],
                       ),
                     ),
-                  ),
 
-                  // 번역 상태 표시
-                  if (isTranslating) _buildTranslatingIndicator(userLang),
-                  if (isFailed && !widget.isMyMessage)
-                    _buildFailedIndicator(userLang),
+                  // 첨부파일만 있고 텍스트 없는 경우 하단 패딩
+                  if (hasAttachments && !hasText && !isTranslating && !isFailed)
+                    const SizedBox(height: 4),
                 ],
               ),
             ),
@@ -170,6 +204,321 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               isFailed: isFailed,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 첨부파일 렌더링 (이미지, 비디오, 파일 등)
+  Widget _buildAttachments(List<Attachment> attachments) {
+    final imageAttachments = <Attachment>[];
+    final fileAttachments = <Attachment>[];
+
+    for (final a in attachments) {
+      if (a.type == 'image' || a.type == 'giphy') {
+        imageAttachments.add(a);
+      } else {
+        fileAttachments.add(a);
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 이미지 그리드
+        if (imageAttachments.isNotEmpty)
+          _buildImageGrid(imageAttachments),
+
+        // 파일/비디오 목록
+        if (fileAttachments.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
+            child: Column(
+              children: fileAttachments.map((a) {
+                if (a.type == 'video') {
+                  return _buildVideoAttachment(a);
+                }
+                return _buildFileAttachment(a);
+              }).toList(),
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// 이미지 그리드 (1장: 전체, 2장: 2열, 3+: 2열 그리드)
+  Widget _buildImageGrid(List<Attachment> images) {
+    if (images.length == 1) {
+      return _buildSingleImage(images[0]);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: images.take(4).toList().asMap().entries.map((entry) {
+          final index = entry.key;
+          final attachment = entry.value;
+          final isLast = index == 3 && images.length > 4;
+          return SizedBox(
+            width: (MediaQuery.of(context).size.width * 0.75 - 12) / 2,
+            height: 120,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildImageThumbnail(attachment),
+                if (isLast)
+                  Container(
+                    color: Colors.black54,
+                    child: Center(
+                      child: Text(
+                        '+${images.length - 3}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  /// 단일 이미지 (전체 너비)
+  Widget _buildSingleImage(Attachment attachment) {
+    final url = attachment.imageUrl ??
+        attachment.thumbUrl ??
+        attachment.assetUrl ??
+        '';
+    if (url.isEmpty) return const SizedBox.shrink();
+
+    return GestureDetector(
+      onTap: () => _openFullscreenImage(url),
+      child: Hero(
+        tag: 'img-${widget.message.id}-0',
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 280),
+          child: CachedNetworkImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            placeholder: (_, _) => Container(
+              height: 180,
+              color: Colors.white.withValues(alpha: 0.05),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AlmaTheme.electricBlue,
+                ),
+              ),
+            ),
+            errorWidget: (_, _, _) => Container(
+              height: 100,
+              color: Colors.white.withValues(alpha: 0.05),
+              child: const Center(
+                child: Icon(Icons.broken_image, color: Colors.white24, size: 32),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 이미지 썸네일 (그리드용)
+  Widget _buildImageThumbnail(Attachment attachment) {
+    final url = attachment.thumbUrl ??
+        attachment.imageUrl ??
+        attachment.assetUrl ??
+        '';
+    if (url.isEmpty) return const SizedBox.shrink();
+
+    return GestureDetector(
+      onTap: () {
+        final fullUrl = attachment.imageUrl ??
+            attachment.assetUrl ??
+            attachment.thumbUrl ??
+            '';
+        if (fullUrl.isNotEmpty) _openFullscreenImage(fullUrl);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.cover,
+          placeholder: (_, _) => Container(
+            color: Colors.white.withValues(alpha: 0.05),
+            child: const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AlmaTheme.electricBlue,
+              ),
+            ),
+          ),
+          errorWidget: (_, _, _) => Container(
+            color: Colors.white.withValues(alpha: 0.05),
+            child: const Center(
+              child: Icon(Icons.broken_image, color: Colors.white24, size: 24),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 비디오 첨부파일 (썸네일 + 재생 아이콘)
+  Widget _buildVideoAttachment(Attachment attachment) {
+    final thumbUrl = attachment.thumbUrl ?? '';
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (thumbUrl.isNotEmpty)
+              CachedNetworkImage(
+                imageUrl: thumbUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 160,
+                placeholder: (_, _) => Container(
+                  height: 160,
+                  color: Colors.white.withValues(alpha: 0.05),
+                ),
+                errorWidget: (_, _, _) => Container(
+                  height: 160,
+                  color: Colors.white.withValues(alpha: 0.05),
+                ),
+              )
+            else
+              Container(
+                height: 120,
+                width: double.infinity,
+                color: Colors.white.withValues(alpha: 0.05),
+              ),
+            // 재생 버튼 오버레이
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white38, width: 1.5),
+              ),
+              child: const Icon(
+                Icons.play_arrow_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
+            // 파일 크기
+            if (attachment.fileSize != null)
+              Positioned(
+                bottom: 6,
+                right: 6,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    _formatFileSize(attachment.fileSize!),
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 파일 첨부파일 (아이콘 + 파일명 + 크기)
+  Widget _buildFileAttachment(Attachment attachment) {
+    final fileName = attachment.title ?? 'File';
+    final fileSize = attachment.fileSize;
+    final ext = fileName.split('.').last.toLowerCase();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: _getFileColor(ext).withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                _getFileIcon(ext),
+                color: _getFileColor(ext),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fileName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (fileSize != null)
+                    Text(
+                      _formatFileSize(fileSize),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontSize: 11,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.download_rounded,
+              color: Colors.white.withValues(alpha: 0.3),
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openFullscreenImage(String url) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FullscreenImage(
+          imageUrl: url,
+          heroTag: 'img-${widget.message.id}-0',
         ),
       ),
     );
@@ -224,7 +573,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     );
   }
 
-  /// 하단 메타정보 (토글 + 배지 + 시간)
+  /// 하단 메타정보 (토글 + 배지 + 시간 + 읽음 표시)
   Widget _buildFooter({
     required bool hasTranslation,
     required String? originalLang,
@@ -312,15 +661,127 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               color: Colors.white.withValues(alpha: 0.3),
             ),
           ),
+
+          // 읽음 표시 (내 메시지만)
+          if (widget.isMyMessage) ...[
+            const SizedBox(width: 4),
+            _buildReadReceipt(),
+          ],
         ],
       ),
     );
+  }
+
+  /// 읽음 표시 아이콘 (✓ 전송됨, ✓✓ 읽음)
+  Widget _buildReadReceipt() {
+    final isRead = _isMessageReadByOthers();
+
+    if (isRead) {
+      // 읽음: 시안 더블체크
+      return Icon(
+        Icons.done_all,
+        size: 14,
+        color: AlmaTheme.cyan.withValues(alpha: 0.9),
+      );
+    }
+
+    // 전송됨: 회색 싱글체크
+    return Icon(
+      Icons.done,
+      size: 14,
+      color: Colors.white.withValues(alpha: 0.4),
+    );
+  }
+
+  /// 다른 사용자가 이 메시지를 읽었는지 확인
+  bool _isMessageReadByOthers() {
+    try {
+      final channel = StreamChannel.of(context).channel;
+      final reads = channel.state?.read;
+      if (reads == null || reads.isEmpty) return false;
+
+      final myUserId = widget.message.user?.id;
+      final messageCreatedAt = widget.message.createdAt;
+
+      for (final read in reads) {
+        // 내 읽음 상태는 건너뜀
+        if (read.user.id == myUserId) continue;
+        // 다른 사용자의 마지막 읽은 시간이 메시지 생성 시간 이후이면 읽음
+        if (read.lastRead.isAfter(messageCreatedAt) ||
+            read.lastRead.isAtSameMomentAs(messageCreatedAt)) {
+          return true;
+        }
+      }
+    } catch (_) {
+      // StreamChannel 컨텍스트를 찾지 못한 경우 무시
+    }
+    return false;
   }
 
   String _formatTime(DateTime time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
+  }
+
+  String _formatFileSize(int bytes) {
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+
+  IconData _getFileIcon(String ext) {
+    switch (ext) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'doc':
+      case 'docx':
+        return Icons.description;
+      case 'xls':
+      case 'xlsx':
+        return Icons.table_chart;
+      case 'ppt':
+      case 'pptx':
+        return Icons.slideshow;
+      case 'zip':
+      case 'rar':
+      case '7z':
+        return Icons.folder_zip;
+      case 'mp3':
+      case 'wav':
+      case 'aac':
+      case 'ogg':
+        return Icons.audiotrack;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  Color _getFileColor(String ext) {
+    switch (ext) {
+      case 'pdf':
+        return AlmaTheme.error;
+      case 'doc':
+      case 'docx':
+        return AlmaTheme.electricBlue;
+      case 'xls':
+      case 'xlsx':
+        return AlmaTheme.success;
+      case 'ppt':
+      case 'pptx':
+        return AlmaTheme.terracottaOrange;
+      case 'zip':
+      case 'rar':
+      case '7z':
+        return AlmaTheme.warning;
+      case 'mp3':
+      case 'wav':
+      case 'aac':
+      case 'ogg':
+        return AlmaTheme.cyan;
+      default:
+        return Colors.white54;
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
+import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../widgets/translated_message.dart';
 
@@ -13,6 +14,7 @@ class ChatScreen extends ConsumerWidget {
     final channel = StreamChannel.of(context).channel;
     final channelName = channel.extraData['name'] as String? ?? 'Chat';
     final langState = ref.watch(languageProvider);
+    final lang = langState.languageCode;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +26,10 @@ class ChatScreen extends ConsumerWidget {
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
             Text(
-              'Translating to ${langState.language.nativeName} ${langState.language.flag}',
+              tr('chat.translatingTo', lang, args: {
+                'lang': langState.language.nativeName,
+                'flag': langState.language.flag,
+              }),
               style: TextStyle(
                 fontSize: 11,
                 color: AlmaTheme.terracottaOrange.withValues(alpha: 0.8),
@@ -39,17 +44,13 @@ class ChatScreen extends ConsumerWidget {
         ),
         centerTitle: true,
         actions: [
-          // 멤버 수 표시
           _MemberCountBadge(channel: channel),
           const SizedBox(width: 8),
         ],
       ),
       body: Column(
         children: [
-          // 연결 상태 배너
-          const _ConnectionBanner(),
-
-          // 메시지 리스트
+          _ConnectionBanner(lang: lang),
           Expanded(
             child: StreamMessageListView(
               messageBuilder: (context, details, messages, defaultWidget) {
@@ -60,11 +61,7 @@ class ChatScreen extends ConsumerWidget {
               },
             ),
           ),
-
-          // 타이핑 인디케이터
-          const _TypingIndicator(),
-
-          // 메시지 입력
+          _TypingIndicator(lang: lang),
           const StreamMessageInput(),
         ],
       ),
@@ -74,7 +71,9 @@ class ChatScreen extends ConsumerWidget {
 
 /// 연결 상태 배너 (오프라인/재연결 중 표시)
 class _ConnectionBanner extends StatelessWidget {
-  const _ConnectionBanner();
+  final String lang;
+
+  const _ConnectionBanner({required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +91,9 @@ class _ConnectionBanner extends StatelessWidget {
 
         final isConnecting = status == ConnectionStatus.connecting;
         final color = isConnecting ? AlmaTheme.warning : AlmaTheme.error;
-        final text = isConnecting ? 'Reconnecting...' : 'No connection';
+        final text = isConnecting
+            ? tr('chat.reconnecting', lang)
+            : tr('chat.noConnection', lang);
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -132,7 +133,9 @@ class _ConnectionBanner extends StatelessWidget {
 
 /// 타이핑 인디케이터
 class _TypingIndicator extends StatelessWidget {
-  const _TypingIndicator();
+  final String lang;
+
+  const _TypingIndicator({required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +159,8 @@ class _TypingIndicator extends StatelessWidget {
 
         final names = typingUsers.map((u) => u.name).join(', ');
         final text = typingUsers.length == 1
-            ? '$names is typing'
-            : '$names are typing';
+            ? tr('chat.isTyping', lang, args: {'name': names})
+            : tr('chat.areTyping', lang, args: {'names': names});
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),

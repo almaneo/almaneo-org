@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/env.dart';
 import '../config/theme.dart';
+import '../l10n/app_strings.dart';
+import '../providers/language_provider.dart';
 import 'chat_screen.dart';
 
-class CreateChannelScreen extends StatefulWidget {
+class CreateChannelScreen extends ConsumerStatefulWidget {
   const CreateChannelScreen({super.key});
 
   @override
-  State<CreateChannelScreen> createState() => _CreateChannelScreenState();
+  ConsumerState<CreateChannelScreen> createState() => _CreateChannelScreenState();
 }
 
-class _CreateChannelScreenState extends State<CreateChannelScreen> {
+class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -88,11 +91,13 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider).languageCode;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Create Channel',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          tr('create.title', lang),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
       body: SingleChildScrollView(
@@ -122,7 +127,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
 
               // Channel name
               Text(
-                'Channel Name',
+                tr('create.channelName', lang),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -134,7 +139,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                 controller: _nameController,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
                 decoration: InputDecoration(
-                  hintText: 'e.g. Korean Learners, Travel Friends',
+                  hintText: tr('create.namePlaceholder', lang),
                   prefixIcon: const Icon(Icons.tag, color: AlmaTheme.electricBlue, size: 20),
                   filled: true,
                   fillColor: AlmaTheme.slateGray,
@@ -156,7 +161,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                 textCapitalization: TextCapitalization.words,
                 validator: (value) {
                   if (value == null || value.trim().length < 2) {
-                    return 'Channel name must be at least 2 characters';
+                    return tr('create.nameMinLength', lang);
                   }
                   return null;
                 },
@@ -166,7 +171,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
 
               // Description
               Text(
-                'Description (optional)',
+                tr('create.description', lang),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -178,7 +183,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                 controller: _descController,
                 style: const TextStyle(color: Colors.white, fontSize: 15),
                 decoration: InputDecoration(
-                  hintText: 'What is this channel about?',
+                  hintText: tr('create.descPlaceholder', lang),
                   prefixIcon: const Icon(Icons.notes, color: AlmaTheme.terracottaOrange, size: 20),
                   filled: true,
                   fillColor: AlmaTheme.slateGray,
@@ -217,7 +222,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Messages are automatically translated so everyone can chat in their own language.',
+                        tr('create.autoTranslateInfo', lang),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.white.withValues(alpha: 0.5),
@@ -280,14 +285,14 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.add, size: 20),
-                            SizedBox(width: 8),
+                            const Icon(Icons.add, size: 20),
+                            const SizedBox(width: 8),
                             Text(
-                              'Create Channel',
-                              style: TextStyle(
+                              tr('create.title', lang),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
