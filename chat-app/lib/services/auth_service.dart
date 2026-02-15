@@ -28,8 +28,10 @@ class AuthService {
 
   /// 백엔드 API에서 Stream Chat 토큰 발급
   Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
+    final url = '${Env.chatApiUrl}/api/stream-token';
+
     final response = await http.post(
-      Uri.parse('${Env.chatApiUrl}/api/stream-token'),
+      Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'userId': userId,
