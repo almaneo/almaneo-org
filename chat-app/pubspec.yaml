@@ -27,6 +27,9 @@ dependencies:
   supabase_flutter: ^2.9.0
   http: ^1.4.0
 
+  # Auth
+  web3auth_flutter: ^6.3.0
+
   # Utils
   intl: ^0.20.2
   shared_preferences: ^2.5.3

@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
+import 'package:web3auth_flutter/web3auth_flutter.dart';
+import 'package:web3auth_flutter/enums.dart';
+import 'package:web3auth_flutter/input.dart';
 import 'config/env.dart';
 import 'config/theme.dart';
 import 'providers/language_provider.dart';
@@ -22,6 +26,9 @@ void main() async {
     anonKey: Env.supabaseAnonKey,
   );
 
+  // Web3Auth 초기화
+  await _initWeb3Auth();
+
   // Stream Chat 클라이언트 생성
   final client = StreamChatClient(
     Env.streamApiKey,
@@ -33,6 +40,38 @@ void main() async {
       child: AlmaChatApp(client: client),
     ),
   );
+}
+
+/// Web3Auth SDK 초기화
+Future<void> _initWeb3Auth() async {
+  try {
+    late final Uri redirectUrl;
+    if (Platform.isAndroid) {
+      redirectUrl = Uri.parse('w3a://org.almaneo.alma_chat/auth');
+    } else if (Platform.isIOS) {
+      redirectUrl = Uri.parse('org.almaneo.almachat://auth');
+    } else {
+      return; // 데스크톱은 지원하지 않음
+    }
+
+    await Web3AuthFlutter.init(
+      Web3AuthOptions(
+        clientId: Env.web3authClientId,
+        network: Network.sapphire_devnet,
+        redirectUrl: redirectUrl,
+        whiteLabel: WhiteLabelData(
+          appName: 'AlmaChat',
+          mode: ThemeModes.dark,
+          defaultLanguage: Language.ko,
+        ),
+      ),
+    );
+
+    // 기존 세션 복원 시도
+    await Web3AuthFlutter.initialize();
+  } catch (e) {
+    debugPrint('Web3Auth init: $e');
+  }
 }
 
 class AlmaChatApp extends ConsumerStatefulWidget {
@@ -48,23 +87,62 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   final _authService = AuthService();
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isConnected = false;
+  bool _isCheckingSession = true;
 
-  Future<void> _handleLogin(String name) async {
-    // 사용자 선호 언어 가져오기
+  @override
+  void initState() {
+    super.initState();
+    _checkExistingSession();
+  }
+
+  /// Web3Auth 기존 세션이 있으면 자동 로그인
+  Future<void> _checkExistingSession() async {
+    try {
+      final privKey = await Web3AuthFlutter.getPrivKey();
+      if (privKey.isNotEmpty) {
+        final userInfo = await Web3AuthFlutter.getUserInfo();
+        final verifierId = userInfo.verifierId ?? userInfo.email ?? '';
+        if (verifierId.isNotEmpty) {
+          final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
+          final langState = ref.read(languageProvider);
+          await _handleSocialLogin(verifierId, name, userInfo.profileImage, langState.languageCode);
+        }
+      }
+    } catch (e) {
+      debugPrint('Session restore: $e');
+    } finally {
+      if (mounted) setState(() => _isCheckingSession = false);
+    }
+  }
+
+  /// 게스트 로그인
+  Future<void> _handleGuestLogin(String name) async {
     final langState = ref.read(languageProvider);
+    final token = await _authService.loginAsGuest(name, langState.languageCode);
 
-    // 게스트 토큰 발급 (언어 설정 포함)
-    final token =
-        await _authService.loginAsGuest(name, langState.languageCode);
-
-    // Stream Chat 연결
     await widget.client.connectUser(
       User(
         id: _authService.userId!,
         name: _authService.userName,
-        extraData: {
-          'preferred_language': langState.languageCode,
-        },
+        extraData: {'preferred_language': langState.languageCode},
+      ),
+      token,
+    );
+
+    setState(() => _isConnected = true);
+  }
+
+  /// 소셜 로그인 (Web3Auth 인증 후)
+  Future<void> _handleSocialLogin(String verifierId, String name, String? image, [String? lang]) async {
+    final langCode = lang ?? ref.read(languageProvider).languageCode;
+    final token = await _authService.loginWithSocial(verifierId, name, image, langCode);
+
+    await widget.client.connectUser(
+      User(
+        id: _authService.userId!,
+        name: name,
+        image: image,
+        extraData: {'preferred_language': langCode},
       ),
       token,
     );
@@ -73,8 +151,17 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   }
 
   Future<void> _handleLogout() async {
-    // Navigator 스택의 모든 푸시된 라우트 제거 (ProfileScreen 등)
     _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+
+    // Web3Auth 로그아웃
+    if (_authService.isWeb3AuthUser) {
+      try {
+        await Web3AuthFlutter.logout();
+      } catch (e) {
+        debugPrint('Web3Auth logout: $e');
+      }
+    }
+
     await widget.client.disconnectUser();
     _authService.logout();
     setState(() => _isConnected = false);
@@ -100,9 +187,31 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           child: child!,
         );
       },
-      home: _isConnected
-          ? ChannelListScreen(onLogout: _handleLogout)
-          : LoginScreen(onLogin: _handleLogin),
+      home: _isCheckingSession
+          ? _buildSplash()
+          : _isConnected
+              ? ChannelListScreen(onLogout: _handleLogout)
+              : LoginScreen(
+                  onGuestLogin: _handleGuestLogin,
+                  onSocialLogin: _handleSocialLogin,
+                ),
+    );
+  }
+
+  Widget _buildSplash() {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [AlmaTheme.deepNavy, Color(0xFF1A1A2E), Color(0xFF0D1520)],
+          ),
+        ),
+        child: const Center(
+          child: CircularProgressIndicator(color: AlmaTheme.electricBlue),
+        ),
+      ),
     );
   }
 }

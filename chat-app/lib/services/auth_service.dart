@@ -3,25 +3,42 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../config/env.dart';
 
-/// 임시 인증 서비스 (MVP용 게스트 로그인)
-/// 향후 Web3Auth Flutter SDK로 교체 예정
+/// 인증 서비스 — 게스트 로그인 + Web3Auth 소셜 로그인 지원
 class AuthService {
   String? _userId;
   String? _userName;
+  String? _profileImage;
+  bool _isWeb3AuthUser = false;
 
   String? get userId => _userId;
   String? get userName => _userName;
+  String? get profileImage => _profileImage;
   bool get isLoggedIn => _userId != null;
+  bool get isWeb3AuthUser => _isWeb3AuthUser;
 
-  /// 게스트 로그인 (MVP용)
-  /// 간단한 닉네임으로 Stream Chat 토큰 발급
+  /// 게스트 로그인 (닉네임만으로 접속)
   Future<String> loginAsGuest(String name, [String preferredLanguage = 'en']) async {
-    // 고유 사용자 ID 생성
     final randomSuffix = Random().nextInt(99999).toString().padLeft(5, '0');
     _userId = 'guest_$randomSuffix';
     _userName = name;
+    _isWeb3AuthUser = false;
 
-    // Stream Chat 토큰 발급 요청 (언어 설정 포함)
+    final token = await _getStreamToken(_userId!, name, preferredLanguage);
+    return token;
+  }
+
+  /// 소셜 로그인 (Web3Auth 인증 후 호출)
+  Future<String> loginWithSocial(
+    String verifierId,
+    String name,
+    String? image, [
+    String preferredLanguage = 'en',
+  ]) async {
+    _userId = _sanitizeUserId(verifierId);
+    _userName = name;
+    _profileImage = image;
+    _isWeb3AuthUser = true;
+
     final token = await _getStreamToken(_userId!, name, preferredLanguage);
     return token;
   }
@@ -48,8 +65,21 @@ class AuthService {
     throw Exception('Failed to get Stream token: ${response.statusCode}');
   }
 
+  /// Stream Chat user ID로 사용할 수 있도록 정제
+  String _sanitizeUserId(String raw) {
+    // @, . 등을 _로 치환 (Stream Chat ID: 알파벳, 숫자, _, - 만 허용)
+    final sanitized = raw.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_');
+    if (sanitized.isEmpty || !RegExp(r'^[a-zA-Z]').hasMatch(sanitized)) {
+      return 'u_$sanitized';
+    }
+    // 너무 길면 앞 64자로 제한
+    return sanitized.length > 64 ? sanitized.substring(0, 64) : sanitized;
+  }
+
   void logout() {
     _userId = null;
     _userName = null;
+    _profileImage = null;
+    _isWeb3AuthUser = false;
   }
 }

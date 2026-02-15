@@ -1,30 +1,40 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:web3auth_flutter/web3auth_flutter.dart';
+import 'package:web3auth_flutter/enums.dart';
+import 'package:web3auth_flutter/input.dart';
+import 'package:web3auth_flutter/output.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import 'settings_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  final Future<void> Function(String name) onLogin;
+  final Future<void> Function(String name) onGuestLogin;
+  final Future<void> Function(String verifierId, String name, String? image, [String? lang]) onSocialLogin;
 
-  const LoginScreen({super.key, required this.onLogin});
+  const LoginScreen({
+    super.key,
+    required this.onGuestLogin,
+    required this.onSocialLogin,
+  });
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _pageController = PageController();
   bool _isLoading = false;
   String? _error;
+  String? _loadingProvider; // 어떤 소셜 로그인 중인지
   int _currentPage = 0;
   bool _showLogin = false;
 
-  // Auto-advance timer for slides
   Timer? _autoAdvanceTimer;
 
   late final AnimationController _fadeController;
@@ -35,6 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -44,6 +55,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       curve: Curves.easeInOut,
     );
     _startAutoAdvance();
+  }
+
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
+    // Android Custom Tab이 닫혔을 때 감지 (Web3Auth 필수)
+    if (state == AppLifecycleState.resumed) {
+      Web3AuthFlutter.setCustomTabsClosed();
+    }
   }
 
   void _startAutoAdvance() {
@@ -68,7 +87,88 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _fadeController.forward();
   }
 
-  Future<void> _handleLogin() async {
+  // ── 소셜 로그인 ──
+
+  Future<void> _loginWithGoogle() => _loginWithProvider(Provider.google, 'google');
+  Future<void> _loginWithApple() => _loginWithProvider(Provider.apple, 'apple');
+
+  Future<void> _loginWithProvider(Provider provider, String label) async {
+    setState(() {
+      _isLoading = true;
+      _loadingProvider = label;
+      _error = null;
+    });
+
+    try {
+      final response = await Web3AuthFlutter.login(
+        LoginParams(loginProvider: provider),
+      );
+      await _handleWeb3AuthResponse(response);
+    } on UserCancelledException {
+      // 사용자가 브라우저를 닫음 — 에러 표시 안 함
+    } catch (e) {
+      setState(() => _error = e.toString());
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _loadingProvider = null;
+        });
+      }
+    }
+  }
+
+  Future<void> _loginWithEmail() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _error = tr('login.invalidEmail', _lang));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _loadingProvider = 'email';
+      _error = null;
+    });
+
+    try {
+      final response = await Web3AuthFlutter.login(
+        LoginParams(
+          loginProvider: Provider.email_passwordless,
+          extraLoginOptions: ExtraLoginOptions(login_hint: email),
+        ),
+      );
+      await _handleWeb3AuthResponse(response);
+    } on UserCancelledException {
+      // 무시
+    } catch (e) {
+      setState(() => _error = e.toString());
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _loadingProvider = null;
+        });
+      }
+    }
+  }
+
+  Future<void> _handleWeb3AuthResponse(Web3AuthResponse response) async {
+    final userInfo = response.userInfo;
+    if (userInfo == null) throw Exception('No user info');
+
+    final verifierId = userInfo.verifierId ?? userInfo.email ?? '';
+    if (verifierId.isEmpty) throw Exception('No verifier ID');
+
+    final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
+    final image = userInfo.profileImage;
+
+    await widget.onSocialLogin(verifierId, name, image);
+  }
+
+  // ── 게스트 로그인 ──
+
+  Future<void> _handleGuestLogin() async {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       setState(() => _error = tr('login.nameRequired', _lang));
@@ -77,23 +177,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     setState(() {
       _isLoading = true;
+      _loadingProvider = 'guest';
       _error = null;
     });
 
     try {
-      await widget.onLogin(name);
+      await widget.onGuestLogin(name);
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
       if (mounted) {
-        setState(() => _isLoading = false);
+        setState(() {
+          _isLoading = false;
+          _loadingProvider = null;
+        });
       }
     }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _nameController.dispose();
+    _emailController.dispose();
     _pageController.dispose();
     _autoAdvanceTimer?.cancel();
     _fadeController.dispose();
@@ -117,56 +223,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         child: SafeArea(
           child: Column(
             children: [
-              // Top bar with language selector
+              // Top bar — language selector
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Language button
                     InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const SettingsScreen(),
-                          ),
+                          MaterialPageRoute(builder: (_) => const SettingsScreen()),
                         );
                       },
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12),
-                          ),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              langState.language.flag,
-                              style: const TextStyle(fontSize: 16),
-                            ),
+                            Text(langState.language.flag, style: const TextStyle(fontSize: 16)),
                             const SizedBox(width: 6),
                             Text(
                               langState.language.nativeName,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white.withValues(alpha: 0.7),
-                              ),
+                              style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.7)),
                             ),
                             const SizedBox(width: 4),
-                            Icon(
-                              Icons.expand_more,
-                              size: 16,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
+                            Icon(Icons.expand_more, size: 16, color: Colors.white.withValues(alpha: 0.5)),
                           ],
                         ),
                       ),
@@ -174,7 +262,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   ],
                 ),
               ),
-
               // Main content
               Expanded(
                 child: _showLogin ? _buildLoginView(lang) : _buildOnboardingView(lang),
@@ -186,71 +273,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
+  // ════════════════════════════════════════════════
+  //  온보딩 슬라이드 (기존과 동일)
+  // ════════════════════════════════════════════════
+
   Widget _buildOnboardingView(String lang) {
     return Column(
       children: [
         const Spacer(flex: 1),
-
-        // Logo + App name
         _buildLogo(),
         const SizedBox(height: 16),
         Text(
           tr('app.name', lang),
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1,
-          ),
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
         ),
         const SizedBox(height: 6),
         Text(
           tr('app.tagline', lang),
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.white.withValues(alpha: 0.5),
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.5)),
           textAlign: TextAlign.center,
         ),
-
         const Spacer(flex: 1),
-
-        // Slides
         SizedBox(
           height: 200,
           child: PageView(
             controller: _pageController,
             onPageChanged: (index) {
               setState(() => _currentPage = index);
-              // Reset auto-advance timer on manual swipe
               _startAutoAdvance();
             },
             children: [
-              _buildSlide(
-                icon: Icons.translate_rounded,
-                iconColor: AlmaTheme.electricBlue,
-                title: tr('onboarding.slide1.title', lang),
-                desc: tr('onboarding.slide1.desc', lang),
-              ),
-              _buildSlide(
-                icon: Icons.public_rounded,
-                iconColor: AlmaTheme.cyan,
-                title: tr('onboarding.slide2.title', lang),
-                desc: tr('onboarding.slide2.desc', lang),
-              ),
-              _buildSlide(
-                icon: Icons.favorite_rounded,
-                iconColor: AlmaTheme.terracottaOrange,
-                title: tr('onboarding.slide3.title', lang),
-                desc: tr('onboarding.slide3.desc', lang),
-              ),
+              _buildSlide(icon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang)),
+              _buildSlide(icon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang)),
+              _buildSlide(icon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang)),
             ],
           ),
         ),
-
         const SizedBox(height: 20),
-
-        // Page indicator dots
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(3, (index) {
@@ -262,17 +321,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               height: 8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: isActive
-                    ? AlmaTheme.electricBlue
-                    : Colors.white.withValues(alpha: 0.2),
+                color: isActive ? AlmaTheme.electricBlue : Colors.white.withValues(alpha: 0.2),
               ),
             );
           }),
         ),
-
         const Spacer(flex: 2),
-
-        // Get Started button
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: SizedBox(
@@ -283,26 +337,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AlmaTheme.electricBlue,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 elevation: 0,
               ),
               child: Text(
                 tr('onboarding.getStarted', lang),
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
               ),
             ),
           ),
         ),
-
         const SizedBox(height: 32),
       ],
     );
   }
+
+  // ════════════════════════════════════════════════
+  //  로그인 뷰 (소셜 + 이메일 + 게스트)
+  // ════════════════════════════════════════════════
 
   Widget _buildLoginView(String lang) {
     return FadeTransition(
@@ -311,134 +363,214 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 24),
 
-            // Logo (smaller)
+            // Logo + welcome
             _buildLogo(size: 64),
-            const SizedBox(height: 16),
-
-            // Welcome text
+            const SizedBox(height: 12),
             Text(
               tr('onboarding.welcome', lang),
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white.withValues(alpha: 0.5),
-              ),
+              style: TextStyle(fontSize: 15, color: Colors.white.withValues(alpha: 0.5)),
             ),
             const SizedBox(height: 4),
             Text(
               tr('app.name', lang),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 28),
 
-            // Name input with label
+            // ── 소셜 로그인 버튼 ──
+            _buildSocialButton(
+              label: tr('login.continueGoogle', lang),
+              icon: _googleIcon(),
+              color: Colors.white,
+              textColor: Colors.black87,
+              onPressed: _isLoading ? null : _loginWithGoogle,
+              isLoading: _loadingProvider == 'google',
+            ),
+            const SizedBox(height: 10),
+            _buildSocialButton(
+              label: tr('login.continueApple', lang),
+              icon: const Icon(Icons.apple, color: Colors.white, size: 22),
+              color: Colors.black,
+              textColor: Colors.white,
+              borderColor: Colors.white.withValues(alpha: 0.2),
+              onPressed: _isLoading ? null : _loginWithApple,
+              isLoading: _loadingProvider == 'apple',
+            ),
+
+            const SizedBox(height: 20),
+
+            // ── 구분선: or ──
+            _buildDivider(lang),
+            const SizedBox(height: 20),
+
+            // ── 이메일 로그인 ──
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                tr('profile.displayName', lang),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.6),
-                ),
+                tr('login.emailLabel', lang),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.6)),
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: _nameController,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-              decoration: InputDecoration(
-                hintText: tr('login.enterName', lang),
-                prefixIcon: Icon(
-                  Icons.person_outline_rounded,
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
-                errorText: _error,
-                filled: true,
-                fillColor: Colors.white.withValues(alpha: 0.06),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.1),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(
-                    color: AlmaTheme.electricBlue,
-                    width: 1.5,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.go,
-              onSubmitted: (_) => _handleLogin(),
-              autofocus: true,
-            ),
-            const SizedBox(height: 24),
-
-            // Login button
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleLogin,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AlmaTheme.electricBlue,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                      AlmaTheme.electricBlue.withValues(alpha: 0.5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  elevation: 0,
-                ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            tr('onboarding.letsGo', lang),
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, size: 20),
-                        ],
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _emailController,
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: tr('login.emailHint', lang),
+                      prefixIcon: Icon(Icons.mail_outline_rounded, color: Colors.white.withValues(alpha: 0.3), size: 20),
+                      filled: true,
+                      fillColor: Colors.white.withValues(alpha: 0.06),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: AlmaTheme.electricBlue, width: 1.5),
+                      ),
+                    ),
+                    onSubmitted: (_) => _loginWithEmail(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                SizedBox(
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _loginWithEmail,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AlmaTheme.electricBlue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      elevation: 0,
+                    ),
+                    child: _loadingProvider == 'email'
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : Icon(Icons.arrow_forward_rounded, size: 20),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('login.magicLinkNote', lang),
+                style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              tr('login.guestNote', lang),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.25),
-              ),
-            ),
-            const SizedBox(height: 24),
 
-            // Back to slides
+            const SizedBox(height: 20),
+
+            // ── 구분선: or ──
+            _buildDivider(lang),
+            const SizedBox(height: 16),
+
+            // ── 게스트 로그인 ──
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('login.guestSection', lang),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.6)),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _nameController,
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    decoration: InputDecoration(
+                      hintText: tr('login.enterName', lang),
+                      prefixIcon: Icon(Icons.person_outline_rounded, color: Colors.white.withValues(alpha: 0.3), size: 20),
+                      filled: true,
+                      fillColor: Colors.white.withValues(alpha: 0.06),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: AlmaTheme.terracottaOrange, width: 1.5),
+                      ),
+                    ),
+                    textInputAction: TextInputAction.go,
+                    onSubmitted: (_) => _handleGuestLogin(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                SizedBox(
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _handleGuestLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AlmaTheme.terracottaOrange.withValues(alpha: 0.8),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      elevation: 0,
+                    ),
+                    child: _loadingProvider == 'guest'
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : const Icon(Icons.arrow_forward_rounded, size: 20),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('login.guestNote', lang),
+                style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
+              ),
+            ),
+
+            // 에러 메시지
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.error_outline, color: Colors.red, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _error!,
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 20),
+
+            // ← Back to slides
             TextButton(
               onPressed: () {
                 _fadeController.reverse().then((_) {
@@ -449,25 +581,89 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.arrow_back_rounded,
-                    size: 16,
-                    color: Colors.white.withValues(alpha: 0.4),
-                  ),
+                  Icon(Icons.arrow_back_rounded, size: 16, color: Colors.white.withValues(alpha: 0.4)),
                   const SizedBox(width: 6),
                   Text(
                     tr('onboarding.skip', lang),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white.withValues(alpha: 0.4),
-                    ),
+                    style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.4)),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
+    );
+  }
+
+  // ════════════════════════════════════════════════
+  //  공통 위젯
+  // ════════════════════════════════════════════════
+
+  Widget _buildSocialButton({
+    required String label,
+    required Widget icon,
+    required Color color,
+    required Color textColor,
+    Color? borderColor,
+    VoidCallback? onPressed,
+    bool isLoading = false,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: textColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: borderColor != null ? BorderSide(color: borderColor) : BorderSide.none,
+          ),
+          elevation: 0,
+        ),
+        child: isLoading
+            ? SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(strokeWidth: 2, color: textColor),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon,
+                  const SizedBox(width: 10),
+                  Text(label, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: textColor)),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildDivider(String lang) {
+    return Row(
+      children: [
+        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.1))),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Text(
+            tr('login.or', lang),
+            style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.3)),
+          ),
+        ),
+        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.1))),
+      ],
+    );
+  }
+
+  Widget _googleIcon() {
+    // Google "G" 로고 (간소화 버전)
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: CustomPaint(painter: _GoogleLogoPainter()),
     );
   }
 
@@ -483,23 +679,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           colors: [AlmaTheme.electricBlue, AlmaTheme.terracottaOrange],
         ),
         boxShadow: [
-          BoxShadow(
-            color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
-            blurRadius: 24,
-            spreadRadius: 2,
-          ),
-          BoxShadow(
-            color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
-            blurRadius: 24,
-            offset: const Offset(4, 4),
-          ),
+          BoxShadow(color: AlmaTheme.electricBlue.withValues(alpha: 0.3), blurRadius: 24, spreadRadius: 2),
+          BoxShadow(color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15), blurRadius: 24, offset: const Offset(4, 4)),
         ],
       ),
-      child: Icon(
-        Icons.chat_bubble_outline_rounded,
-        color: Colors.white,
-        size: size * 0.45,
-      ),
+      child: Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: size * 0.45),
     );
   }
 
@@ -514,37 +698,75 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon with glow background
           Container(
             width: 56,
             height: 56,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: iconColor.withValues(alpha: 0.12),
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: iconColor.withValues(alpha: 0.12)),
             child: Icon(icon, color: iconColor, size: 28),
           ),
           const SizedBox(height: 20),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
+          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
           const SizedBox(height: 10),
           Text(
             desc,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.5,
-              color: Colors.white.withValues(alpha: 0.55),
-            ),
+            style: TextStyle(fontSize: 15, height: 1.5, color: Colors.white.withValues(alpha: 0.55)),
           ),
         ],
       ),
     );
   }
+}
+
+/// Google "G" 로고 커스텀 페인터
+class _GoogleLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double w = size.width;
+    final double h = size.height;
+    final double cx = w / 2;
+    final double cy = h / 2;
+    final double r = w * 0.45;
+
+    // Blue arc (top-right)
+    final bluePaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = w * 0.18
+      ..strokeCap = StrokeCap.butt;
+    canvas.drawArc(Rect.fromCircle(center: Offset(cx, cy), radius: r), -0.8, 1.6, false, bluePaint);
+
+    // Green arc (bottom-right)
+    final greenPaint = Paint()
+      ..color = const Color(0xFF34A853)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = w * 0.18
+      ..strokeCap = StrokeCap.butt;
+    canvas.drawArc(Rect.fromCircle(center: Offset(cx, cy), radius: r), 0.8, 1.2, false, greenPaint);
+
+    // Yellow arc (bottom-left)
+    final yellowPaint = Paint()
+      ..color = const Color(0xFFFBBC05)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = w * 0.18
+      ..strokeCap = StrokeCap.butt;
+    canvas.drawArc(Rect.fromCircle(center: Offset(cx, cy), radius: r), 2.0, 1.2, false, yellowPaint);
+
+    // Red arc (top-left)
+    final redPaint = Paint()
+      ..color = const Color(0xFFEA4335)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = w * 0.18
+      ..strokeCap = StrokeCap.butt;
+    canvas.drawArc(Rect.fromCircle(center: Offset(cx, cy), radius: r), 3.2, 1.27, false, redPaint);
+
+    // Horizontal bar
+    final barPaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Rect.fromLTWH(cx, cy - w * 0.09, r + w * 0.05, w * 0.18), barPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
