@@ -15,6 +15,7 @@ import 'l10n/app_strings.dart';
 import 'providers/language_provider.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
+import 'services/session_storage.dart';
 import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/chat_screen.dart';
@@ -131,11 +132,14 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           User(
             id: restored.session.userId,
             name: restored.session.userName,
-            image: restored.session.profileImage,
+            // image를 전달하지 않으면 Stream 서버의 기존 이미지가 유지됨
             extraData: {'preferred_language': restored.session.languageCode},
           ),
           restored.token,
         );
+
+        // 연결 후 서버의 프로필 이미지를 SessionStorage에 동기화
+        await _syncProfileImageFromServer();
 
         await _initNotifications();
         if (mounted) setState(() => _isConnected = true);
@@ -198,14 +202,32 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       User(
         id: _authService.userId!,
         name: name,
-        image: image,
+        // image를 전달하지 않음 — Stream 서버의 기존 커스텀 이미지 보존
+        // 최초 로그인 시 Stream이 자동으로 빈 이미지로 생성
         extraData: {'preferred_language': langCode},
       ),
       token,
     );
 
+    // 서버에 이미지가 없고 소셜 프로필 이미지가 있으면 설정 (최초 로그인)
+    final serverUser = widget.client.state.currentUser;
+    if ((serverUser?.image == null || serverUser!.image!.isEmpty) && image != null && image.isNotEmpty) {
+      await widget.client.partialUpdateUser(_authService.userId!, set: {'image': image});
+    }
+
+    // 서버의 프로필 이미지를 SessionStorage에 동기화
+    await _syncProfileImageFromServer();
+
     await _initNotifications();
     setState(() => _isConnected = true);
+  }
+
+  /// 연결 후 Stream 서버의 프로필 이미지를 SessionStorage에 동기화
+  Future<void> _syncProfileImageFromServer() async {
+    final user = widget.client.state.currentUser;
+    if (user != null && user.image != null && user.image!.isNotEmpty) {
+      await SessionStorage.updateProfileImage(user.image);
+    }
   }
 
   /// Stream Chat 연결 (401 등 간헐적 에러 시 1회 재시도)

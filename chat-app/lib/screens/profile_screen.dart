@@ -310,9 +310,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       final imageUrl = supabase.storage.from('meetup-photos').getPublicUrl(filePath);
       debugPrint('[PhotoUpload] Public URL: $imageUrl');
 
-      // Stream 사용자 프로필 업데이트
-      await client.partialUpdateUser(user.id, set: {'image': imageUrl});
-      debugPrint('[PhotoUpload] Stream user updated with image');
+      // 로컬에 즉시 반영 (Supabase 업로드 성공 시점)
+      if (mounted) {
+        setState(() => _localImageUrl = imageUrl);
+        await SessionStorage.updateProfileImage(imageUrl);
+      }
+
+      // Stream 사용자 프로필 업데이트 (실패해도 로컬은 유지)
+      try {
+        await client.partialUpdateUser(user.id, set: {'image': imageUrl});
+        debugPrint('[PhotoUpload] Stream user updated with image');
+      } catch (streamErr) {
+        debugPrint('[PhotoUpload] Stream update failed (local saved): $streamErr');
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -331,10 +341,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-        // 로컬 URL로 즉시 반영 (Stream 상태 업데이트 대기 불필요)
-        setState(() => _localImageUrl = imageUrl);
-        // SessionStorage에도 저장 (재로그인 시 유지)
-        await SessionStorage.updateProfileImage(imageUrl);
       }
     } catch (e, stack) {
       debugPrint('[PhotoUpload] FAILED: $e');
