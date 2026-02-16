@@ -162,6 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
     final displayName = _originalName ?? user?.name ?? 'Guest';
+    final isGuest = user?.id.startsWith('guest_') ?? true;
 
     return Scaffold(
       appBar: AppBar(
@@ -197,6 +198,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           const SizedBox(height: 4),
           _buildInfoTile(
+            icon: isGuest ? Icons.person_outline : Icons.verified_user_outlined,
+            iconColor: isGuest ? Colors.white54 : AlmaTheme.success,
+            title: tr('profile.accountType', lang),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isGuest ? Icons.person : Icons.shield_outlined,
+                  size: 16,
+                  color: isGuest ? Colors.white54 : AlmaTheme.success,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  isGuest ? tr('profile.loginGuest', lang) : tr('profile.loginSocial', lang),
+                  style: TextStyle(
+                    color: isGuest ? Colors.white54 : AlmaTheme.success,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          _buildInfoTile(
             icon: Icons.fingerprint,
             iconColor: Colors.white38,
             title: tr('profile.userId', lang),
@@ -204,7 +229,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  user?.id ?? '',
+                  _truncateId(user?.id ?? ''),
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 13,
@@ -235,6 +260,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ],
             ),
           ),
+          if (user?.createdAt != null) ...[
+            const SizedBox(height: 4),
+            _buildInfoTile(
+              icon: Icons.calendar_today_outlined,
+              iconColor: AlmaTheme.cyan,
+              title: tr('profile.memberSince', lang),
+              trailing: Text(
+                _formatDate(user!.createdAt!, lang),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ],
 
           const SizedBox(height: 24),
 
@@ -271,38 +311,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               );
             },
           ),
-
-          const SizedBox(height: 24),
-
-          _buildSectionLabel(tr('profile.about', lang)),
-          const SizedBox(height: 8),
-          _buildInfoTile(
-            icon: Icons.info_outline,
-            iconColor: AlmaTheme.cyan,
-            title: tr('app.name', lang),
-            trailing: Text(
-              tr('profile.version', lang),
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
-                fontSize: 13,
-              ),
-            ),
-          ),
           const SizedBox(height: 4),
           _buildInfoTile(
-            icon: Icons.favorite_outline,
-            iconColor: AlmaTheme.terracottaOrange,
-            title: tr('profile.mission', lang),
-            trailing: Flexible(
-              child: Text(
-                tr('profile.missionText', lang),
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.4),
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.right,
-              ),
+            icon: Icons.settings_outlined,
+            iconColor: Colors.white54,
+            title: tr('settings.title', lang),
+            trailing: Icon(
+              Icons.chevron_right,
+              color: Colors.white.withValues(alpha: 0.3),
+              size: 20,
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
           ),
 
           const SizedBox(height: 32),
@@ -311,15 +335,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: 16),
 
-          Center(
-            child: Text(
-              tr('profile.guestNote', lang),
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.2),
-                fontSize: 12,
+          if (StreamChat.of(context).currentUser?.id.startsWith('guest_') ?? true)
+            Center(
+              child: Text(
+                tr('profile.guestNote', lang),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
           const SizedBox(height: 24),
         ],
       ),
@@ -327,6 +352,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAvatarSection(String displayName, String lang) {
+    final user = StreamChat.of(context).currentUser;
+    final isGuest = user?.id.startsWith('guest_') ?? true;
+    final userImage = user?.image;
+    final badgeLabel = isGuest ? tr('profile.guest', lang) : tr('profile.verified', lang);
+    final badgeColor = isGuest ? AlmaTheme.electricBlue : AlmaTheme.success;
+
     return Column(
       children: [
         Container(
@@ -334,28 +365,42 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           height: 88,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              colors: [AlmaTheme.terracottaOrange, Color(0xFFFF8C33)],
+            gradient: LinearGradient(
+              colors: isGuest
+                  ? [AlmaTheme.terracottaOrange, const Color(0xFFFF8C33)]
+                  : [AlmaTheme.electricBlue, AlmaTheme.cyan],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             boxShadow: [
               BoxShadow(
-                color: AlmaTheme.terracottaOrange.withValues(alpha: 0.3),
+                color: (isGuest ? AlmaTheme.terracottaOrange : AlmaTheme.electricBlue)
+                    .withValues(alpha: 0.3),
                 blurRadius: 16,
                 spreadRadius: 2,
               ),
             ],
           ),
-          child: Center(
-            child: Text(
-              displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          child: ClipOval(
+            child: userImage != null && userImage.isNotEmpty
+                ? Image.network(
+                    userImage,
+                    width: 88,
+                    height: 88,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Center(
+                      child: Text(
+                        displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
+                        style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
+                      style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
+                    ),
+                  ),
           ),
         ),
         const SizedBox(height: 12),
@@ -371,19 +416,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           decoration: BoxDecoration(
-            color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+            color: badgeColor.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
+              color: badgeColor.withValues(alpha: 0.3),
             ),
           ),
-          child: Text(
-            tr('profile.guest', lang),
-            style: const TextStyle(
-              color: AlmaTheme.electricBlue,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!isGuest) ...[
+                Icon(Icons.verified, color: badgeColor, size: 14),
+                const SizedBox(width: 4),
+              ],
+              Text(
+                badgeLabel,
+                style: TextStyle(
+                  color: badgeColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -537,6 +591,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  String _truncateId(String id) {
+    if (id.length <= 16) return id;
+    return '${id.substring(0, 12)}...';
+  }
+
+  String _formatDate(DateTime date, String lang) {
+    final months = {
+      'ko': ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+      'ja': ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+      'zh': ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    };
+    if (months.containsKey(lang)) {
+      return '${date.year}${lang == 'ko' ? '년 ' : '/'}${months[lang]![date.month - 1]}';
+    }
+    const enMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return '${enMonths[date.month - 1]} ${date.year}';
   }
 
   Widget _buildLogoutButton(String lang) {

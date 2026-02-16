@@ -4,13 +4,19 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
-
-/// 언어 설정 화면
-class SettingsScreen extends ConsumerWidget {
+/// 설정 화면 — 알림, 언어, 정보 섹션
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  bool _notificationsEnabled = true;
+
+  @override
+  Widget build(BuildContext context) {
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
 
@@ -28,15 +34,21 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // 현재 설정 카드
-          _CurrentLanguageCard(langState: langState, lang: lang),
-          const SizedBox(height: 20),
+          // ── Notifications ──
+          _buildSectionLabel(tr('settings.notifications', lang)),
+          const SizedBox(height: 8),
+          _buildNotificationToggle(lang),
+          const SizedBox(height: 24),
 
-          // 자동 감지 옵션
+          // ── Language ──
+          _buildSectionLabel(tr('settings.languageSection', lang)),
+          const SizedBox(height: 8),
+          _CurrentLanguageCard(langState: langState, lang: lang),
+          const SizedBox(height: 12),
           _AutoDetectTile(langState: langState, lang: lang, ref: ref),
           const SizedBox(height: 12),
 
-          // 구분선 + 라벨
+          // Language list
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
@@ -49,14 +61,171 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-
-          // 언어 목록
           ...supportedLanguages.map((l) => _LanguageTile(
                 language: l,
                 isSelected: !langState.isAutoDetect && langState.languageCode == l.code,
                 onTap: () => _selectLanguage(context, ref, l.code, lang),
               )),
+
+          const SizedBox(height: 24),
+
+          // ── About ──
+          _buildSectionLabel(tr('settings.about', lang)),
+          const SizedBox(height: 8),
+          _buildSettingsTile(
+            icon: Icons.info_outline,
+            iconColor: AlmaTheme.cyan,
+            title: tr('app.name', lang),
+            trailing: Text(
+              'v0.1.0',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.4),
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          _buildSettingsTile(
+            icon: Icons.favorite_outline,
+            iconColor: AlmaTheme.terracottaOrange,
+            title: tr('profile.mission', lang),
+            trailing: Flexible(
+              child: Text(
+                tr('profile.missionText', lang),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          _buildSettingsTile(
+            icon: Icons.language,
+            iconColor: AlmaTheme.electricBlue,
+            title: tr('settings.website', lang),
+            trailing: Text(
+              'almaneo.org',
+              style: TextStyle(
+                color: AlmaTheme.electricBlue.withValues(alpha: 0.7),
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white.withValues(alpha: 0.5),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationToggle(String lang) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AlmaTheme.slateGray,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: (_notificationsEnabled
+                    ? AlmaTheme.terracottaOrange
+                    : Colors.white24)
+                .withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            _notificationsEnabled
+                ? Icons.notifications_active
+                : Icons.notifications_off_outlined,
+            color: _notificationsEnabled
+                ? AlmaTheme.terracottaOrange
+                : Colors.white38,
+            size: 20,
+          ),
+        ),
+        title: Text(
+          tr('settings.notifications', lang),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        subtitle: Text(
+          tr('settings.notificationsDesc', lang),
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.4),
+            fontSize: 12,
+          ),
+        ),
+        trailing: Switch.adaptive(
+          value: _notificationsEnabled,
+          onChanged: (value) {
+            setState(() => _notificationsEnabled = value);
+          },
+          activeTrackColor: AlmaTheme.terracottaOrange.withValues(alpha: 0.5),
+          activeThumbColor: AlmaTheme.terracottaOrange,
+          inactiveTrackColor: Colors.white12,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required Widget trailing,
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AlmaTheme.slateGray,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        trailing: trailing,
+        onTap: onTap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
     );
   }

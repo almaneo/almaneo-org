@@ -104,24 +104,67 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     _checkExistingSession();
   }
 
-  /// Web3Auth 기존 세션이 있으면 자동 로그인
+  /// 세션 복원 순서:
+  /// 1. 로컬 저장소 (SharedPreferences) → 가장 빠르고 안정적
+  /// 2. Web3Auth SDK 세션 → 소셜 로그인 사용자 (로컬 세션 없을 때)
   Future<void> _checkExistingSession() async {
     try {
-      final privKey = await Web3AuthFlutter.getPrivKey();
-      if (privKey.isNotEmpty) {
-        final userInfo = await Web3AuthFlutter.getUserInfo();
-        final verifierId = userInfo.verifierId ?? userInfo.email ?? '';
-        if (verifierId.isNotEmpty) {
-          final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
-          final langState = ref.read(languageProvider);
-          await _handleSocialLogin(verifierId, name, userInfo.profileImage, langState.languageCode);
-        }
+      // 1단계: 로컬 저장 세션 복원 시도
+      final restored = await _authService.restoreSession().timeout(
+        const Duration(seconds: 8),
+        onTimeout: () {
+          debugPrint('Session restore: timeout (8s)');
+          return null;
+        },
+      );
+
+      if (restored != null) {
+        // 언어 설정 복원
+        final langNotifier = ref.read(languageProvider.notifier);
+        langNotifier.setLanguage(restored.session.languageCode);
+
+        await widget.client.connectUser(
+          User(
+            id: restored.session.userId,
+            name: restored.session.userName,
+            image: restored.session.profileImage,
+            extraData: {'preferred_language': restored.session.languageCode},
+          ),
+          restored.token,
+        );
+
+        await _initNotifications();
+        if (mounted) setState(() => _isConnected = true);
+        debugPrint('Session restored from local storage: ${restored.session.userId}');
+        return;
       }
+
+      // 2단계: Web3Auth SDK 세션 복원 (소셜 로그인 사용자)
+      await _tryWeb3AuthRestore().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          debugPrint('Web3Auth restore: timeout (5s)');
+        },
+      );
     } catch (e) {
-      debugPrint('Session restore: $e');
+      debugPrint('Session check error: $e');
     } finally {
       if (mounted) setState(() => _isCheckingSession = false);
     }
+  }
+
+  /// Web3Auth SDK 세션에서 복원 시도
+  Future<void> _tryWeb3AuthRestore() async {
+    final privKey = await Web3AuthFlutter.getPrivKey();
+    if (privKey.isEmpty) return;
+
+    final userInfo = await Web3AuthFlutter.getUserInfo();
+    final verifierId = userInfo.verifierId ?? userInfo.email ?? '';
+    if (verifierId.isEmpty) return;
+
+    final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
+    final langState = ref.read(languageProvider);
+    await _handleSocialLogin(verifierId, name, userInfo.profileImage, langState.languageCode);
   }
 
   /// 게스트 로그인
@@ -183,13 +226,15 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final channelId = parts[1];
     final channel = widget.client.channel(channelType, id: channelId);
 
-    _navigatorKey.currentState?.push(
+    // 기존 ChatScreen이 있으면 제거하고 새 채널로 이동 (스택 쌓임 방지)
+    _navigatorKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => StreamChannel(
           channel: channel,
           child: const ChatScreen(),
         ),
       ),
+      (route) => route.isFirst, // ChannelListScreen만 남김
     );
   }
 
@@ -209,7 +254,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     }
 
     await widget.client.disconnectUser();
-    _authService.logout();
+    await _authService.logout(); // 로컬 세션도 삭제
     setState(() => _isConnected = false);
   }
 
@@ -254,8 +299,51 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
             colors: [AlmaTheme.deepNavy, Color(0xFF1A1A2E), Color(0xFF0D1520)],
           ),
         ),
-        child: const Center(
-          child: CircularProgressIndicator(color: AlmaTheme.electricBlue),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AlmaTheme.electricBlue, AlmaTheme.terracottaOrange],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
+                      blurRadius: 24,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: 32),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'AlmaChat',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AlmaTheme.electricBlue,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
