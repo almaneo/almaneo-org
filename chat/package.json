@@ -9,18 +9,19 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "ai": "^6.0.78",
-    "@ai-sdk/google": "^3.0.23",
     "@ai-sdk/anthropic": "^3.0.0",
+    "@ai-sdk/google": "^3.0.23",
     "@ai-sdk/groq": "^3.0.22",
-    "@vercel/ai-sdk-gateway": "^0.1.0",
     "@supabase/supabase-js": "^2.49.0",
-    "stream-chat": "^8.0.0",
-    "franc-min": "^6.2.0"
+    "@vercel/ai-sdk-gateway": "^0.1.0",
+    "ai": "^6.0.78",
+    "ethers": "^6.16.0",
+    "franc-min": "^6.2.0",
+    "stream-chat": "^8.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
     "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
     "vercel": "^41.0.0"
   }
 }
