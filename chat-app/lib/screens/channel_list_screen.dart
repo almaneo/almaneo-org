@@ -13,6 +13,7 @@ import '../widgets/alma_logo.dart';
 import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
 import 'create_channel_screen.dart';
+import 'find_friends_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
 
@@ -37,6 +38,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
   Timer? _debounce;
   List<Channel>? _searchResults;
   bool _isLoadingSearch = false;
+  String _filter = 'all'; // 'all', 'dm', 'group'
 
   @override
   void dispose() {
@@ -233,18 +235,47 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
       ),
       body: _isSearching
           ? _buildSearchBody(lang, user)
-          : StreamChannelListView(
-              controller: StreamChannelListController(
-                client: StreamChat.of(context).client,
-                filter: Filter.in_('members', [user?.id ?? '']),
-                channelStateSort: const [SortOption.desc('last_message_at')],
-                limit: 20,
-              ),
-              itemBuilder: (context, channels, index, defaultWidget) {
-                return defaultWidget;
-              },
-              onChannelTap: _navigateToChannel,
-              emptyBuilder: (context) => _buildEmptyState(context, lang),
+          : Column(
+              children: [
+                // Filter chips
+                _FilterChips(
+                  selected: _filter,
+                  lang: lang,
+                  onChanged: (f) => setState(() => _filter = f),
+                ),
+                Expanded(
+                  child: StreamChannelListView(
+                    controller: StreamChannelListController(
+                      client: StreamChat.of(context).client,
+                      filter: Filter.in_('members', [user?.id ?? '']),
+                      channelStateSort: const [SortOption.desc('last_message_at')],
+                      limit: 20,
+                    ),
+                    itemBuilder: (context, channels, index, defaultWidget) {
+                      final channel = channels[index];
+                      final isDM = _isDMChannel(channel, user);
+
+                      // Apply filter
+                      if (_filter == 'dm' && !isDM) {
+                        return const SizedBox.shrink();
+                      }
+                      if (_filter == 'group' && isDM) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return _ChannelTile(
+                        channel: channel,
+                        currentUser: user,
+                        isDM: isDM,
+                        lang: lang,
+                        onTap: () => _navigateToChannel(channel),
+                      );
+                    },
+                    onChannelTap: _navigateToChannel,
+                    emptyBuilder: (context) => _buildEmptyState(context, lang),
+                  ),
+                ),
+              ],
             ),
       floatingActionButton: _isSearching
           ? null
@@ -462,6 +493,19 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                 ),
               ),
               _BottomSheetOption(
+                icon: Icons.person_search,
+                iconColor: AlmaTheme.cyan,
+                title: tr('friends.title', lang),
+                subtitle: tr('friends.menuDesc', lang),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const FindFriendsScreen()),
+                  );
+                },
+              ),
+              _BottomSheetOption(
                 icon: Icons.public,
                 iconColor: AlmaTheme.success,
                 title: tr('channels.joinGlobal', lang),
@@ -502,6 +546,14 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
         ),
       ),
     );
+  }
+
+  bool _isDMChannel(Channel channel, User? currentUser) {
+    final memberCount = channel.state?.members.length ?? channel.memberCount ?? 0;
+    final hasName = channel.extraData['name'] != null &&
+        (channel.extraData['name'] as String).isNotEmpty;
+    // DM = exactly 2 members and no explicit channel name
+    return memberCount == 2 && !hasName;
   }
 
   Future<void> _createGlobalChannel(BuildContext context, String lang) async {
@@ -583,6 +635,302 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
         );
       }
     }
+  }
+}
+
+/// 필터 칩 (전체 | DM | 그룹)
+class _FilterChips extends StatelessWidget {
+  final String selected;
+  final String lang;
+  final ValueChanged<String> onChanged;
+
+  const _FilterChips({
+    required this.selected,
+    required this.lang,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Row(
+        children: [
+          _chip('all', tr('channels.filterAll', lang)),
+          const SizedBox(width: 8),
+          _chip('dm', tr('channels.filterDM', lang)),
+          const SizedBox(width: 8),
+          _chip('group', tr('channels.filterGroup', lang)),
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(String value, String label) {
+    final isSelected = selected == value;
+    return GestureDetector(
+      onTap: () => onChanged(value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AlmaTheme.electricBlue.withValues(alpha: 0.2)
+              : AlmaTheme.slateGray.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? AlmaTheme.electricBlue.withValues(alpha: 0.5)
+                : Colors.transparent,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected
+                ? AlmaTheme.electricBlue
+                : Colors.white.withValues(alpha: 0.5),
+            fontSize: 13,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 커스텀 채널 리스트 타일 (DM/Group 구분)
+class _ChannelTile extends StatelessWidget {
+  final Channel channel;
+  final User? currentUser;
+  final bool isDM;
+  final String lang;
+  final VoidCallback onTap;
+
+  const _ChannelTile({
+    required this.channel,
+    required this.currentUser,
+    required this.isDM,
+    required this.lang,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final unreadCount = channel.state?.unreadCount ?? 0;
+    final lastMessage = channel.state?.lastMessage;
+    final lastMessageText = lastMessage?.text ?? '';
+    final lastMessageAt = lastMessage?.createdAt ?? channel.createdAt;
+
+    // Determine display name and avatar
+    String displayName;
+    String? avatarUrl;
+    Widget avatarWidget;
+
+    if (isDM) {
+      // DM: show the other person
+      final otherMember = channel.state?.members
+          .where((m) => m.userId != currentUser?.id)
+          .firstOrNull;
+      final otherUser = otherMember?.user;
+      displayName = otherUser?.name ?? otherMember?.userId ?? 'User';
+      avatarUrl = otherUser?.image;
+
+      avatarWidget = CircleAvatar(
+        radius: 24,
+        backgroundColor: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
+        backgroundImage: (avatarUrl != null && avatarUrl.isNotEmpty)
+            ? NetworkImage(avatarUrl)
+            : null,
+        child: (avatarUrl == null || avatarUrl.isEmpty)
+            ? Text(
+                displayName[0].toUpperCase(),
+                style: const TextStyle(
+                  color: AlmaTheme.terracottaOrange,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              )
+            : null,
+      );
+    } else {
+      // Group channel
+      displayName = channel.extraData['name'] as String? ?? channel.id ?? 'Chat';
+      avatarWidget = CircleAvatar(
+        radius: 24,
+        backgroundColor: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+        child: Text(
+          displayName.isNotEmpty ? displayName[0].toUpperCase() : '#',
+          style: const TextStyle(
+            color: AlmaTheme.electricBlue,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+
+    // Last message sender name for groups
+    String preview = '';
+    if (lastMessage != null) {
+      if (lastMessage.attachments.isNotEmpty && lastMessageText.isEmpty) {
+        preview = '📷 ${tr('chat.photo', lang)}';
+      } else if (!isDM && lastMessage.user != null) {
+        final senderName = lastMessage.user!.name.split(' ').first;
+        preview = '$senderName: $lastMessageText';
+      } else {
+        preview = lastMessageText;
+      }
+    }
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            // Avatar with online indicator for DM
+            Stack(
+              children: [
+                avatarWidget,
+                if (isDM)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: _OnlineIndicator(channel: channel, currentUserId: currentUser?.id),
+                  ),
+              ],
+            ),
+            const SizedBox(width: 12),
+            // Name + Last message
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (!isDM)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Icon(
+                            Icons.group,
+                            size: 14,
+                            color: Colors.white.withValues(alpha: 0.3),
+                          ),
+                        ),
+                      Expanded(
+                        child: Text(
+                          displayName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: unreadCount > 0 ? FontWeight.w600 : FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (lastMessageAt != null)
+                        Text(
+                          _formatTime(lastMessageAt),
+                          style: TextStyle(
+                            color: unreadCount > 0
+                                ? AlmaTheme.electricBlue
+                                : Colors.white.withValues(alpha: 0.3),
+                            fontSize: 11,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          preview.isNotEmpty ? preview : tr('channels.noMessages', lang),
+                          style: TextStyle(
+                            color: unreadCount > 0
+                                ? Colors.white.withValues(alpha: 0.7)
+                                : Colors.white.withValues(alpha: 0.35),
+                            fontSize: 13,
+                            fontWeight: unreadCount > 0 ? FontWeight.w500 : FontWeight.w400,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                      if (unreadCount > 0)
+                        Container(
+                          margin: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AlmaTheme.electricBlue,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            unreadCount > 99 ? '99+' : '$unreadCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inDays == 0) {
+      // Today: show time
+      final hour = dateTime.hour.toString().padLeft(2, '0');
+      final min = dateTime.minute.toString().padLeft(2, '0');
+      return '$hour:$min';
+    } else if (diff.inDays == 1) {
+      return tr('channels.yesterday', lang);
+    } else if (diff.inDays < 7) {
+      final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return weekdays[dateTime.weekday - 1];
+    } else {
+      return '${dateTime.month}/${dateTime.day}';
+    }
+  }
+}
+
+/// DM 상대방 온라인 인디케이터
+class _OnlineIndicator extends StatelessWidget {
+  final Channel channel;
+  final String? currentUserId;
+
+  const _OnlineIndicator({required this.channel, required this.currentUserId});
+
+  @override
+  Widget build(BuildContext context) {
+    final otherMember = channel.state?.members
+        .where((m) => m.userId != currentUserId)
+        .firstOrNull;
+    final isOnline = otherMember?.user?.online ?? false;
+
+    if (!isOnline) return const SizedBox.shrink();
+
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(
+        color: AlmaTheme.success,
+        shape: BoxShape.circle,
+        border: Border.all(color: AlmaTheme.deepNavy, width: 2),
+      ),
+    );
   }
 }
 

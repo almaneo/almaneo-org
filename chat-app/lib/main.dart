@@ -11,12 +11,15 @@ import 'package:web3auth_flutter/enums.dart';
 import 'package:web3auth_flutter/input.dart';
 import 'config/env.dart';
 import 'config/theme.dart';
+import 'l10n/app_strings.dart';
 import 'providers/language_provider.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/chat_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
 import 'widgets/alma_logo.dart';
 
 void main() async {
@@ -282,7 +285,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       home: _isCheckingSession
           ? _buildSplash()
           : _isConnected
-              ? ChannelListScreen(onLogout: _handleLogout, authService: _authService)
+              ? _MainShell(onLogout: _handleLogout, authService: _authService)
               : LoginScreen(
                   onGuestLogin: _handleGuestLogin,
                   onSocialLogin: _handleSocialLogin,
@@ -326,6 +329,81 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Bottom navigation shell with 3 tabs: Home | Chat | Profile
+class _MainShell extends ConsumerStatefulWidget {
+  final VoidCallback onLogout;
+  final AuthService authService;
+
+  const _MainShell({required this.onLogout, required this.authService});
+
+  @override
+  ConsumerState<_MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends ConsumerState<_MainShell> {
+  int _currentIndex = 1; // Start on Chat tab
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider).languageCode;
+
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          const HomeScreen(),
+          ChannelListScreen(
+            onLogout: widget.onLogout,
+            authService: widget.authService,
+          ),
+          ProfileScreen(
+            onLogout: widget.onLogout,
+            authService: widget.authService,
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: AlmaTheme.deepNavy,
+          border: Border(
+            top: BorderSide(
+              color: Colors.white.withValues(alpha: 0.05),
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: AlmaTheme.electricBlue,
+          unselectedItemColor: Colors.white.withValues(alpha: 0.35),
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: tr('nav.home', lang),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.chat_bubble_outline),
+              activeIcon: const Icon(Icons.chat_bubble),
+              label: tr('nav.chat', lang),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person_outline),
+              activeIcon: const Icon(Icons.person),
+              label: tr('nav.profile', lang),
+            ),
+          ],
         ),
       ),
     );

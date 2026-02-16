@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
@@ -124,6 +125,213 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         );
       }
+    }
+  }
+
+  /// 프로필 사진 변경 바텀시트
+  void _showPhotoOptions() {
+    final lang = _lang;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AlmaTheme.slateGray,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                tr('profile.changePhoto', lang),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ListTile(
+                leading: Container(
+                  width: 40, height: 40,
+                  decoration: BoxDecoration(
+                    color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.photo_library_outlined, color: AlmaTheme.electricBlue),
+                ),
+                title: Text(tr('profile.photoGallery', lang), style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickAndUploadPhoto(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  width: 40, height: 40,
+                  decoration: BoxDecoration(
+                    color: AlmaTheme.cyan.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.camera_alt_outlined, color: AlmaTheme.cyan),
+                ),
+                title: Text(tr('profile.photoCamera', lang), style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickAndUploadPhoto(ImageSource.camera);
+                },
+              ),
+              // 기존 사진이 있을 때만 삭제 옵션 표시
+              if (StreamChat.of(context).currentUser?.image?.isNotEmpty == true)
+                ListTile(
+                  leading: Container(
+                    width: 40, height: 40,
+                    decoration: BoxDecoration(
+                      color: AlmaTheme.error.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.delete_outline, color: AlmaTheme.error),
+                  ),
+                  title: Text(tr('profile.photoRemove', lang), style: const TextStyle(color: AlmaTheme.error)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _removePhoto();
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 이미지 선택 + Stream CDN 업로드 + 사용자 프로필 업데이트
+  Future<void> _pickAndUploadPhoto(ImageSource source) async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+      if (picked == null) return;
+
+      // 로딩 표시
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const SizedBox(
+                  width: 16, height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                ),
+                const SizedBox(width: 12),
+                Text(tr('profile.photoUploading', _lang)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.electricBlue.withValues(alpha: 0.9),
+            duration: const Duration(seconds: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+
+      final client = StreamChat.of(context).client;
+      final user = StreamChat.of(context).currentUser;
+      if (user == null) return;
+
+      // Stream CDN에 업로드 (임의 채널 사용)
+      final fileSize = await picked.length();
+      final file = AttachmentFile(path: picked.path, size: fileSize);
+      final response = await client.sendImage(file, 'messaging', 'general');
+      final imageUrl = response.file;
+
+      // 사용자 프로필 업데이트
+      await client.partialUpdateUser(user.id, set: {'image': imageUrl});
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(tr('profile.photoUpdated', _lang)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint('Photo upload failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(tr('profile.photoFailed', _lang)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.error,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+    }
+  }
+
+  /// 프로필 사진 삭제
+  Future<void> _removePhoto() async {
+    try {
+      final client = StreamChat.of(context).client;
+      final user = StreamChat.of(context).currentUser;
+      if (user == null) return;
+
+      await client.partialUpdateUser(user.id, set: {'image': ''});
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(tr('profile.photoRemoved', _lang)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint('Photo remove failed: $e');
     }
   }
 
@@ -379,47 +587,69 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Column(
       children: [
-        Container(
-          width: 88,
-          height: 88,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: isGuest
-                  ? [AlmaTheme.terracottaOrange, const Color(0xFFFF8C33)]
-                  : [AlmaTheme.electricBlue, AlmaTheme.cyan],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: (isGuest ? AlmaTheme.terracottaOrange : AlmaTheme.electricBlue)
-                    .withValues(alpha: 0.3),
-                blurRadius: 16,
-                spreadRadius: 2,
+        GestureDetector(
+          onTap: _showPhotoOptions,
+          child: Stack(
+            children: [
+              Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: isGuest
+                        ? [AlmaTheme.terracottaOrange, const Color(0xFFFF8C33)]
+                        : [AlmaTheme.electricBlue, AlmaTheme.cyan],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (isGuest ? AlmaTheme.terracottaOrange : AlmaTheme.electricBlue)
+                          .withValues(alpha: 0.3),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: userImage != null && userImage.isNotEmpty
+                      ? Image.network(
+                          userImage,
+                          width: 88,
+                          height: 88,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: Text(
+                              displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
+                              style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
+                            style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                ),
+              ),
+              // 카메라 아이콘 오버레이
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AlmaTheme.electricBlue,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AlmaTheme.deepNavy, width: 2),
+                  ),
+                  child: const Icon(Icons.camera_alt, color: Colors.white, size: 14),
+                ),
               ),
             ],
-          ),
-          child: ClipOval(
-            child: userImage != null && userImage.isNotEmpty
-                ? Image.network(
-                    userImage,
-                    width: 88,
-                    height: 88,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Center(
-                      child: Text(
-                        displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
-                        style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      displayName.isNotEmpty ? displayName[0].toUpperCase() : '?',
-                      style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
-                    ),
-                  ),
           ),
         ),
         const SizedBox(height: 12),

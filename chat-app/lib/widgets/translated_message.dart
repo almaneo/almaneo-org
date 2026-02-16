@@ -101,6 +101,10 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     final hasAttachments = attachments.isNotEmpty;
     final hasText = displayText.isNotEmpty;
 
+    // 상대방 아바타 정보
+    final senderUser = widget.message.user;
+    final senderImage = senderUser?.image;
+
     return Padding(
       padding: EdgeInsets.only(
         left: widget.isMyMessage ? 48 : 8,
@@ -111,11 +115,24 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
       child: Align(
         alignment:
             widget.isMyMessage ? Alignment.centerRight : Alignment.centerLeft,
-        child: Column(
-          crossAxisAlignment: widget.isMyMessage
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            // 상대방 아바타 (왼쪽)
+            if (!widget.isMyMessage)
+              Padding(
+                padding: const EdgeInsets.only(right: 6, bottom: 18),
+                child: _buildAvatar(senderImage, senderName),
+              ),
+
+            // 메시지 컬럼
+            Flexible(
+              child: Column(
+                crossAxisAlignment: widget.isMyMessage
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
+                children: [
             // 발신자 이름 (상대방 메시지만)
             if (!widget.isMyMessage && senderName.isNotEmpty)
               Padding(
@@ -203,7 +220,36 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               isTranslating: isTranslating,
               isFailed: isFailed,
             ),
+                ],
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 사용자 아바타 (32dp 원형)
+  Widget _buildAvatar(String? imageUrl, String name) {
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      return CircleAvatar(
+        radius: 16,
+        backgroundImage: NetworkImage(imageUrl),
+        backgroundColor: AlmaTheme.slateGray,
+        onBackgroundImageError: (_, __) {},
+        child: null,
+      );
+    }
+    // 이미지 없으면 이니셜
+    return CircleAvatar(
+      radius: 16,
+      backgroundColor: AlmaTheme.terracottaOrange.withValues(alpha: 0.3),
+      child: Text(
+        name.isNotEmpty ? name[0].toUpperCase() : '?',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

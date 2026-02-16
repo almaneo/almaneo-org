@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
@@ -26,6 +28,121 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void dispose() {
     NotificationService.instance.setActiveChannel(null);
     super.dispose();
+  }
+
+  void _shareInviteLink(Channel channel, String channelName, String lang) {
+    final channelId = channel.id;
+    if (channelId == null) return;
+
+    final inviteLink = 'https://chat.almaneo.org/join/$channelId';
+    final shareText = tr('invite.message', lang, args: {
+      'name': channelName,
+      'link': inviteLink,
+    });
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AlmaTheme.slateGray,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Text(
+                tr('invite.title', lang),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Link display
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AlmaTheme.deepNavy,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Text(
+                  inviteLink,
+                  style: TextStyle(
+                    color: AlmaTheme.electricBlue.withValues(alpha: 0.9),
+                    fontSize: 13,
+                    fontFamily: 'monospace',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Copy button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: inviteLink));
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(tr('invite.copied', lang)),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.copy, size: 18),
+                  label: Text(tr('invite.copyLink', lang)),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Share button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    SharePlus.instance.share(ShareParams(text: shareText));
+                  },
+                  icon: const Icon(Icons.share, size: 18),
+                  label: Text(tr('invite.share', lang)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AlmaTheme.electricBlue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -63,6 +180,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
         centerTitle: true,
         actions: [
+          // Share invite link
+          IconButton(
+            icon: const Icon(Icons.share_outlined, size: 20),
+            onPressed: () => _shareInviteLink(channel, channelName, lang),
+            tooltip: tr('invite.share', lang),
+          ),
           _MemberCountBadge(channel: channel),
           const SizedBox(width: 8),
         ],
