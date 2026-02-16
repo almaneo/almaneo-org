@@ -448,10 +448,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           tr('profile.title', lang),
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

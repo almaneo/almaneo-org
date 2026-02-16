@@ -14,7 +14,6 @@ import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
 import 'create_channel_screen.dart';
 import 'find_friends_screen.dart';
-import 'profile_screen.dart';
 import 'settings_screen.dart';
 
 class ChannelListScreen extends ConsumerStatefulWidget {
@@ -127,29 +126,6 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
     );
   }
 
-  Widget _buildAppBarAvatar(User? user) {
-    final imageUrl = user?.image;
-    final name = user?.name ?? '?';
-    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
-
-    return CircleAvatar(
-      radius: 16,
-      backgroundColor: AlmaTheme.terracottaOrange,
-      backgroundImage: hasImage ? NetworkImage(imageUrl) : null,
-      onBackgroundImageError: hasImage ? (_, __) {} : null,
-      child: hasImage
-          ? null
-          : Text(
-              name[0].toUpperCase(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = StreamChat.of(context).currentUser;
@@ -228,21 +204,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                     ),
                   ),
                 ),
-                // 사용자 아바타 → 프로필 화면
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProfileScreen(onLogout: widget.onLogout, authService: widget.authService),
-                        ),
-                      );
-                    },
-                    child: _buildAppBarAvatar(user),
-                  ),
-                ),
+                const SizedBox(width: 8),
               ],
       ),
       body: _isSearching
