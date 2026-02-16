@@ -4,13 +4,32 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../services/notification_service.dart';
 import '../widgets/translated_message.dart';
 
-class ChatScreen extends ConsumerWidget {
+class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends ConsumerState<ChatScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final cid = StreamChannel.of(context).channel.cid;
+    NotificationService.instance.setActiveChannel(cid);
+  }
+
+  @override
+  void dispose() {
+    NotificationService.instance.setActiveChannel(null);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final channel = StreamChannel.of(context).channel;
     final channelName = channel.extraData['name'] as String? ?? 'Chat';
     final langState = ref.watch(languageProvider);

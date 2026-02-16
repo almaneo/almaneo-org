@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:web3auth_flutter/web3auth_flutter.dart';
@@ -11,14 +13,20 @@ import 'config/env.dart';
 import 'config/theme.dart';
 import 'providers/language_provider.dart';
 import 'services/auth_service.dart';
+import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
+import 'screens/chat_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 환경변수 로드
   await dotenv.load(fileName: '.env');
+
+  // Firebase 초기화
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Supabase 초기화
   await Supabase.initialize(
@@ -85,6 +93,7 @@ class AlmaChatApp extends ConsumerStatefulWidget {
 
 class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   final _authService = AuthService();
+  final _notificationService = NotificationService.instance;
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isConnected = false;
   bool _isCheckingSession = true;
@@ -129,6 +138,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       token,
     );
 
+    await _initNotifications();
     setState(() => _isConnected = true);
   }
 
@@ -147,11 +157,47 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       token,
     );
 
+    await _initNotifications();
     setState(() => _isConnected = true);
+  }
+
+  /// 푸시 알림 초기화
+  Future<void> _initNotifications() async {
+    try {
+      _notificationService.onNotificationTap = _onNotificationTap;
+      await _notificationService.initialize(
+        widget.client,
+        _authService.userId!,
+      );
+    } catch (e) {
+      debugPrint('Notification init: $e');
+    }
+  }
+
+  /// 알림 탭 → 해당 채널로 이동
+  void _onNotificationTap(String channelCid) {
+    final parts = channelCid.split(':');
+    if (parts.length != 2) return;
+
+    final channelType = parts[0];
+    final channelId = parts[1];
+    final channel = widget.client.channel(channelType, id: channelId);
+
+    _navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (_) => StreamChannel(
+          channel: channel,
+          child: const ChatScreen(),
+        ),
+      ),
+    );
   }
 
   Future<void> _handleLogout() async {
     _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+
+    // 알림 해제
+    await _notificationService.unregister(widget.client);
 
     // Web3Auth 로그아웃
     if (_authService.isWeb3AuthUser) {
