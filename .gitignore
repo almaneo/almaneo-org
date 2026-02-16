@@ -102,6 +102,8 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 .firebaserc
+**/google-services.json
+**/GoogleService-Info.plist
 
 # -------------------------------------------
 # Temporary Files
@@ -110,6 +112,7 @@ ui-debug.log
 *.temp
 *.bak
 *.backup
+logcat_*.txt
 
 # -------------------------------------------
 # Secrets & Credentials (NEVER COMMIT!)
