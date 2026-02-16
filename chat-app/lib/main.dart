@@ -127,7 +127,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         final langNotifier = ref.read(languageProvider.notifier);
         langNotifier.setLanguage(restored.session.languageCode);
 
-        await widget.client.connectUser(
+        await _connectUserWithRetry(
           User(
             id: restored.session.userId,
             name: restored.session.userName,
@@ -176,7 +176,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final langState = ref.read(languageProvider);
     final token = await _authService.loginAsGuest(name, langState.languageCode);
 
-    await widget.client.connectUser(
+    await _connectUserWithRetry(
       User(
         id: _authService.userId!,
         name: _authService.userName,
@@ -194,7 +194,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final langCode = lang ?? ref.read(languageProvider).languageCode;
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
-    await widget.client.connectUser(
+    await _connectUserWithRetry(
       User(
         id: _authService.userId!,
         name: name,
@@ -206,6 +206,28 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
     await _initNotifications();
     setState(() => _isConnected = true);
+  }
+
+  /// Stream Chat 연결 (401 등 간헐적 에러 시 1회 재시도)
+  Future<void> _connectUserWithRetry(User user, String token, {int retries = 1}) async {
+    try {
+      await widget.client.connectUser(user, token);
+    } catch (e) {
+      debugPrint('connectUser failed: $e');
+      if (retries > 0 && e.toString().contains('401')) {
+        debugPrint('Retrying connectUser after 401...');
+        await Future.delayed(const Duration(seconds: 1));
+        // 토큰 재발급 후 재시도
+        final newToken = await _authService.refreshToken();
+        if (newToken != null) {
+          await widget.client.connectUser(user, newToken);
+        } else {
+          rethrow;
+        }
+      } else {
+        rethrow;
+      }
+    }
   }
 
   /// 푸시 알림 초기화

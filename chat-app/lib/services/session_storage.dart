@@ -80,6 +80,22 @@ class SessionStorage {
     await prefs.remove(_keyWalletAddress);
   }
 
+  /// 프로필 이미지 URL만 업데이트 (사진 변경 시)
+  static Future<void> updateProfileImage(String? imageUrl) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      await prefs.setString(_keyProfileImage, imageUrl);
+    } else {
+      await prefs.remove(_keyProfileImage);
+    }
+  }
+
+  /// 사용자 이름만 업데이트 (이름 변경 시)
+  static Future<void> updateUserName(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyUserName, name);
+  }
+
   /// 세션 존재 여부
   static Future<bool> hasSession() async {
     final prefs = await SharedPreferences.getInstance();

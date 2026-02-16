@@ -113,6 +113,17 @@ class AuthService {
     }
   }
 
+  /// 현재 사용자의 Stream Chat 토큰 재발급 (연결 실패 시 재시도용)
+  Future<String?> refreshToken() async {
+    if (_userId == null) return null;
+    try {
+      return await _getStreamToken(_userId!, _userName);
+    } catch (e) {
+      debugPrint('Token refresh failed: $e');
+      return null;
+    }
+  }
+
   /// 백엔드 API에서 Stream Chat 토큰 발급
   Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
     final url = '${Env.chatApiUrl}/api/stream-token';

@@ -10,6 +10,7 @@ import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/auth_service.dart';
+import '../services/session_storage.dart';
 import '../services/almaneo_service.dart';
 import '../widgets/kindness_score_card.dart';
 import '../widgets/ambassador_badge.dart';
@@ -89,6 +90,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         _isEditing = false;
         _isSaving = false;
       });
+
+      // SessionStorage에도 저장 (재로그인 시 유지)
+      await SessionStorage.updateUserName(newName);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -329,6 +333,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
         // 로컬 URL로 즉시 반영 (Stream 상태 업데이트 대기 불필요)
         setState(() => _localImageUrl = imageUrl);
+        // SessionStorage에도 저장 (재로그인 시 유지)
+        await SessionStorage.updateProfileImage(imageUrl);
       }
     } catch (e, stack) {
       debugPrint('[PhotoUpload] FAILED: $e');
@@ -380,6 +386,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         );
         setState(() => _localImageUrl = null);
+        // SessionStorage에서도 제거 (재로그인 시 유지)
+        await SessionStorage.updateProfileImage(null);
       }
     } catch (e) {
       debugPrint('Photo remove failed: $e');
