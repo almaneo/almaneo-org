@@ -17,6 +17,7 @@ import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/chat_screen.dart';
+import 'widgets/alma_logo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -164,7 +165,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
     final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
     final langState = ref.read(languageProvider);
-    await _handleSocialLogin(verifierId, name, userInfo.profileImage, langState.languageCode);
+    await _handleSocialLogin(verifierId, name, userInfo.profileImage, langState.languageCode, privKey);
   }
 
   /// 게스트 로그인
@@ -186,9 +187,9 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   }
 
   /// 소셜 로그인 (Web3Auth 인증 후)
-  Future<void> _handleSocialLogin(String verifierId, String name, String? image, [String? lang]) async {
+  Future<void> _handleSocialLogin(String verifierId, String name, String? image, [String? lang, String? privateKey]) async {
     final langCode = lang ?? ref.read(languageProvider).languageCode;
-    final token = await _authService.loginWithSocial(verifierId, name, image, langCode);
+    final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
     await widget.client.connectUser(
       User(
@@ -281,7 +282,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       home: _isCheckingSession
           ? _buildSplash()
           : _isConnected
-              ? ChannelListScreen(onLogout: _handleLogout)
+              ? ChannelListScreen(onLogout: _handleLogout, authService: _authService)
               : LoginScreen(
                   onGuestLogin: _handleGuestLogin,
                   onSocialLogin: _handleSocialLogin,
@@ -303,26 +304,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AlmaTheme.electricBlue, AlmaTheme.terracottaOrange],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
-                      blurRadius: 24,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: const Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: 32),
-              ),
+              const AlmaLogo(size: 72),
               const SizedBox(height: 16),
               const Text(
                 'AlmaChat',

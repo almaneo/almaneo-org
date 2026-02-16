@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:pointycastle/export.dart' as pc;
 import '../config/env.dart';
 import 'session_storage.dart';
 
@@ -13,11 +14,13 @@ class AuthService {
   String? _userId;
   String? _userName;
   String? _profileImage;
+  String? _walletAddress;
   bool _isWeb3AuthUser = false;
 
   String? get userId => _userId;
   String get userName => _userName ?? 'User';
   String? get profileImage => _profileImage;
+  String? get walletAddress => _walletAddress;
   bool get isLoggedIn => _userId != null;
   bool get isWeb3AuthUser => _isWeb3AuthUser;
 
@@ -47,11 +50,17 @@ class AuthService {
     String name,
     String? image, [
     String preferredLanguage = 'en',
+    String? privateKeyHex,
   ]) async {
     _userId = _sanitizeUserId(verifierId);
     _userName = name;
     _profileImage = image;
     _isWeb3AuthUser = true;
+
+    // 지갑 주소 도출
+    if (privateKeyHex != null && privateKeyHex.isNotEmpty) {
+      _walletAddress = _deriveWalletAddress(privateKeyHex);
+    }
 
     final token = await _getStreamToken(_userId!, name, preferredLanguage);
 
@@ -62,6 +71,7 @@ class AuthService {
       profileImage: image,
       isWeb3AuthUser: true,
       languageCode: preferredLanguage,
+      walletAddress: _walletAddress,
     ));
 
     return token;
@@ -81,6 +91,7 @@ class AuthService {
       _userName = session.userName;
       _profileImage = session.profileImage;
       _isWeb3AuthUser = session.isWeb3AuthUser;
+      _walletAddress = session.walletAddress;
 
       // 백엔드에서 새 Stream Chat 토큰 발급
       final token = await _getStreamToken(
@@ -96,6 +107,7 @@ class AuthService {
       _userId = null;
       _userName = null;
       _profileImage = null;
+      _walletAddress = null;
       _isWeb3AuthUser = false;
       return null;
     }
@@ -139,7 +151,70 @@ class AuthService {
     _userId = null;
     _userName = null;
     _profileImage = null;
+    _walletAddress = null;
     _isWeb3AuthUser = false;
     await SessionStorage.clear();
+  }
+
+  /// Web3Auth private key에서 Ethereum 지갑 주소 도출
+  ///
+  /// secp256k1 공개키 → Keccak-256 해시 → 하위 20바이트 → 0x 접두어
+  String? _deriveWalletAddress(String privateKeyHex) {
+    try {
+      final privKeyBytes = _hexToBytes(privateKeyHex);
+      final domainParams = pc.ECDomainParameters('secp256k1');
+      final privKeyBigInt = _bytesToBigInt(privKeyBytes);
+      final pubPoint = domainParams.G * privKeyBigInt;
+      if (pubPoint == null) return null;
+
+      // 비압축 공개키 (접두어 04 제외) → 64바이트
+      final xBytes = _bigIntToBytes(pubPoint.x!.toBigInteger()!, 32);
+      final yBytes = _bigIntToBytes(pubPoint.y!.toBigInteger()!, 32);
+      final pubKeyUncompressed = Uint8List.fromList([...xBytes, ...yBytes]);
+
+      // Keccak-256 해시
+      final digest = pc.KeccakDigest(256);
+      final hash = Uint8List(32);
+      digest.update(pubKeyUncompressed, 0, pubKeyUncompressed.length);
+      digest.doFinal(hash, 0);
+
+      // 하위 20바이트 → 주소
+      final addressBytes = hash.sublist(12);
+      return '0x${_bytesToHex(addressBytes)}';
+    } catch (e) {
+      debugPrint('Wallet address derivation failed: $e');
+      return null;
+    }
+  }
+
+  static Uint8List _hexToBytes(String hex) {
+    final h = hex.startsWith('0x') ? hex.substring(2) : hex;
+    final bytes = Uint8List(h.length ~/ 2);
+    for (var i = 0; i < bytes.length; i++) {
+      bytes[i] = int.parse(h.substring(i * 2, i * 2 + 2), radix: 16);
+    }
+    return bytes;
+  }
+
+  static BigInt _bytesToBigInt(Uint8List bytes) {
+    var result = BigInt.zero;
+    for (final b in bytes) {
+      result = (result << 8) | BigInt.from(b);
+    }
+    return result;
+  }
+
+  static Uint8List _bigIntToBytes(BigInt number, int length) {
+    final bytes = Uint8List(length);
+    var n = number;
+    for (var i = length - 1; i >= 0; i--) {
+      bytes[i] = (n & BigInt.from(0xFF)).toInt();
+      n = n >> 8;
+    }
+    return bytes;
+  }
+
+  static String _bytesToHex(Uint8List bytes) {
+    return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
 }

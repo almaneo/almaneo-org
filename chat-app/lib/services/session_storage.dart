@@ -7,6 +7,7 @@ class SessionData {
   final String? profileImage;
   final bool isWeb3AuthUser;
   final String languageCode;
+  final String? walletAddress;
 
   const SessionData({
     required this.userId,
@@ -14,6 +15,7 @@ class SessionData {
     this.profileImage,
     required this.isWeb3AuthUser,
     required this.languageCode,
+    this.walletAddress,
   });
 
   bool get isGuest => userId.startsWith('guest_');
@@ -30,6 +32,7 @@ class SessionStorage {
   static const _keyProfileImage = 'session_profile_image';
   static const _keyIsWeb3Auth = 'session_is_web3auth';
   static const _keyLanguageCode = 'session_language_code';
+  static const _keyWalletAddress = 'session_wallet_address';
 
   /// 세션 저장
   static Future<void> save(SessionData data) async {
@@ -43,6 +46,11 @@ class SessionStorage {
     }
     await prefs.setBool(_keyIsWeb3Auth, data.isWeb3AuthUser);
     await prefs.setString(_keyLanguageCode, data.languageCode);
+    if (data.walletAddress != null) {
+      await prefs.setString(_keyWalletAddress, data.walletAddress!);
+    } else {
+      await prefs.remove(_keyWalletAddress);
+    }
   }
 
   /// 저장된 세션 로드 (없으면 null)
@@ -57,6 +65,7 @@ class SessionStorage {
       profileImage: prefs.getString(_keyProfileImage),
       isWeb3AuthUser: prefs.getBool(_keyIsWeb3Auth) ?? false,
       languageCode: prefs.getString(_keyLanguageCode) ?? 'en',
+      walletAddress: prefs.getString(_keyWalletAddress),
     );
   }
 
@@ -68,6 +77,7 @@ class SessionStorage {
     await prefs.remove(_keyProfileImage);
     await prefs.remove(_keyIsWeb3Auth);
     await prefs.remove(_keyLanguageCode);
+    await prefs.remove(_keyWalletAddress);
   }
 
   /// 세션 존재 여부

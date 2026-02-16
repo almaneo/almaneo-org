@@ -2,16 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../services/auth_service.dart';
+import '../services/almaneo_service.dart';
+import '../widgets/kindness_score_card.dart';
+import '../widgets/ambassador_badge.dart';
+import '../widgets/wallet_info_card.dart';
 import 'settings_screen.dart';
 
 /// 사용자 프로필 화면
 class ProfileScreen extends ConsumerStatefulWidget {
   final VoidCallback onLogout;
+  final AuthService authService;
 
-  const ProfileScreen({super.key, required this.onLogout});
+  const ProfileScreen({
+    super.key,
+    required this.onLogout,
+    required this.authService,
+  });
 
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
@@ -329,13 +340,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             },
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
+
+          // ── AlmaNEO 생태계 섹션 ──
+          if (!isGuest && widget.authService.walletAddress != null)
+            _buildAlmaNeoSection(lang)
+          else if (isGuest)
+            _buildUpgradePrompt(lang),
+
+          const SizedBox(height: 24),
 
           _buildLogoutButton(lang),
 
           const SizedBox(height: 16),
 
-          if (StreamChat.of(context).currentUser?.id.startsWith('guest_') ?? true)
+          if (isGuest)
             Center(
               child: Text(
                 tr('profile.guestNote', lang),
@@ -609,6 +628,265 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
     const enMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return '${enMonths[date.month - 1]} ${date.year}';
+  }
+
+  /// AlmaNEO 생태계 섹션 (소셜 로그인 사용자)
+  Widget _buildAlmaNeoSection(String lang) {
+    final walletAddress = widget.authService.walletAddress!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionLabel(tr('almaneo.title', lang)),
+        const SizedBox(height: 4),
+        Text(
+          tr('almaneo.subtitle', lang),
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+        const SizedBox(height: 12),
+        FutureBuilder<AlmaNeoData>(
+          future: AlmaNeoService.getUserData(walletAddress),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                padding: const EdgeInsets.all(24),
+                decoration: AlmaTheme.glassCard(),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AlmaTheme.electricBlue,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        tr('almaneo.loading', lang),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.4),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final data = snapshot.data ?? AlmaNeoData(walletAddress: walletAddress);
+
+            return Column(
+              children: [
+                // Kindness Score
+                KindnessScoreCard(
+                  score: data.kindnessScore,
+                  tier: data.ambassadorTier,
+                  label: tr('almaneo.kindnessScore', lang),
+                ),
+                const SizedBox(height: 8),
+
+                // Ambassador Badge (티어가 있을 때만)
+                if (data.hasTier) ...[
+                  AmbassadorBadge(
+                    tier: data.ambassadorTier!,
+                    tierName: tr('tier.${data.ambassadorTier}', lang),
+                    tierDesc: tr('tier.${data.ambassadorTier}.desc', lang),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+
+                // Wallet Info
+                WalletInfoCard(
+                  walletAddress: walletAddress,
+                  tokenBalance: data.tokenBalance,
+                  addressLabel: tr('almaneo.walletAddress', lang),
+                  balanceLabel: tr('almaneo.tokenBalance', lang),
+                  noBalanceLabel: tr('almaneo.noBalance', lang),
+                  copiedMessage: tr('almaneo.addressCopied', lang),
+                  networkLabel: '${tr('almaneo.polygon', lang)} ${tr('almaneo.testnet', lang)}',
+                ),
+                const SizedBox(height: 8),
+
+                // Meetup stats
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: AlmaTheme.glassCard(),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _buildStatItem(
+                          Icons.groups_outlined,
+                          '${data.meetupsAttended}',
+                          tr('almaneo.meetupsAttended', lang),
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 32,
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
+                      Expanded(
+                        child: _buildStatItem(
+                          Icons.event_outlined,
+                          '${data.meetupsHosted}',
+                          tr('almaneo.meetupsHosted', lang),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // View on AlmaNEO 버튼
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse('https://almaneo.org/kindness'),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    icon: const Icon(Icons.open_in_new, size: 16),
+                    label: Text(tr('almaneo.viewOnAlmaNeo', lang)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AlmaTheme.electricBlue,
+                      side: BorderSide(
+                        color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatItem(IconData icon, String value, String label) {
+    return Column(
+      children: [
+        Icon(icon, color: AlmaTheme.cyan, size: 20),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  /// 게스트 사용자 업그레이드 프롬프트
+  Widget _buildUpgradePrompt(String lang) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionLabel(tr('almaneo.title', lang)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AlmaTheme.electricBlue.withValues(alpha: 0.1),
+                AlmaTheme.terracottaOrange.withValues(alpha: 0.05),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AlmaTheme.electricBlue.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: AlmaTheme.brandGradient,
+                    ),
+                    child: const Icon(Icons.rocket_launch, color: Colors.white, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      tr('almaneo.upgradeTitle', lang),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                tr('almaneo.upgradeDesc', lang),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildFeatureItem(Icons.favorite, tr('almaneo.upgradeFeature1', lang)),
+              _buildFeatureItem(Icons.star, tr('almaneo.upgradeFeature2', lang)),
+              _buildFeatureItem(Icons.account_balance_wallet, tr('almaneo.upgradeFeature3', lang)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureItem(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Icon(icon, color: AlmaTheme.terracottaOrange, size: 16),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLogoutButton(String lang) {

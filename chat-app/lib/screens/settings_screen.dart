@@ -4,6 +4,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../widgets/alma_logo.dart';
 /// 설정 화면 — 알림, 언어, 정보 섹션
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -72,16 +73,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // ── About ──
           _buildSectionLabel(tr('settings.about', lang)),
           const SizedBox(height: 8),
-          _buildSettingsTile(
-            icon: Icons.info_outline,
-            iconColor: AlmaTheme.cyan,
-            title: tr('app.name', lang),
-            trailing: Text(
-              'v0.1.0',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
-                fontSize: 13,
-              ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AlmaTheme.slateGray,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                const AlmaLogo(size: 48),
+                const SizedBox(height: 12),
+                Text(
+                  tr('app.name', lang),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  tr('app.tagline', lang),
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'v0.1.0',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    fontSize: 11,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 4),

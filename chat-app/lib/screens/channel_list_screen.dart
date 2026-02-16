@@ -8,6 +8,8 @@ import '../config/env.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../services/auth_service.dart';
+import '../widgets/alma_logo.dart';
 import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
 import 'create_channel_screen.dart';
@@ -16,8 +18,13 @@ import 'settings_screen.dart';
 
 class ChannelListScreen extends ConsumerStatefulWidget {
   final VoidCallback onLogout;
+  final AuthService authService;
 
-  const ChannelListScreen({super.key, required this.onLogout});
+  const ChannelListScreen({
+    super.key,
+    required this.onLogout,
+    required this.authService,
+  });
 
   @override
   ConsumerState<ChannelListScreen> createState() => _ChannelListScreenState();
@@ -204,7 +211,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => ProfileScreen(onLogout: widget.onLogout),
+                          builder: (_) => ProfileScreen(onLogout: widget.onLogout, authService: widget.authService),
                         ),
                       );
                     },
@@ -390,10 +397,12 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.forum_outlined,
-            size: 64,
-            color: Colors.white.withValues(alpha: 0.2),
+          Image.asset(
+            'assets/images/Small_Heart.webp',
+            width: 80,
+            height: 80,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => const AlmaLogo(size: 56, showShadow: false),
           ),
           const SizedBox(height: 16),
           Text(

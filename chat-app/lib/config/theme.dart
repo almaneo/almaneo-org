@@ -20,6 +20,48 @@ class AlmaTheme {
   static const warning = Color(0xFFFACC15);
   static const error = Color(0xFFF87171);
 
+  // ── Gradients ──
+  static const brandGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [electricBlue, terracottaOrange],
+  );
+
+  static const coldGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [electricBlue, cyan],
+  );
+
+  // ── Glow Shadow ──
+  static List<BoxShadow> glowShadow(Color color, {double blur = 24, double spread = 2}) {
+    return [
+      BoxShadow(
+        color: color.withValues(alpha: 0.3),
+        blurRadius: blur,
+        spreadRadius: spread,
+      ),
+    ];
+  }
+
+  // ── Ambassador Tier Colors ──
+  static const tierColors = <String, Color>{
+    'friend': success,
+    'host': cyan,
+    'ambassador': electricBlue,
+    'guardian': terracottaOrange,
+    'none': Colors.white38,
+  };
+
+  /// Glass card decoration (frosted glass effect)
+  static BoxDecoration glassCard({double opacity = 0.08, double radius = 16}) {
+    return BoxDecoration(
+      color: Colors.white.withValues(alpha: opacity),
+      borderRadius: BorderRadius.circular(radius),
+      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+    );
+  }
+
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,

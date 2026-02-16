@@ -10,11 +10,12 @@ import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/web3auth_session.dart';
+import '../widgets/alma_logo.dart';
 import 'settings_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   final Future<void> Function(String name) onGuestLogin;
-  final Future<void> Function(String verifierId, String name, String? image, [String? lang]) onSocialLogin;
+  final Future<void> Function(String verifierId, String name, String? image, [String? lang, String? privateKey]) onSocialLogin;
 
   const LoginScreen({
     super.key,
@@ -128,10 +129,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               (userInfo['email'] as String?)?.split('@')[0] ??
               'User';
           final image = userInfo['profileImage'] as String?;
+          final privKey = sessionData['privKey'] as String?;
 
           if (verifierId.isNotEmpty) {
             debugPrint('[Web3Auth] Session recovered: $verifierId');
-            _completeRedirectLogin(verifierId, name, image);
+            _completeRedirectLogin(verifierId, name, image, privKey);
             return;
           }
         }
@@ -155,7 +157,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         if (verifierId.isNotEmpty) {
           final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
           debugPrint('[Web3Auth] SDK fallback succeeded: $verifierId');
-          _completeRedirectLogin(verifierId, name, userInfo.profileImage);
+          _completeRedirectLogin(verifierId, name, userInfo.profileImage, privKey);
           return;
         }
       }
@@ -165,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   /// redirect 기반 로그인 완료 처리 (상태 업데이트 + 콜백)
-  void _completeRedirectLogin(String verifierId, String name, String? image) {
+  void _completeRedirectLogin(String verifierId, String name, String? image, [String? privateKey]) {
     _loginCompletedViaRedirect = true;
     if (mounted) {
       setState(() {
@@ -173,7 +175,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         _loadingProvider = null;
       });
     }
-    widget.onSocialLogin(verifierId, name, image);
+    widget.onSocialLogin(verifierId, name, image, null, privateKey);
   }
 
   // ── 소셜 로그인 ──
@@ -231,7 +233,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           final verifierId = userInfo.verifierId ?? userInfo.email ?? '';
           if (verifierId.isNotEmpty) {
             final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
-            await widget.onSocialLogin(verifierId, name, userInfo.profileImage);
+            await widget.onSocialLogin(verifierId, name, userInfo.profileImage, null, privKey);
             return true;
           }
         }
@@ -299,8 +301,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     final name = userInfo.name ?? userInfo.email?.split('@')[0] ?? 'User';
     final image = userInfo.profileImage;
+    final privKey = response.privKey;
 
-    await widget.onSocialLogin(verifierId, name, image);
+    await widget.onSocialLogin(verifierId, name, image, null, privKey);
   }
 
   // ── 게스트 로그인 ──
@@ -419,7 +422,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     return Column(
       children: [
         const Spacer(flex: 1),
-        _buildLogo(),
+        const AlmaLogo(size: 80),
         const SizedBox(height: 16),
         Text(
           tr('app.name', lang),
@@ -441,9 +444,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               _startAutoAdvance();
             },
             children: [
-              _buildSlide(icon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang)),
-              _buildSlide(icon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang)),
-              _buildSlide(icon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang)),
+              _buildSlide(image: 'assets/images/Auto_Translation.webp', fallbackIcon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang)),
+              _buildSlide(image: 'assets/images/Global_Community.webp', fallbackIcon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang)),
+              _buildSlide(image: 'assets/images/Kindness_First.webp', fallbackIcon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang)),
             ],
           ),
         ),
@@ -504,7 +507,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             const SizedBox(height: 24),
 
             // Logo + welcome
-            _buildLogo(size: 64),
+            const AlmaLogo(size: 64),
             const SizedBox(height: 12),
             Text(
               tr('onboarding.welcome', lang),
@@ -805,28 +808,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
-  Widget _buildLogo({double size = 80}) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AlmaTheme.electricBlue, AlmaTheme.terracottaOrange],
-        ),
-        boxShadow: [
-          BoxShadow(color: AlmaTheme.electricBlue.withValues(alpha: 0.3), blurRadius: 24, spreadRadius: 2),
-          BoxShadow(color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15), blurRadius: 24, offset: const Offset(4, 4)),
-        ],
-      ),
-      child: Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: size * 0.45),
-    );
-  }
-
   Widget _buildSlide({
-    required IconData icon,
+    required String image,
+    required IconData fallbackIcon,
     required Color iconColor,
     required String title,
     required String desc,
@@ -836,13 +820,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: iconColor.withValues(alpha: 0.12)),
-            child: Icon(icon, color: iconColor, size: 28),
+          SizedBox(
+            width: 72,
+            height: 72,
+            child: Image.asset(
+              image,
+              width: 72,
+              height: 72,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: iconColor.withValues(alpha: 0.12)),
+                child: Icon(fallbackIcon, color: iconColor, size: 28),
+              ),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
           const SizedBox(height: 10),
           Text(

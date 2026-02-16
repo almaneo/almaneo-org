@@ -158,6 +158,44 @@ final Map<String, Map<String, String>> _translations = {
     'common.cancel': 'Cancel',
     'common.error': 'Error',
     'common.loading': 'Loading...',
+
+    // AlmaNEO Ecosystem
+    'almaneo.title': 'AlmaNEO',
+    'almaneo.subtitle': 'Kindness Ecosystem',
+    'almaneo.kindnessScore': 'Kindness Score',
+    'almaneo.ambassadorTier': 'Ambassador Tier',
+    'almaneo.wallet': 'Wallet',
+    'almaneo.walletAddress': 'Wallet Address',
+    'almaneo.addressCopied': 'Address copied',
+    'almaneo.tokenBalance': 'ALMAN Balance',
+    'almaneo.noBalance': 'No tokens yet',
+    'almaneo.viewOnAlmaNeo': 'View on AlmaNEO',
+    'almaneo.meetupsAttended': 'Meetups Attended',
+    'almaneo.meetupsHosted': 'Meetups Hosted',
+    'almaneo.loading': 'Loading AlmaNEO data...',
+    'almaneo.error': 'Failed to load data',
+    'almaneo.retry': 'Retry',
+    'almaneo.polygon': 'Polygon',
+    'almaneo.testnet': 'Testnet',
+
+    // Ambassador Tiers
+    'tier.friend': 'Kindness Friend',
+    'tier.host': 'Kindness Host',
+    'tier.ambassador': 'Kindness Ambassador',
+    'tier.guardian': 'Kindness Guardian',
+    'tier.none': 'No Tier',
+    'tier.friend.desc': 'Attended first meetup',
+    'tier.host.desc': 'Hosted 3+ meetups',
+    'tier.ambassador.desc': 'Kindness Score 500+',
+    'tier.guardian.desc': '1,000+ score & 10 referrals',
+
+    // Upgrade prompt (guest)
+    'almaneo.upgradeTitle': 'Connect to AlmaNEO',
+    'almaneo.upgradeDesc': 'Sign in with Google or Apple to unlock:',
+    'almaneo.upgradeFeature1': 'Kindness Score tracking',
+    'almaneo.upgradeFeature2': 'Ambassador SBT badge',
+    'almaneo.upgradeFeature3': 'ALMAN token wallet',
+    'almaneo.upgradeButton': 'Upgrade Account',
   },
 
   // ──────────────────────────────────────
@@ -288,6 +326,44 @@ final Map<String, Map<String, String>> _translations = {
     'common.cancel': '취소',
     'common.error': '오류',
     'common.loading': '로딩 중...',
+
+    // AlmaNEO 생태계
+    'almaneo.title': 'AlmaNEO',
+    'almaneo.subtitle': '친절 생태계',
+    'almaneo.kindnessScore': '친절 점수',
+    'almaneo.ambassadorTier': '앰배서더 등급',
+    'almaneo.wallet': '지갑',
+    'almaneo.walletAddress': '지갑 주소',
+    'almaneo.addressCopied': '주소가 복사되었습니다',
+    'almaneo.tokenBalance': 'ALMAN 잔액',
+    'almaneo.noBalance': '아직 토큰이 없습니다',
+    'almaneo.viewOnAlmaNeo': 'AlmaNEO에서 보기',
+    'almaneo.meetupsAttended': '참가한 밋업',
+    'almaneo.meetupsHosted': '주최한 밋업',
+    'almaneo.loading': 'AlmaNEO 데이터 로딩 중...',
+    'almaneo.error': '데이터를 불러올 수 없습니다',
+    'almaneo.retry': '다시 시도',
+    'almaneo.polygon': 'Polygon',
+    'almaneo.testnet': '테스트넷',
+
+    // 앰배서더 등급
+    'tier.friend': '친절한 친구',
+    'tier.host': '친절한 호스트',
+    'tier.ambassador': '친절 앰배서더',
+    'tier.guardian': '친절 가디언',
+    'tier.none': '등급 없음',
+    'tier.friend.desc': '첫 밋업 참가',
+    'tier.host.desc': '밋업 3회 이상 주최',
+    'tier.ambassador.desc': '친절 점수 500점 이상',
+    'tier.guardian.desc': '1,000점 이상 & 추천인 10명',
+
+    // 업그레이드 (게스트)
+    'almaneo.upgradeTitle': 'AlmaNEO 연결하기',
+    'almaneo.upgradeDesc': 'Google 또는 Apple로 로그인하면:',
+    'almaneo.upgradeFeature1': '친절 점수 추적',
+    'almaneo.upgradeFeature2': '앰배서더 SBT 배지',
+    'almaneo.upgradeFeature3': 'ALMAN 토큰 지갑',
+    'almaneo.upgradeButton': '계정 업그레이드',
   },
 
   // ──────────────────────────────────────

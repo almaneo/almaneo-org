@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="alma_chat"
+        android:label="AlmaChat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
