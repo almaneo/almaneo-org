@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
@@ -35,6 +37,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isSaving = false;
   String? _originalName;
   bool _initialized = false;
+  /// 업로드 직후 로컬에서 즉시 반영할 이미지 URL
+  String? _localImageUrl;
 
   String get _lang => ref.read(languageProvider).languageCode;
 
@@ -215,7 +219,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  /// 이미지 선택 + Stream CDN 업로드 + 사용자 프로필 업데이트
+  /// 이미지 선택 + Supabase Storage 업로드 + Stream 프로필 업데이트
+  /// MIME 타입 변환 (jpg → jpeg 등)
+  String _getMimeType(String ext) {
+    switch (ext.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'webp':
+        return 'image/webp';
+      case 'gif':
+        return 'image/gif';
+      default:
+        return 'image/jpeg';
+    }
+  }
+
   Future<void> _pickAndUploadPhoto(ImageSource source) async {
     try {
       final picker = ImagePicker();
@@ -251,16 +272,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
       final client = StreamChat.of(context).client;
       final user = StreamChat.of(context).currentUser;
-      if (user == null) return;
+      if (user == null) {
+        debugPrint('[PhotoUpload] currentUser is null, aborting');
+        return;
+      }
 
-      // Stream CDN에 업로드 (임의 채널 사용)
-      final fileSize = await picked.length();
-      final file = AttachmentFile(path: picked.path, size: fileSize);
-      final response = await client.sendImage(file, 'messaging', 'general');
-      final imageUrl = response.file;
+      debugPrint('[PhotoUpload] Starting upload for user: ${user.id}');
 
-      // 사용자 프로필 업데이트
+      // Supabase Storage에 업로드 (채널 의존 없음)
+      final supabase = Supabase.instance.client;
+      final file = File(picked.path);
+      final bytes = await file.readAsBytes();
+      final ext = picked.path.split('.').last.toLowerCase();
+      final mimeType = _getMimeType(ext);
+      // 항상 jpeg 확장자 사용 (일관성)
+      final normalizedExt = ext == 'jpg' ? 'jpeg' : ext;
+      final filePath = 'profile-photos/${user.id}/avatar.$normalizedExt';
+
+      debugPrint('[PhotoUpload] File: ${picked.path}, size: ${bytes.length}, mime: $mimeType');
+      debugPrint('[PhotoUpload] Upload path: $filePath');
+
+      await supabase.storage.from('meetup-photos').uploadBinary(
+        filePath,
+        bytes,
+        fileOptions: FileOptions(
+          contentType: mimeType,
+          upsert: true,
+        ),
+      );
+
+      debugPrint('[PhotoUpload] Supabase upload success');
+
+      final imageUrl = supabase.storage.from('meetup-photos').getPublicUrl(filePath);
+      debugPrint('[PhotoUpload] Public URL: $imageUrl');
+
+      // Stream 사용자 프로필 업데이트
       await client.partialUpdateUser(user.id, set: {'image': imageUrl});
+      debugPrint('[PhotoUpload] Stream user updated with image');
 
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -279,10 +327,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-        setState(() {});
+        // 로컬 URL로 즉시 반영 (Stream 상태 업데이트 대기 불필요)
+        setState(() => _localImageUrl = imageUrl);
       }
-    } catch (e) {
-      debugPrint('Photo upload failed: $e');
+    } catch (e, stack) {
+      debugPrint('[PhotoUpload] FAILED: $e');
+      debugPrint('[PhotoUpload] Stack: $stack');
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -291,12 +341,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               children: [
                 const Icon(Icons.error_outline, color: Colors.white, size: 18),
                 const SizedBox(width: 8),
-                Text(tr('profile.photoFailed', _lang)),
+                Expanded(child: Text('${tr('profile.photoFailed', _lang)}: $e')),
               ],
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AlmaTheme.error,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            duration: const Duration(seconds: 5),
           ),
         );
       }
@@ -328,7 +379,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-        setState(() {});
+        setState(() => _localImageUrl = null);
       }
     } catch (e) {
       debugPrint('Photo remove failed: $e');
@@ -581,7 +632,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildAvatarSection(String displayName, String lang) {
     final user = StreamChat.of(context).currentUser;
     final isGuest = user?.id.startsWith('guest_') ?? true;
-    final userImage = user?.image;
+    // 로컬 URL 우선, 없으면 Stream 사용자 이미지
+    final userImage = _localImageUrl ?? user?.image;
     final badgeLabel = isGuest ? tr('profile.guest', lang) : tr('profile.verified', lang);
     final badgeColor = isGuest ? AlmaTheme.electricBlue : AlmaTheme.success;
 

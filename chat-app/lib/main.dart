@@ -349,6 +349,41 @@ class _MainShell extends ConsumerStatefulWidget {
 class _MainShellState extends ConsumerState<_MainShell> {
   int _currentIndex = 1; // Start on Chat tab
 
+  Widget _buildProfileIcon({required bool isActive}) {
+    final user = StreamChat.of(context).currentUser;
+    final imageUrl = user?.image;
+    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+
+    if (hasImage) {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isActive
+                ? AlmaTheme.electricBlue
+                : Colors.white.withValues(alpha: 0.2),
+            width: 1.5,
+          ),
+        ),
+        child: ClipOval(
+          child: Image.network(
+            imageUrl,
+            width: 26,
+            height: 26,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Icon(
+              isActive ? Icons.person : Icons.person_outline,
+              size: 20,
+            ),
+          ),
+        ),
+      );
+    }
+    return Icon(isActive ? Icons.person : Icons.person_outline);
+  }
+
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
@@ -399,8 +434,8 @@ class _MainShellState extends ConsumerState<_MainShell> {
               label: tr('nav.chat', lang),
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.person_outline),
-              activeIcon: const Icon(Icons.person),
+              icon: _buildProfileIcon(isActive: false),
+              activeIcon: _buildProfileIcon(isActive: true),
               label: tr('nav.profile', lang),
             ),
           ],

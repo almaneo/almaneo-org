@@ -127,6 +127,29 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
     );
   }
 
+  Widget _buildAppBarAvatar(User? user) {
+    final imageUrl = user?.image;
+    final name = user?.name ?? '?';
+    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+
+    return CircleAvatar(
+      radius: 16,
+      backgroundColor: AlmaTheme.terracottaOrange,
+      backgroundImage: hasImage ? NetworkImage(imageUrl) : null,
+      onBackgroundImageError: hasImage ? (_, __) {} : null,
+      child: hasImage
+          ? null
+          : Text(
+              name[0].toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = StreamChat.of(context).currentUser;
@@ -217,18 +240,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                         ),
                       );
                     },
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: AlmaTheme.terracottaOrange,
-                      child: Text(
-                        (user?.name ?? '?')[0].toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
+                    child: _buildAppBarAvatar(user),
                   ),
                 ),
               ],
