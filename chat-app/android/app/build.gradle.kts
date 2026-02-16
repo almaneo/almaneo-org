@@ -39,6 +39,12 @@ android {
     }
 }
 
+dependencies {
+    // Web3Auth Core SDK — compileOnly so we can access Web3Auth.setCustomTabsClosed()
+    // in MainActivity.kt. The actual class is provided at runtime by web3auth_flutter plugin.
+    compileOnly("com.github.Web3Auth:web3auth-android-sdk:9.1.3")
+}
+
 flutter {
     source = "../.."
 }

@@ -30,6 +30,9 @@ dependencies:
   # Auth
   web3auth_flutter: ^6.3.0
 
+  # Crypto (Web3Auth session recovery bypass)
+  pointycastle: ^3.9.1
+
   # Utils
   intl: ^0.20.2
   shared_preferences: ^2.5.3
