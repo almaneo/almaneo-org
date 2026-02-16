@@ -49,13 +49,15 @@ class NotificationService {
     // 2. FCM 토큰 발급 + Stream Chat에 등록
     final token = await _fcm.getToken();
     if (token != null) {
-      await client.addDevice(token, PushProvider.firebase);
+      await client.addDevice(token, PushProvider.firebase,
+          pushProviderName: 'almachat');
       debugPrint('[Notification] FCM token registered');
     }
 
     // 3. 토큰 리프레시 리스너
     _fcm.onTokenRefresh.listen((newToken) {
-      client.addDevice(newToken, PushProvider.firebase);
+      client.addDevice(newToken, PushProvider.firebase,
+          pushProviderName: 'almachat');
     });
 
     // 4. 로컬 알림 초기화 (포그라운드 알림 표시용)

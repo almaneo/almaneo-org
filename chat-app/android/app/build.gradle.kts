@@ -12,6 +12,7 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -41,6 +42,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     // Web3Auth Core SDK — compileOnly so we can access Web3Auth.setCustomTabsClosed()
     // in MainActivity.kt. The actual class is provided at runtime by web3auth_flutter plugin.
     compileOnly("com.github.Web3Auth:web3auth-android-sdk:9.1.3")
