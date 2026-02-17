@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<Map<String, dynamic>>? _meetups;
   bool _isLoading = true;
-  String _filter = 'upcoming'; // 'upcoming', 'completed', 'all'
+  String _filter = 'upcoming'; // 'upcoming', 'in_progress', 'completed', 'all'
 
   @override
   void initState() {
@@ -133,6 +133,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Row(
         children: [
           _filterChip('upcoming', tr('home.upcoming', lang), lang),
+          const SizedBox(width: 8),
+          _filterChip('in_progress', tr('home.inProgress', lang), lang),
           const SizedBox(width: 8),
           _filterChip('completed', tr('home.completed', lang), lang),
           const SizedBox(width: 8),
@@ -432,7 +434,7 @@ class _MeetupCard extends StatelessWidget {
       meetingDate = DateTime.parse(meetup['meeting_date'] as String);
     } catch (_) {}
 
-    final isUpcoming = status == 'upcoming';
+    final isActive = status == 'upcoming' || status == 'in_progress';
 
     return GestureDetector(
       onTap: onTap,
@@ -442,7 +444,7 @@ class _MeetupCard extends StatelessWidget {
         color: AlmaTheme.slateGray.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isUpcoming
+          color: isActive
               ? AlmaTheme.electricBlue.withValues(alpha: 0.15)
               : Colors.white.withValues(alpha: 0.05),
         ),
@@ -553,6 +555,12 @@ class _MeetupCard extends StatelessWidget {
       case 'upcoming':
         color = AlmaTheme.electricBlue;
         label = tr('home.upcoming', lang);
+      case 'in_progress':
+        color = AlmaTheme.terracottaOrange;
+        label = tr('home.inProgress', lang);
+      case 'ended':
+        color = AlmaTheme.warning;
+        label = tr('home.ended', lang);
       case 'completed':
         color = AlmaTheme.success;
         label = tr('home.completed', lang);

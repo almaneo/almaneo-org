@@ -3,13 +3,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class MeetupService {
   static final _supabase = Supabase.instance.client;
 
-  /// Get upcoming meetups
+  /// Get upcoming and in-progress meetups
   static Future<List<Map<String, dynamic>>> getUpcomingMeetups({int limit = 20}) async {
     final response = await _supabase
         .from('meetups')
         .select()
-        .eq('status', 'upcoming')
-        .gte('meeting_date', DateTime.now().toIso8601String())
+        .inFilter('status', ['upcoming', 'in_progress'])
         .order('meeting_date', ascending: true)
         .limit(limit);
     return List<Map<String, dynamic>>.from(response);
@@ -152,5 +151,48 @@ class MeetupService {
         .inFilter('id', meetupIds)
         .order('meeting_date', ascending: false);
     return List<Map<String, dynamic>>.from(response);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Meetup Lifecycle (V0.3 Phase 3)
+  // upcoming → in_progress → ended → completed (or cancelled)
+  // ---------------------------------------------------------------------------
+
+  /// Start a meetup: upcoming → in_progress
+  static Future<bool> startMeetup(String meetupId) async {
+    try {
+      await _supabase.from('meetups').update({
+        'status': 'in_progress',
+        'started_at': DateTime.now().toIso8601String(),
+      }).eq('id', meetupId);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// End a meetup: in_progress → ended
+  static Future<bool> endMeetup(String meetupId) async {
+    try {
+      await _supabase.from('meetups').update({
+        'status': 'ended',
+        'ended_at': DateTime.now().toIso8601String(),
+      }).eq('id', meetupId);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Complete a meetup: ended → completed
+  static Future<bool> completeMeetup(String meetupId) async {
+    try {
+      await _supabase.from('meetups').update({
+        'status': 'completed',
+      }).eq('id', meetupId);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }
