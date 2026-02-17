@@ -130,17 +130,17 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         final langNotifier = ref.read(languageProvider.notifier);
         langNotifier.setLanguage(restored.session.languageCode);
 
+        // image를 전달하지 않음 — Stream 서버의 기존 이미지 보존
         await _connectUserWithRetry(
           User(
             id: restored.session.userId,
             name: restored.session.userName,
-            image: restored.session.profileImage,
             extraData: {'preferred_language': restored.session.languageCode},
           ),
           restored.token,
         );
 
-        // SessionStorage의 프로필 이미지가 Stream 서버에 없으면 설정
+        // 서버에 이미지가 없고 SessionStorage에 있으면 푸시 (백업 복원)
         final sessionImage = restored.session.profileImage;
         final serverUser = widget.client.state.currentUser;
         if (sessionImage != null && sessionImage.isNotEmpty &&
@@ -153,7 +153,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
             debugPrint('Session restore: image push failed: $e');
           }
         }
-        // 연결 후 서버의 프로필 이미지를 SessionStorage에 동기화
+        // 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
         await _syncProfileImageFromServer();
 
         await _initNotifications();
@@ -219,11 +219,12 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
     try {
+      // image를 전달하지 않음 — Stream 서버의 기존 커스텀 이미지 보존
+      // connectUserWithProvider에 image를 보내면 소셜 아바타로 덮어써짐
       await _connectUserWithRetry(
         User(
           id: _authService.userId!,
           name: name,
-          image: image,
           extraData: {'preferred_language': langCode},
         ),
         token,
@@ -235,7 +236,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         await widget.client.partialUpdateUser(_authService.userId!, set: {'image': image});
       }
 
-      // 서버의 프로필 이미지를 SessionStorage에 동기화
+      // 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
       await _syncProfileImageFromServer();
 
       await _initNotifications();
@@ -247,11 +248,12 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     if (mounted) setState(() => _isConnected = true);
   }
 
-  /// 연결 후 Stream 서버의 프로필 이미지를 SessionStorage에 동기화
+  /// 연결 후 Stream 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
   Future<void> _syncProfileImageFromServer() async {
     final user = widget.client.state.currentUser;
     if (user != null && user.image != null && user.image!.isNotEmpty) {
       await SessionStorage.updateProfileImage(user.image);
+      _authService.setProfileImage(user.image);
     }
   }
 
@@ -300,7 +302,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       if (newToken == null || _authService.userId == null) return;
 
       await widget.client.connectUserWithProvider(
-        User(id: _authService.userId!, name: _authService.userName, image: _authService.profileImage),
+        User(id: _authService.userId!, name: _authService.userName),
         (userId) async {
           final t = await _authService.refreshToken();
           if (t == null) throw Exception('Token refresh failed');
