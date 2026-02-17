@@ -3706,13 +3706,66 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 101+)
+### ✅ 완료된 작업 (2026-02-17 - Session 101: V0.3 Phase 2 초대 링크 시스템)
+
+#### 1. **Supabase `invite_links` 테이블 생성** ✅
+   - `supabase/migrations/20260217100000_invite_links.sql` (신규)
+   - 컬럼: id (UUID PK), code (UNIQUE), channel_id, channel_type, created_by, expires_at, max_uses, use_count
+   - 인덱스: code, channel_id, created_by
+   - RLS: 누구나 읽기/쓰기/수정 가능
+   - ⚠️ **Supabase Dashboard에서 SQL 직접 실행 필요** (마이그레이션 히스토리 충돌로 push 실패)
+
+#### 2. **create-invite API** ✅
+   - `chat/api/create-invite.ts` (신규)
+   - POST `/api/create-invite` → `{ userId, channelId, channelType? }`
+   - 6자리 초대 코드 생성 (문자셋: `ABCDEFGHJKLMNPQRSTUVWXYZ23456789` — I/O/0/1 제외)
+   - 7일 만료, 기존 유효 코드 재사용
+   - 반환: `{ success, code, inviteUrl, expiresAt }`
+
+#### 3. **join-invite API** ✅
+   - `chat/api/join-invite.ts` (신규)
+   - POST `/api/join-invite` → `{ userId, code }`
+   - 코드 검증 (만료, max_uses), 대소문자 무관
+   - Stream Chat `channel.addMembers([userId])` 서버사이드 실행
+   - use_count 증가
+   - 에러 타입: `invalid_code`, `expired_code`, `max_uses_reached`
+
+#### 4. **chat_screen.dart 수정** ✅
+   - `_shareInviteLink()`: 동기 → 비동기 전환, `/api/create-invite` API 호출
+   - 로딩 다이얼로그 표시
+   - `_showInviteBottomSheet()`: 초대 코드 강조 표시 (28px 모노스페이스, letter-spacing 6)
+   - 에러 처리 (`invite.createFailed` 번역 키)
+
+#### 5. **channel_list_screen.dart 수정** ✅
+   - `_showChannelOptions()` 바텀시트에 "코드로 참여" 옵션 추가
+   - 아이콘: `Icons.vpn_key_outlined`, 색상: `AlmaTheme.sandGold`
+   - `_showJoinByCodeDialog()`: 6자리 텍스트 필드 (대문자, 모노스페이스)
+   - `/api/join-invite` API 호출 → 성공 시 채널로 이동
+   - `StatefulBuilder` 패턴으로 다이얼로그 내 로딩 상태 관리
+
+#### 6. **15개 언어 번역 추가** ✅
+   - `app_strings.dart`에 150개 새 번역 항목 (15개 언어 × 10개 키)
+   - 새 키: `invite.joinByCode`, `invite.joinByCodeDesc`, `invite.codeLabel`, `invite.join`, `invite.invalidCode`, `invite.expiredCode`, `invite.joinSuccess`, `invite.joinFailed`, `invite.creating`, `invite.createFailed`
+
+#### 7. **커밋**
+   - `e4acd13` - feat(chat): Implement invite link system (V0.3 Phase 2)
+   - 6개 파일, +750줄, -18줄
+
+#### 8. **실기기 테스트 전 필요 작업**
+   - Supabase Dashboard에서 `invite_links` 테이블 SQL 직접 실행
+   - Vercel 배포 (chat 백엔드 신규 API)
+   - Vercel 환경변수 `SUPABASE_SERVICE_KEY` 확인
+
+---
+
+### 🔲 다음 세션 작업 (Session 102+)
 
 #### 🔴 최우선
-1. **프로필 이미지 크로스-디바이스 테스트** — 기기1 이미지 설정 → 기기2 다른 계정 로그인 → 기기1 이미지 유지 확인
-2. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
+1. **초대 링크 실기기 테스트** — 코드 생성 → 다른 계정에서 코드 입력 → 채널 참여 확인
+2. **프로필 이미지 크로스-디바이스 테스트** — 기기1 이미지 설정 → 기기2 다른 계정 로그인 → 기기1 이미지 유지 확인
+3. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
 
 #### 🟡 중간 우선순위
-3. **V0.3 Phase 2 시작**: 초대 링크 시스템 구현
 4. **V0.3 Phase 3**: 밋업 녹음 기능
 5. **V0.3 Phase 4**: Kindness AI 분석 MVP
+6. **딥링크 핸들러**: `almachat://invite/{code}` 또는 App Links (Phase 5)
