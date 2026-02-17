@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import '../config/env.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
@@ -30,16 +33,86 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     super.dispose();
   }
 
-  void _shareInviteLink(Channel channel, String channelName, String lang) {
+  Future<void> _shareInviteLink(Channel channel, String channelName, String lang) async {
     final channelId = channel.id;
-    if (channelId == null) return;
+    final user = StreamChat.of(context).currentUser;
+    if (channelId == null || user == null) return;
 
-    final inviteLink = 'https://chat.almaneo.org/join/$channelId';
-    final shareText = tr('invite.message', lang, args: {
-      'name': channelName,
-      'link': inviteLink,
-    });
+    // Show loading
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AlmaTheme.slateGray,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                width: 24, height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2, color: AlmaTheme.electricBlue),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                tr('invite.creating', lang),
+                style: const TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
+    try {
+      final response = await http.post(
+        Uri.parse('${Env.chatApiUrl}/api/create-invite'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': user.id,
+          'channelId': channelId,
+          'channelType': channel.type,
+        }),
+      );
+
+      if (!mounted) return;
+      Navigator.pop(context); // dismiss loading
+
+      if (response.statusCode != 200) {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final inviteCode = data['code'] as String;
+      final inviteUrl = data['inviteUrl'] as String;
+
+      final shareText = tr('invite.message', lang, args: {
+        'name': channelName,
+        'link': inviteUrl,
+      });
+
+      if (!mounted) return;
+      _showInviteBottomSheet(inviteCode, inviteUrl, shareText, lang);
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context); // dismiss loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('invite.createFailed', lang)),
+            backgroundColor: AlmaTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+    }
+  }
+
+  void _showInviteBottomSheet(String code, String inviteUrl, String shareText, String lang) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AlmaTheme.slateGray,
@@ -70,10 +143,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Link display
+              // Invite code display (large, prominent)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 decoration: BoxDecoration(
                   color: AlmaTheme.deepNavy,
                   borderRadius: BorderRadius.circular(10),
@@ -81,14 +154,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
                   ),
                 ),
-                child: Text(
-                  inviteLink,
-                  style: TextStyle(
-                    color: AlmaTheme.electricBlue.withValues(alpha: 0.9),
-                    fontSize: 13,
-                    fontFamily: 'monospace',
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  children: [
+                    Text(
+                      tr('invite.codeLabel', lang),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      code,
+                      style: const TextStyle(
+                        color: AlmaTheme.electricBlue,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                        letterSpacing: 6,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      inviteUrl,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.35),
+                        fontSize: 11,
+                        fontFamily: 'monospace',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
@@ -97,7 +194,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: inviteLink));
+                    Clipboard.setData(ClipboardData(text: inviteUrl));
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -443,6 +444,180 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
     );
   }
 
+  void _showJoinByCodeDialog(String lang) {
+    final codeController = TextEditingController();
+    bool isLoading = false;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          backgroundColor: AlmaTheme.slateGray,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(
+            tr('invite.joinByCode', lang),
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                tr('invite.joinByCodeDesc', lang),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: codeController,
+                textCapitalization: TextCapitalization.characters,
+                maxLength: 6,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                  letterSpacing: 6,
+                ),
+                cursorColor: AlmaTheme.electricBlue,
+                decoration: InputDecoration(
+                  hintText: 'ABC123',
+                  hintStyle: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'monospace',
+                    letterSpacing: 6,
+                  ),
+                  counterText: '',
+                  filled: true,
+                  fillColor: AlmaTheme.deepNavy,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: AlmaTheme.electricBlue),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: isLoading ? null : () => Navigator.pop(ctx),
+              child: Text(
+                tr('common.cancel', lang),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final code = codeController.text.trim().toUpperCase();
+                      if (code.length < 4) return;
+
+                      final user = StreamChat.of(context).currentUser;
+                      if (user == null) return;
+
+                      setDialogState(() => isLoading = true);
+
+                      try {
+                        final response = await http.post(
+                          Uri.parse('${Env.chatApiUrl}/api/join-invite'),
+                          headers: {'Content-Type': 'application/json'},
+                          body: jsonEncode({
+                            'userId': user.id,
+                            'code': code,
+                          }),
+                        );
+
+                        final data = jsonDecode(response.body) as Map<String, dynamic>;
+
+                        if (response.statusCode != 200) {
+                          final errorType = data['error'] as String? ?? '';
+                          String errorMsg;
+                          if (errorType == 'invalid_code') {
+                            errorMsg = tr('invite.invalidCode', lang);
+                          } else if (errorType == 'expired_code') {
+                            errorMsg = tr('invite.expiredCode', lang);
+                          } else {
+                            errorMsg = tr('invite.joinFailed', lang);
+                          }
+                          if (ctx.mounted) {
+                            setDialogState(() => isLoading = false);
+                            ScaffoldMessenger.of(ctx).showSnackBar(
+                              SnackBar(
+                                content: Text(errorMsg),
+                                backgroundColor: AlmaTheme.error,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
+                        final channelId = data['channelId'] as String;
+                        final channelType = data['channelType'] as String? ?? 'messaging';
+                        final client = StreamChat.of(context).client;
+                        final channel = client.channel(channelType, id: channelId);
+                        await channel.watch();
+
+                        if (ctx.mounted) Navigator.pop(ctx);
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(tr('invite.joinSuccess', lang)),
+                              backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                          );
+                          _navigateToChannel(channel);
+                        }
+                      } catch (e) {
+                        if (ctx.mounted) {
+                          setDialogState(() => isLoading = false);
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            SnackBar(
+                              content: Text(tr('invite.joinFailed', lang)),
+                              backgroundColor: AlmaTheme.error,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                          );
+                        }
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AlmaTheme.electricBlue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      width: 18, height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : Text(tr('invite.join', lang)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showChannelOptions(BuildContext context, String lang) {
     showModalBottomSheet(
       context: context,
@@ -513,6 +688,16 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                     context,
                     MaterialPageRoute(builder: (_) => const BrowseChannelsScreen()),
                   );
+                },
+              ),
+              _BottomSheetOption(
+                icon: Icons.vpn_key_outlined,
+                iconColor: AlmaTheme.sandGold,
+                title: tr('invite.joinByCode', lang),
+                subtitle: tr('invite.joinByCodeDesc', lang),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showJoinByCodeDialog(lang);
                 },
               ),
             ],
