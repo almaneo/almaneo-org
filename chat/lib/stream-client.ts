@@ -39,10 +39,12 @@ export function isStreamConfigured(): boolean {
 
 /**
  * Generate a user token for Stream Chat
+ * Token expires in 24 hours — the client's tokenProvider will auto-refresh
  */
 export function generateUserToken(userId: string): string {
   const sc = getStreamClient();
-  return sc.createToken(userId);
+  const exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60; // 24h
+  return sc.createToken(userId, exp);
 }
 
 /**

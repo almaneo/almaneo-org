@@ -419,24 +419,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   // ════════════════════════════════════════════════
 
   Widget _buildOnboardingView(String lang) {
+    final screenH = MediaQuery.of(context).size.height;
+    final isCompact = screenH < 700; // A24/소형 디바이스 대응
+    final logoSize = isCompact ? 56.0 : 80.0;
+    final titleSize = isCompact ? 24.0 : 30.0;
+    final slideHeight = isCompact ? 160.0 : 200.0;
+    final bottomPad = isCompact ? 16.0 : 32.0;
+
     return Column(
       children: [
         const Spacer(flex: 1),
-        const AlmaLogo(size: 80),
-        const SizedBox(height: 16),
+        AlmaLogo(size: logoSize),
+        SizedBox(height: isCompact ? 10 : 16),
         Text(
           tr('app.name', lang),
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
+          style: TextStyle(fontSize: titleSize, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
         ),
         const SizedBox(height: 6),
         Text(
           tr('app.tagline', lang),
-          style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.5)),
+          style: TextStyle(fontSize: isCompact ? 12 : 14, color: Colors.white.withValues(alpha: 0.5)),
           textAlign: TextAlign.center,
         ),
         const Spacer(flex: 1),
         SizedBox(
-          height: 200,
+          height: slideHeight,
           child: PageView(
             controller: _pageController,
             onPageChanged: (index) {
@@ -444,13 +451,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               _startAutoAdvance();
             },
             children: [
-              _buildSlide(image: 'assets/images/Auto_Translation.webp', fallbackIcon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang)),
-              _buildSlide(image: 'assets/images/Global_Community.webp', fallbackIcon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang)),
-              _buildSlide(image: 'assets/images/Kindness_First.webp', fallbackIcon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang)),
+              _buildSlide(image: 'assets/images/Auto_Translation.webp', fallbackIcon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang), compact: isCompact),
+              _buildSlide(image: 'assets/images/Global_Community.webp', fallbackIcon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang), compact: isCompact),
+              _buildSlide(image: 'assets/images/Kindness_First.webp', fallbackIcon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang), compact: isCompact),
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: isCompact ? 12 : 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(3, (index) {
@@ -472,7 +479,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: SizedBox(
             width: double.infinity,
-            height: 52,
+            height: isCompact ? 46 : 52,
             child: ElevatedButton(
               onPressed: _goToLogin,
               style: ElevatedButton.styleFrom(
@@ -483,12 +490,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               ),
               child: Text(
                 tr('onboarding.getStarted', lang),
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: isCompact ? 15 : 17, fontWeight: FontWeight.w600),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: bottomPad),
       ],
     );
   }
@@ -814,35 +821,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     required Color iconColor,
     required String title,
     required String desc,
+    bool compact = false,
   }) {
+    final imgSize = compact ? 52.0 : 72.0;
+    final titleFontSize = compact ? 17.0 : 20.0;
+    final descFontSize = compact ? 13.0 : 15.0;
+    final hPad = compact ? 28.0 : 40.0;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: EdgeInsets.symmetric(horizontal: hPad),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 72,
-            height: 72,
+            width: imgSize,
+            height: imgSize,
             child: Image.asset(
               image,
-              width: 72,
-              height: 72,
+              width: imgSize,
+              height: imgSize,
               fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => Container(
-                width: 56,
-                height: 56,
+                width: imgSize * 0.78,
+                height: imgSize * 0.78,
                 decoration: BoxDecoration(shape: BoxShape.circle, color: iconColor.withValues(alpha: 0.12)),
-                child: Icon(fallbackIcon, color: iconColor, size: 28),
+                child: Icon(fallbackIcon, color: iconColor, size: imgSize * 0.39),
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
-          const SizedBox(height: 10),
+          SizedBox(height: compact ? 10 : 16),
+          Text(title, style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.w700, color: Colors.white)),
+          SizedBox(height: compact ? 6 : 10),
           Text(
             desc,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, height: 1.5, color: Colors.white.withValues(alpha: 0.55)),
+            style: TextStyle(fontSize: descFontSize, height: 1.5, color: Colors.white.withValues(alpha: 0.55)),
+            maxLines: compact ? 2 : 3,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

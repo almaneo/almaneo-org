@@ -230,25 +230,61 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     }
   }
 
-  /// Stream Chat 연결 (401 등 간헐적 에러 시 1회 재시도)
+  /// Stream Chat 연결 — tokenProvider 방식 사용
+  /// SDK가 401/토큰만료 시 자동으로 tokenProvider를 호출하여 토큰 갱신
   Future<void> _connectUserWithRetry(User user, String token, {int retries = 1}) async {
     try {
-      await widget.client.connectUser(user, token);
+      await widget.client.connectUserWithProvider(
+        user,
+        (userId) async {
+          final freshToken = await _authService.refreshToken();
+          if (freshToken == null) {
+            throw Exception('Failed to refresh Stream token');
+          }
+          return freshToken;
+        },
+      );
     } catch (e) {
-      debugPrint('connectUser failed: $e');
-      if (retries > 0 && e.toString().contains('401')) {
-        debugPrint('Retrying connectUser after 401...');
-        await Future.delayed(const Duration(seconds: 1));
-        // 토큰 재발급 후 재시도
-        final newToken = await _authService.refreshToken();
-        if (newToken != null) {
-          await widget.client.connectUser(user, newToken);
-        } else {
-          rethrow;
-        }
-      } else {
-        rethrow;
+      debugPrint('connectUserWithProvider failed: $e');
+      if (retries > 0) {
+        debugPrint('Retrying connection...');
+        await Future.delayed(const Duration(seconds: 2));
+        return _connectUserWithRetry(user, token, retries: retries - 1);
       }
+      rethrow;
+    }
+
+    // WebSocket 상태 감시 — SDK가 재연결 포기 시 전체 재로그인
+    _listenConnectionStatus();
+  }
+
+  /// SDK가 재연결을 포기(disconnected)하면 전체 재로그인 시도
+  void _listenConnectionStatus() {
+    widget.client.wsConnectionStatusStream.listen((status) {
+      if (status == ConnectionStatus.disconnected && _isConnected) {
+        debugPrint('Stream disconnected — attempting full reconnection');
+        _attemptFullReconnect();
+      }
+    });
+  }
+
+  /// 전체 재연결: 토큰 재발급 → connectUserWithProvider
+  Future<void> _attemptFullReconnect() async {
+    try {
+      final newToken = await _authService.refreshToken();
+      if (newToken == null || _authService.userId == null) return;
+
+      await widget.client.connectUserWithProvider(
+        User(id: _authService.userId!, name: _authService.userName),
+        (userId) async {
+          final t = await _authService.refreshToken();
+          if (t == null) throw Exception('Token refresh failed');
+          return t;
+        },
+      );
+      debugPrint('Full reconnection successful');
+    } catch (e) {
+      debugPrint('Full reconnection failed: $e');
     }
   }
 
