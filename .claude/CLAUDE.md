@@ -3511,3 +3511,60 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 #### 🟢 낮은 우선순위
 
 10. **메인넷 배포 준비** (Multi-sig 설정, 감사)
+
+---
+
+### ✅ 완료된 작업 (2026-02-17 - Session 97: Stream 401 수정 & V0.3 계획)
+
+#### 1. **Stream Chat 401 네트워크 끊김 근본 수정** ✅
+   - **근본 원인**: `connectUser(user, token)` 사용 → 토큰이 `static`으로 저장 → SDK가 401 시 토큰 갱신 불가
+   - **수정**: `connectUserWithProvider(user, tokenProvider)` 로 전환
+     - SDK 내부 `isStatic = false` → 401/토큰만료 시 자동 `tokenProvider` 호출
+     - WebSocket 재연결 + HTTP API 재시도 모두 자동 토큰 갱신
+   - **서버 토큰 24시간 만료 추가**: `chat/lib/stream-client.ts`
+     ```typescript
+     const exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
+     return sc.createToken(userId, exp);
+     ```
+   - **전체 재연결 폴백**: `wsConnectionStatusStream` 감시 → SDK 재연결 포기 시 `_attemptFullReconnect()` 호출
+
+#### 2. **온보딩 슬라이드 A24 반응형 대응** ✅
+   - `MediaQuery.of(context).size.height < 700` → compact 모드 자동 전환
+   - compact 모드 사이즈 조정:
+     | 요소 | 일반 | compact |
+     |------|------|---------|
+     | 로고 | 80dp | 56dp |
+     | 타이틀 폰트 | 30sp | 24sp |
+     | 슬라이드 높이 | 200dp | 160dp |
+     | 슬라이드 이미지 | 72dp | 52dp |
+     | 슬라이드 타이틀 | 20sp | 17sp |
+     | 슬라이드 설명 | 15sp | 13sp |
+     | 버튼 높이 | 52dp | 46dp |
+
+#### 3. **푸시 알림 테스트 가이드** ✅
+   - Stream Chat Dashboard → Push Notifications → Firebase 설정 필수
+   - Push Provider Name: `almachat` (코드와 일치)
+   - 6가지 테스트 시나리오 정리 (포그라운드/백그라운드/종료/알림탭 등)
+
+#### 4. **V0.3 계획 수립** ✅
+   - `chat-app/V0.3_PLAN.md` 생성
+   - Phase 1: 안정성 강화 (✅ 완료)
+   - Phase 2: 초대 링크 시스템
+   - Phase 3: 밋업 녹음 & 데이터 수집
+   - Phase 4: Kindness AI 분석 MVP (Gemini Audio API → STT → 요약 → 점수)
+   - Phase 5: 폴리싱 & 확장
+
+#### 5. **커밋**
+   - `890a196` - fix(chat-app): Fix Stream 401 disconnect and responsive onboarding
+   - 4개 파일, +297줄, -40줄
+
+### 🔲 다음 세션 작업 (Session 98+)
+
+#### 🔴 최우선
+1. **실기기 테스트**: Stream 401 수정 검증, 온보딩 반응형 확인
+2. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
+3. **V0.3 Phase 2 시작**: 초대 링크 시스템 구현
+
+#### 🟡 중간 우선순위
+4. **V0.3 Phase 3**: 밋업 녹음 기능
+5. **V0.3 Phase 4**: Kindness AI 분석 MVP
