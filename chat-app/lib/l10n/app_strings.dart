@@ -24,6 +24,7 @@ final Map<String, Map<String, String>> _translations = {
     // App
     'app.name': 'AlmaChat',
     'app.tagline': 'Connect with kindness, across languages',
+    'app.pressBackToExit': 'Press back again to exit',
 
     // Login
     'login.enterName': 'Enter your name',
@@ -265,6 +266,7 @@ final Map<String, Map<String, String>> _translations = {
   'ko': {
     'app.name': 'AlmaChat',
     'app.tagline': '친절로 연결되는, 언어를 넘어',
+    'app.pressBackToExit': '한 번 더 누르면 앱이 종료됩니다',
 
     'login.enterName': '이름을 입력하세요',
     'login.nameRequired': '이름을 입력해 주세요',
@@ -493,6 +495,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'zh': {
     'app.tagline': '以善意连接，跨越语言',
+    'app.pressBackToExit': '再按一次返回键退出',
     'login.enterName': '请输入您的名字',
     'login.nameRequired': '请输入您的名字',
     'login.startChatting': '开始聊天',
@@ -641,6 +644,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'ja': {
     'app.tagline': '優しさでつながる、言語を超えて',
+    'app.pressBackToExit': 'もう一度押すと終了します',
     'login.enterName': '名前を入力してください',
     'login.nameRequired': '名前を入力してください',
     'login.startChatting': 'チャットを始める',
@@ -789,6 +793,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'es': {
     'app.tagline': 'Conecta con amabilidad, más allá de los idiomas',
+    'app.pressBackToExit': 'Presiona atrás de nuevo para salir',
     'login.enterName': 'Ingresa tu nombre',
     'login.nameRequired': 'Por favor ingresa tu nombre',
     'login.startChatting': 'Empezar a chatear',
@@ -937,6 +942,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'fr': {
     'app.tagline': 'Connectez-vous avec bienveillance, au-delà des langues',
+    'app.pressBackToExit': 'Appuyez à nouveau pour quitter',
     'login.enterName': 'Entrez votre nom',
     'login.nameRequired': 'Veuillez entrer votre nom',
     'login.startChatting': 'Commencer à chatter',
@@ -1085,6 +1091,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'ar': {
     'app.tagline': 'تواصل بلطف، عبر اللغات',
+    'app.pressBackToExit': 'اضغط مرة أخرى للخروج',
     'login.enterName': 'أدخل اسمك',
     'login.nameRequired': 'الرجاء إدخال اسمك',
     'login.startChatting': 'ابدأ المحادثة',
@@ -1233,6 +1240,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'vi': {
     'app.tagline': 'Kết nối bằng lòng tốt, vượt qua ngôn ngữ',
+    'app.pressBackToExit': 'Nhấn lần nữa để thoát',
     'login.enterName': 'Nhập tên của bạn',
     'login.nameRequired': 'Vui lòng nhập tên',
     'login.startChatting': 'Bắt đầu trò chuyện',
@@ -1381,6 +1389,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'th': {
     'app.tagline': 'เชื่อมต่อด้วยความใจดี ข้ามภาษา',
+    'app.pressBackToExit': 'กดอีกครั้งเพื่อออก',
     'login.enterName': 'กรอกชื่อของคุณ',
     'login.nameRequired': 'กรุณากรอกชื่อ',
     'login.startChatting': 'เริ่มแชท',
@@ -1529,6 +1538,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'pt': {
     'app.tagline': 'Conecte-se com gentileza, além dos idiomas',
+    'app.pressBackToExit': 'Pressione voltar novamente para sair',
     'login.enterName': 'Digite seu nome',
     'login.nameRequired': 'Por favor, digite seu nome',
     'login.startChatting': 'Começar a conversar',
@@ -1659,6 +1669,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'id': {
     'app.tagline': 'Terhubung dengan kebaikan, melampaui bahasa',
+    'app.pressBackToExit': 'Tekan kembali sekali lagi untuk keluar',
     'login.enterName': 'Masukkan nama Anda',
     'login.nameRequired': 'Silakan masukkan nama',
     'login.startChatting': 'Mulai Mengobrol',
@@ -1789,6 +1800,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'hi': {
     'app.tagline': 'दयालुता से जुड़ें, भाषाओं से परे',
+    'app.pressBackToExit': 'बाहर निकलने के लिए फिर से दबाएं',
     'login.enterName': 'अपना नाम दर्ज करें',
     'login.nameRequired': 'कृपया अपना नाम दर्ज करें',
     'login.startChatting': 'चैट शुरू करें',
@@ -1898,6 +1910,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'de': {
     'app.tagline': 'Verbinden mit Freundlichkeit, über Sprachen hinweg',
+    'app.pressBackToExit': 'Noch einmal drücken zum Beenden',
     'login.enterName': 'Geben Sie Ihren Namen ein',
     'login.nameRequired': 'Bitte geben Sie Ihren Namen ein',
     'login.startChatting': 'Chat starten',
@@ -2007,6 +2020,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'ru': {
     'app.tagline': 'Соединяйтесь с добротой, преодолевая языки',
+    'app.pressBackToExit': 'Нажмите ещё раз для выхода',
     'login.enterName': 'Введите ваше имя',
     'login.nameRequired': 'Пожалуйста, введите имя',
     'login.startChatting': 'Начать общение',
@@ -2116,6 +2130,7 @@ final Map<String, Map<String, String>> _translations = {
   // ──────────────────────────────────────
   'tr': {
     'app.tagline': 'Nezaketle bağlan, dillerin ötesinde',
+    'app.pressBackToExit': 'Çıkmak için tekrar basın',
     'login.enterName': 'Adınızı girin',
     'login.nameRequired': 'Lütfen adınızı girin',
     'login.startChatting': 'Sohbete Başla',

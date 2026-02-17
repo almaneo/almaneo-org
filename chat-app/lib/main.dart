@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -132,7 +133,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           User(
             id: restored.session.userId,
             name: restored.session.userName,
-            // image를 전달하지 않으면 Stream 서버의 기존 이미지가 유지됨
+            image: restored.session.profileImage,
             extraData: {'preferred_language': restored.session.languageCode},
           ),
           restored.token,
@@ -275,7 +276,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       if (newToken == null || _authService.userId == null) return;
 
       await widget.client.connectUserWithProvider(
-        User(id: _authService.userId!, name: _authService.userName),
+        User(id: _authService.userId!, name: _authService.userName, image: _authService.profileImage),
         (userId) async {
           final t = await _authService.refreshToken();
           if (t == null) throw Exception('Token refresh failed');
@@ -428,6 +429,7 @@ class _MainShell extends ConsumerStatefulWidget {
 
 class _MainShellState extends ConsumerState<_MainShell> {
   int _currentIndex = 1; // Start on Chat tab
+  DateTime? _lastBackPress;
 
   Widget _buildProfileIcon({required bool isActive}) {
     final user = StreamChat.of(context).currentUser;
@@ -468,7 +470,37 @@ class _MainShellState extends ConsumerState<_MainShell> {
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+
+        // 채팅 탭(1)이 아니면 채팅 탭으로 이동
+        if (_currentIndex != 1) {
+          setState(() => _currentIndex = 1);
+          return;
+        }
+
+        // 채팅 탭에서 2초 내 두 번 누르면 앱 종료
+        final now = DateTime.now();
+        if (_lastBackPress != null &&
+            now.difference(_lastBackPress!) < const Duration(seconds: 2)) {
+          SystemNavigator.pop(); // 앱 종료
+          return;
+        }
+        _lastBackPress = now;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('app.pressBackToExit', lang)),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+      },
+      child: Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: [
@@ -521,6 +553,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
           ],
         ),
       ),
-    );
+    ),  // PopScope child: Scaffold end
+    );  // PopScope end
   }
 }

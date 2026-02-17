@@ -60,15 +60,21 @@ export async function upsertStreamUser(user: {
   ambassador_tier?: string;
 }): Promise<void> {
   const sc = getStreamClient();
-  await sc.upsertUser({
+
+  // Build user data — only include fields that are explicitly provided
+  // so that undefined fields don't overwrite existing server values (e.g. profile image)
+  const userData: Record<string, unknown> = {
     id: user.id,
     name: user.name || user.id,
-    image: user.image,
     preferred_language: user.preferred_language || 'en',
-    wallet_address: user.wallet_address,
-    kindness_score: user.kindness_score || 0,
-    ambassador_tier: user.ambassador_tier || 'none',
-  });
+  };
+
+  if (user.image !== undefined) userData.image = user.image;
+  if (user.wallet_address !== undefined) userData.wallet_address = user.wallet_address;
+  if (user.kindness_score !== undefined) userData.kindness_score = user.kindness_score;
+  if (user.ambassador_tier !== undefined) userData.ambassador_tier = user.ambassador_tier;
+
+  await sc.upsertUser(userData as { id: string } & Record<string, unknown>);
 }
 
 /**
