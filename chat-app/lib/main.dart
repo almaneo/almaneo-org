@@ -17,7 +17,7 @@ import 'l10n/app_strings.dart';
 import 'providers/language_provider.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
-import 'services/session_storage.dart';
+import 'services/profile_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/chat_screen.dart';
@@ -133,22 +133,17 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         final langNotifier = ref.read(languageProvider.notifier);
         langNotifier.setLanguage(restored.session.languageCode);
 
-        // 서버에 저장된 기존 이미지를 포함하여 연결 (이미지 초기화 방지)
         await _connectUserWithRetry(
           User(
             id: restored.session.userId,
             name: restored.session.userName,
-            image: _authService.serverImage,
             extraData: {'preferred_language': restored.session.languageCode},
           ),
           restored.token,
         );
 
-        debugPrint('[Session] Connected. currentUser.image='
-            '${widget.client.state.currentUser?.image ?? "null"}');
-
-        // 프로필 이미지 보장 (서버 > 영속 저장소 > 세션 저장소)
-        await _ensureProfileImage();
+        // DB에서 프로필 이미지 읽어 Stream에 동기화
+        await _syncProfileImageFromDB();
 
         await _initNotifications();
         if (mounted) setState(() => _isConnected = true);
@@ -194,12 +189,12 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         User(
           id: _authService.userId!,
           name: _authService.userName,
-          image: _authService.serverImage,
           extraData: {'preferred_language': langState.languageCode},
         ),
         token,
       );
 
+      await _syncProfileImageFromDB();
       await _initNotifications();
     } catch (e) {
       debugPrint('Guest login post-connect error: $e');
@@ -217,23 +212,17 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
     try {
-      // 서버에 저장된 기존 이미지를 포함하여 연결 (이미지 초기화 방지)
-      // serverImage가 있으면 커스텀 이미지 유지, 없으면 _ensureProfileImage에서 처리
       await _connectUserWithRetry(
         User(
           id: _authService.userId!,
           name: name,
-          image: _authService.serverImage,
           extraData: {'preferred_language': langCode},
         ),
         token,
       );
 
-      debugPrint('[SocialLogin] Connected. currentUser.image='
-          '${widget.client.state.currentUser?.image ?? "null"}');
-
-      // 프로필 이미지 보장 (서버 > 영속 저장소 > 소셜 아바타)
-      await _ensureProfileImage(socialAvatar: image);
+      // DB에서 프로필 이미지 읽어 Stream에 동기화 (없으면 소셜 아바타 폴백)
+      await _syncProfileImageFromDB(socialAvatar: image);
 
       await _initNotifications();
     } catch (e) {
@@ -244,54 +233,31 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     if (mounted) setState(() => _isConnected = true);
   }
 
-  /// 프로필 이미지 보장 — 연결 후 호출
+  /// 프로필 이미지 동기화 — DB에서 읽어 Stream에 설정
   ///
-  /// 우선순위: 서버 이미지 > 영속 저장소 > 소셜 아바타
-  /// 로그아웃 → 재로그인 시에도 커스텀 이미지가 복원되도록 함
-  Future<void> _ensureProfileImage({String? socialAvatar}) async {
-    final user = widget.client.state.currentUser;
-    if (user == null || _authService.userId == null) return;
-
+  /// Single Source of Truth: Supabase chat_profiles 테이블
+  /// DB에 없으면 소셜 아바타를 폴백으로 사용 (최초 로그인)
+  Future<void> _syncProfileImageFromDB({String? socialAvatar}) async {
+    if (_authService.userId == null) return;
     final userId = _authService.userId!;
-    final serverImage = user.image;
 
-    debugPrint('[ProfileImage] ensureProfileImage: server="${serverImage ?? "null"}", '
-        'socialAvatar="${socialAvatar ?? "null"}"');
+    try {
+      final dbImage = await ProfileService.getProfileImage(userId);
 
-    // 1. 서버에 이미지가 있으면 → 로컬에 동기화 + 영속 저장
-    if (serverImage != null && serverImage.isNotEmpty) {
-      debugPrint('[ProfileImage] Using server image');
-      await SessionStorage.updateProfileImage(serverImage);
-      await SessionStorage.savePersistentImage(userId, serverImage);
-      _authService.setProfileImage(serverImage);
-      return;
-    }
-
-    // 2. 서버에 없으면 → 영속 저장소에서 복원 시도
-    final persistentImage = await SessionStorage.getPersistentImage(userId);
-    if (persistentImage != null && persistentImage.isNotEmpty) {
-      final imageUrl = '$persistentImage?v=${DateTime.now().millisecondsSinceEpoch}';
-      debugPrint('[ProfileImage] Restoring from persistent store: $imageUrl');
-      try {
+      if (dbImage != null && dbImage.isNotEmpty) {
+        // DB에 이미지가 있으면 → Stream에 동기화
+        final imageUrl = '$dbImage?v=${DateTime.now().millisecondsSinceEpoch}';
         await widget.client.partialUpdateUser(userId, set: {'image': imageUrl});
-        await SessionStorage.updateProfileImage(imageUrl);
         _authService.setProfileImage(imageUrl);
-        return;
-      } catch (e) {
-        debugPrint('[ProfileImage] Persistent restore failed: $e');
-      }
-    }
-
-    // 3. 소셜 아바타로 폴백 (최초 로그인 시)
-    if (socialAvatar != null && socialAvatar.isNotEmpty) {
-      debugPrint('[ProfileImage] Setting social avatar as fallback');
-      try {
+        debugPrint('[ProfileImage] Synced from DB: $imageUrl');
+      } else if (socialAvatar != null && socialAvatar.isNotEmpty) {
+        // DB에 없고 소셜 아바타가 있으면 → 폴백 (최초 로그인)
         await widget.client.partialUpdateUser(userId, set: {'image': socialAvatar});
-        await SessionStorage.updateProfileImage(socialAvatar);
         _authService.setProfileImage(socialAvatar);
-      } catch (e) {
-        debugPrint('[ProfileImage] Social avatar set failed: $e');
+        debugPrint('[ProfileImage] Using social avatar fallback');
       }
+    } catch (e) {
+      debugPrint('[ProfileImage] DB sync failed: $e');
     }
   }
 
@@ -336,22 +302,19 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   /// 전체 재연결: 토큰 재발급 → connectUserWithProvider
   Future<void> _attemptFullReconnect() async {
     try {
-      // refreshToken 호출 시 서버가 기존 이미지도 함께 반환 → _authService.serverImage에 저장
       final newToken = await _authService.refreshToken();
       if (newToken == null || _authService.userId == null) return;
 
       await widget.client.connectUserWithProvider(
-        User(
-          id: _authService.userId!,
-          name: _authService.userName,
-          image: _authService.serverImage,
-        ),
+        User(id: _authService.userId!, name: _authService.userName),
         (userId) async {
           final t = await _authService.refreshToken();
           if (t == null) throw Exception('Token refresh failed');
           return t;
         },
       );
+
+      await _syncProfileImageFromDB();
       debugPrint('Full reconnection successful');
     } catch (e) {
       debugPrint('Full reconnection failed: $e');

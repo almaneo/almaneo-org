@@ -11,6 +11,7 @@ import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/auth_service.dart';
 import '../services/session_storage.dart';
+import '../services/profile_service.dart';
 import '../services/almaneo_service.dart';
 import '../widgets/kindness_score_card.dart';
 import '../widgets/ambassador_badge.dart';
@@ -312,20 +313,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       final imageUrl = '$rawUrl?v=${DateTime.now().millisecondsSinceEpoch}';
       debugPrint('[PhotoUpload] Public URL: $imageUrl');
 
-      // 로컬에 즉시 반영 (Supabase 업로드 성공 시점)
+      // DB에 저장 (Single Source of Truth)
+      await ProfileService.saveProfileImage(user.id, imageUrl);
+
+      // 로컬에 즉시 반영
       if (mounted) {
         setState(() => _localImageUrl = imageUrl);
         await SessionStorage.updateProfileImage(imageUrl);
-        await SessionStorage.savePersistentImage(user.id, imageUrl);
         widget.authService.setProfileImage(imageUrl);
       }
 
-      // Stream 사용자 프로필 업데이트 (실패해도 로컬은 유지)
+      // Stream 사용자 프로필 업데이트 (채널 리스트 아바타용, 실패해도 DB는 유지)
       try {
         await client.partialUpdateUser(user.id, set: {'image': imageUrl});
         debugPrint('[PhotoUpload] Stream user updated with image');
       } catch (streamErr) {
-        debugPrint('[PhotoUpload] Stream update failed (local saved): $streamErr');
+        debugPrint('[PhotoUpload] Stream update failed (DB saved): $streamErr');
       }
 
       if (mounted) {
@@ -396,10 +399,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         );
         setState(() => _localImageUrl = null);
-        // SessionStorage에서도 제거 (재로그인 시 유지)
+        // DB에서 제거 (Single Source of Truth)
+        await ProfileService.removeProfileImage(user.id);
         await SessionStorage.updateProfileImage(null);
-        // 영속 키도 제거 (로그아웃 후 복원 방지)
-        await SessionStorage.clearPersistentImage(user.id);
       }
     } catch (e) {
       debugPrint('Photo remove failed: $e');

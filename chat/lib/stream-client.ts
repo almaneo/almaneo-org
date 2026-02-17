@@ -78,20 +78,6 @@ export async function upsertStreamUser(user: {
 }
 
 /**
- * Query a user's current data from Stream
- * Returns the existing image URL (if any) so callers can preserve it
- */
-export async function queryStreamUserImage(userId: string): Promise<string | null> {
-  const sc = getStreamClient();
-  try {
-    const { users } = await sc.queryUsers({ id: userId });
-    return (users[0]?.image as string) || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
  * Update message metadata with translations
  * Uses partialUpdateMessage with userId for server-side auth
  */

@@ -102,28 +102,4 @@ class SessionStorage {
     final userId = prefs.getString(_keyUserId);
     return userId != null && userId.isNotEmpty;
   }
-
-  // ── 영속 프로필 이미지 (로그아웃 시에도 유지) ──
-
-  static const _keyPersistentImagePrefix = 'persistent_profile_image_';
-
-  /// 프로필 이미지를 영속 키에 저장 (로그아웃 후에도 유지)
-  /// cache-busting 쿼리 파라미터를 제거한 기본 URL만 저장
-  static Future<void> savePersistentImage(String userId, String imageUrl) async {
-    final prefs = await SharedPreferences.getInstance();
-    final baseUrl = imageUrl.split('?').first;
-    await prefs.setString('$_keyPersistentImagePrefix$userId', baseUrl);
-  }
-
-  /// 영속 프로필 이미지 URL 조회 (로그아웃 후 복원용)
-  static Future<String?> getPersistentImage(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('$_keyPersistentImagePrefix$userId');
-  }
-
-  /// 영속 프로필 이미지 삭제 (사용자가 사진을 직접 삭제한 경우)
-  static Future<void> clearPersistentImage(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('$_keyPersistentImagePrefix$userId');
-  }
 }
