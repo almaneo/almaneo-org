@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   /// redirect 기반 로그인 완료 처리 (상태 업데이트 + 콜백)
-  void _completeRedirectLogin(String verifierId, String name, String? image, [String? privateKey]) {
+  Future<void> _completeRedirectLogin(String verifierId, String name, String? image, [String? privateKey]) async {
     _loginCompletedViaRedirect = true;
     if (mounted) {
       setState(() {
@@ -175,7 +175,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         _loadingProvider = null;
       });
     }
-    widget.onSocialLogin(verifierId, name, image, null, privateKey);
+    try {
+      await widget.onSocialLogin(verifierId, name, image, null, privateKey);
+    } catch (e) {
+      debugPrint('[Web3Auth] onSocialLogin callback error: $e');
+    }
   }
 
   // ── 소셜 로그인 ──

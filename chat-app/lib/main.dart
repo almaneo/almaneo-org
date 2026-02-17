@@ -181,17 +181,22 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final langState = ref.read(languageProvider);
     final token = await _authService.loginAsGuest(name, langState.languageCode);
 
-    await _connectUserWithRetry(
-      User(
-        id: _authService.userId!,
-        name: _authService.userName,
-        extraData: {'preferred_language': langState.languageCode},
-      ),
-      token,
-    );
+    try {
+      await _connectUserWithRetry(
+        User(
+          id: _authService.userId!,
+          name: _authService.userName,
+          extraData: {'preferred_language': langState.languageCode},
+        ),
+        token,
+      );
 
-    await _initNotifications();
-    setState(() => _isConnected = true);
+      await _initNotifications();
+    } catch (e) {
+      debugPrint('Guest login post-connect error: $e');
+    }
+
+    if (mounted) setState(() => _isConnected = true);
   }
 
   /// 소셜 로그인 (Web3Auth 인증 후)
@@ -199,28 +204,33 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final langCode = lang ?? ref.read(languageProvider).languageCode;
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
-    await _connectUserWithRetry(
-      User(
-        id: _authService.userId!,
-        name: name,
-        // image를 전달하지 않음 — Stream 서버의 기존 커스텀 이미지 보존
-        // 최초 로그인 시 Stream이 자동으로 빈 이미지로 생성
-        extraData: {'preferred_language': langCode},
-      ),
-      token,
-    );
+    try {
+      await _connectUserWithRetry(
+        User(
+          id: _authService.userId!,
+          name: name,
+          image: image,
+          extraData: {'preferred_language': langCode},
+        ),
+        token,
+      );
 
-    // 서버에 이미지가 없고 소셜 프로필 이미지가 있으면 설정 (최초 로그인)
-    final serverUser = widget.client.state.currentUser;
-    if ((serverUser?.image == null || serverUser!.image!.isEmpty) && image != null && image.isNotEmpty) {
-      await widget.client.partialUpdateUser(_authService.userId!, set: {'image': image});
+      // 서버에 이미지가 없고 소셜 프로필 이미지가 있으면 설정 (최초 로그인)
+      final serverUser = widget.client.state.currentUser;
+      if ((serverUser?.image == null || serverUser!.image!.isEmpty) && image != null && image.isNotEmpty) {
+        await widget.client.partialUpdateUser(_authService.userId!, set: {'image': image});
+      }
+
+      // 서버의 프로필 이미지를 SessionStorage에 동기화
+      await _syncProfileImageFromServer();
+
+      await _initNotifications();
+    } catch (e) {
+      debugPrint('Social login post-connect error: $e');
+      // 세션은 이미 저장됨 — Stream 연결 실패해도 홈 화면으로 진입
     }
 
-    // 서버의 프로필 이미지를 SessionStorage에 동기화
-    await _syncProfileImageFromServer();
-
-    await _initNotifications();
-    setState(() => _isConnected = true);
+    if (mounted) setState(() => _isConnected = true);
   }
 
   /// 연결 후 Stream 서버의 프로필 이미지를 SessionStorage에 동기화
