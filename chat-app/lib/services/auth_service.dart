@@ -20,6 +20,11 @@ class AuthService {
   String? get userId => _userId;
   String get userName => _userName ?? 'User';
   String? get profileImage => _profileImage;
+
+  /// 프로필 이미지 URL 업데이트 (업로드 후 호출)
+  void setProfileImage(String? url) {
+    _profileImage = url;
+  }
   String? get walletAddress => _walletAddress;
   bool get isLoggedIn => _userId != null;
   bool get isWeb3AuthUser => _isWeb3AuthUser;

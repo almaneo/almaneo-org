@@ -307,13 +307,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
       debugPrint('[PhotoUpload] Supabase upload success');
 
-      final imageUrl = supabase.storage.from('meetup-photos').getPublicUrl(filePath);
+      final rawUrl = supabase.storage.from('meetup-photos').getPublicUrl(filePath);
+      // Cache-busting: 동일 경로에 upsert하므로 Image.network 캐시 방지
+      final imageUrl = '$rawUrl?v=${DateTime.now().millisecondsSinceEpoch}';
       debugPrint('[PhotoUpload] Public URL: $imageUrl');
 
       // 로컬에 즉시 반영 (Supabase 업로드 성공 시점)
       if (mounted) {
         setState(() => _localImageUrl = imageUrl);
         await SessionStorage.updateProfileImage(imageUrl);
+        widget.authService.setProfileImage(imageUrl);
       }
 
       // Stream 사용자 프로필 업데이트 (실패해도 로컬은 유지)

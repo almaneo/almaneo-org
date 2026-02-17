@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -139,6 +140,19 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           restored.token,
         );
 
+        // SessionStorage의 프로필 이미지가 Stream 서버에 없으면 설정
+        final sessionImage = restored.session.profileImage;
+        final serverUser = widget.client.state.currentUser;
+        if (sessionImage != null && sessionImage.isNotEmpty &&
+            (serverUser?.image == null || serverUser!.image!.isEmpty)) {
+          try {
+            await widget.client.partialUpdateUser(
+              restored.session.userId, set: {'image': sessionImage});
+            debugPrint('Session restore: pushed profile image to Stream');
+          } catch (e) {
+            debugPrint('Session restore: image push failed: $e');
+          }
+        }
         // 연결 후 서버의 프로필 이미지를 SessionStorage에 동기화
         await _syncProfileImageFromServer();
 
@@ -440,6 +454,23 @@ class _MainShell extends ConsumerStatefulWidget {
 class _MainShellState extends ConsumerState<_MainShell> {
   int _currentIndex = 1; // Start on Chat tab
   DateTime? _lastBackPress;
+  StreamSubscription? _userSub;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Stream 사용자 프로필 변경 시 하단 네비 프로필 아이콘 갱신
+    _userSub?.cancel();
+    _userSub = StreamChat.of(context).client.state.currentUserStream.listen((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _userSub?.cancel();
+    super.dispose();
+  }
 
   Widget _buildProfileIcon({required bool isActive}) {
     final user = StreamChat.of(context).currentUser;
