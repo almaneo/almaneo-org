@@ -133,11 +133,12 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         final langNotifier = ref.read(languageProvider.notifier);
         langNotifier.setLanguage(restored.session.languageCode);
 
-        // image를 전달하지 않음 — Stream 서버의 기존 이미지 보존
+        // 서버에 저장된 기존 이미지를 포함하여 연결 (이미지 초기화 방지)
         await _connectUserWithRetry(
           User(
             id: restored.session.userId,
             name: restored.session.userName,
+            image: _authService.serverImage,
             extraData: {'preferred_language': restored.session.languageCode},
           ),
           restored.token,
@@ -193,6 +194,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         User(
           id: _authService.userId!,
           name: _authService.userName,
+          image: _authService.serverImage,
           extraData: {'preferred_language': langState.languageCode},
         ),
         token,
@@ -215,12 +217,13 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
     try {
-      // image를 전달하지 않음 — Stream 서버의 기존 커스텀 이미지 보존
-      // connectUserWithProvider에 image를 보내면 소셜 아바타로 덮어써짐
+      // 서버에 저장된 기존 이미지를 포함하여 연결 (이미지 초기화 방지)
+      // serverImage가 있으면 커스텀 이미지 유지, 없으면 _ensureProfileImage에서 처리
       await _connectUserWithRetry(
         User(
           id: _authService.userId!,
           name: name,
+          image: _authService.serverImage,
           extraData: {'preferred_language': langCode},
         ),
         token,
@@ -333,11 +336,16 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   /// 전체 재연결: 토큰 재발급 → connectUserWithProvider
   Future<void> _attemptFullReconnect() async {
     try {
+      // refreshToken 호출 시 서버가 기존 이미지도 함께 반환 → _authService.serverImage에 저장
       final newToken = await _authService.refreshToken();
       if (newToken == null || _authService.userId == null) return;
 
       await widget.client.connectUserWithProvider(
-        User(id: _authService.userId!, name: _authService.userName),
+        User(
+          id: _authService.userId!,
+          name: _authService.userName,
+          image: _authService.serverImage,
+        ),
         (userId) async {
           final t = await _authService.refreshToken();
           if (t == null) throw Exception('Token refresh failed');

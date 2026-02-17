@@ -15,11 +15,14 @@ class AuthService {
   String? _userName;
   String? _profileImage;
   String? _walletAddress;
+  String? _serverImage; // Stream 서버에 저장된 기존 프로필 이미지
   bool _isWeb3AuthUser = false;
 
   String? get userId => _userId;
   String get userName => _userName ?? 'User';
   String? get profileImage => _profileImage;
+  /// Stream 서버에 저장된 기존 프로필 이미지 (토큰 발급 시 조회)
+  String? get serverImage => _serverImage;
 
   /// 프로필 이미지 URL 업데이트 (업로드 후 호출)
   void setProfileImage(String? url) {
@@ -130,6 +133,7 @@ class AuthService {
   }
 
   /// 백엔드 API에서 Stream Chat 토큰 발급
+  /// 서버는 기존 유저의 프로필 이미지도 함께 반환 → _serverImage에 저장
   Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
     final url = '${Env.chatApiUrl}/api/stream-token';
 
@@ -145,6 +149,9 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      // 서버가 반환한 기존 프로필 이미지 저장
+      _serverImage = data['image'] as String?;
+      debugPrint('[AuthService] Token received. serverImage=${_serverImage ?? "null"}');
       return data['token'] as String;
     }
 

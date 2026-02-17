@@ -14,6 +14,7 @@ import {
   isStreamConfigured,
   generateUserToken,
   upsertStreamUser,
+  queryStreamUserImage,
 } from '../lib/stream-client.js';
 
 export const config = {
@@ -63,12 +64,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       wallet_address: walletAddress,
     });
 
+    // Query existing user image (before it could be wiped by connectUser)
+    const existingImage = await queryStreamUserImage(userId);
+
     // Generate token
     const token = generateUserToken(userId);
 
     return res.status(200).json({
       token,
       apiKey: process.env.STREAM_API_KEY,
+      image: existingImage,
     });
   } catch (error) {
     console.error('[StreamToken] Error:', error);
