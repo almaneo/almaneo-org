@@ -3758,14 +3758,102 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 102+)
+### ✅ 완료된 작업 (2026-02-17 - Session 102: V0.3 Phase 3 밋업 녹음 & 데이터 수집)
 
-#### 🔴 최우선
-1. **초대 링크 실기기 테스트** — 코드 생성 → 다른 계정에서 코드 입력 → 채널 참여 확인
-2. **프로필 이미지 크로스-디바이스 테스트** — 기기1 이미지 설정 → 기기2 다른 계정 로그인 → 기기1 이미지 유지 확인
-3. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
+#### 1. **DB 마이그레이션** ✅
+   - `supabase/migrations/20260218100000_meetup_recordings.sql` (신규)
+   - `meetups.status` CHECK 확장: `'upcoming', 'in_progress', 'ended', 'completed', 'cancelled'`
+   - `meetups` 테이블에 `started_at`, `ended_at` TIMESTAMPTZ 컬럼 추가
+   - `meetup_recordings` 테이블 생성 (id, meetup_id, recorder_id, storage_path, public_url, duration_seconds, file_size_bytes, format, status, created_at)
+   - `meetup-recordings` Storage 버킷 (150MB 제한, audio MIME types)
+   - RLS 정책 + 인덱스 설정
+   - Supabase migration history repair (`20260217` orphan entry) 후 push 성공
+
+#### 2. **패키지 + 플랫폼 권한** ✅
+   - `pubspec.yaml`: `record: ^5.2.0`, `path_provider: ^2.1.5` 추가
+   - `dependency_overrides`: `record_linux: ^1.1.0` (→ 1.3.0 resolved, record_platform_interface 호환)
+   - `AndroidManifest.xml`: `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE` 권한
+   - `Info.plist`: `NSMicrophoneUsageDescription`, `UIBackgroundModes` > `audio`
+
+#### 3. **RecordingService 생성** ✅
+   - `chat-app/lib/services/recording_service.dart` (신규)
+   - 기존 static 메서드 패턴 (ProfileService/MeetupService와 동일)
+   - 기능: `hasPermission()`, `startRecording(meetupId)`, `stopRecording()`, `isRecording()`, `getElapsedSeconds()`
+   - 업로드: `uploadRecording()` — Supabase Storage 업로드 + DB 레코드 생성
+   - 조회: `getRecordings(meetupId)` — 밋업의 녹음 파일 목록
+   - AAC 128kbps, 44100Hz, 모노, 최대 2시간 자동 중지 (7200초)
+   - Storage 경로: `recordings/{meetupId}/{filename}`
+
+#### 4. **MeetupService 라이프사이클 확장** ✅
+   - `startMeetup(meetupId)`: upcoming → in_progress, started_at 기록
+   - `endMeetup(meetupId)`: in_progress → ended, ended_at 기록
+   - `completeMeetup(meetupId)`: ended → completed
+   - `getUpcomingMeetups()` 수정: `['upcoming', 'in_progress']` 필터
+
+#### 5. **i18n 번역 키 추가** ✅
+   - 18개 키 × 15개 언어 = 270 항목
+   - 키: `home.inProgress`, `home.ended`, `home.startMeetup`, `home.endMeetup`, `home.endMeetupConfirm`
+   - 키: `recording.start/stop/recording/uploading/uploaded/failed/permissionDenied/permissionDesc/maxDuration/duration/recordings/noRecordings/processing`
+
+#### 6. **RecordingIndicator 위젯** ✅
+   - `chat-app/lib/widgets/recording_indicator.dart` (신규)
+   - 빨간 점 펄스 애니메이션 (0.4~1.0 opacity) + "REC" + HH:MM:SS
+   - `LiveRecordingIndicator`: Timer 기반 자동 업데이트 래퍼
+   - 정지 버튼, AlmaTheme.error 색상
+
+#### 7. **MeetupDetailScreen UI 확장** ✅
+   - 녹음 상태 관리: `_isRecording`, `_isUploading`, `_recordingTimer`, `_recordingElapsed`, `_recordings`
+   - 호스트 감지: `_isHost => _userId == _hostAddress`
+   - **상태별 UI 분기:**
+     | 상태 | 호스트 UI | 참가자 UI |
+     |------|----------|----------|
+     | upcoming | "밋업 시작" 버튼 + 참가/탈퇴 | 참가/탈퇴 |
+     | in_progress | 녹음 시작/중지 + RecordingIndicator + "밋업 종료" | "진행 중" 배지 |
+     | ended | 녹음 파일 목록 + "완료" 버튼 | "종료됨" 배지 |
+     | completed | 녹음 목록 | 녹음 목록 |
+   - 밋업 종료 시 녹음 자동 중지 + 업로드
+   - 확인 다이얼로그 (시작/종료)
+
+#### 8. **HomeScreen 업데이트** ✅
+   - 필터 탭에 `in_progress` 추가 (upcoming | in_progress | completed | all)
+   - `_statusBadge`에 `in_progress` (terracottaOrange), `ended` (warning) 케이스 추가
+   - 밋업 카드 border highlight: `isUpcoming` → `isActive` (upcoming + in_progress)
+
+#### 9. **APK 빌드 성공** ✅
+   - `flutter build apk --release` → 75.6MB
+   - `record_linux` 호환 이슈: `dependency_overrides`로 `record_linux: ^1.1.0` 적용하여 해결
+
+#### 10. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `supabase/migrations/20260218100000_meetup_recordings.sql` | **신규** |
+   | `chat-app/lib/services/recording_service.dart` | **신규** |
+   | `chat-app/lib/widgets/recording_indicator.dart` | **신규** |
+   | `chat-app/pubspec.yaml` | 수정 (패키지 2개 + dependency_overrides) |
+   | `chat-app/pubspec.lock` | 수정 (의존성 해결) |
+   | `chat-app/android/app/src/main/AndroidManifest.xml` | 수정 (권한 3개) |
+   | `chat-app/ios/Runner/Info.plist` | 수정 (마이크, 백그라운드 오디오) |
+   | `chat-app/lib/services/meetup_service.dart` | 수정 (메서드 3개 + 필터 수정) |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 (270 번역 항목) |
+   | `chat-app/lib/screens/meetup_detail_screen.dart` | 수정 (대규모 UI 확장) |
+   | `chat-app/lib/screens/home_screen.dart` | 수정 (필터 탭 + 배지) |
+   - **총 11개 파일** (신규 3개, 수정 8개), +807줄
+
+---
+
+### 🔲 다음 세션 작업 (Session 103+)
+
+#### 🔴 최우선 — 밋업 기능 실기기 테스트
+1. **밋업 전체 플로우 테스트**
+   - 밋업 생성 → 참가 → "밋업 시작" → 녹음 시작 → 녹음 중지 → "밋업 종료" → 업로드 확인
+   - Supabase DB에서 `meetup_recordings` 레코드 확인
+   - Supabase Storage `meetup-recordings` 버킷에 파일 확인
+2. **마이크 권한 테스트** — 최초 녹음 시 권한 요청 다이얼로그 표시 확인
+3. **HomeScreen 필터 테스트** — in_progress 필터 탭 동작, 상태 배지 색상 확인
+4. **초대 링크 실기기 테스트** — 코드 생성 → 다른 계정에서 코드 입력 → 채널 참여 확인
+5. **프로필 이미지 크로스-디바이스 테스트**
 
 #### 🟡 중간 우선순위
-4. **V0.3 Phase 3**: 밋업 녹음 기능
-5. **V0.3 Phase 4**: Kindness AI 분석 MVP
-6. **딥링크 핸들러**: `almachat://invite/{code}` 또는 App Links (Phase 5)
+6. **V0.3 Phase 4**: Kindness AI 분석 MVP (Gemini Audio API → STT → 요약 → 점수)
+7. **딥링크 핸들러**: `almachat://invite/{code}` 또는 App Links (Phase 5)
+8. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
