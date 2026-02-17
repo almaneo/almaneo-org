@@ -1,7 +1,7 @@
 -- Chat user profiles (keyed by Stream Chat user ID)
 -- Source of truth for profile images, decoupled from Stream SDK
 
-CREATE TABLE chat_profiles (
+CREATE TABLE IF NOT EXISTS chat_profiles (
   user_id TEXT PRIMARY KEY,
   profile_image_url TEXT,
   display_name TEXT,
@@ -18,6 +18,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS chat_profiles_updated_at ON chat_profiles;
 CREATE TRIGGER chat_profiles_updated_at
   BEFORE UPDATE ON chat_profiles
   FOR EACH ROW
@@ -26,14 +27,18 @@ CREATE TRIGGER chat_profiles_updated_at
 -- RLS
 ALTER TABLE chat_profiles ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Anyone can read profiles"
-  ON chat_profiles FOR SELECT USING (true);
-
-CREATE POLICY "Anyone can insert profiles"
-  ON chat_profiles FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Anyone can update profiles"
-  ON chat_profiles FOR UPDATE USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'chat_profiles' AND policyname = 'Anyone can read profiles') THEN
+    CREATE POLICY "Anyone can read profiles" ON chat_profiles FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'chat_profiles' AND policyname = 'Anyone can insert profiles') THEN
+    CREATE POLICY "Anyone can insert profiles" ON chat_profiles FOR INSERT WITH CHECK (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'chat_profiles' AND policyname = 'Anyone can update profiles') THEN
+    CREATE POLICY "Anyone can update profiles" ON chat_profiles FOR UPDATE USING (true);
+  END IF;
+END $$;
 
 -- Index for quick lookups
-CREATE INDEX idx_chat_profiles_user_id ON chat_profiles (user_id);
+CREATE INDEX IF NOT EXISTS idx_chat_profiles_user_id ON chat_profiles (user_id);
