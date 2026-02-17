@@ -3558,13 +3558,68 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - `890a196` - fix(chat-app): Fix Stream 401 disconnect and responsive onboarding
    - 4개 파일, +297줄, -40줄
 
-### 🔲 다음 세션 작업 (Session 98+)
+### ✅ 완료된 작업 (2026-02-17 - Session 98: 프로필 이미지 & 로그인 버그 수정)
+
+#### 1. **Android 뒤로가기 앱 종료 방지** ✅
+   - `_MainShell`에 `PopScope` 위젯 추가
+   - 채팅 탭이 아니면 채팅 탭으로 이동
+   - 채팅 탭에서 2초 내 두 번 누르면 앱 종료
+   - 15개 언어 `app.pressBackToExit` 번역 추가
+
+#### 2. **Web3Auth 로그인 후 홈 화면 전환 안 되는 문제 수정** ✅
+   - **근본 원인**: `_completeRedirectLogin`이 `void`여서 `widget.onSocialLogin`을 await하지 않음 → 예외 발생 시 `setState(_isConnected = true)` 미실행
+   - **수정**: `_completeRedirectLogin`을 `Future<void> async`로 변경 + `await widget.onSocialLogin()`
+   - `_handleSocialLogin`, `_handleGuestLogin`에 try-catch 추가 → Stream 연결 실패해도 홈 화면 진입
+
+#### 3. **프로필 이미지 캐시 문제 수정** ✅ (부분)
+   - **캐시 버스팅**: 업로드 URL에 `?v=${timestamp}` 추가 → `Image.network` 캐시 무효화
+   - **하단 네비 프로필 아이콘**: `currentUserStream` 구독으로 `_MainShellState` 자동 rebuild
+   - **AuthService 동기화**: `setProfileImage()` 메서드 추가, 업로드/복원 시 AuthService에도 동기화
+   - **Stream 서버 백업**: 세션 복원 시 SessionStorage 이미지가 Stream에 없으면 push
+
+#### 4. **소셜 아바타 덮어쓰기 방지** ✅ (부분)
+   - **근본 원인**: `connectUserWithProvider(User(image: googleAvatar))`가 소셜 로그인 시 Google 아바타를 Stream 서버에 보내 기존 커스텀 이미지 덮어씀
+   - **수정**: `connectUserWithProvider`에 `image` 미전달 → Stream 서버 기존 이미지 보존
+   - 서버에 이미지 없을 때만 (최초 로그인) `partialUpdateUser`로 소셜 아바타 설정
+   - `_attemptFullReconnect`에서도 동일 패턴 적용
+
+#### 5. **Backend `upsertStreamUser` 수정** ✅
+   - `chat/lib/stream-client.ts`: undefined 필드를 포함하지 않도록 변경
+   - 토큰 갱신 시 image가 undefined로 전달되어 기존 이미지 덮어쓰는 문제 해결
+
+#### 6. **커밋**
+   - `f064d29` - fix(chat-app): Prevent back-button exit, preserve profile image on restart
+   - `6d12bcc` - fix(chat-app): Ensure login screen transitions to home after Web3Auth
+   - `d63e547` - fix(chat-app): Fix profile image persistence and bottom nav reactivity
+   - `5cb1047` - fix(chat-app): Prevent social avatar from overwriting custom profile image
+
+#### 7. **미해결 이슈: 프로필 이미지 로그아웃 후 재로그인 시 소실** 🔴
+   - **증상**: 커스텀 프로필 이미지 업로드 후, 로그아웃 → 재로그인하면 프로필 이미지가 보이지 않음
+   - **현재까지 시도한 수정**:
+     - Backend `upsertStreamUser`에서 undefined 필드 제외 ✅
+     - `connectUserWithProvider`에 image 미전달 ✅
+     - 서버에 이미지 없을 때만 소셜 아바타 설정 ✅
+     - `_syncProfileImageFromServer()` 호출로 서버 이미지 → SessionStorage 동기화 ✅
+   - **다음 세션에서 조사할 사항**:
+     - `connectUserWithProvider`가 image 없이 호출될 때 Stream SDK가 서버의 기존 이미지를 정말 보존하는지 확인 (SDK가 `image: null`을 보내면 서버가 기울 수 있음)
+     - `partialUpdateUser`의 반환값에서 서버의 실제 이미지 URL 확인 (디버그 로그 추가)
+     - Stream Dashboard에서 직접 사용자의 image 필드 확인
+     - 로그아웃 → 재로그인 직후 `client.state.currentUser?.image` 값 디버그 출력
+     - `_getStreamToken` API 호출 시 서버의 `upsertStreamUser`가 image를 건드리지 않는지 Vercel 로그 확인
+   - **파일 참조**:
+     - `chat-app/lib/main.dart`: `_handleSocialLogin`, `_checkExistingSession`, `_syncProfileImageFromServer`
+     - `chat-app/lib/screens/profile_screen.dart`: `_pickAndUploadPhoto`
+     - `chat-app/lib/services/auth_service.dart`: `setProfileImage`, `loginWithSocial`
+     - `chat/lib/stream-client.ts`: `upsertStreamUser`
+     - `chat/api/stream-token.ts`: API 엔드포인트
+
+### 🔲 다음 세션 작업 (Session 99+)
 
 #### 🔴 최우선
-1. **실기기 테스트**: Stream 401 수정 검증, 온보딩 반응형 확인
+1. **프로필 이미지 로그아웃 후 재로그인 시 소실 문제 해결** (위 조사 사항 참고)
 2. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
-3. **V0.3 Phase 2 시작**: 초대 링크 시스템 구현
 
 #### 🟡 중간 우선순위
+3. **V0.3 Phase 2 시작**: 초대 링크 시스템 구현
 4. **V0.3 Phase 3**: 밋업 녹음 기능
 5. **V0.3 Phase 4**: Kindness AI 분석 MVP
