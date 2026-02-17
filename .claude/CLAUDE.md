@@ -3613,10 +3613,51 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
      - `chat/lib/stream-client.ts`: `upsertStreamUser`
      - `chat/api/stream-token.ts`: API 엔드포인트
 
-### 🔲 다음 세션 작업 (Session 99+)
+### ✅ 완료된 작업 (2026-02-17 - Session 99: 프로필 이미지 영속 복원 시스템)
+
+#### 1. **프로필 이미지 로그아웃 후 소실 문제 근본 수정** ✅
+   - **근본 원인 분석**:
+     - `SessionStorage.clear()` (로그아웃 시) → profileImage 포함 모든 세션 데이터 삭제
+     - 재로그인 시 커스텀 이미지 URL 복원 불가 (소셜 아바타만 남음)
+     - `connectUserWithProvider(User(id, name))` → image 미전달 시 서버가 기존 이미지를 보존할 수도, 덮어쓸 수도 있음
+
+   - **해결: 영속 프로필 이미지 저장소 추가**
+     - `SessionStorage.savePersistentImage(userId, url)`: 별도 키 `persistent_profile_image_{userId}`에 저장
+     - `SessionStorage.getPersistentImage(userId)`: 로그아웃 후에도 조회 가능
+     - `SessionStorage.clearPersistentImage(userId)`: 사용자가 사진 직접 삭제 시
+     - 키가 `clear()` 메서드의 삭제 범위에 포함되지 않아 로그아웃 후에도 유지
+
+   - **이미지 복원 로직 중앙화: `_ensureProfileImage()`**
+     - 기존 분산된 복원 로직 (`_syncProfileImageFromServer`, 세션 복원 코드, 소셜 아바타 설정 코드) 통합
+     - 복원 우선순위: **서버 이미지 > 영속 저장소 > 소셜 아바타**
+     - `_checkExistingSession`, `_handleSocialLogin` 모두 동일 메서드 호출
+
+   - **프로필 업로드/삭제 시 영속 저장소 동기화**
+     - `_pickAndUploadPhoto`: 업로드 성공 시 `savePersistentImage()` 호출
+     - `_removePhoto`: 삭제 시 `clearPersistentImage()` 호출
+
+   - **디버그 로깅 추가** (진단용)
+     - `[ProfileImage]`: 이미지 복원 플로우 추적
+     - `[Session]`: 세션 복원 시점 이미지 상태
+     - `[SocialLogin]`: 소셜 로그인 시점 이미지 상태
+
+#### 2. **수정 파일 3개**
+   | 파일 | 변경 |
+   |------|------|
+   | `session_storage.dart` | 영속 이미지 메서드 3개 추가 |
+   | `profile_screen.dart` | 업로드/삭제 시 영속 키 동기화 |
+   | `main.dart` | `_ensureProfileImage()` 중앙화, 디버그 로깅 |
+
+#### 3. **커밋**
+   - `2d478f5` - fix(chat-app): Persist profile image across logout/re-login cycles
+   - 3개 파일, +89줄, -27줄
+
+---
+
+### 🔲 다음 세션 작업 (Session 100+)
 
 #### 🔴 최우선
-1. **프로필 이미지 로그아웃 후 재로그인 시 소실 문제 해결** (위 조사 사항 참고)
+1. **프로필 이미지 수정 실기기 테스트** — 로그아웃 → 재로그인 후 커스텀 이미지 복원 확인
 2. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
 
 #### 🟡 중간 우선순위
