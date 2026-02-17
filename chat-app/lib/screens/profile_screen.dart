@@ -316,6 +316,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (mounted) {
         setState(() => _localImageUrl = imageUrl);
         await SessionStorage.updateProfileImage(imageUrl);
+        await SessionStorage.savePersistentImage(user.id, imageUrl);
         widget.authService.setProfileImage(imageUrl);
       }
 
@@ -397,6 +398,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         setState(() => _localImageUrl = null);
         // SessionStorage에서도 제거 (재로그인 시 유지)
         await SessionStorage.updateProfileImage(null);
+        // 영속 키도 제거 (로그아웃 후 복원 방지)
+        await SessionStorage.clearPersistentImage(user.id);
       }
     } catch (e) {
       debugPrint('Photo remove failed: $e');

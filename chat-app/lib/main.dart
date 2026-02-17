@@ -126,6 +126,9 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       );
 
       if (restored != null) {
+        debugPrint('[Session] Restoring: userId=${restored.session.userId}, '
+            'profileImage=${restored.session.profileImage ?? "null"}');
+
         // 언어 설정 복원
         final langNotifier = ref.read(languageProvider.notifier);
         langNotifier.setLanguage(restored.session.languageCode);
@@ -140,21 +143,11 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
           restored.token,
         );
 
-        // 서버에 이미지가 없고 SessionStorage에 있으면 푸시 (백업 복원)
-        final sessionImage = restored.session.profileImage;
-        final serverUser = widget.client.state.currentUser;
-        if (sessionImage != null && sessionImage.isNotEmpty &&
-            (serverUser?.image == null || serverUser!.image!.isEmpty)) {
-          try {
-            await widget.client.partialUpdateUser(
-              restored.session.userId, set: {'image': sessionImage});
-            debugPrint('Session restore: pushed profile image to Stream');
-          } catch (e) {
-            debugPrint('Session restore: image push failed: $e');
-          }
-        }
-        // 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
-        await _syncProfileImageFromServer();
+        debugPrint('[Session] Connected. currentUser.image='
+            '${widget.client.state.currentUser?.image ?? "null"}');
+
+        // 프로필 이미지 보장 (서버 > 영속 저장소 > 세션 저장소)
+        await _ensureProfileImage();
 
         await _initNotifications();
         if (mounted) setState(() => _isConnected = true);
@@ -215,6 +208,9 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
   /// 소셜 로그인 (Web3Auth 인증 후)
   Future<void> _handleSocialLogin(String verifierId, String name, String? image, [String? lang, String? privateKey]) async {
+    debugPrint('[SocialLogin] verifier=$verifierId, name=$name, '
+        'socialAvatar=${image ?? "null"}');
+
     final langCode = lang ?? ref.read(languageProvider).languageCode;
     final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
@@ -230,14 +226,11 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
         token,
       );
 
-      // 서버에 이미지가 없고 소셜 프로필 이미지가 있으면 설정 (최초 로그인)
-      final serverUser = widget.client.state.currentUser;
-      if ((serverUser?.image == null || serverUser!.image!.isEmpty) && image != null && image.isNotEmpty) {
-        await widget.client.partialUpdateUser(_authService.userId!, set: {'image': image});
-      }
+      debugPrint('[SocialLogin] Connected. currentUser.image='
+          '${widget.client.state.currentUser?.image ?? "null"}');
 
-      // 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
-      await _syncProfileImageFromServer();
+      // 프로필 이미지 보장 (서버 > 영속 저장소 > 소셜 아바타)
+      await _ensureProfileImage(socialAvatar: image);
 
       await _initNotifications();
     } catch (e) {
@@ -248,12 +241,54 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
     if (mounted) setState(() => _isConnected = true);
   }
 
-  /// 연결 후 Stream 서버의 프로필 이미지를 SessionStorage 및 AuthService에 동기화
-  Future<void> _syncProfileImageFromServer() async {
+  /// 프로필 이미지 보장 — 연결 후 호출
+  ///
+  /// 우선순위: 서버 이미지 > 영속 저장소 > 소셜 아바타
+  /// 로그아웃 → 재로그인 시에도 커스텀 이미지가 복원되도록 함
+  Future<void> _ensureProfileImage({String? socialAvatar}) async {
     final user = widget.client.state.currentUser;
-    if (user != null && user.image != null && user.image!.isNotEmpty) {
-      await SessionStorage.updateProfileImage(user.image);
-      _authService.setProfileImage(user.image);
+    if (user == null || _authService.userId == null) return;
+
+    final userId = _authService.userId!;
+    final serverImage = user.image;
+
+    debugPrint('[ProfileImage] ensureProfileImage: server="${serverImage ?? "null"}", '
+        'socialAvatar="${socialAvatar ?? "null"}"');
+
+    // 1. 서버에 이미지가 있으면 → 로컬에 동기화 + 영속 저장
+    if (serverImage != null && serverImage.isNotEmpty) {
+      debugPrint('[ProfileImage] Using server image');
+      await SessionStorage.updateProfileImage(serverImage);
+      await SessionStorage.savePersistentImage(userId, serverImage);
+      _authService.setProfileImage(serverImage);
+      return;
+    }
+
+    // 2. 서버에 없으면 → 영속 저장소에서 복원 시도
+    final persistentImage = await SessionStorage.getPersistentImage(userId);
+    if (persistentImage != null && persistentImage.isNotEmpty) {
+      final imageUrl = '$persistentImage?v=${DateTime.now().millisecondsSinceEpoch}';
+      debugPrint('[ProfileImage] Restoring from persistent store: $imageUrl');
+      try {
+        await widget.client.partialUpdateUser(userId, set: {'image': imageUrl});
+        await SessionStorage.updateProfileImage(imageUrl);
+        _authService.setProfileImage(imageUrl);
+        return;
+      } catch (e) {
+        debugPrint('[ProfileImage] Persistent restore failed: $e');
+      }
+    }
+
+    // 3. 소셜 아바타로 폴백 (최초 로그인 시)
+    if (socialAvatar != null && socialAvatar.isNotEmpty) {
+      debugPrint('[ProfileImage] Setting social avatar as fallback');
+      try {
+        await widget.client.partialUpdateUser(userId, set: {'image': socialAvatar});
+        await SessionStorage.updateProfileImage(socialAvatar);
+        _authService.setProfileImage(socialAvatar);
+      } catch (e) {
+        debugPrint('[ProfileImage] Social avatar set failed: $e');
+      }
     }
   }
 
