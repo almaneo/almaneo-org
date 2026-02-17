@@ -1,7 +1,115 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../config/env.dart';
 
 class MeetupService {
   static final _supabase = Supabase.instance.client;
+
+  /// Ensure user exists in the users table (required for foreign key constraints)
+  static Future<void> _ensureUserExists(String userId) async {
+    try {
+      final existing = await _supabase
+          .from('users')
+          .select('wallet_address')
+          .eq('wallet_address', userId)
+          .maybeSingle();
+      if (existing == null) {
+        await _supabase.from('users').insert({
+          'wallet_address': userId,
+          'nickname': userId,
+          'kindness_score': 0,
+          'total_points': 0,
+          'level': 1,
+        });
+        debugPrint('[MeetupService] Created user record for: $userId');
+      }
+    } catch (e) {
+      debugPrint('[MeetupService] _ensureUserExists error: $e');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Stream Chat Channel Helpers
+  // ---------------------------------------------------------------------------
+
+  /// Create a Stream Chat channel for a meetup
+  static Future<String?> _createMeetupChannel({
+    required String meetupId,
+    required String hostUserId,
+    required String meetupTitle,
+    String? meetupDate,
+    String? meetupLocation,
+    String? meetupDescription,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Env.chatApiUrl}/api/create-meetup-channel'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'meetupId': meetupId,
+          'hostUserId': hostUserId,
+          'meetupTitle': meetupTitle,
+          if (meetupDate != null) 'meetupDate': meetupDate,
+          if (meetupLocation != null) 'meetupLocation': meetupLocation,
+          if (meetupDescription != null) 'meetupDescription': meetupDescription,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return data['channelId'] as String?;
+      }
+      debugPrint('[MeetupService] _createMeetupChannel server error: ${response.statusCode} ${response.body}');
+      return null;
+    } catch (e) {
+      debugPrint('[MeetupService] _createMeetupChannel error: $e');
+      return null;
+    }
+  }
+
+  /// Add a user to the meetup's Stream Chat channel
+  static Future<bool> _addUserToChannel(String channelId, String userId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Env.chatApiUrl}/api/join-channel'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': userId,
+          'channelId': channelId,
+          'channelType': 'messaging',
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('[MeetupService] _addUserToChannel error: $e');
+      return false;
+    }
+  }
+
+  /// Remove a user from the meetup's Stream Chat channel
+  static Future<bool> _removeUserFromChannel(String channelId, String userId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Env.chatApiUrl}/api/leave-channel'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': userId,
+          'channelId': channelId,
+          'channelType': 'messaging',
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('[MeetupService] _removeUserFromChannel error: $e');
+      return false;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Meetup CRUD
+  // ---------------------------------------------------------------------------
 
   /// Get upcoming and in-progress meetups
   static Future<List<Map<String, dynamic>>> getUpcomingMeetups({int limit = 20}) async {
@@ -68,22 +176,34 @@ class MeetupService {
     return response != null;
   }
 
-  /// Join a meetup
+  /// Join a meetup (DB + Stream Chat channel)
   static Future<bool> joinMeetup(String meetupId, String userAddress) async {
     try {
+      // Ensure user exists in users table (foreign key constraint)
+      await _ensureUserExists(userAddress);
+
       await _supabase.from('meetup_participants').insert({
         'meetup_id': meetupId,
         'user_address': userAddress,
         'attended': false,
         'points_earned': 0,
       });
+
+      // Add user to the meetup's chat channel (best-effort)
+      final meetup = await getMeetupById(meetupId);
+      final channelId = meetup?['channel_id'] as String?;
+      if (channelId != null && channelId.isNotEmpty) {
+        await _addUserToChannel(channelId, userAddress);
+      }
+
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] joinMeetup error: $e');
       return false;
     }
   }
 
-  /// Leave a meetup
+  /// Leave a meetup (DB + Stream Chat channel)
   static Future<bool> leaveMeetup(String meetupId, String userAddress) async {
     try {
       await _supabase
@@ -91,13 +211,22 @@ class MeetupService {
           .delete()
           .eq('meetup_id', meetupId)
           .eq('user_address', userAddress);
+
+      // Remove user from the meetup's chat channel (best-effort)
+      final meetup = await getMeetupById(meetupId);
+      final channelId = meetup?['channel_id'] as String?;
+      if (channelId != null && channelId.isNotEmpty) {
+        await _removeUserFromChannel(channelId, userAddress);
+      }
+
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] leaveMeetup error: $e');
       return false;
     }
   }
 
-  /// Create a new meetup
+  /// Create a new meetup (DB + Stream Chat channel)
   static Future<Map<String, dynamic>?> createMeetup({
     required String title,
     String? description,
@@ -107,6 +236,9 @@ class MeetupService {
     int maxParticipants = 20,
   }) async {
     try {
+      // Ensure host exists in users table (foreign key constraint)
+      await _ensureUserExists(hostAddress);
+
       final response = await _supabase.from('meetups').insert({
         'title': title,
         'description': description,
@@ -116,8 +248,45 @@ class MeetupService {
         'max_participants': maxParticipants,
         'status': 'upcoming',
       }).select().single();
+
+      final meetupId = response['id'] as String;
+      debugPrint('[MeetupService] Created meetup: $meetupId');
+
+      // Create a Stream Chat channel for this meetup
+      final channelId = await _createMeetupChannel(
+        meetupId: meetupId,
+        hostUserId: hostAddress,
+        meetupTitle: title,
+        meetupDate: meetingDate.toIso8601String(),
+        meetupLocation: location,
+        meetupDescription: description,
+      );
+
+      if (channelId != null) {
+        // Save the channel_id back to the meetup record
+        await _supabase.from('meetups').update({
+          'channel_id': channelId,
+        }).eq('id', meetupId);
+        response['channel_id'] = channelId;
+        debugPrint('[MeetupService] Created chat channel: $channelId for meetup: $meetupId');
+      }
+
+      // Auto-join the host as participant
+      await _ensureUserExists(hostAddress);
+      try {
+        await _supabase.from('meetup_participants').insert({
+          'meetup_id': meetupId,
+          'user_address': hostAddress,
+          'attended': false,
+          'points_earned': 0,
+        });
+      } catch (e) {
+        debugPrint('[MeetupService] Host auto-join error (may already exist): $e');
+      }
+
       return response;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] createMeetup error: $e');
       return null;
     }
   }
@@ -166,7 +335,8 @@ class MeetupService {
         'started_at': DateTime.now().toIso8601String(),
       }).eq('id', meetupId);
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] startMeetup error: $e');
       return false;
     }
   }
@@ -179,7 +349,8 @@ class MeetupService {
         'ended_at': DateTime.now().toIso8601String(),
       }).eq('id', meetupId);
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] endMeetup error: $e');
       return false;
     }
   }
@@ -191,7 +362,8 @@ class MeetupService {
         'status': 'completed',
       }).eq('id', meetupId);
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[MeetupService] completeMeetup error: $e');
       return false;
     }
   }

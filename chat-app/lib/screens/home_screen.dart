@@ -338,10 +338,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         return;
                       }
                       Navigator.pop(ctx);
-                      // For now, we don't have wallet address from chat user
-                      // Use Stream user ID as a placeholder
                       final userId =
                           StreamChat.of(context).currentUser?.id ?? '';
+                      if (userId.isEmpty) return;
                       final result = await MeetupService.createMeetup(
                         title: titleController.text.trim(),
                         description: descController.text.trim().isNotEmpty
@@ -353,6 +352,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       );
                       if (result != null) {
                         _loadMeetups();
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(tr('home.meetupCreated', lang)),
+                              backgroundColor: AlmaTheme.success,
+                            ),
+                          );
+                        }
+                      } else {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(tr('home.meetupCreateFailed', lang)),
+                              backgroundColor: AlmaTheme.error,
+                            ),
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(

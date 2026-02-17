@@ -130,22 +130,33 @@ export async function getChannelActiveLanguages(
 }
 
 /**
- * Create a meetup channel
+ * Create a meetup channel with host as first member and meetup metadata
  */
 export async function createMeetupChannel(
   meetupId: string,
   hostUserId: string,
   meetupTitle: string,
+  meetupDate?: string,
+  meetupLocation?: string,
+  meetupDescription?: string,
 ): Promise<{ channelId: string }> {
   const sc = getStreamClient();
   const channelId = `meetup-${meetupId}`;
-  const channel = sc.channel('messaging', channelId, {
+
+  const extraData: Record<string, unknown> = {
     name: meetupTitle,
     created_by_id: hostUserId,
     meetup_id: meetupId,
     channel_type: 'meetup',
-  });
+  };
 
+  if (meetupDate) extraData.meetup_date = meetupDate;
+  if (meetupLocation) extraData.meetup_location = meetupLocation;
+  if (meetupDescription) extraData.meetup_description = meetupDescription;
+
+  const channel = sc.channel('messaging', channelId, extraData);
   await channel.create();
+  await channel.addMembers([hostUserId]);
+
   return { channelId };
 }

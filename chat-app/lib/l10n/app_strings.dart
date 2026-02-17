@@ -255,6 +255,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Cancelled',
     'home.noMeetups': 'No meetups yet',
     'home.createFirst': 'Create the first meetup!',
+    'home.meetupCreated': 'Meetup created!',
+    'home.meetupCreateFailed': 'Failed to create meetup',
     'home.createMeetup': 'New Meetup',
     'home.create': 'Create',
     'home.meetupTitle': 'Title',
@@ -283,6 +285,10 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Recordings',
     'recording.noRecordings': 'No recordings yet',
     'recording.processing': 'Processing...',
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'Failed to open meetup chat',
+    'meetupChat.toggleInfo': 'Meetup Info',
     'home.leave': 'Leave',
     'home.joined': 'Joined',
     'home.full': 'Full',
@@ -513,6 +519,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': '취소됨',
     'home.noMeetups': '아직 밋업이 없습니다',
     'home.createFirst': '첫 밋업을 만들어 보세요!',
+    'home.meetupCreated': '밋업이 생성되었습니다!',
+    'home.meetupCreateFailed': '밋업 생성에 실패했습니다',
     'home.createMeetup': '새 밋업',
     'home.create': '만들기',
     'home.meetupTitle': '제목',
@@ -541,6 +549,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': '녹음 파일',
     'recording.noRecordings': '녹음 파일이 없습니다',
     'recording.processing': '처리 중...',
+
+    // Meetup Chat
+    'meetupChat.openChat': '채팅',
+    'meetupChat.openFailed': '밋업 채팅을 열 수 없습니다',
+    'meetupChat.toggleInfo': '밋업 정보',
+
     'home.leave': '나가기',
     'home.joined': '참가 중',
     'home.full': '마감',
@@ -690,6 +704,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': '已取消',
     'home.noMeetups': '暂无聚会',
     'home.createFirst': '创建第一个聚会吧！',
+    'home.meetupCreated': '聚会已创建！',
+    'home.meetupCreateFailed': '创建聚会失败',
     'home.createMeetup': '新建聚会',
     'home.create': '创建',
     'home.meetupTitle': '标题',
@@ -718,6 +734,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': '录音文件',
     'recording.noRecordings': '暂无录音',
     'recording.processing': '处理中...',
+
+    // Meetup Chat
+    'meetupChat.openChat': '聊天',
+    'meetupChat.openFailed': '无法打开聚会聊天',
+    'meetupChat.toggleInfo': '聚会信息',
+
     'home.leave': '退出',
     'home.joined': '已参加',
     'home.full': '已满',
@@ -867,6 +889,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'キャンセル',
     'home.noMeetups': 'ミートアップがありません',
     'home.createFirst': '最初のミートアップを作りましょう！',
+    'home.meetupCreated': 'ミートアップを作成しました！',
+    'home.meetupCreateFailed': 'ミートアップの作成に失敗しました',
     'home.createMeetup': '新規ミートアップ',
     'home.create': '作成',
     'home.meetupTitle': 'タイトル',
@@ -895,6 +919,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': '録音ファイル',
     'recording.noRecordings': '録音ファイルがありません',
     'recording.processing': '処理中...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'チャット',
+    'meetupChat.openFailed': 'ミートアップチャットを開けません',
+    'meetupChat.toggleInfo': 'ミートアップ情報',
+
     'home.leave': '退出',
     'home.joined': '参加中',
     'home.full': '満員',
@@ -1044,6 +1074,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Cancelados',
     'home.noMeetups': 'No hay encuentros aún',
     'home.createFirst': '¡Crea el primero!',
+    'home.meetupCreated': '¡Encuentro creado!',
+    'home.meetupCreateFailed': 'Error al crear encuentro',
     'home.createMeetup': 'Nuevo encuentro',
     'home.create': 'Crear',
     'home.meetupTitle': 'Título',
@@ -1072,6 +1104,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Grabaciones',
     'recording.noRecordings': 'No hay grabaciones',
     'recording.processing': 'Procesando...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'No se pudo abrir el chat del meetup',
+    'meetupChat.toggleInfo': 'Info del Meetup',
+
     'home.leave': 'Salir',
     'home.joined': 'Unido',
     'home.full': 'Lleno',
@@ -1221,6 +1259,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Annulés',
     'home.noMeetups': 'Aucune rencontre pour le moment',
     'home.createFirst': 'Créez la première !',
+    'home.meetupCreated': 'Rencontre créée !',
+    'home.meetupCreateFailed': 'Échec de la création',
     'home.createMeetup': 'Nouvelle rencontre',
     'home.create': 'Créer',
     'home.meetupTitle': 'Titre',
@@ -1249,6 +1289,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Enregistrements',
     'recording.noRecordings': 'Aucun enregistrement',
     'recording.processing': 'Traitement...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'Impossible d\'ouvrir le chat du meetup',
+    'meetupChat.toggleInfo': 'Info Meetup',
+
     'home.leave': 'Quitter',
     'home.joined': 'Rejoint',
     'home.full': 'Complet',
@@ -1398,6 +1444,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'ملغاة',
     'home.noMeetups': 'لا توجد لقاءات بعد',
     'home.createFirst': 'أنشئ أول لقاء!',
+    'home.meetupCreated': 'تم إنشاء اللقاء!',
+    'home.meetupCreateFailed': 'فشل إنشاء اللقاء',
     'home.createMeetup': 'لقاء جديد',
     'home.create': 'إنشاء',
     'home.meetupTitle': 'العنوان',
@@ -1426,6 +1474,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'التسجيلات',
     'recording.noRecordings': 'لا توجد تسجيلات',
     'recording.processing': 'جاري المعالجة...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'محادثة',
+    'meetupChat.openFailed': 'فشل فتح محادثة اللقاء',
+    'meetupChat.toggleInfo': 'معلومات اللقاء',
+
     'home.leave': 'مغادرة',
     'home.joined': 'منضم',
     'home.full': 'مكتمل',
@@ -1575,6 +1629,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Đã hủy',
     'home.noMeetups': 'Chưa có buổi gặp mặt nào',
     'home.createFirst': 'Tạo buổi gặp mặt đầu tiên!',
+    'home.meetupCreated': 'Đã tạo buổi gặp mặt!',
+    'home.meetupCreateFailed': 'Tạo buổi gặp mặt thất bại',
     'home.createMeetup': 'Gặp mặt mới',
     'home.create': 'Tạo',
     'home.meetupTitle': 'Tiêu đề',
@@ -1603,6 +1659,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Bản ghi âm',
     'recording.noRecordings': 'Chưa có bản ghi âm',
     'recording.processing': 'Đang xử lý...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Trò chuyện',
+    'meetupChat.openFailed': 'Không thể mở chat meetup',
+    'meetupChat.toggleInfo': 'Thông tin Meetup',
+
     'home.leave': 'Rời khỏi',
     'home.joined': 'Đã tham gia',
     'home.full': 'Đã đầy',
@@ -1752,6 +1814,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'ยกเลิก',
     'home.noMeetups': 'ยังไม่มีมีตอัพ',
     'home.createFirst': 'สร้างมีตอัพแรกเลย!',
+    'home.meetupCreated': 'สร้างมีตอัพแล้ว!',
+    'home.meetupCreateFailed': 'สร้างมีตอัพไม่สำเร็จ',
     'home.createMeetup': 'มีตอัพใหม่',
     'home.create': 'สร้าง',
     'home.meetupTitle': 'ชื่อ',
@@ -1780,6 +1844,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'การบันทึก',
     'recording.noRecordings': 'ยังไม่มีการบันทึก',
     'recording.processing': 'กำลังประมวลผล...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'แชท',
+    'meetupChat.openFailed': 'ไม่สามารถเปิดแชทมีทอัพได้',
+    'meetupChat.toggleInfo': 'ข้อมูลมีทอัพ',
+
     'home.leave': 'ออก',
     'home.joined': 'เข้าร่วมแล้ว',
     'home.full': 'เต็ม',
@@ -1911,6 +1981,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Cancelados',
     'home.noMeetups': 'Nenhum encontro ainda',
     'home.createFirst': 'Crie o primeiro!',
+    'home.meetupCreated': 'Encontro criado!',
+    'home.meetupCreateFailed': 'Falha ao criar encontro',
     'home.createMeetup': 'Novo encontro',
     'home.create': 'Criar',
     'home.meetupTitle': 'Título',
@@ -1939,6 +2011,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Gravações',
     'recording.noRecordings': 'Nenhuma gravação',
     'recording.processing': 'Processando...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'Falha ao abrir o chat do meetup',
+    'meetupChat.toggleInfo': 'Info do Meetup',
+
     'home.leave': 'Sair',
     'home.joined': 'Participando',
     'home.full': 'Lotado',
@@ -2070,6 +2148,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Dibatalkan',
     'home.noMeetups': 'Belum ada pertemuan',
     'home.createFirst': 'Buat pertemuan pertama!',
+    'home.meetupCreated': 'Pertemuan dibuat!',
+    'home.meetupCreateFailed': 'Gagal membuat pertemuan',
     'home.createMeetup': 'Pertemuan baru',
     'home.create': 'Buat',
     'home.meetupTitle': 'Judul',
@@ -2098,6 +2178,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Rekaman',
     'recording.noRecordings': 'Belum ada rekaman',
     'recording.processing': 'Memproses...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'Gagal membuka chat meetup',
+    'meetupChat.toggleInfo': 'Info Meetup',
+
     'home.leave': 'Keluar',
     'home.joined': 'Bergabung',
     'home.full': 'Penuh',
@@ -2208,6 +2294,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'रद्द',
     'home.noMeetups': 'अभी कोई मिलन नहीं',
     'home.createFirst': 'पहला मिलन बनाएं!',
+    'home.meetupCreated': 'मिलन बनाया गया!',
+    'home.meetupCreateFailed': 'मिलन बनाने में विफल',
     'home.createMeetup': 'नया मिलन',
     'home.create': 'बनाएं',
     'home.meetupTitle': 'शीर्षक',
@@ -2236,6 +2324,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'रिकॉर्डिंग',
     'recording.noRecordings': 'कोई रिकॉर्डिंग नहीं',
     'recording.processing': 'प्रोसेसिंग...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'चैट',
+    'meetupChat.openFailed': 'मीटअप चैट खोलने में विफल',
+    'meetupChat.toggleInfo': 'मीटअप जानकारी',
+
     'home.leave': 'छोड़ें',
     'home.joined': 'शामिल',
     'home.full': 'भरा हुआ',
@@ -2346,6 +2440,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Abgesagt',
     'home.noMeetups': 'Noch keine Treffen',
     'home.createFirst': 'Erstelle das erste!',
+    'home.meetupCreated': 'Treffen erstellt!',
+    'home.meetupCreateFailed': 'Treffen konnte nicht erstellt werden',
     'home.createMeetup': 'Neues Treffen',
     'home.create': 'Erstellen',
     'home.meetupTitle': 'Titel',
@@ -2374,6 +2470,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Aufnahmen',
     'recording.noRecordings': 'Keine Aufnahmen',
     'recording.processing': 'Verarbeitung...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Chat',
+    'meetupChat.openFailed': 'Meetup-Chat konnte nicht geöffnet werden',
+    'meetupChat.toggleInfo': 'Meetup-Info',
+
     'home.leave': 'Verlassen',
     'home.joined': 'Beigetreten',
     'home.full': 'Voll',
@@ -2484,6 +2586,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'Отменённые',
     'home.noMeetups': 'Встреч пока нет',
     'home.createFirst': 'Создайте первую!',
+    'home.meetupCreated': 'Встреча создана!',
+    'home.meetupCreateFailed': 'Не удалось создать встречу',
     'home.createMeetup': 'Новая встреча',
     'home.create': 'Создать',
     'home.meetupTitle': 'Название',
@@ -2512,6 +2616,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Записи',
     'recording.noRecordings': 'Записей пока нет',
     'recording.processing': 'Обработка...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Чат',
+    'meetupChat.openFailed': 'Не удалось открыть чат встречи',
+    'meetupChat.toggleInfo': 'Информация о встрече',
+
     'home.leave': 'Покинуть',
     'home.joined': 'Участвую',
     'home.full': 'Заполнено',
@@ -2622,6 +2732,8 @@ final Map<String, Map<String, String>> _translations = {
     'home.cancelled': 'İptal edilen',
     'home.noMeetups': 'Henüz buluşma yok',
     'home.createFirst': 'İlk buluşmayı oluştur!',
+    'home.meetupCreated': 'Buluşma oluşturuldu!',
+    'home.meetupCreateFailed': 'Buluşma oluşturulamadı',
     'home.createMeetup': 'Yeni buluşma',
     'home.create': 'Oluştur',
     'home.meetupTitle': 'Başlık',
@@ -2650,6 +2762,12 @@ final Map<String, Map<String, String>> _translations = {
     'recording.recordings': 'Kayıtlar',
     'recording.noRecordings': 'Henüz kayıt yok',
     'recording.processing': 'İşleniyor...',
+
+    // Meetup Chat
+    'meetupChat.openChat': 'Sohbet',
+    'meetupChat.openFailed': 'Buluşma sohbeti açılamadı',
+    'meetupChat.toggleInfo': 'Buluşma Bilgisi',
+
     'home.leave': 'Ayrıl',
     'home.joined': 'Katıldı',
     'home.full': 'Dolu',

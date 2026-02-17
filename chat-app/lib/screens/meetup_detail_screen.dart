@@ -9,6 +9,7 @@ import '../providers/language_provider.dart';
 import '../services/meetup_service.dart';
 import '../services/recording_service.dart';
 import '../widgets/recording_indicator.dart';
+import 'meetup_chat_screen.dart';
 
 class MeetupDetailScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> meetup;
@@ -225,6 +226,42 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
     }
   }
 
+  Future<void> _openMeetupChat(String lang) async {
+    final channelId = _meetup['channel_id'] as String?;
+    final client = StreamChat.of(context).client;
+
+    // Determine the channel ID — from DB or fallback to convention
+    final cid = channelId ?? 'meetup-$_meetupId';
+
+    try {
+      final channel = client.channel('messaging', id: cid);
+      await channel.watch();
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => StreamChannel(
+            channel: channel,
+            child: MeetupChatScreen(meetup: _meetup),
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Open meetup chat error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('meetupChat.openFailed', lang)),
+            backgroundColor: AlmaTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+    }
+  }
+
   Future<bool?> _showConfirmDialog(String title, String message) {
     return showDialog<bool>(
       context: context,
@@ -273,6 +310,13 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           overflow: TextOverflow.ellipsis,
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _openMeetupChat(lang),
+        icon: const Icon(Icons.chat_bubble_outline, size: 20),
+        label: Text(tr('meetupChat.openChat', lang)),
+        backgroundColor: AlmaTheme.electricBlue,
+        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(
