@@ -3654,10 +3654,62 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 100+)
+### ✅ 완료된 작업 (2026-02-17 - Session 100: DB 기반 프로필 이미지 관리 시스템)
+
+#### 1. **다기기 프로필 이미지 소실 버그 발견 및 분석** ✅
+   - **증상**: 기기1에서 프로필 이미지 설정 후, 기기2에서 **다른 계정**으로 로그인하면 기기1의 프로필 이미지가 사라짐
+   - **근본 원인**: `connectUserWithProvider(User(id, name))` 호출 시 `image` 필드 미전달 → Stream SDK가 서버에 `image: null`을 보냄 → 서버가 기존 이미지를 삭제 → `user.updated` 이벤트가 다른 디바이스로 전파
+   - **초기 접근 (커밋 `9dc6d22`)**: 서버에서 기존 유저 이미지를 조회하여 토큰 응답에 포함 → Flutter에서 `connectUserWithProvider(User(image: serverImage))`로 보존
+   - **사용자 피드백**: "같은 계정이 아니다. 서로 다른 계정으로 로그인한다" → DB 기반 단순화 접근으로 전환
+
+#### 2. **Supabase DB 기반 Single Source of Truth 시스템 구축** ✅
+   - **핵심 전략**: 기존 4개 저장소 (Stream Server, SharedPreferences persistent, SessionStorage, AuthService 메모리) → **Supabase `chat_profiles` 테이블 1개**로 단순화
+   - **마이그레이션**: `supabase/migrations/20260217_chat_profiles.sql`
+     ```sql
+     CREATE TABLE chat_profiles (
+       user_id TEXT PRIMARY KEY,
+       profile_image_url TEXT,
+       display_name TEXT,
+       created_at TIMESTAMPTZ DEFAULT NOW(),
+       updated_at TIMESTAMPTZ DEFAULT NOW()
+     );
+     ```
+   - **RLS 정책**: 누구나 읽기, 누구나 upsert/update 가능
+
+#### 3. **ProfileService 생성** ✅
+   - `chat-app/lib/services/profile_service.dart` (신규)
+   - `getProfileImage(userId)`: DB에서 URL 조회
+   - `saveProfileImage(userId, url)`: DB에 upsert
+   - `removeProfileImage(userId)`: DB에서 삭제
+
+#### 4. **프로필 업로드/삭제 수정** ✅
+   - `profile_screen.dart`: SessionStorage 호출 제거 → `ProfileService.saveProfileImage()` / `removeProfileImage()` 사용
+   - Stream `partialUpdateUser`는 채널 리스트 아바타용으로 유지
+
+#### 5. **이미지 복원 로직 단순화** ✅
+   - `main.dart`: 45줄 `_ensureProfileImage()` → 20줄 `_syncProfileImageFromDB()`로 교체
+   - 복원 우선순위: **DB 이미지 > 소셜 아바타**
+   - `connectUserWithProvider`에서 `image` 파라미터 완전 제거 (4곳)
+
+#### 6. **레거시 코드 정리** ✅
+   | 파일 | 제거 대상 |
+   |------|----------|
+   | `session_storage.dart` | `savePersistentImage`, `getPersistentImage`, `clearPersistentImage` |
+   | `auth_service.dart` | `_serverImage` 필드, `serverImage` getter |
+   | `stream-token.ts` | `queryStreamUserImage` 호출, 응답의 `image` 필드 |
+   | `stream-client.ts` | `queryStreamUserImage()` 함수 전체 |
+
+#### 7. **커밋 (2개)**
+   - `9dc6d22` - fix(chat-app): Preserve profile image across multi-device login (초기 접근)
+   - `07ca22e` - refactor(chat-app): Use Supabase DB as single source of truth for profile images (최종 해결)
+   - 총 8개 파일 수정, 복잡도 대폭 감소 (-85줄 순감)
+
+---
+
+### 🔲 다음 세션 작업 (Session 101+)
 
 #### 🔴 최우선
-1. **프로필 이미지 수정 실기기 테스트** — 로그아웃 → 재로그인 후 커스텀 이미지 복원 확인
+1. **프로필 이미지 크로스-디바이스 테스트** — 기기1 이미지 설정 → 기기2 다른 계정 로그인 → 기기1 이미지 유지 확인
 2. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
 
 #### 🟡 중간 우선순위
