@@ -5,6 +5,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../providers/language_provider.dart';
 import 'fullscreen_image.dart';
+import 'reaction_bar.dart';
 
 /// 번역 로딩 텍스트 (언어별)
 const _translatingText = <String, String>{
@@ -58,11 +59,19 @@ const _failedText = <String, String>{
 class TranslatedMessage extends ConsumerStatefulWidget {
   final Message message;
   final bool isMyMessage;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onReply;
+  final String? currentUserId;
+  final Channel? channel;
 
   const TranslatedMessage({
     super.key,
     required this.message,
     required this.isMyMessage,
+    this.onLongPress,
+    this.onReply,
+    this.currentUserId,
+    this.channel,
   });
 
   @override
@@ -106,6 +115,11 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     final senderUser = widget.message.user;
     final senderImage = senderUser?.image;
 
+    // Check if message has reactions
+    final hasReactions = widget.channel != null &&
+        widget.currentUserId != null &&
+        (widget.message.reactionGroups?.isNotEmpty ?? false);
+
     return Padding(
       padding: EdgeInsets.only(
         left: widget.isMyMessage ? 48 : 8,
@@ -113,7 +127,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
         top: 2,
         bottom: 2,
       ),
-      child: Align(
+      child: GestureDetector(
+        onLongPress: widget.onLongPress,
+        child: Align(
         alignment:
             widget.isMyMessage ? Alignment.centerRight : Alignment.centerLeft,
         child: Row(
@@ -224,13 +240,39 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               isFailed: isFailed,
               alma: alma,
             ),
+
+            // 리액션 바
+            if (hasReactions)
+              ReactionBar(
+                message: widget.message,
+                currentUserId: widget.currentUserId!,
+                onReactionTap: (type) => _handleReactionTap(type),
+              ),
                 ],
               ),
             ),
           ],
         ),
       ),
+      ),
     );
+  }
+
+  void _handleReactionTap(String type) {
+    final channel = widget.channel;
+    final currentUserId = widget.currentUserId;
+    if (channel == null || currentUserId == null) return;
+
+    final existing = widget.message.latestReactions?.firstWhere(
+      (r) => r.userId == currentUserId && r.type == type,
+      orElse: () => Reaction(type: '', messageId: ''),
+    );
+
+    if (existing != null && existing.type == type) {
+      channel.deleteReaction(widget.message, existing);
+    } else {
+      channel.sendReaction(widget.message, type);
+    }
   }
 
   /// 사용자 아바타 (32dp 원형)

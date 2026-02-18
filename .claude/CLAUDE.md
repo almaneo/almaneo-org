@@ -4365,14 +4365,55 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 114+)
+### ✅ 완료된 작업 (2026-02-19 - Session 114: V0.5 기획 & Phase A 시작)
+
+#### 1. **V0.5 "Social & UX Enhancement" 기획 완료** ✅
+   - V0.3/V0.4 완료 상태 리뷰
+   - 코드베이스 전체 조사 (34개 Dart 파일, 6개 디렉토리)
+   - 사용자 선택: "소셜 & UX 강화" 방향
+   - 구현 순서 확정: A(Reactions) → C(Unread Badge) → B(Profile/Info) → D(Safety) → E(Deep Links)
+   - `chat-app/V0.5_PLAN.md` 생성
+
+#### 2. **V0.5 Phase A 핵심 위젯 3개 생성** ✅
+
+   | 파일 | 기능 |
+   |------|------|
+   | `lib/widgets/reaction_picker.dart` | 6개 이모지 가로 피커 (👍 ❤️ 😂 😮 😢 🙏) |
+   | `lib/widgets/reaction_bar.dart` | 메시지 하단 리액션 카운트 표시, 탭으로 추가/제거 |
+   | `lib/widgets/message_actions_sheet.dart` | 롱프레스 바텀시트 (리액션 + 복사 + 답장 + 삭제) |
+
+   - Stream SDK v9.5 호환: `reactionGroups` 사용 (deprecated `reactionCounts` 대신)
+   - `ReactionBar`: 내 리액션은 파란색 하이라이트, 타인 리액션은 기본 chipBg
+   - `MessageActionsSheet`: 삭제 시 확인 다이얼로그, 복사 시 SnackBar 피드백
+
+#### 3. **translated_message.dart 수정** ✅
+   - 4개 새 파라미터 추가: `onLongPress`, `onReply`, `currentUserId`, `channel`
+   - `GestureDetector(onLongPress)` 래핑으로 롱프레스 감지
+   - Footer 아래 `ReactionBar` 조건부 표시
+   - `_handleReactionTap()` 메서드 추가 (리액션 토글)
+
+#### 4. **Phase A 잔여 작업** (다음 세션)
+   - `chat_screen.dart`: TranslatedMessage에 콜백 전달, 답장 기능 와이어링
+   - `meetup_chat_screen.dart`: 동일 와이어링
+   - `app_strings.dart`: 10개 키 × 15개 언어 = 150개 번역 항목
+   - APK 빌드 & 테스트
+
+---
+
+### 🔲 다음 세션 작업 (Session 115+)
+
+#### 🔴 최우선
+- **V0.5 Phase A 완료**: chat_screen + meetup_chat_screen 와이어링, i18n 키 추가, APK 빌드
+- **V0.5 Phase C**: 읽지 않은 메시지 뱃지, 스크롤 FAB
 
 #### 🟡 중간 우선순위
-- **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
-- **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
-- **Governance 실제 제안 로드**: Mock 데이터 제거
+- **V0.5 Phase B**: 유저 프로필 시트, 채널 정보 화면
+- **V0.5 Phase D**: 채널 관리 (핀, 뮤트, 나가기)
+- **V0.5 Phase E**: 딥링크 핸들러 `almachat://invite/{code}`
 
 #### 🟢 낮은 우선순위
+- **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
+- **Governance 실제 제안 로드**: Mock 데이터 제거
 - **Kindness AI 분석 MVP**: V0.5+
 - **메인넷 배포 준비**: Multi-sig, 감사
 - **토큰 로고 AI 생성**
