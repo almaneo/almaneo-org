@@ -397,8 +397,11 @@ class AlmaTheme {
           color: colors.textPrimary,
           fontSize: 15,
         ),
+        idleBorderGradient: const LinearGradient(
+          colors: [Colors.transparent, Colors.transparent],
+        ),
         activeBorderGradient: const LinearGradient(
-          colors: [electricBlue, electricBlue],
+          colors: [Colors.transparent, Colors.transparent],
         ),
         borderRadius: BorderRadius.circular(20),
       ),
