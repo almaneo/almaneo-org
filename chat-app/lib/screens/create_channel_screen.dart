@@ -92,6 +92,7 @@ class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
+    final alma = context.alma;
 
     return Scaffold(
       appBar: AppBar(
@@ -131,18 +132,19 @@ class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: alma.textSecondary,
                 ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _nameController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color: alma.textPrimary, fontSize: 16),
                 decoration: InputDecoration(
                   hintText: tr('create.namePlaceholder', lang),
+                  hintStyle: TextStyle(color: alma.textTertiary),
                   prefixIcon: const Icon(Icons.tag, color: AlmaTheme.electricBlue, size: 20),
                   filled: true,
-                  fillColor: AlmaTheme.slateGray,
+                  fillColor: alma.inputBg,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -153,7 +155,7 @@ class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
                   ),
                   counterText: '${_nameController.text.length}/50',
                   counterStyle: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: alma.textTertiary,
                     fontSize: 12,
                   ),
                 ),
@@ -175,18 +177,19 @@ class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: alma.textSecondary,
                 ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _descController,
-                style: const TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: alma.textPrimary, fontSize: 15),
                 decoration: InputDecoration(
                   hintText: tr('create.descPlaceholder', lang),
+                  hintStyle: TextStyle(color: alma.textTertiary),
                   prefixIcon: const Icon(Icons.notes, color: AlmaTheme.terracottaOrange, size: 20),
                   filled: true,
-                  fillColor: AlmaTheme.slateGray,
+                  fillColor: alma.inputBg,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -225,7 +228,7 @@ class _CreateChannelScreenState extends ConsumerState<CreateChannelScreen> {
                         tr('create.autoTranslateInfo', lang),
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: alma.textSecondary.withValues(alpha: 0.8),
                           height: 1.4,
                         ),
                       ),

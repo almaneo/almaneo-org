@@ -127,6 +127,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
   // ── Edit Meetup (host only, upcoming only) ──
 
   Future<void> _showEditSheet(String lang) async {
+    final alma = context.alma;
     final titleCtrl = TextEditingController(text: _meetup['title'] as String? ?? '');
     final descCtrl = TextEditingController(text: _meetup['description'] as String? ?? '');
     final locationCtrl = TextEditingController(text: _meetup['location'] as String? ?? '');
@@ -139,7 +140,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
     final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AlmaTheme.deepNavy,
+      backgroundColor: alma.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -161,7 +162,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white24,
+                      color: alma.divider,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -169,8 +170,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                 const SizedBox(height: 16),
                 Text(
                   tr('meetup.editMeetup', lang),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: alma.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -178,15 +179,15 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                 const SizedBox(height: 16),
 
                 // Title
-                _buildTextField(titleCtrl, tr('home.meetupTitle', lang)),
+                _buildTextField(titleCtrl, tr('home.meetupTitle', lang), alma),
                 const SizedBox(height: 12),
 
                 // Description
-                _buildTextField(descCtrl, tr('home.meetupDesc', lang), maxLines: 3),
+                _buildTextField(descCtrl, tr('home.meetupDesc', lang), alma, maxLines: 3),
                 const SizedBox(height: 12),
 
                 // Location
-                _buildTextField(locationCtrl, tr('home.meetupLocation', lang)),
+                _buildTextField(locationCtrl, tr('home.meetupLocation', lang), alma),
                 const SizedBox(height: 12),
 
                 // Date picker
@@ -215,20 +216,20 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.06),
+                      color: alma.chipBg,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                      border: Border.all(color: alma.divider),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.calendar_today, size: 18, color: Colors.white54),
+                        Icon(Icons.calendar_today, size: 18, color: alma.textSecondary),
                         const SizedBox(width: 10),
                         Text(
                           selectedDate != null
                               ? '${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')} ${selectedDate!.hour.toString().padLeft(2, '0')}:${selectedDate!.minute.toString().padLeft(2, '0')}'
                               : tr('home.meetupDate', lang),
                           style: TextStyle(
-                            color: selectedDate != null ? Colors.white : Colors.white54,
+                            color: selectedDate != null ? alma.textPrimary : alma.textSecondary,
                             fontSize: 14,
                           ),
                         ),
@@ -241,11 +242,11 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                 // Max participants stepper
                 Row(
                   children: [
-                    Icon(Icons.people, size: 18, color: Colors.white54),
+                    Icon(Icons.people, size: 18, color: alma.textSecondary),
                     const SizedBox(width: 10),
                     Text(
                       tr('meetup.maxParticipants', lang),
-                      style: const TextStyle(color: Colors.white70, fontSize: 14),
+                      style: TextStyle(color: alma.textSecondary, fontSize: 14),
                     ),
                     const Spacer(),
                     GestureDetector(
@@ -256,18 +257,18 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: alma.chipBg,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.remove, color: Colors.white70, size: 18),
+                        child: Icon(Icons.remove, color: alma.textSecondary, size: 18),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Text(
                         '$maxParts',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: alma.textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -281,10 +282,10 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: alma.chipBg,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.add, color: Colors.white70, size: 18),
+                        child: Icon(Icons.add, color: alma.textSecondary, size: 18),
                       ),
                     ),
                   ],
@@ -358,23 +359,23 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
     }
   }
 
-  Widget _buildTextField(TextEditingController ctrl, String label, {int maxLines = 1}) {
+  Widget _buildTextField(TextEditingController ctrl, String label, AlmaColors alma, {int maxLines = 1}) {
     return TextField(
       controller: ctrl,
       maxLines: maxLines,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
+      style: TextStyle(color: alma.textPrimary, fontSize: 14),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white54, fontSize: 13),
+        labelStyle: TextStyle(color: alma.textSecondary, fontSize: 13),
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.06),
+        fillColor: alma.inputBg,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          borderSide: BorderSide(color: alma.divider),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          borderSide: BorderSide(color: alma.divider),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -625,16 +626,17 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
   }
 
   Future<bool?> _showConfirmDialog(String title, String message) {
+    final alma = context.alma;
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AlmaTheme.slateGray,
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-        content: Text(message, style: TextStyle(color: Colors.white70)),
+        backgroundColor: alma.cardBg,
+        title: Text(title, style: TextStyle(color: alma.textPrimary)),
+        content: Text(message, style: TextStyle(color: alma.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel', style: TextStyle(color: Colors.white54)),
+            child: Text('Cancel', style: TextStyle(color: alma.textTertiary)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -647,6 +649,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final lang = ref.watch(languageProvider).languageCode;
     final title = _meetup['title'] as String? ?? '';
     final description = _meetup['description'] as String? ?? '';
@@ -677,8 +680,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
           // Host action menu (edit/cancel/delete)
           if (_isHost && !isCancelled && status != 'completed')
             PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, color: Colors.white70),
-              color: AlmaTheme.slateGray,
+              icon: Icon(Icons.more_vert, color: alma.textSecondary),
+              color: alma.cardBg,
               onSelected: (value) {
                 switch (value) {
                   case 'edit':
@@ -695,9 +698,9 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     value: 'edit',
                     child: Row(
                       children: [
-                        const Icon(Icons.edit, color: Colors.white70, size: 18),
+                        Icon(Icons.edit, color: alma.textSecondary, size: 18),
                         const SizedBox(width: 10),
-                        Text(tr('meetup.editMeetup', lang), style: const TextStyle(color: Colors.white)),
+                        Text(tr('meetup.editMeetup', lang), style: TextStyle(color: alma.textPrimary)),
                       ],
                     ),
                   ),
@@ -764,7 +767,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                   child: Icon(
                     Icons.event,
                     size: 48,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: alma.textTertiary,
                   ),
                 ),
               ),
@@ -792,8 +795,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                   // Title
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: alma.textPrimary,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
@@ -804,7 +807,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     Text(
                       description,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: alma.textSecondary,
                         fontSize: 14,
                         height: 1.4,
                       ),
@@ -819,21 +822,25 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     meetingDate != null
                         ? _formatFullDate(meetingDate, lang)
                         : '-',
+                    alma,
                   ),
                   const SizedBox(height: 10),
                   _infoRow(
                     Icons.location_on,
                     location,
+                    alma,
                   ),
                   const SizedBox(height: 10),
                   _infoRow(
                     Icons.person,
                     '${tr('meetup.host', lang)}: ${_hostDisplayName.isNotEmpty ? _hostDisplayName : _truncateAddress(_hostAddress)}',
+                    alma,
                   ),
                   const SizedBox(height: 10),
                   _infoRow(
                     Icons.people,
                     '$_participantCount / $maxParticipants ${tr('meetup.participantsLabel', lang)}',
+                    alma,
                   ),
 
                   const SizedBox(height: 24),
@@ -982,8 +989,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                       children: [
                         Text(
                           tr('meetup.participantList', lang),
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: alma.textPrimary,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -1007,7 +1014,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    ..._participants.map((p) => _participantTile(p, lang)),
+                    ..._participants.map((p) => _participantTile(p, lang, alma)),
                   ],
 
                   // Recordings list (visible for ended/completed or in_progress host)
@@ -1016,8 +1023,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                     const SizedBox(height: 24),
                     Text(
                       tr('recording.recordings', lang),
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: alma.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1027,12 +1034,12 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                       Text(
                         tr('recording.noRecordings', lang),
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: alma.textTertiary,
                           fontSize: 13,
                         ),
                       )
                     else
-                      ..._recordings.map((rec) => _recordingTile(rec, lang)),
+                      ..._recordings.map((rec) => _recordingTile(rec, lang, alma)),
                   ],
 
                   // Kindness points info for completed meetups
@@ -1064,7 +1071,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                             size: 32,
                           ),
                           const SizedBox(height: 8),
-                          Text(
+                          const Text(
                             '+30 Kindness Points',
                             style: TextStyle(
                               color: AlmaTheme.terracottaOrange,
@@ -1076,7 +1083,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                           Text(
                             tr('almaneo.meetupsAttended', lang),
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.5),
+                              color: alma.textTertiary,
                               fontSize: 13,
                             ),
                           ),
@@ -1098,7 +1105,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
 
   // ── Helper widgets ──
 
-  Widget _participantTile(Map<String, dynamic> participant, String lang) {
+  Widget _participantTile(Map<String, dynamic> participant, String lang, AlmaColors alma) {
     final address = participant['user_address'] as String;
     final nickname = participant['nickname'] as String? ?? address;
     final avatarUrl = participant['avatar_url'] as String?;
@@ -1140,8 +1147,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                 Flexible(
                   child: Text(
                     displayName,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: alma.textPrimary,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -1173,7 +1180,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
           // Remove button (host can remove non-host participants, only when upcoming)
           if (_isHost && !isHost && _status == 'upcoming')
             IconButton(
-              icon: const Icon(Icons.close, size: 16, color: Colors.white38),
+              icon: Icon(Icons.close, size: 16, color: alma.textTertiary),
               onPressed: () => _removeParticipant(address, displayName, lang),
               visualDensity: VisualDensity.compact,
               padding: EdgeInsets.zero,
@@ -1279,7 +1286,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
     );
   }
 
-  Widget _recordingTile(Map<String, dynamic> rec, String lang) {
+  Widget _recordingTile(Map<String, dynamic> rec, String lang, AlmaColors alma) {
     final duration = rec['duration_seconds'] as int? ?? 0;
     final status = rec['status'] as String? ?? 'uploaded';
     final createdAt = rec['created_at'] as String?;
@@ -1306,8 +1313,8 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
               children: [
                 Text(
                   '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: alma.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'monospace',
@@ -1317,7 +1324,7 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
                   Text(
                     _formatShortDate(createdAt),
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.4),
+                      color: alma.textTertiary,
                       fontSize: 11,
                     ),
                   ),
@@ -1341,16 +1348,16 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
     );
   }
 
-  Widget _infoRow(IconData icon, String value) {
+  Widget _infoRow(IconData icon, String value, AlmaColors alma) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.white.withValues(alpha: 0.4)),
+        Icon(icon, size: 18, color: alma.textTertiary),
         const SizedBox(width: 10),
         Expanded(
           child: Text(
             value,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: alma.textSecondary,
               fontSize: 14,
             ),
           ),

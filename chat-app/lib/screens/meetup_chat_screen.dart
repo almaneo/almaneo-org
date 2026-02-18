@@ -36,6 +36,7 @@ class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final channel = StreamChannel.of(context).channel;
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
@@ -85,7 +86,7 @@ class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
               size: 20,
               color: _showInfo
                   ? AlmaTheme.terracottaOrange
-                  : Colors.white.withValues(alpha: 0.6),
+                  : alma.textSecondary,
             ),
             onPressed: () => setState(() => _showInfo = !_showInfo),
             tooltip: tr('meetupChat.toggleInfo', lang),
@@ -144,14 +145,15 @@ class _MeetupInfoHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AlmaTheme.slateGray.withValues(alpha: 0.5),
+        color: alma.cardBg.withValues(alpha: 0.5),
         border: Border(
           bottom: BorderSide(
-            color: Colors.white.withValues(alpha: 0.06),
+            color: alma.divider,
           ),
         ),
       ),
@@ -170,13 +172,13 @@ class _MeetupInfoHeader extends StatelessWidget {
                     children: [
                       Icon(Icons.calendar_today,
                           size: 13,
-                          color: Colors.white.withValues(alpha: 0.5)),
+                          color: alma.textTertiary),
                       const SizedBox(width: 5),
                       Text(
                         _formatDate(meetingDate!, lang),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: alma.textSecondary,
                         ),
                       ),
                     ],
@@ -187,14 +189,14 @@ class _MeetupInfoHeader extends StatelessWidget {
                     children: [
                       Icon(Icons.location_on,
                           size: 13,
-                          color: Colors.white.withValues(alpha: 0.5)),
+                          color: alma.textTertiary),
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           location,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: alma.textSecondary,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),

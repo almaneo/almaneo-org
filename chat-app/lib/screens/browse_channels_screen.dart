@@ -148,6 +148,7 @@ class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
+    final alma = context.alma;
 
     return Scaffold(
       appBar: AppBar(
@@ -162,11 +163,11 @@ class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
           ),
         ],
       ),
-      body: _buildBody(lang),
+      body: _buildBody(lang, alma),
     );
   }
 
-  Widget _buildBody(String lang) {
+  Widget _buildBody(String lang, AlmaColors alma) {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: AlmaTheme.electricBlue),
@@ -182,7 +183,7 @@ class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
             const SizedBox(height: 12),
             Text(
               _error!,
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+              style: TextStyle(color: alma.textSecondary),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -205,16 +206,16 @@ class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: 48, color: Colors.white.withValues(alpha: 0.2)),
+            Icon(Icons.search_off, size: 48, color: alma.textTertiary),
             const SizedBox(height: 12),
             Text(
               tr('browse.noChannels', lang),
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 16),
+              style: TextStyle(color: alma.textSecondary, fontSize: 16),
             ),
             const SizedBox(height: 4),
             Text(
               tr('browse.createFirst', lang),
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 13),
+              style: TextStyle(color: alma.textTertiary, fontSize: 13),
             ),
           ],
         ),
@@ -229,7 +230,7 @@ class _BrowseChannelsScreenState extends ConsumerState<BrowseChannelsScreen> {
         itemCount: _channels.length,
         separatorBuilder: (_, _) => Divider(
           height: 1,
-          color: Colors.white.withValues(alpha: 0.06),
+          color: alma.divider,
           indent: 68,
         ),
         itemBuilder: (context, index) {
@@ -264,6 +265,8 @@ class _ChannelTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
+
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
@@ -286,8 +289,8 @@ class _ChannelTile extends StatelessWidget {
           Expanded(
             child: Text(
               info.name,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: alma.textPrimary,
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
               ),
@@ -321,7 +324,7 @@ class _ChannelTile extends StatelessWidget {
               child: Text(
                 info.description,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: alma.textSecondary,
                   fontSize: 13,
                 ),
                 maxLines: 1,
@@ -332,12 +335,12 @@ class _ChannelTile extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4),
             child: Row(
               children: [
-                Icon(Icons.people_outline, size: 13, color: Colors.white.withValues(alpha: 0.3)),
+                Icon(Icons.people_outline, size: 13, color: alma.textTertiary),
                 const SizedBox(width: 4),
                 Text(
                   tr('browse.members', lang, args: {'count': '${info.memberCount}'}),
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: alma.textTertiary,
                     fontSize: 12,
                   ),
                 ),
@@ -347,7 +350,7 @@ class _ChannelTile extends StatelessWidget {
         ],
       ),
       trailing: info.isMember
-          ? Icon(Icons.chevron_right, color: Colors.white.withValues(alpha: 0.3))
+          ? Icon(Icons.chevron_right, color: alma.textTertiary)
           : isJoining
               ? const SizedBox(
                   width: 22,

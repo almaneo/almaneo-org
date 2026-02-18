@@ -114,6 +114,7 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
+    final alma = context.alma;
 
     return Scaffold(
       appBar: AppBar(
@@ -128,24 +129,24 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
               controller: _searchController,
               focusNode: _focusNode,
               onChanged: _onSearchChanged,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: alma.textPrimary, fontSize: 16),
               cursorColor: AlmaTheme.electricBlue,
               decoration: InputDecoration(
                 hintText: tr('friends.searchHint', lang),
                 hintStyle: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: alma.textTertiary,
                   fontSize: 15,
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: alma.textTertiary,
                   size: 22,
                 ),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
                         icon: Icon(
                           Icons.close,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: alma.textTertiary,
                           size: 20,
                         ),
                         onPressed: () {
@@ -155,7 +156,7 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
                       )
                     : null,
                 filled: true,
-                fillColor: AlmaTheme.slateGray,
+                fillColor: alma.inputBg,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -166,13 +167,13 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
           ),
 
           // Body
-          Expanded(child: _buildBody(lang)),
+          Expanded(child: _buildBody(lang, alma)),
         ],
       ),
     );
   }
 
-  Widget _buildBody(String lang) {
+  Widget _buildBody(String lang, AlmaColors alma) {
     // Empty query
     if (_searchController.text.trim().isEmpty) {
       return Center(
@@ -182,13 +183,13 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
             Icon(
               Icons.person_search,
               size: 56,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: alma.textTertiary,
             ),
             const SizedBox(height: 16),
             Text(
               tr('friends.searchHint', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textSecondary,
                 fontSize: 15,
               ),
             ),
@@ -196,7 +197,7 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
             Text(
               tr('friends.searchDesc', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.25),
+                color: alma.textTertiary,
                 fontSize: 13,
               ),
               textAlign: TextAlign.center,
@@ -224,7 +225,7 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
             Text(
               tr('search.searching', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textSecondary,
                 fontSize: 14,
               ),
             ),
@@ -242,13 +243,13 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
             Icon(
               Icons.person_off_outlined,
               size: 56,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: alma.textTertiary,
             ),
             const SizedBox(height: 16),
             Text(
               tr('friends.noResults', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textSecondary,
                 fontSize: 15,
               ),
             ),
@@ -289,6 +290,7 @@ class _UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final name = user.name.isNotEmpty ? user.name : user.id;
     final imageUrl = user.image;
     final isOnline = user.online;
@@ -322,7 +324,7 @@ class _UserTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AlmaTheme.success,
                   shape: BoxShape.circle,
-                  border: Border.all(color: AlmaTheme.deepNavy, width: 2),
+                  border: Border.all(color: alma.scaffold, width: 2),
                 ),
               ),
             ),
@@ -330,8 +332,8 @@ class _UserTile extends StatelessWidget {
       ),
       title: Text(
         name,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: alma.textPrimary,
           fontWeight: FontWeight.w500,
           fontSize: 15,
         ),
@@ -343,7 +345,7 @@ class _UserTile extends StatelessWidget {
         style: TextStyle(
           color: isOnline
               ? AlmaTheme.success.withValues(alpha: 0.8)
-              : Colors.white.withValues(alpha: 0.4),
+              : alma.textTertiary,
           fontSize: 13,
         ),
       ),
