@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3auth_flutter/web3auth_flutter.dart';
 import 'package:web3auth_flutter/enums.dart';
 import 'package:web3auth_flutter/input.dart';
@@ -61,7 +62,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       parent: _fadeController,
       curve: Curves.easeInOut,
     );
+    _checkOnboardingCompleted();
     _startAutoAdvance();
+  }
+
+  /// 첫 실행 여부 확인 — 완료된 경우 온보딩 건너뜀
+  Future<void> _checkOnboardingCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    final completed = prefs.getBool('onboarding_completed') ?? false;
+    if (completed && mounted) {
+      setState(() => _showLogin = true);
+      _fadeController.forward();
+    }
   }
 
   @override
@@ -83,7 +95,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         timer.cancel();
         return;
       }
-      if (_currentPage < 2) {
+      if (_currentPage < 5) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
@@ -96,6 +108,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _autoAdvanceTimer?.cancel();
     setState(() => _showLogin = true);
     _fadeController.forward();
+    // 온보딩 완료 표시 — 다음 실행부터 건너뜀
+    SharedPreferences.getInstance().then(
+      (prefs) => prefs.setBool('onboarding_completed', true),
+    );
   }
 
   // ── MethodChannel: 네이티브에서 redirect URL 수신 ──
@@ -468,19 +484,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               _buildSlide(image: 'assets/images/Auto_Translation.webp', fallbackIcon: Icons.translate_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide1.title', lang), desc: tr('onboarding.slide1.desc', lang), compact: isCompact),
               _buildSlide(image: 'assets/images/Global_Community.webp', fallbackIcon: Icons.public_rounded, iconColor: AlmaTheme.cyan, title: tr('onboarding.slide2.title', lang), desc: tr('onboarding.slide2.desc', lang), compact: isCompact),
               _buildSlide(image: 'assets/images/Kindness_First.webp', fallbackIcon: Icons.favorite_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide3.title', lang), desc: tr('onboarding.slide3.desc', lang), compact: isCompact),
+              _buildSlide(image: 'assets/images/Meetup_Together.webp', fallbackIcon: Icons.event_rounded, iconColor: AlmaTheme.terracottaOrange, title: tr('onboarding.slide4.title', lang), desc: tr('onboarding.slide4.desc', lang), compact: isCompact),
+              _buildSlide(image: 'assets/images/Small_Heart.webp', fallbackIcon: Icons.favorite_border_rounded, iconColor: const Color(0xFFE91E63), title: tr('onboarding.slide5.title', lang), desc: tr('onboarding.slide5.desc', lang), compact: isCompact),
+              _buildSlide(image: 'assets/images/Get_Started.webp', fallbackIcon: Icons.rocket_launch_rounded, iconColor: AlmaTheme.electricBlue, title: tr('onboarding.slide6.title', lang), desc: tr('onboarding.slide6.desc', lang), compact: isCompact),
             ],
           ),
         ),
         SizedBox(height: isCompact ? 12 : 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (index) {
+          children: List.generate(6, (index) {
             final isActive = index == _currentPage;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: isActive ? 24 : 8,
-              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: isActive ? 20 : 7,
+              height: 7,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: isActive ? AlmaTheme.electricBlue : alma.textTertiary,
@@ -858,7 +877,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               width: imgSize,
               height: imgSize,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (context2, err, stack) => Container(
                 width: imgSize * 0.78,
                 height: imgSize * 0.78,
                 decoration: BoxDecoration(shape: BoxShape.circle, color: iconColor.withValues(alpha: 0.12)),

@@ -6,6 +6,7 @@ import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/alma_logo.dart';
+import 'app_guide_screen.dart';
 /// 설정 화면 — 알림, 테마, 언어, 정보 섹션
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -77,6 +78,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onTap: () => _selectLanguage(context, ref, l.code, lang),
               )),
 
+          const SizedBox(height: 24),
+
+          // ── App Guide ──
+          _buildSectionLabel(tr('settings.appGuide', lang), alma),
+          const SizedBox(height: 8),
+          _buildSettingsTile(
+            icon: Icons.menu_book_outlined,
+            iconColor: AlmaTheme.cyan,
+            title: tr('settings.appGuide', lang),
+            alma: alma,
+            trailing: Icon(Icons.chevron_right, color: alma.textTertiary, size: 20),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AppGuideScreen()),
+            ),
+          ),
           const SizedBox(height: 24),
 
           // ── About ──
