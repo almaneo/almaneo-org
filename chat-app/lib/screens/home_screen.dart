@@ -221,6 +221,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final descController = TextEditingController();
     final locationController = TextEditingController();
     DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
+    int maxParticipants = 20;
 
     showModalBottomSheet(
       context: context,
@@ -273,6 +274,76 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 // Location
                 _inputField(locationController, tr('home.meetupLocation', lang),
                     icon: Icons.location_on),
+                const SizedBox(height: 12),
+                // Max Participants
+                Row(
+                  children: [
+                    Icon(Icons.people,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.4)),
+                    const SizedBox(width: 10),
+                    Text(
+                      tr('home.maxParticipants', lang),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.6),
+                        fontSize: 14,
+                      ),
+                    ),
+                    const Spacer(),
+                    // Decrement
+                    GestureDetector(
+                      onTap: () {
+                        if (maxParticipants > 2) {
+                          setModalState(() => maxParticipants--);
+                        }
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AlmaTheme.deepNavy,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AlmaTheme.electricBlue.withValues(alpha: 0.2),
+                          ),
+                        ),
+                        child: const Icon(Icons.remove, color: Colors.white, size: 18),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 48,
+                      child: Text(
+                        '$maxParticipants',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    // Increment
+                    GestureDetector(
+                      onTap: () {
+                        if (maxParticipants < 100) {
+                          setModalState(() => maxParticipants++);
+                        }
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AlmaTheme.deepNavy,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AlmaTheme.electricBlue.withValues(alpha: 0.2),
+                          ),
+                        ),
+                        child: const Icon(Icons.add, color: Colors.white, size: 18),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 // Date picker
                 GestureDetector(
@@ -349,6 +420,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         hostAddress: userId,
                         location: locationController.text.trim(),
                         meetingDate: selectedDate,
+                        maxParticipants: maxParticipants,
                       );
                       if (result != null) {
                         _loadMeetups();

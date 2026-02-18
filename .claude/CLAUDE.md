@@ -3919,23 +3919,61 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 104+)
+### ✅ 완료된 작업 (2026-02-18 - Session 104: 배포 준비 & 코드 리뷰 버그 수정)
 
-#### 🔴 최우선 — 배포 & 실기기 테스트
-1. **Supabase Dashboard SQL 실행**: `20260218200000_meetup_channel_id.sql` (meetups에 channel_id 컬럼 추가)
-2. **Vercel 배포**: chat 백엔드 새 API (`create-meetup-channel`, `leave-channel`)
-3. **밋업 그룹 채팅 테스트**
-   - 밋업 생성 → Supabase `meetups.channel_id` 값 확인
-   - 밋업 상세 → "채팅" FAB → 채팅 화면 진입
-   - 상단 밋업 정보 (날짜, 장소) 표시 확인
-   - 메시지 전송 + 번역 작동 확인
-   - 다른 사용자 밋업 참가 → 채팅방 멤버 자동 추가 확인
-4. **밋업 녹음 플로우 테스트** (Session 102 기능)
-   - 밋업 시작 → 녹음 → 종료 → 업로드 확인
-5. **초대 링크 실기기 테스트** — 코드 생성 → 다른 계정에서 코드 입력 → 채널 참여 확인
-6. **프로필 이미지 크로스-디바이스 테스트**
+#### 1. **Supabase 마이그레이션 적용** ✅
+   - `meetups.channel_id` TEXT 컬럼 + 인덱스 추가 (`20260218200000`)
+   - `chat_profiles` 테이블 확인 (이미 존재, skip)
+   - 마이그레이션 히스토리 복구 (`20260217` orphan → reverted)
+   - `supabase db push --include-all` 성공
+
+#### 2. **Vercel 백엔드 배포 확인** ✅
+   - 14개 API 엔드포인트 모두 배포 완료 (chat.almaneo.org)
+   - 새 API 4개 응답 확인: `create-meetup-channel`, `leave-channel`, `create-invite`, `join-invite`
+
+#### 3. **코드 리뷰 버그 10개 발견 & 수정** ✅
+   - 3개 백그라운드 에이전트로 병렬 코드 리뷰 수행
+   - 커밋: `708322e` - fix(chat-app,chat): Fix 10 bugs from code review
+   - 7개 파일, +86줄, -51줄
+
+   **백엔드 수정 (3개 파일):**
+   | 파일 | 수정 |
+   |------|------|
+   | `join-channel.ts` | 채널 메타데이터 덮어쓰기 방지 + `getStreamClient()` 사용 |
+   | `leave-channel.ts` | `getStreamClient()` 사용 통일 |
+   | `join-invite.ts` | `getStreamClient()` import + 사용 |
+
+   **Flutter 수정 (4개 파일):**
+   | 파일 | 수정 |
+   |------|------|
+   | `meetup_detail_screen.dart` | ghost channel 방지 (channel_id null 체크), `didChangeDependencies` 패턴, 녹음 종료 순서 변경 (확인 후 중지) |
+   | `chat_screen.dart` | `dialogDismissed` 플래그로 double `Navigator.pop()` 방지 |
+   | `channel_list_screen.dart` | async 갭 전 `StreamChat.of(context).client` 캡처 |
+   | `recording_service.dart` | `_isStopping` 가드 (동시 stop 방지), lazy `AudioRecorder` 재생성, 업로드 실패 시 DB 레코드 `failed` 마킹, `onAutoStop` 콜백 |
+
+#### 4. **APK 빌드** ✅
+   - 최종 빌드: `app-release.apk` (75.6MB)
+   - 실기기 테스트 미진행 (다음 세션)
+
+#### 5. **git push 완료** ✅
+   - `d49ef67..708322e main -> main`
+
+---
+
+### 🔲 다음 세션 작업 (Session 105+)
+
+#### 🔴 최우선 — 실기기 테스트
+1. **APK 실기기 설치 및 테스트**
+   - 밋업 그룹 채팅: 생성 → channel_id 확인 → 채팅 FAB → 메시지 + 번역
+   - 밋업 녹음: 시작 → 녹음 → 종료 → 업로드 확인
+   - 초대 링크: 코드 생성 → 다른 계정에서 코드 입력 → 채널 참여
+   - 프로필 이미지: 업로드 → 로그아웃 → 재로그인 → 유지 확인
 
 #### 🟡 중간 우선순위
-7. **V0.3 Phase 4**: Kindness AI 분석 MVP (Gemini Audio API → STT → 요약 → 점수)
-8. **딥링크 핸들러**: `almachat://invite/{code}` 또는 App Links (Phase 5)
-9. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
+2. **V0.3 Phase 4**: Kindness AI 분석 MVP (Gemini Audio API → STT → 요약 → 점수)
+3. **딥링크 핸들러**: `almachat://invite/{code}` 또는 App Links (Phase 5)
+4. **푸시 알림 실기기 테스트**: Stream Dashboard Firebase 설정 확인
+
+#### 🟢 낮은 우선순위
+5. **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
+6. **메인넷 배포 준비**: Multi-sig, 감사
