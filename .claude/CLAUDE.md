@@ -4214,13 +4214,69 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 111+)
+### ✅ 완료된 작업 (2026-02-18 - Session 111: Stream 싱가포르 마이그레이션 & 연결 안정화)
+
+#### 1. **Stream Chat 싱가포르 프로젝트 마이그레이션** ✅
+   - 기존: US East 클러스터 (`zz454a2savzv`)
+   - 신규: Asia Pacific - Singapore 클러스터 (`hfbghwcu3sp3`)
+   - **레이턴시 개선**: 베트남 기준 220~350ms → 30~60ms (4~6배)
+   - `chat-app/.env`: `STREAM_API_KEY` 업데이트
+   - `chat/.env`: `STREAM_API_KEY`, `STREAM_API_SECRET` 업데이트
+   - Vercel 프로덕션 환경변수 업데이트 (`vercel env add` 사용)
+   - **Stream Dashboard FCM Push Provider**: 기존 설정 그대로 복사 (알림 정상 작동)
+
+#### 2. **`main.dart` — WidgetsBindingObserver 앱 생명주기 연동** ✅
+   - 백그라운드 → 포그라운드 복귀 시 WebSocket 상태 즉시 확인 및 재연결
+   - `_lastKnownStatus` 캐시: 스트림 이벤트 없이 현재 연결 상태 판단 가능
+   - `_isReconnecting` 플래그: 생명주기 이벤트와 WebSocket 이벤트 중복 재연결 방지
+   - `dispose()`에 `removeObserver(this)` 추가로 메모리 누수 방지
+
+   ```dart
+   class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
+       with WidgetsBindingObserver {
+     ConnectionStatus _lastKnownStatus = ConnectionStatus.disconnected;
+
+     @override
+     void didChangeAppLifecycleState(AppLifecycleState state) {
+       if (state == AppLifecycleState.resumed && _isConnected && !_isReconnecting) {
+         if (_lastKnownStatus == ConnectionStatus.disconnected) {
+           _attemptFullReconnect();
+         }
+       }
+     }
+   }
+   ```
+
+#### 3. **`auth_service.dart` — 토큰 요청 지수 백오프 재시도** ✅
+   - 최대 3회 시도, 15초 타임아웃/요청
+   - 1차 실패 → 1초 대기 → 2차 실패 → 2초 대기 → 3차 실패 → 예외 throw
+   - 4xx 클라이언트 에러: 즉시 실패 (재시도 없음)
+   - 5xx 서버 에러 / 네트워크 오류: 재시도
+
+#### 4. **커밋 정보**
+   - `b249384` - fix(chat-app,chat): Fix push notification and Stream connection stability (Session 111 이전)
+   - `b82b78c` - fix(chat): Deploy API to Singapore region (sin1)
+   - `2d63ef4` - feat(chat-app): Add app lifecycle reconnect & Stream Asia Pacific migration
+   - APK: **76.3MB** ✅
+
+#### 5. **현재 Stream Chat 설정**
+
+| 항목 | 값 |
+|------|-----|
+| **API Key** | `hfbghwcu3sp3` |
+| **지역** | Asia Pacific (Singapore) |
+| **FCM Provider** | `almachat` (V1 HTTP API) |
+| **Vercel Backend** | Singapore (`sin1`) |
+| **토큰 만료** | 24시간 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 112+)
 
 #### 🔴 높은 우선순위
 - **실기기 QA 테스트** ⭐
-  - 온보딩 슬라이드 이미지 풀 와이드 표시 확인
+  - 새 Stream 싱가포르 키로 로그인/채팅/알림 전체 테스트
   - 라이트/다크 모드 전체 화면 점검
-  - compact 모드 (화면 높이 < 700dp) 확인
 
 #### 🟡 중간 우선순위
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
