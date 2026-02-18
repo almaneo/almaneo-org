@@ -4182,21 +4182,50 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 110+)
+### ✅ 완료된 작업 (2026-02-18 - Session 110: 온보딩 슬라이드 이미지 풀 와이드 리디자인)
+
+#### 1. **6개 슬라이드 이미지 AI 생성 프롬프트 작성**
+   - 각 슬라이드별 테마, 색상, 구도, 스타일 상세 프롬프트 작성
+   - 권장 사이즈: 1200×800 (3:2), 실제 생성: 16:9
+
+   | # | 파일명 | 테마 | 색상 |
+   |---|--------|------|------|
+   | 1 | `Auto_Translation.webp` | 자동 번역 | 일렉트릭 블루 |
+   | 2 | `Global_Community.webp` | 글로벌 커뮤니티 | 시안/블루 |
+   | 3 | `Kindness_First.webp` | 친절 우선 / 정(情) | 테라코타 오렌지 |
+   | 4 | `Meetup_Together.webp` | 오프라인 밋업 | 테라코타 오렌지 |
+   | 5 | `Small_Heart.webp` | Kindness Score | 핑크/로즈 |
+   | 6 | `Get_Started.webp` | 시작하기 | 일렉트릭 블루 |
+
+#### 2. **`_buildSlide()` 완전 재설계** (`login_screen.dart`, `app_guide_screen.dart`)
+   - 기존: `SizedBox(52~72dp)` 정사각형 아이콘 크기 이미지
+   - 변경: `AspectRatio(16/9)` 풀 와이드 이미지 (`BoxFit.cover`)
+   - 이미지 아래 남은 공간 `Expanded` → title + desc 수직 중앙 정렬
+
+#### 3. **레이아웃 구조 변경** (두 파일 공통)
+   - 기존: `SizedBox(height: 160~200)` 고정 높이 PageView
+   - 변경: `Expanded(child: PageView(...))` → 화면 여백을 모두 채움
+   - 기존: 큰 로고(56~80dp) + 태그라인 + Spacer 상단 섹션
+   - 변경: compact 행 (로고 24~32dp + 앱명) → 상단 패딩만 사용
+
+#### 4. **빌드 결과**
+   - APK: **76.3MB** ✅ (이전: 76.1MB)
+   - 커밋: `4f6b5fc` - feat(chat-app): Full-width 16:9 onboarding slide images
+
+---
+
+### 🔲 다음 세션 작업 (Session 111+)
 
 #### 🔴 높은 우선순위
-- **온보딩 슬라이드 이미지 풀위드 리디자인** ⭐
-  - 현재: 작은 이미지가 중앙에 아이콘 크기로 표시 (72dp)
-  - 목표: 가로 화면 폭에 가득 차는 비주얼 이미지 표시
-  - 방향: `Image.asset` → 가로 full-width + 적절한 비율 유지
-  - 준비 필요: 각 슬라이드용 고해상도 .webp 이미지 6장 (와이드 비율 권장)
-  - 파일 위치: `chat-app/assets/images/` (Auto_Translation.webp 등 교체)
+- **실기기 QA 테스트** ⭐
+  - 온보딩 슬라이드 이미지 풀 와이드 표시 확인
+  - 라이트/다크 모드 전체 화면 점검
+  - compact 모드 (화면 높이 < 700dp) 확인
 
 #### 🟡 중간 우선순위
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
-- **실기기 QA 테스트**: 라이트/다크 모드 전체 화면 점검
+- **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 
 #### 🟢 낮은 우선순위
 - **Kindness AI 분석 MVP**: V0.5+
-- **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **메인넷 배포 준비**: Multi-sig, 감사
