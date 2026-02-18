@@ -12,9 +12,10 @@ class Web3AuthSessionRecovery {
   static const String _sessionApiUrl =
       'https://session.web3auth.io/v2/store/get';
 
-  /// origin 후보 — Sapphire Mainnet URL이 정답 (Swift SDK와 동일).
-  /// '*' 는 fallback용.
+  /// origin 후보 — Devnet을 우선 시도 후 Mainnet, 마지막 '*' 폴백.
+  /// 앱은 sapphire_devnet 사용 → devnet origin이 정답.
   static const List<String> _originCandidates = [
+    'https://sapphire-devnet.web3auth.io',
     'https://sapphire.web3auth.io',
     '*',
   ];

@@ -55,16 +55,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // Upsert user in Stream Chat
-    await upsertStreamUser({
+    // Upsert user in Stream Chat (best-effort — token generation proceeds even if this fails)
+    upsertStreamUser({
       id: userId,
       name,
       image,
       preferred_language: preferredLanguage || 'en',
       wallet_address: walletAddress,
+    }).catch((err: unknown) => {
+      console.warn('[StreamToken] upsertUser failed (non-fatal):', err);
     });
 
-    // Generate token
+    // Generate token (local JWT signing — does not require Stream API call)
     const token = generateUserToken(userId);
 
     return res.status(200).json({
