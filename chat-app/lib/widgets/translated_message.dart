@@ -63,6 +63,7 @@ class TranslatedMessage extends ConsumerStatefulWidget {
   final VoidCallback? onReply;
   final String? currentUserId;
   final Channel? channel;
+  final void Function(User user)? onAvatarTap;
 
   const TranslatedMessage({
     super.key,
@@ -72,6 +73,7 @@ class TranslatedMessage extends ConsumerStatefulWidget {
     this.onReply,
     this.currentUserId,
     this.channel,
+    this.onAvatarTap,
   });
 
   @override
@@ -140,7 +142,14 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             if (!widget.isMyMessage)
               Padding(
                 padding: const EdgeInsets.only(right: 6, bottom: 18),
-                child: _buildAvatar(senderImage, senderName, alma),
+                child: GestureDetector(
+                  onTap: () {
+                    if (widget.onAvatarTap != null && senderUser != null) {
+                      widget.onAvatarTap!(senderUser);
+                    }
+                  },
+                  child: _buildAvatar(senderImage, senderName, alma),
+                ),
               ),
 
             // 메시지 컬럼

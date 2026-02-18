@@ -13,6 +13,8 @@ import '../services/notification_service.dart';
 import '../widgets/chat_widgets.dart';
 import '../widgets/message_actions_sheet.dart';
 import '../widgets/translated_message.dart';
+import '../widgets/user_profile_sheet.dart';
+import 'channel_info_screen.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -288,25 +290,35 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              channelName,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-            Text(
-              tr('chat.translatingTo', lang, args: {
-                'lang': langState.language.nativeName,
-                'flag': langState.language.flag,
-              }),
-              style: TextStyle(
-                fontSize: 11,
-                color: AlmaTheme.terracottaOrange.withValues(alpha: 0.8),
-                fontWeight: FontWeight.w400,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ChannelInfoScreen(channel: channel),
               ),
-            ),
-          ],
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                channelName,
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+              Text(
+                tr('chat.translatingTo', lang, args: {
+                  'lang': langState.language.nativeName,
+                  'flag': langState.language.flag,
+                }),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: AlmaTheme.terracottaOrange.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -375,6 +387,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   },
                   currentUserId: currentUserId,
                   channel: channel,
+                  onAvatarTap: (user) {
+                    UserProfileSheet.show(context, user: user, lang: lang);
+                  },
                 );
               },
             ),

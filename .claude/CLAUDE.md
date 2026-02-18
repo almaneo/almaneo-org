@@ -4424,14 +4424,69 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 116+)
+### ✅ 완료된 작업 (2026-02-19 - Session 116: V0.5 Phase B 완료)
+
+#### 1. **UserProfileSheet 위젯 생성** ✅
+   - `chat-app/lib/widgets/user_profile_sheet.dart` (신규)
+   - 바텀시트: 아바타(40dp), 이름, 온라인 상태, 유저 ID 복사, "메시지 보내기" DM 버튼
+   - `UserProfileSheet.show()` 정적 메서드로 어디서나 호출 가능
+   - `_startDM()`: distinct messaging 채널 생성 → ChatScreen 네비게이션
+   - `_formatLastSeen()`: 번역된 상대 시간 표시 (방금, N분 전, N시간 전, N일 전)
+
+#### 2. **ChannelInfoScreen 생성** ✅
+   - `chat-app/lib/screens/channel_info_screen.dart` (신규)
+   - 풀스크린: 채널 아바타, 이름, 설명, 멤버 수, 생성일
+   - 멤버 목록: 온라인 표시, 역할 배지 (owner/admin), "나" 배지
+   - 멤버 탭 → UserProfileSheet
+   - 뮤트/뮤트해제: 클라이언트 사이드 `channel.mute()`/`channel.unmute()` (백엔드 불필요)
+   - 채널 나가기: 확인 다이얼로그 → `channel.removeMembers()` → 루트로 이동
+
+#### 3. **translated_message.dart 수정** ✅
+   - `onAvatarTap` 콜백 파라미터 추가 (`void Function(User user)?`)
+   - 아바타를 GestureDetector로 래핑하여 탭 감지
+
+#### 4. **chat_screen.dart 와이어링** ✅
+   - AppBar 제목 GestureDetector → ChannelInfoScreen 네비게이션
+   - TranslatedMessage `onAvatarTap` → UserProfileSheet.show()
+
+#### 5. **meetup_chat_screen.dart 와이어링** ✅
+   - 동일 패턴 적용 (AppBar + 아바타 탭)
+
+#### 6. **find_friends_screen.dart 와이어링** ✅
+   - 유저 타일 탭 → UserProfileSheet (프로필 바텀시트)
+   - trailing "Chat" 버튼 → _startDM (DM 직접 시작)
+   - `_UserTile`에 `onChat` 파라미터 추가
+
+#### 7. **i18n 15개 언어 번역** ✅
+   - `app_strings.dart`에 375개 새 번역 항목 (25개 키 × 15개 언어)
+   - `userProfile.*` 8개 키: online, offline, justNow, minutesAgo, hoursAgo, daysAgo, idCopied, sendMessage
+   - `channelInfo.*` 17개 키: title, memberCount, created, channelId, idCopied, members, you, owner, admin, mute, unmute, muted, unmuted, leave, leaveConfirmTitle, leaveConfirmDesc, actionFailed
+
+#### 8. **APK 빌드 성공** ✅
+   - `flutter build apk --release` → 76.6MB
+   - `flutter analyze` → 신규 에러/경고 없음 (기존 info 수준 25개만 존재)
+
+#### 9. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `lib/widgets/user_profile_sheet.dart` | **신규** — 유저 프로필 바텀시트 |
+   | `lib/screens/channel_info_screen.dart` | **신규** — 채널 정보 풀스크린 |
+   | `lib/widgets/translated_message.dart` | 수정 — onAvatarTap 콜백 추가 |
+   | `lib/screens/chat_screen.dart` | 수정 — AppBar + 아바타 탭 와이어링 |
+   | `lib/screens/meetup_chat_screen.dart` | 수정 — 동일 와이어링 |
+   | `lib/screens/find_friends_screen.dart` | 수정 — UserProfileSheet + onChat 분리 |
+   | `lib/l10n/app_strings.dart` | 수정 — 375 번역 항목 추가 |
+   | `V0.5_PLAN.md` | 수정 — Phase B ✅ 완료 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 117+)
 
 #### 🔴 최우선
-- **V0.5 Phase B**: 유저 프로필 시트 (아바타 탭 → 프로필 바텀시트), 채널 정보 화면 (채널명 탭 → 멤버 목록/설정)
-- **V0.5 Phase D**: 채널 관리 (핀, 뮤트, 나가기)
+- **V0.5 Phase D**: 채널 관리 & 안전 (채널 롱프레스 → 핀, 뮤트, 나가기)
+- **V0.5 Phase E**: 딥링크 핸들러 `almachat://invite/{code}`
 
 #### 🟡 중간 우선순위
-- **V0.5 Phase E**: 딥링크 핸들러 `almachat://invite/{code}`
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
 

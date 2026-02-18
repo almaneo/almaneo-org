@@ -5,6 +5,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../widgets/user_profile_sheet.dart';
 import 'chat_screen.dart';
 
 class FindFriendsScreen extends ConsumerStatefulWidget {
@@ -267,7 +268,8 @@ class _FindFriendsScreenState extends ConsumerState<FindFriendsScreen> {
           return _UserTile(
             user: user,
             lang: lang,
-            onTap: () => _startDM(user),
+            onTap: () => UserProfileSheet.show(context, user: user, lang: lang),
+            onChat: () => _startDM(user),
           );
         },
       );
@@ -281,11 +283,13 @@ class _UserTile extends StatelessWidget {
   final User user;
   final String lang;
   final VoidCallback onTap;
+  final VoidCallback? onChat;
 
   const _UserTile({
     required this.user,
     required this.lang,
     required this.onTap,
+    this.onChat,
   });
 
   @override
@@ -349,18 +353,21 @@ class _UserTile extends StatelessWidget {
           fontSize: 13,
         ),
       ),
-      trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          tr('friends.chat', lang),
-          style: const TextStyle(
-            color: AlmaTheme.electricBlue,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+      trailing: GestureDetector(
+        onTap: onChat,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            tr('friends.chat', lang),
+            style: const TextStyle(
+              color: AlmaTheme.electricBlue,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
