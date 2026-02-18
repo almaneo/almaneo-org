@@ -27,12 +27,13 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
   const status = {
     service: 'almachat-api',
-    version: '1.0.1',
+    version: '1.0.2',
     status: 'ok',
     timestamp: new Date().toISOString(),
     config: {
       streamChat: !!(process.env.STREAM_API_KEY && process.env.STREAM_API_SECRET),
       streamKeyPrefix: process.env.STREAM_API_KEY?.substring(0, 8) || 'not-set',
+      streamBaseURL: process.env.STREAM_BASE_URL || 'https://chat-proxy-singapore.stream-io-api.com',
       streamConnected,
       streamError: streamError || undefined,
       supabase: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
