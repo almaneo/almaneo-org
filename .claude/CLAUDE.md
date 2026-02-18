@@ -4095,25 +4095,46 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 108+)
+### ✅ 완료된 작업 (2026-02-18 - Session 108: V0.4 Phase D 후속 버그 수정 & 라이트 모드 완성)
 
-#### 🔴 최우선 — V0.4 Phase D
-**Phase D: Widget Migration** (8파일, ~200 변경)
+#### 1. **V0.4 Phase D 후속 4개 버그 수정** ✅
+   - 커밋: `c2bc208` - fix(chat-app): V0.4 Phase D - Fix 4 light theme issues after migration
 
-| 파일 | 예상 변경 | 비고 |
-|------|:--------:|------|
-| `translated_message.dart` | ~50 | my-msg: electricBlue 유지, other-msg: cardBg |
-| `chat_widgets.dart` | ~10 | ConnectionBanner, TypingIndicator |
-| `recording_indicator.dart` | ~5 | error 색상 보존 |
-| `kindness_score_card.dart` | ~15 | |
-| `ambassador_badge.dart` | ~10 | |
-| `wallet_info_card.dart` | ~10 | |
-| `alma_logo.dart` | ~3 | brand gradient 보존 |
-| `fullscreen_image.dart` | ~5 | black 배경 보존 (의도적) |
+   | 이슈 | 파일 | 수정 내용 |
+   |------|------|----------|
+   | **#1 채팅 말풍선 글자색** | `translated_message.dart` | `alma.textPrimary` → `widget.isMyMessage ? Colors.white : alma.textPrimary` |
+   | **#2 입력창 테두리** | `theme.dart` | 라이트 모드 `StreamMessageInputThemeData` 추가 (idle/active 투명 border, 흰색 배경) |
+   | **#3 설정 미션 섹션 + 버전** | `settings_screen.dart` | `_buildSettingsTile(trailing: Flexible(...))` → `Container + Row + Expanded(Column)` 재설계; 버전 `v0.1.0` → `v0.4.0` |
+   | **#4 AppBar 스크롤 회색** | `theme.dart` | `scrolledUnderElevation: 0`, `surfaceTintColor: Colors.transparent` 추가 |
+
+#### 2. **로그인 화면 라이트 모드 배경 수정** ✅
+   - 커밋: `a060d23` - fix(chat-app): Fix login screen background for light mode
+   - 문제: `Scaffold.body` Container가 항상 `deepNavy` 다크 그라디언트로 하드코딩
+   - 수정: `isDark` 분기 추가
+     - 다크: `deepNavy → #1A1A2E → #0D1520` (기존 브랜드 유지)
+     - 라이트: `alma.scaffold → alma.surfaceVariant → alma.surface` (Warm Cream)
+
+#### 3. **StreamMessageInput 테두리 완전 제거** ✅ (2단계)
+   - 1차 커밋 `93b385d`: `idleBorderGradient` 삭제 → Stream SDK 기본값 폴백으로 여전히 테두리 표시
+   - 2차 커밋 `b027730`: 양쪽 gradient를 명시적으로 `Colors.transparent`로 설정 → 완전 제거
+   - `inputBackgroundColor: colors.surface` (흰색)으로 배경 대비로 구분
+
+#### 4. **커밋 목록**
+   | 커밋 | 내용 |
+   |------|------|
+   | `c2bc208` | fix: V0.4 Phase D 4개 버그 수정 |
+   | `a060d23` | fix: 로그인 화면 라이트 모드 배경 |
+   | `93b385d` | fix: StreamMessageInput idle border 제거 (1차) |
+   | `b027730` | fix: StreamMessageInput border 완전 제거 (투명 gradient) |
+
+---
+
+### 🔲 다음 세션 작업 (Session 109+)
 
 #### 🟡 중간 우선순위
 - **Phase E**: App Guide / Onboarding Redesign (6 슬라이드)
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
+- **실기기 QA 테스트**: 라이트/다크 모드 전체 화면 점검
 
 #### 🟢 낮은 우선순위
 - **Kindness AI 분석 MVP**: V0.5+
