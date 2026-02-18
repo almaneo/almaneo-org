@@ -7,23 +7,22 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { isStreamConfigured, getStreamClient } from '../lib/stream-client.js';
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   // Test Stream Chat connectivity with a real API call
   let streamConnected = false;
   let streamError = '';
 
-  try {
-    const { StreamChat } = await import('stream-chat');
-    const sc = StreamChat.getInstance(
-      process.env.STREAM_API_KEY!,
-      process.env.STREAM_API_SECRET!,
-    );
-    // Lightweight API call to verify key validity
-    await sc.getAppSettings();
-    streamConnected = true;
-  } catch (err) {
-    streamError = err instanceof Error ? err.message : String(err);
+  if (isStreamConfigured()) {
+    try {
+      const sc = getStreamClient();
+      // Lightweight API call to verify key validity and regional endpoint
+      await sc.getAppSettings();
+      streamConnected = true;
+    } catch (err) {
+      streamError = err instanceof Error ? err.message : String(err);
+    }
   }
 
   const status = {
