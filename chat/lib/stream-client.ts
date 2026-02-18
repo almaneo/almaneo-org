@@ -25,13 +25,13 @@ export function getStreamClient(): StreamChat {
       throw new Error('STREAM_API_KEY and STREAM_API_SECRET are required');
     }
 
-    // Singapore region requires a specific base URL
-    // https://getstream.io/chat/docs/node/multi_region/
-    const baseURL =
-      process.env.STREAM_BASE_URL ||
-      'https://chat-proxy-singapore.stream-io-api.com';
+    // Optional region-specific base URL (e.g. Singapore: chat-proxy-singapore.stream-io-api.com)
+    // Defaults to the global edge endpoint if not set.
+    const options = process.env.STREAM_BASE_URL
+      ? { baseURL: process.env.STREAM_BASE_URL }
+      : undefined;
 
-    client = StreamChat.getInstance(apiKey, apiSecret, { baseURL });
+    client = StreamChat.getInstance(apiKey, apiSecret, options);
   }
   return client;
 }
