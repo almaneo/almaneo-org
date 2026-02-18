@@ -15,6 +15,7 @@ import 'config/env.dart';
 import 'config/theme.dart';
 import 'l10n/app_strings.dart';
 import 'providers/language_provider.dart';
+import 'providers/theme_provider.dart';
 import 'services/auth_service.dart';
 import 'services/notification_service.dart';
 import 'services/profile_service.dart';
@@ -383,15 +384,19 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = ref.watch(themeProvider);
+    final almaColors = themeState.isDark ? AlmaTheme.darkColors : AlmaTheme.lightColors;
+    final brightness = themeState.isDark ? Brightness.dark : Brightness.light;
+
     return MaterialApp(
       navigatorKey: _navigatorKey,
       title: 'AlmaChat',
       debugShowCheckedModeBanner: false,
-      theme: AlmaTheme.darkTheme,
+      theme: AlmaTheme.theme(almaColors),
       builder: (context, child) {
         return StreamChat(
           client: widget.client,
-          streamChatThemeData: AlmaTheme.streamTheme(context),
+          streamChatThemeData: AlmaTheme.streamTheme(context, brightness: brightness),
           child: child!,
         );
       },
@@ -407,14 +412,24 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   }
 
   Widget _buildSplash() {
+    final themeState = ref.read(themeProvider);
+    final isDark = themeState.isDark;
+    final colors = isDark ? AlmaTheme.darkColors : AlmaTheme.lightColors;
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AlmaTheme.deepNavy, Color(0xFF1A1A2E), Color(0xFF0D1520)],
-          ),
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AlmaTheme.deepNavy, Color(0xFF1A1A2E), Color(0xFF0D1520)],
+                )
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [colors.scaffold, colors.surface, colors.surfaceVariant],
+                ),
         ),
         child: Center(
           child: Column(
@@ -422,12 +437,12 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
             children: [
               const AlmaLogo(size: 72),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'AlmaChat',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: colors.textPrimary,
                   letterSpacing: 1,
                 ),
               ),
@@ -484,6 +499,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
     final user = StreamChat.of(context).currentUser;
     final imageUrl = user?.image;
     final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+    final colors = context.alma;
 
     if (hasImage) {
       return Container(
@@ -494,7 +510,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
           border: Border.all(
             color: isActive
                 ? AlmaTheme.electricBlue
-                : Colors.white.withValues(alpha: 0.2),
+                : colors.textTertiary,
             width: 1.5,
           ),
         ),
@@ -566,11 +582,9 @@ class _MainShellState extends ConsumerState<_MainShell> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: AlmaTheme.deepNavy,
+          color: context.alma.navBg,
           border: Border(
-            top: BorderSide(
-              color: Colors.white.withValues(alpha: 0.05),
-            ),
+            top: BorderSide(color: context.alma.navBorder),
           ),
         ),
         child: BottomNavigationBar(
@@ -579,7 +593,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           selectedItemColor: AlmaTheme.electricBlue,
-          unselectedItemColor: Colors.white.withValues(alpha: 0.35),
+          unselectedItemColor: context.alma.textTertiary,
           selectedFontSize: 11,
           unselectedFontSize: 11,
           type: BottomNavigationBarType.fixed,

@@ -139,10 +139,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   /// 프로필 사진 변경 바텀시트
   void _showPhotoOptions() {
+    final alma = context.alma;
     final lang = _lang;
     showModalBottomSheet(
       context: context,
-      backgroundColor: AlmaTheme.slateGray,
+      backgroundColor: alma.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -156,15 +157,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white24,
+                  color: alma.textTertiary,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const SizedBox(height: 16),
               Text(
                 tr('profile.changePhoto', lang),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: alma.textPrimary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -179,7 +180,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   child: const Icon(Icons.photo_library_outlined, color: AlmaTheme.electricBlue),
                 ),
-                title: Text(tr('profile.photoGallery', lang), style: const TextStyle(color: Colors.white)),
+                title: Text(tr('profile.photoGallery', lang), style: TextStyle(color: alma.textPrimary)),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickAndUploadPhoto(ImageSource.gallery);
@@ -194,7 +195,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   child: const Icon(Icons.camera_alt_outlined, color: AlmaTheme.cyan),
                 ),
-                title: Text(tr('profile.photoCamera', lang), style: const TextStyle(color: Colors.white)),
+                title: Text(tr('profile.photoCamera', lang), style: TextStyle(color: alma.textPrimary)),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickAndUploadPhoto(ImageSource.camera);
@@ -409,28 +410,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void _confirmLogout() {
+    final alma = context.alma;
     final lang = _lang;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AlmaTheme.slateGray,
+        backgroundColor: alma.cardBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         title: Text(
           tr('profile.logout', lang),
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(color: alma.textPrimary, fontWeight: FontWeight.w600),
         ),
         content: Text(
           tr('profile.logoutConfirm', lang),
-          style: const TextStyle(color: Colors.white70),
+          style: TextStyle(color: alma.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               tr('profile.cancel', lang),
-              style: const TextStyle(color: Colors.white54),
+              style: TextStyle(color: alma.textSecondary),
             ),
           ),
           TextButton(
@@ -453,6 +455,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final user = StreamChat.of(context).currentUser;
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
+    final alma = context.alma;
     final displayName = _originalName ?? user?.name ?? 'Guest';
     final isGuest = user?.id.startsWith('guest_') ?? true;
 
@@ -467,18 +470,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildAvatarSection(displayName, lang),
+          _buildAvatarSection(displayName, lang, alma),
           const SizedBox(height: 28),
 
-          _buildSectionLabel(tr('profile.account', lang)),
+          _buildSectionLabel(tr('profile.account', lang), alma),
           const SizedBox(height: 8),
           _buildInfoTile(
             icon: Icons.badge_outlined,
             iconColor: AlmaTheme.electricBlue,
             title: tr('profile.displayName', lang),
             trailing: _isEditing
-                ? _buildNameEditor()
-                : _buildNameDisplay(displayName),
+                ? _buildNameEditor(alma)
+                : _buildNameDisplay(displayName, alma),
+            alma: alma,
             onTap: () {
               if (!_isEditing) {
                 setState(() => _isEditing = true);
@@ -488,7 +492,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 4),
           _buildInfoTile(
             icon: isGuest ? Icons.person_outline : Icons.verified_user_outlined,
-            iconColor: isGuest ? Colors.white54 : AlmaTheme.success,
+            iconColor: isGuest ? alma.textSecondary : AlmaTheme.success,
             title: tr('profile.accountType', lang),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -496,23 +500,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Icon(
                   isGuest ? Icons.person : Icons.shield_outlined,
                   size: 16,
-                  color: isGuest ? Colors.white54 : AlmaTheme.success,
+                  color: isGuest ? alma.textSecondary : AlmaTheme.success,
                 ),
                 const SizedBox(width: 6),
                 Text(
                   isGuest ? tr('profile.loginGuest', lang) : tr('profile.loginSocial', lang),
                   style: TextStyle(
-                    color: isGuest ? Colors.white54 : AlmaTheme.success,
+                    color: isGuest ? alma.textSecondary : AlmaTheme.success,
                     fontSize: 14,
                   ),
                 ),
               ],
             ),
+            alma: alma,
           ),
           const SizedBox(height: 4),
           _buildInfoTile(
             icon: Icons.fingerprint,
-            iconColor: Colors.white38,
+            iconColor: alma.textTertiary,
             title: tr('profile.userId', lang),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -520,7 +525,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Text(
                   _truncateId(user?.id ?? ''),
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: alma.textTertiary,
                     fontSize: 13,
                     fontFamily: 'monospace',
                   ),
@@ -543,11 +548,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   child: Icon(
                     Icons.copy,
                     size: 16,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: alma.textTertiary,
                   ),
                 ),
               ],
             ),
+            alma: alma,
           ),
           if (user?.createdAt != null) ...[
             const SizedBox(height: 4),
@@ -558,16 +564,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               trailing: Text(
                 _formatDate(user!.createdAt!, lang),
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: alma.textSecondary,
                   fontSize: 13,
                 ),
               ),
+              alma: alma,
             ),
           ],
 
           const SizedBox(height: 24),
 
-          _buildSectionLabel(tr('profile.settings', lang)),
+          _buildSectionLabel(tr('profile.settings', lang), alma),
           const SizedBox(height: 8),
           _buildInfoTile(
             icon: Icons.translate,
@@ -583,16 +590,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const SizedBox(width: 8),
                 Text(
                   langState.language.nativeName,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: alma.textSecondary, fontSize: 14),
                 ),
                 const SizedBox(width: 4),
                 Icon(
                   Icons.chevron_right,
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: alma.textTertiary,
                   size: 20,
                 ),
               ],
             ),
+            alma: alma,
             onTap: () {
               Navigator.push(
                 context,
@@ -603,13 +611,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 4),
           _buildInfoTile(
             icon: Icons.settings_outlined,
-            iconColor: Colors.white54,
+            iconColor: alma.textSecondary,
             title: tr('settings.title', lang),
             trailing: Icon(
               Icons.chevron_right,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: alma.textTertiary,
               size: 20,
             ),
+            alma: alma,
             onTap: () {
               Navigator.push(
                 context,
@@ -622,13 +631,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           // ── AlmaNEO 생태계 섹션 ──
           if (!isGuest && widget.authService.walletAddress != null)
-            _buildAlmaNeoSection(lang)
+            _buildAlmaNeoSection(lang, alma)
           else if (isGuest)
-            _buildUpgradePrompt(lang),
+            _buildUpgradePrompt(lang, alma),
 
           const SizedBox(height: 24),
 
-          _buildLogoutButton(lang),
+          _buildLogoutButton(lang, alma),
 
           const SizedBox(height: 16),
 
@@ -637,7 +646,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: Text(
                 tr('profile.guestNote', lang),
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: alma.textTertiary,
                   fontSize: 12,
                 ),
               ),
@@ -648,7 +657,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildAvatarSection(String displayName, String lang) {
+  Widget _buildAvatarSection(String displayName, String lang, AlmaColors alma) {
     final user = StreamChat.of(context).currentUser;
     final isGuest = user?.id.startsWith('guest_') ?? true;
     // 로컬 URL 우선, 없으면 Stream 사용자 이미지
@@ -715,7 +724,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   decoration: BoxDecoration(
                     color: AlmaTheme.electricBlue,
                     shape: BoxShape.circle,
-                    border: Border.all(color: AlmaTheme.deepNavy, width: 2),
+                    border: Border.all(color: alma.scaffold, width: 2),
                   ),
                   child: const Icon(Icons.camera_alt, color: Colors.white, size: 14),
                 ),
@@ -726,8 +735,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         const SizedBox(height: 12),
         Text(
           displayName,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: alma.textPrimary,
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
@@ -764,13 +773,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildSectionLabel(String label) {
+  Widget _buildSectionLabel(String label, AlmaColors alma) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Text(
         label,
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.5),
+          color: alma.textSecondary,
           fontSize: 13,
           fontWeight: FontWeight.w500,
         ),
@@ -783,11 +792,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     required Color iconColor,
     required String title,
     required Widget trailing,
+    required AlmaColors alma,
     VoidCallback? onTap,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AlmaTheme.slateGray,
+        color: alma.cardBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -802,8 +812,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
         title: Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: alma.textPrimary,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -817,13 +827,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildNameDisplay(String name) {
+  Widget _buildNameDisplay(String name, AlmaColors alma) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           name,
-          style: const TextStyle(color: Colors.white70, fontSize: 14),
+          style: TextStyle(color: alma.textSecondary, fontSize: 14),
         ),
         const SizedBox(width: 6),
         Icon(
@@ -835,7 +845,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildNameEditor() {
+  Widget _buildNameEditor(AlmaColors alma) {
     return SizedBox(
       width: 180,
       child: Row(
@@ -846,11 +856,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               controller: _nameController,
               autofocus: true,
               maxLength: 30,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: alma.textPrimary, fontSize: 14),
               decoration: InputDecoration(
                 isDense: true,
                 filled: true,
-                fillColor: AlmaTheme.deepNavy,
+                fillColor: alma.inputBg,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 8,
@@ -903,7 +913,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               },
               child: Icon(
                 Icons.cancel,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textTertiary,
                 size: 22,
               ),
             ),
@@ -932,19 +942,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   /// AlmaNEO 생태계 섹션 (소셜 로그인 사용자)
-  Widget _buildAlmaNeoSection(String lang) {
+  Widget _buildAlmaNeoSection(String lang, AlmaColors alma) {
     final walletAddress = widget.authService.walletAddress!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionLabel(tr('almaneo.title', lang)),
+        _buildSectionLabel(tr('almaneo.title', lang), alma),
         const SizedBox(height: 4),
         Text(
           tr('almaneo.subtitle', lang),
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withValues(alpha: 0.4),
+            color: alma.textTertiary,
           ),
         ),
         const SizedBox(height: 12),
@@ -970,7 +980,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Text(
                         tr('almaneo.loading', lang),
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: alma.textTertiary,
                           fontSize: 12,
                         ),
                       ),
@@ -1025,18 +1035,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Icons.groups_outlined,
                           '${data.meetupsAttended}',
                           tr('almaneo.meetupsAttended', lang),
+                          alma,
                         ),
                       ),
                       Container(
                         width: 1,
                         height: 32,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: alma.divider,
                       ),
                       Expanded(
                         child: _buildStatItem(
                           Icons.event_outlined,
                           '${data.meetupsHosted}',
                           tr('almaneo.meetupsHosted', lang),
+                          alma,
                         ),
                       ),
                     ],
@@ -1076,17 +1088,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildStatItem(IconData icon, String value, String label) {
+  Widget _buildStatItem(IconData icon, String value, String label, AlmaColors alma) {
     return Column(
       children: [
         Icon(icon, color: AlmaTheme.cyan, size: 20),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: alma.textPrimary,
           ),
         ),
         const SizedBox(height: 2),
@@ -1094,7 +1106,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           label,
           style: TextStyle(
             fontSize: 11,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: alma.textSecondary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -1103,11 +1115,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   /// 게스트 사용자 업그레이드 프롬프트
-  Widget _buildUpgradePrompt(String lang) {
+  Widget _buildUpgradePrompt(String lang, AlmaColors alma) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionLabel(tr('almaneo.title', lang)),
+        _buildSectionLabel(tr('almaneo.title', lang), alma),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.all(20),
@@ -1143,10 +1155,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Expanded(
                     child: Text(
                       tr('almaneo.upgradeTitle', lang),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: alma.textPrimary,
                       ),
                     ),
                   ),
@@ -1157,13 +1169,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 tr('almaneo.upgradeDesc', lang),
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: alma.textSecondary,
                 ),
               ),
               const SizedBox(height: 12),
-              _buildFeatureItem(Icons.favorite, tr('almaneo.upgradeFeature1', lang)),
-              _buildFeatureItem(Icons.star, tr('almaneo.upgradeFeature2', lang)),
-              _buildFeatureItem(Icons.account_balance_wallet, tr('almaneo.upgradeFeature3', lang)),
+              _buildFeatureItem(Icons.favorite, tr('almaneo.upgradeFeature1', lang), alma),
+              _buildFeatureItem(Icons.star, tr('almaneo.upgradeFeature2', lang), alma),
+              _buildFeatureItem(Icons.account_balance_wallet, tr('almaneo.upgradeFeature3', lang), alma),
             ],
           ),
         ),
@@ -1171,7 +1183,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String text) {
+  Widget _buildFeatureItem(IconData icon, String text, AlmaColors alma) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -1180,9 +1192,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(width: 8),
           Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
-              color: Colors.white70,
+              color: alma.textSecondary,
             ),
           ),
         ],
@@ -1190,7 +1202,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildLogoutButton(String lang) {
+  Widget _buildLogoutButton(String lang, AlmaColors alma) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),

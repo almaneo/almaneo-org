@@ -41,6 +41,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     // Show loading
     if (!mounted) return;
+    final alma = context.alma;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -48,7 +49,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: AlmaTheme.slateGray,
+            color: alma.cardBg,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -61,7 +62,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               const SizedBox(height: 12),
               Text(
                 tr('invite.creating', lang),
-                style: const TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
+                style: TextStyle(color: alma.textPrimary, fontSize: 14, decoration: TextDecoration.none),
               ),
             ],
           ),
@@ -116,9 +117,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   void _showInviteBottomSheet(String code, String inviteUrl, String shareText, String lang) {
+    final alma = context.alma;
     showModalBottomSheet(
       context: context,
-      backgroundColor: AlmaTheme.slateGray,
+      backgroundColor: alma.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -133,14 +135,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: alma.textTertiary,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               Text(
                 tr('invite.title', lang),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: alma.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -151,7 +153,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 decoration: BoxDecoration(
-                  color: AlmaTheme.deepNavy,
+                  color: alma.inputBg,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
@@ -162,7 +164,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     Text(
                       tr('invite.codeLabel', lang),
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: alma.textTertiary,
                         fontSize: 12,
                       ),
                     ),
@@ -182,7 +184,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     Text(
                       inviteUrl,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.35),
+                        color: alma.textTertiary,
                         fontSize: 11,
                         fontFamily: 'monospace',
                       ),
@@ -212,8 +214,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   icon: const Icon(Icons.copy, size: 18),
                   label: Text(tr('invite.copyLink', lang)),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                    foregroundColor: alma.textPrimary,
+                    side: BorderSide(color: alma.borderDefault),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),

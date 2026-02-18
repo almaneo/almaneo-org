@@ -129,6 +129,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final user = StreamChat.of(context).currentUser;
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
@@ -189,13 +190,13 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     margin: const EdgeInsets.only(right: 4),
                     decoration: BoxDecoration(
-                      color: AlmaTheme.slateGray,
+                      color: alma.cardBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.translate, size: 16, color: Colors.white70),
+                        Icon(Icons.translate, size: 16, color: alma.textSecondary),
                         const SizedBox(width: 4),
                         Text(
                           langState.language.flag,
@@ -262,6 +263,8 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
   }
 
   Widget _buildSearchBody(String lang, User? user) {
+    final alma = context.alma;
+
     // Empty query - show hint
     if (_searchController.text.trim().isEmpty) {
       return Center(
@@ -271,13 +274,13 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
             Icon(
               Icons.search,
               size: 56,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: alma.borderDefault,
             ),
             const SizedBox(height: 16),
             Text(
               tr('search.hint', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textTertiary,
                 fontSize: 15,
               ),
             ),
@@ -304,7 +307,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
             Text(
               tr('search.searching', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textTertiary,
                 fontSize: 14,
               ),
             ),
@@ -322,13 +325,13 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
             Icon(
               Icons.search_off,
               size: 56,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: alma.borderDefault,
             ),
             const SizedBox(height: 16),
             Text(
               tr('search.noResults', lang),
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: alma.textTertiary,
                 fontSize: 15,
               ),
             ),
@@ -399,6 +402,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
   }
 
   Widget _buildEmptyState(BuildContext context, String lang) {
+    final alma = context.alma;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -414,7 +418,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
           Text(
             tr('channels.noConversations', lang),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.5),
+              color: alma.textTertiary,
               fontSize: 16,
             ),
           ),
@@ -422,7 +426,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
           Text(
             tr('channels.joinGlobalHint', lang),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: alma.textTertiary,
               fontSize: 13,
             ),
           ),
@@ -450,260 +454,266 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
 
     showDialog(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AlmaTheme.slateGray,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text(
-            tr('invite.joinByCode', lang),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                tr('invite.joinByCodeDesc', lang),
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 14),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: codeController,
-                textCapitalization: TextCapitalization.characters,
-                maxLength: 6,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'monospace',
-                  letterSpacing: 6,
+      builder: (ctx) {
+        final alma = ctx.alma;
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) => AlertDialog(
+            backgroundColor: alma.cardBg,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(
+              tr('invite.joinByCode', lang),
+              style: TextStyle(color: alma.textPrimary, fontWeight: FontWeight.bold),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  tr('invite.joinByCodeDesc', lang),
+                  style: TextStyle(color: alma.textTertiary, fontSize: 14),
                 ),
-                cursorColor: AlmaTheme.electricBlue,
-                decoration: InputDecoration(
-                  hintText: 'ABC123',
-                  hintStyle: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.15),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: codeController,
+                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 6,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: alma.textPrimary,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'monospace',
                     letterSpacing: 6,
                   ),
-                  counterText: '',
-                  filled: true,
-                  fillColor: AlmaTheme.deepNavy,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                  cursorColor: AlmaTheme.electricBlue,
+                  decoration: InputDecoration(
+                    hintText: 'ABC123',
+                    hintStyle: TextStyle(
+                      color: alma.borderDefault,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'monospace',
+                      letterSpacing: 6,
+                    ),
+                    counterText: '',
+                    filled: true,
+                    fillColor: alma.inputBg,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: AlmaTheme.electricBlue),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AlmaTheme.electricBlue),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),
+                  ],
                 ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: isLoading ? null : () => Navigator.pop(ctx),
-              child: Text(
-                tr('common.cancel', lang),
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
-              ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () async {
-                      final code = codeController.text.trim().toUpperCase();
-                      if (code.length < 4) return;
+            actions: [
+              TextButton(
+                onPressed: isLoading ? null : () => Navigator.pop(ctx),
+                child: Text(
+                  tr('common.cancel', lang),
+                  style: TextStyle(color: alma.textTertiary),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        final code = codeController.text.trim().toUpperCase();
+                        if (code.length < 4) return;
 
-                      final user = StreamChat.of(context).currentUser;
-                      final client = StreamChat.of(context).client;
-                      if (user == null) return;
+                        final user = StreamChat.of(context).currentUser;
+                        final client = StreamChat.of(context).client;
+                        if (user == null) return;
 
-                      setDialogState(() => isLoading = true);
+                        setDialogState(() => isLoading = true);
 
-                      try {
-                        final response = await http.post(
-                          Uri.parse('${Env.chatApiUrl}/api/join-invite'),
-                          headers: {'Content-Type': 'application/json'},
-                          body: jsonEncode({
-                            'userId': user.id,
-                            'code': code,
-                          }),
-                        );
+                        try {
+                          final response = await http.post(
+                            Uri.parse('${Env.chatApiUrl}/api/join-invite'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: jsonEncode({
+                              'userId': user.id,
+                              'code': code,
+                            }),
+                          );
 
-                        final data = jsonDecode(response.body) as Map<String, dynamic>;
+                          final data = jsonDecode(response.body) as Map<String, dynamic>;
 
-                        if (response.statusCode != 200) {
-                          final errorType = data['error'] as String? ?? '';
-                          String errorMsg;
-                          if (errorType == 'invalid_code') {
-                            errorMsg = tr('invite.invalidCode', lang);
-                          } else if (errorType == 'expired_code') {
-                            errorMsg = tr('invite.expiredCode', lang);
-                          } else {
-                            errorMsg = tr('invite.joinFailed', lang);
+                          if (response.statusCode != 200) {
+                            final errorType = data['error'] as String? ?? '';
+                            String errorMsg;
+                            if (errorType == 'invalid_code') {
+                              errorMsg = tr('invite.invalidCode', lang);
+                            } else if (errorType == 'expired_code') {
+                              errorMsg = tr('invite.expiredCode', lang);
+                            } else {
+                              errorMsg = tr('invite.joinFailed', lang);
+                            }
+                            if (ctx.mounted) {
+                              setDialogState(() => isLoading = false);
+                              ScaffoldMessenger.of(ctx).showSnackBar(
+                                SnackBar(
+                                  content: Text(errorMsg),
+                                  backgroundColor: AlmaTheme.error,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                              );
+                            }
+                            return;
                           }
+
+                          final channelId = data['channelId'] as String;
+                          final channelType = data['channelType'] as String? ?? 'messaging';
+                          final channel = client.channel(channelType, id: channelId);
+                          await channel.watch();
+
+                          if (ctx.mounted) Navigator.pop(ctx);
+
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(tr('invite.joinSuccess', lang)),
+                                backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                            );
+                            _navigateToChannel(channel);
+                          }
+                        } catch (e) {
                           if (ctx.mounted) {
                             setDialogState(() => isLoading = false);
                             ScaffoldMessenger.of(ctx).showSnackBar(
                               SnackBar(
-                                content: Text(errorMsg),
+                                content: Text(tr('invite.joinFailed', lang)),
                                 backgroundColor: AlmaTheme.error,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               ),
                             );
                           }
-                          return;
                         }
-
-                        final channelId = data['channelId'] as String;
-                        final channelType = data['channelType'] as String? ?? 'messaging';
-                        final channel = client.channel(channelType, id: channelId);
-                        await channel.watch();
-
-                        if (ctx.mounted) Navigator.pop(ctx);
-
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(tr('invite.joinSuccess', lang)),
-                              backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                          );
-                          _navigateToChannel(channel);
-                        }
-                      } catch (e) {
-                        if (ctx.mounted) {
-                          setDialogState(() => isLoading = false);
-                          ScaffoldMessenger.of(ctx).showSnackBar(
-                            SnackBar(
-                              content: Text(tr('invite.joinFailed', lang)),
-                              backgroundColor: AlmaTheme.error,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                          );
-                        }
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AlmaTheme.electricBlue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AlmaTheme.electricBlue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: isLoading
+                    ? const SizedBox(
+                        width: 18, height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      )
+                    : Text(tr('invite.join', lang)),
               ),
-              child: isLoading
-                  ? const SizedBox(
-                      width: 18, height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
-                  : Text(tr('invite.join', lang)),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   void _showChannelOptions(BuildContext context, String lang) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AlmaTheme.slateGray,
+      backgroundColor: context.alma.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle bar
-              Container(
-                width: 36,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(2),
+      builder: (ctx) {
+        final alma = ctx.alma;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: alma.textTertiary,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-              ),
-              _BottomSheetOption(
-                icon: Icons.person_search,
-                iconColor: AlmaTheme.cyan,
-                title: tr('friends.title', lang),
-                subtitle: tr('friends.menuDesc', lang),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const FindFriendsScreen()),
-                  );
-                },
-              ),
-              _BottomSheetOption(
-                icon: Icons.public,
-                iconColor: AlmaTheme.success,
-                title: tr('channels.joinGlobal', lang),
-                subtitle: tr('channels.globalDesc', lang),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _createGlobalChannel(context, lang);
-                },
-              ),
-              _BottomSheetOption(
-                icon: Icons.add_circle_outline,
-                iconColor: AlmaTheme.electricBlue,
-                title: tr('channels.createChannel', lang),
-                subtitle: tr('channels.createDesc', lang),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CreateChannelScreen()),
-                  );
-                },
-              ),
-              _BottomSheetOption(
-                icon: Icons.explore_outlined,
-                iconColor: AlmaTheme.terracottaOrange,
-                title: tr('channels.browseChannels', lang),
-                subtitle: tr('channels.browseDesc', lang),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const BrowseChannelsScreen()),
-                  );
-                },
-              ),
-              _BottomSheetOption(
-                icon: Icons.vpn_key_outlined,
-                iconColor: AlmaTheme.sandGold,
-                title: tr('invite.joinByCode', lang),
-                subtitle: tr('invite.joinByCodeDesc', lang),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showJoinByCodeDialog(lang);
-                },
-              ),
-            ],
+                _BottomSheetOption(
+                  icon: Icons.person_search,
+                  iconColor: AlmaTheme.cyan,
+                  title: tr('friends.title', lang),
+                  subtitle: tr('friends.menuDesc', lang),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const FindFriendsScreen()),
+                    );
+                  },
+                ),
+                _BottomSheetOption(
+                  icon: Icons.public,
+                  iconColor: AlmaTheme.success,
+                  title: tr('channels.joinGlobal', lang),
+                  subtitle: tr('channels.globalDesc', lang),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _createGlobalChannel(context, lang);
+                  },
+                ),
+                _BottomSheetOption(
+                  icon: Icons.add_circle_outline,
+                  iconColor: AlmaTheme.electricBlue,
+                  title: tr('channels.createChannel', lang),
+                  subtitle: tr('channels.createDesc', lang),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CreateChannelScreen()),
+                    );
+                  },
+                ),
+                _BottomSheetOption(
+                  icon: Icons.explore_outlined,
+                  iconColor: AlmaTheme.terracottaOrange,
+                  title: tr('channels.browseChannels', lang),
+                  subtitle: tr('channels.browseDesc', lang),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const BrowseChannelsScreen()),
+                    );
+                  },
+                ),
+                _BottomSheetOption(
+                  icon: Icons.vpn_key_outlined,
+                  iconColor: AlmaTheme.sandGold,
+                  title: tr('invite.joinByCode', lang),
+                  subtitle: tr('invite.joinByCodeDesc', lang),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _showJoinByCodeDialog(lang);
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -815,17 +825,18 @@ class _FilterChips extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
-          _chip('all', tr('channels.filterAll', lang)),
+          _chip(context, 'all', tr('channels.filterAll', lang)),
           const SizedBox(width: 8),
-          _chip('dm', tr('channels.filterDM', lang)),
+          _chip(context, 'dm', tr('channels.filterDM', lang)),
           const SizedBox(width: 8),
-          _chip('group', tr('channels.filterGroup', lang)),
+          _chip(context, 'group', tr('channels.filterGroup', lang)),
         ],
       ),
     );
   }
 
-  Widget _chip(String value, String label) {
+  Widget _chip(BuildContext context, String value, String label) {
+    final alma = context.alma;
     final isSelected = selected == value;
     return GestureDetector(
       onTap: () => onChanged(value),
@@ -835,7 +846,7 @@ class _FilterChips extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AlmaTheme.electricBlue.withValues(alpha: 0.2)
-              : AlmaTheme.slateGray.withValues(alpha: 0.5),
+              : alma.chipBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
@@ -848,7 +859,7 @@ class _FilterChips extends StatelessWidget {
           style: TextStyle(
             color: isSelected
                 ? AlmaTheme.electricBlue
-                : Colors.white.withValues(alpha: 0.5),
+                : alma.textTertiary,
             fontSize: 13,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),
@@ -876,6 +887,7 @@ class _ChannelTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final unreadCount = channel.state?.unreadCount ?? 0;
     final lastMessage = channel.state?.lastMessage;
     final lastMessageText = lastMessage?.text ?? '';
@@ -974,14 +986,14 @@ class _ChannelTile extends StatelessWidget {
                           child: Icon(
                             Icons.group,
                             size: 14,
-                            color: Colors.white.withValues(alpha: 0.3),
+                            color: alma.textTertiary,
                           ),
                         ),
                       Expanded(
                         child: Text(
                           displayName,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: alma.textPrimary,
                             fontWeight: unreadCount > 0 ? FontWeight.w600 : FontWeight.w500,
                             fontSize: 15,
                           ),
@@ -994,7 +1006,7 @@ class _ChannelTile extends StatelessWidget {
                           style: TextStyle(
                             color: unreadCount > 0
                                 ? AlmaTheme.electricBlue
-                                : Colors.white.withValues(alpha: 0.3),
+                                : alma.textTertiary,
                             fontSize: 11,
                           ),
                         ),
@@ -1008,8 +1020,8 @@ class _ChannelTile extends StatelessWidget {
                           preview.isNotEmpty ? preview : tr('channels.noMessages', lang),
                           style: TextStyle(
                             color: unreadCount > 0
-                                ? Colors.white.withValues(alpha: 0.7)
-                                : Colors.white.withValues(alpha: 0.35),
+                                ? alma.textSecondary
+                                : alma.textTertiary,
                             fontSize: 13,
                             fontWeight: unreadCount > 0 ? FontWeight.w500 : FontWeight.w400,
                           ),
@@ -1074,6 +1086,7 @@ class _OnlineIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final otherMember = channel.state?.members
         .where((m) => m.userId != currentUserId)
         .firstOrNull;
@@ -1087,7 +1100,7 @@ class _OnlineIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: AlmaTheme.success,
         shape: BoxShape.circle,
-        border: Border.all(color: AlmaTheme.deepNavy, width: 2),
+        border: Border.all(color: alma.scaffold, width: 2),
       ),
     );
   }
@@ -1109,16 +1122,17 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return TextField(
       controller: controller,
       focusNode: focusNode,
       onChanged: onChanged,
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: TextStyle(color: alma.textPrimary, fontSize: 16),
       cursorColor: AlmaTheme.electricBlue,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(
-          color: Colors.white.withValues(alpha: 0.4),
+          color: alma.textTertiary,
           fontSize: 16,
         ),
         border: InputBorder.none,
@@ -1148,6 +1162,7 @@ class _SearchResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: AlmaTheme.electricBlue.withValues(alpha: 0.15),
@@ -1162,8 +1177,8 @@ class _SearchResultTile extends StatelessWidget {
       ),
       title: Text(
         name,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: alma.textPrimary,
           fontWeight: FontWeight.w500,
           fontSize: 15,
         ),
@@ -1173,7 +1188,7 @@ class _SearchResultTile extends StatelessWidget {
             ? description
             : tr('browse.members', lang, args: {'count': memberCount.toString()}),
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.4),
+          color: alma.textTertiary,
           fontSize: 13,
         ),
         maxLines: 1,
@@ -1286,6 +1301,7 @@ class _BottomSheetOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return ListTile(
       leading: Container(
         width: 40,
@@ -1298,8 +1314,8 @@ class _BottomSheetOption extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: alma.textPrimary,
           fontWeight: FontWeight.w500,
           fontSize: 15,
         ),
@@ -1307,13 +1323,13 @@ class _BottomSheetOption extends StatelessWidget {
       subtitle: Text(
         subtitle,
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.4),
+          color: alma.textTertiary,
           fontSize: 13,
         ),
       ),
       trailing: Icon(
         Icons.chevron_right,
-        color: Colors.white.withValues(alpha: 0.3),
+        color: alma.textTertiary,
       ),
       onTap: onTap,
     );

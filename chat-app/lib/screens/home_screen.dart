@@ -145,6 +145,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _filterChip(String value, String label, String lang) {
+    final alma = context.alma;
     final isSelected = _filter == value;
     return GestureDetector(
       onTap: () {
@@ -157,7 +158,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? AlmaTheme.terracottaOrange.withValues(alpha: 0.2)
-              : AlmaTheme.slateGray.withValues(alpha: 0.5),
+              : alma.chipBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
@@ -170,7 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           style: TextStyle(
             color: isSelected
                 ? AlmaTheme.terracottaOrange
-                : Colors.white.withValues(alpha: 0.5),
+                : alma.textSecondary,
             fontSize: 13,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),

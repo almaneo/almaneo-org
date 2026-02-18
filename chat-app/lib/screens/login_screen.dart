@@ -355,6 +355,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
     final langState = ref.watch(languageProvider);
+    final alma = context.alma;
 
     return Scaffold(
       body: Container(
@@ -385,9 +386,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
+                          color: alma.chipBg,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                          border: Border.all(color: alma.borderDefault),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -396,10 +397,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             const SizedBox(width: 6),
                             Text(
                               langState.language.nativeName,
-                              style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.7)),
+                              style: TextStyle(fontSize: 13, color: alma.textSecondary),
                             ),
                             const SizedBox(width: 4),
-                            Icon(Icons.expand_more, size: 16, color: Colors.white.withValues(alpha: 0.5)),
+                            Icon(Icons.expand_more, size: 16, color: alma.textTertiary),
                           ],
                         ),
                       ),
@@ -429,6 +430,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final titleSize = isCompact ? 24.0 : 30.0;
     final slideHeight = isCompact ? 160.0 : 200.0;
     final bottomPad = isCompact ? 16.0 : 32.0;
+    final alma = context.alma;
 
     return Column(
       children: [
@@ -437,12 +439,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         SizedBox(height: isCompact ? 10 : 16),
         Text(
           tr('app.name', lang),
-          style: TextStyle(fontSize: titleSize, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
+          style: TextStyle(fontSize: titleSize, fontWeight: FontWeight.bold, color: alma.textPrimary, letterSpacing: 1),
         ),
         const SizedBox(height: 6),
         Text(
           tr('app.tagline', lang),
-          style: TextStyle(fontSize: isCompact ? 12 : 14, color: Colors.white.withValues(alpha: 0.5)),
+          style: TextStyle(fontSize: isCompact ? 12 : 14, color: alma.textSecondary),
           textAlign: TextAlign.center,
         ),
         const Spacer(flex: 1),
@@ -473,7 +475,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               height: 8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: isActive ? AlmaTheme.electricBlue : Colors.white.withValues(alpha: 0.2),
+                color: isActive ? AlmaTheme.electricBlue : alma.textTertiary,
               ),
             );
           }),
@@ -509,6 +511,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   // ════════════════════════════════════════════════
 
   Widget _buildLoginView(String lang) {
+    final alma = context.alma;
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SingleChildScrollView(
@@ -522,12 +525,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             const SizedBox(height: 12),
             Text(
               tr('onboarding.welcome', lang),
-              style: TextStyle(fontSize: 15, color: Colors.white.withValues(alpha: 0.5)),
+              style: TextStyle(fontSize: 15, color: alma.textSecondary),
             ),
             const SizedBox(height: 4),
             Text(
               tr('app.name', lang),
-              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: alma.textPrimary),
             ),
             const SizedBox(height: 28),
 
@@ -562,7 +565,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               alignment: Alignment.centerLeft,
               child: Text(
                 tr('login.emailLabel', lang),
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.6)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: alma.textSecondary),
               ),
             ),
             const SizedBox(height: 8),
@@ -571,21 +574,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 Expanded(
                   child: TextField(
                     controller: _emailController,
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: alma.textPrimary, fontSize: 15),
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: tr('login.emailHint', lang),
-                      prefixIcon: Icon(Icons.mail_outline_rounded, color: Colors.white.withValues(alpha: 0.3), size: 20),
+                      prefixIcon: Icon(Icons.mail_outline_rounded, color: alma.textTertiary, size: 20),
                       filled: true,
-                      fillColor: Colors.white.withValues(alpha: 0.06),
+                      fillColor: alma.inputBg,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(color: alma.inputBorder),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(color: alma.inputBorder),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -619,7 +622,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               alignment: Alignment.centerLeft,
               child: Text(
                 tr('login.magicLinkNote', lang),
-                style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
+                style: TextStyle(fontSize: 11, color: alma.textTertiary),
               ),
             ),
 
@@ -634,7 +637,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               alignment: Alignment.centerLeft,
               child: Text(
                 tr('login.guestSection', lang),
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.6)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: alma.textSecondary),
               ),
             ),
             const SizedBox(height: 8),
@@ -643,20 +646,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 Expanded(
                   child: TextField(
                     controller: _nameController,
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: alma.textPrimary, fontSize: 15),
                     decoration: InputDecoration(
                       hintText: tr('login.enterName', lang),
-                      prefixIcon: Icon(Icons.person_outline_rounded, color: Colors.white.withValues(alpha: 0.3), size: 20),
+                      prefixIcon: Icon(Icons.person_outline_rounded, color: alma.textTertiary, size: 20),
                       filled: true,
-                      fillColor: Colors.white.withValues(alpha: 0.06),
+                      fillColor: alma.inputBg,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(color: alma.inputBorder),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(color: alma.inputBorder),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -691,7 +694,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               alignment: Alignment.centerLeft,
               child: Text(
                 tr('login.guestNote', lang),
-                style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
+                style: TextStyle(fontSize: 11, color: alma.textTertiary),
               ),
             ),
 
@@ -733,11 +736,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_back_rounded, size: 16, color: Colors.white.withValues(alpha: 0.4)),
+                  Icon(Icons.arrow_back_rounded, size: 16, color: alma.textTertiary),
                   const SizedBox(width: 6),
                   Text(
                     tr('onboarding.skip', lang),
-                    style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.4)),
+                    style: TextStyle(fontSize: 13, color: alma.textTertiary),
                   ),
                 ],
               ),
@@ -795,17 +798,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildDivider(String lang) {
+    final alma = context.alma;
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.1))),
+        Expanded(child: Divider(color: alma.divider)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
             tr('login.or', lang),
-            style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.3)),
+            style: TextStyle(fontSize: 12, color: alma.textTertiary),
           ),
         ),
-        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.1))),
+        Expanded(child: Divider(color: alma.divider)),
       ],
     );
   }
@@ -831,6 +835,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final titleFontSize = compact ? 17.0 : 20.0;
     final descFontSize = compact ? 13.0 : 15.0;
     final hPad = compact ? 28.0 : 40.0;
+    final alma = context.alma;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: hPad),
@@ -854,12 +859,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ),
           ),
           SizedBox(height: compact ? 10 : 16),
-          Text(title, style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.w700, color: Colors.white)),
+          Text(title, style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.w700, color: alma.textPrimary)),
           SizedBox(height: compact ? 6 : 10),
           Text(
             desc,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: descFontSize, height: 1.5, color: Colors.white.withValues(alpha: 0.55)),
+            style: TextStyle(fontSize: descFontSize, height: 1.5, color: alma.textSecondary),
             maxLines: compact ? 2 : 3,
             overflow: TextOverflow.ellipsis,
           ),
