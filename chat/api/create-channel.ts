@@ -9,7 +9,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isStreamConfigured } from '../lib/stream-client.js';
+import { isStreamConfigured, getStreamClient } from '../lib/stream-client.js';
 
 export const config = {
   maxDuration: 10,
@@ -76,11 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const suffix = Math.random().toString(36).substring(2, 7);
     const channelId = `${slug}-${suffix}`;
 
-    const StreamChat = (await import('stream-chat')).StreamChat;
-    const sc = StreamChat.getInstance(
-      process.env.STREAM_API_KEY!,
-      process.env.STREAM_API_SECRET!,
-    );
+    const sc = getStreamClient();
 
     // Create the channel with the creator as admin
     const channel = sc.channel('messaging', channelId, {
@@ -100,6 +96,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (error) {
     console.error('[CreateChannel] Error:', error);
+    console.error('[CreateChannel] STREAM_API_KEY prefix:', process.env.STREAM_API_KEY?.substring(0, 8));
     const message = error instanceof Error ? error.message : 'Internal server error';
     return res.status(500).json({ error: message });
   }

@@ -15,6 +15,7 @@ export default function handler(_req: VercelRequest, res: VercelResponse) {
     timestamp: new Date().toISOString(),
     config: {
       streamChat: !!(process.env.STREAM_API_KEY && process.env.STREAM_API_SECRET),
+      streamKeyPrefix: process.env.STREAM_API_KEY?.substring(0, 8) || 'not-set',
       supabase: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
       aiGateway: !!process.env.AI_GATEWAY_API_KEY,
       gemini: !!process.env.GEMINI_API_KEY,
