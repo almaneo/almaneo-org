@@ -4343,7 +4343,12 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - **raw HTTP code 2** (`"api_key not found"`): 키가 존재하지 않음
    - health 엔드포인트 v1.2.0: raw HTTP 테스트에 `STREAM_BASE_URL` 반영
 
-#### 4. **최종 상태**
+#### 4. **실기기 테스트 완료** ✅
+   - APK 빌드 성공 (76.3MB)
+   - 로그인, 채팅, 채널 생성 정상 작동
+   - **푸시 알림 정상 작동** 확인
+
+#### 5. **최종 상태**
    ```
    Health Endpoint (v1.2.0):
    streamKeyPrefix: zz454a2s
@@ -4351,21 +4356,16 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    streamBaseURL: https://chat.stream-io-api.com (default)
    ```
 
-#### 5. **커밋 내역**
+#### 6. **커밋 내역**
    - `45026e9` - fix(chat): Switch to Singapore Stream Chat app (hfbghwcu3sp3)
    - `a40269a` - fix(chat): Use Singapore regional endpoint for Stream Chat
    - `4e7c430` - fix(chat): Fix trailing newline in Vercel env vars (v1.1.2)
    - `4ced820` - fix(chat): Restore US East Stream Chat key (v1.2.0)
+   - `4180541` - docs: Update CLAUDE.md with Session 113 summary
 
 ---
 
 ### 🔲 다음 세션 작업 (Session 114+)
-
-#### 🔴 최우선
-- **실기기 QA 테스트** ⭐
-  - 로그인/채팅/채널 생성/알림 전체 테스트
-  - 라이트/다크 모드 점검
-  - 밋업 채팅 FAB 테스트
 
 #### 🟡 중간 우선순위
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
