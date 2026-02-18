@@ -105,6 +105,8 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isConnected = false;
   bool _isCheckingSession = true;
+  bool _isReconnecting = false; // 중복 재연결 방지 플래그
+  StreamSubscription? _connectionStatusSub; // 단일 구독 유지
 
   @override
   void initState() {
@@ -286,29 +288,47 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       rethrow;
     }
 
-    // WebSocket 상태 감시 — SDK가 재연결 포기 시 전체 재로그인
+    // WebSocket 상태 감시 — 기존 구독 취소 후 재등록 (중복 방지)
     _listenConnectionStatus();
   }
 
   /// SDK가 재연결을 포기(disconnected)하면 전체 재로그인 시도
+  /// _connectionStatusSub로 단일 구독 유지, _isReconnecting으로 중복 방지
   void _listenConnectionStatus() {
-    widget.client.wsConnectionStatusStream.listen((status) {
-      if (status == ConnectionStatus.disconnected && _isConnected) {
+    _connectionStatusSub?.cancel();
+    _connectionStatusSub = widget.client.wsConnectionStatusStream.listen((status) {
+      if (status == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
         debugPrint('Stream disconnected — attempting full reconnection');
         _attemptFullReconnect();
       }
     });
   }
 
-  /// 전체 재연결: 토큰 재발급 → connectUserWithProvider
+  /// 전체 재연결: 기존 연결 해제 → 토큰 재발급 → 재연결
   Future<void> _attemptFullReconnect() async {
+    if (_isReconnecting) return; // 이미 재연결 중이면 무시
+    _isReconnecting = true;
+
     try {
+      final userId = _authService.userId;
+      if (userId == null) return;
+
+      // 기존 연결 해제 후 재연결 (이미 연결된 상태에서 connectUserWithProvider 재호출 시 에러 방지)
+      try {
+        await widget.client.disconnectUser();
+      } catch (e) {
+        debugPrint('disconnectUser during reconnect: $e');
+      }
+
       final newToken = await _authService.refreshToken();
-      if (newToken == null || _authService.userId == null) return;
+      if (newToken == null) {
+        debugPrint('Token refresh returned null — skipping reconnect');
+        return;
+      }
 
       await widget.client.connectUserWithProvider(
-        User(id: _authService.userId!, name: _authService.userName),
-        (userId) async {
+        User(id: userId, name: _authService.userName),
+        (uid) async {
           final t = await _authService.refreshToken();
           if (t == null) throw Exception('Token refresh failed');
           return t;
@@ -319,6 +339,8 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
       debugPrint('Full reconnection successful');
     } catch (e) {
       debugPrint('Full reconnection failed: $e');
+    } finally {
+      _isReconnecting = false;
     }
   }
 
@@ -378,6 +400,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
   @override
   void dispose() {
+    _connectionStatusSub?.cancel();
     widget.client.dispose();
     super.dispose();
   }
@@ -520,7 +543,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
             width: 26,
             height: 26,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Icon(
+            errorBuilder: (context, error, stack) => Icon(
               isActive ? Icons.person : Icons.person_outline,
               size: 20,
             ),

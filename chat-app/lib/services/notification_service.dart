@@ -183,7 +183,20 @@ class NotificationService {
   }
 
   /// FCM 포그라운드 메시지 → 로컬 알림 표시
+  ///
+  /// 포그라운드에서는 Stream WebSocket이 활성화되어 있으므로
+  /// Stream이 보낸 data-only FCM(sender: stream.io)은 무시하고
+  /// _handleStreamMessage가 처리하도록 위임.
+  /// notification 페이로드가 있는 FCM만 직접 표시.
   void _handleForegroundFCM(RemoteMessage message) {
+    // Stream Chat SDK가 보낸 FCM인지 확인 (data에 sender 필드 포함)
+    final sender = message.data['sender'] as String? ?? '';
+    if (sender == 'stream.chat') {
+      // Stream WebSocket 이벤트(_handleStreamMessage)가 이미 처리하므로 무시
+      debugPrint('[Notification] Ignoring Stream FCM in foreground (handled by WebSocket)');
+      return;
+    }
+
     final notification = message.notification;
     if (notification == null) return;
 

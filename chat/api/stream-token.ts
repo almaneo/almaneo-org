@@ -17,7 +17,7 @@ import {
 } from '../lib/stream-client.js';
 
 export const config = {
-  maxDuration: 10,
+  maxDuration: 30,
 };
 
 function setCors(res: VercelResponse) {
