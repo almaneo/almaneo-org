@@ -4392,28 +4392,50 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - Footer 아래 `ReactionBar` 조건부 표시
    - `_handleReactionTap()` 메서드 추가 (리액션 토글)
 
-#### 4. **Phase A 잔여 작업** (다음 세션)
-   - `chat_screen.dart`: TranslatedMessage에 콜백 전달, 답장 기능 와이어링
-   - `meetup_chat_screen.dart`: 동일 와이어링
-   - `app_strings.dart`: 10개 키 × 15개 언어 = 150개 번역 항목
-   - APK 빌드 & 테스트
+---
+
+### ✅ 완료된 작업 (2026-02-19 - Session 115: V0.5 Phase A 완료 & Phase C 완료)
+
+#### 1. **V0.5 Phase A 완료 — 채팅 화면 와이어링** ✅
+   - 커밋: `c9b5b9e` - feat(chat-app): V0.5 Phase A - Wire message reactions & actions to chat screens
+
+   | 파일 | 변경 |
+   |------|------|
+   | `chat_screen.dart` | `StreamMessageInputController` 추가, `_showMessageActions` 메서드, TranslatedMessage 콜백 와이어링, 답장(quotedMessage) 연결 |
+   | `meetup_chat_screen.dart` | 동일 패턴 적용 |
+   | `app_strings.dart` | 6개 키 × 15개 언어 = 90개 번역 (message.copy/copied/reply/delete/deleteConfirm/deleteConfirmDesc) |
+
+#### 2. **V0.5 Phase C 완료 — 읽지 않은 메시지 뱃지 & 스크롤 FAB** ✅
+   - 커밋: `1dab408` - feat(chat-app): V0.5 Phase C - Add unread badge, scroll FAB & markRead
+
+   | 파일 | 변경 |
+   |------|------|
+   | `main.dart` | `_buildChatIcon()` — `StreamBuilder<int>` on `totalUnreadCountStream`, Badge 표시 |
+   | `chat_screen.dart` | `scrollToBottomBuilder` — 테마 적용 원형 FAB + 읽지 않은 수 Badge |
+   | `meetup_chat_screen.dart` | 동일 scrollToBottomBuilder 패턴 |
+   | `channel_list_screen.dart` | `_navigateToChannel`에 `channel.markRead()` 추가 |
+
+   - 4개 파일, +82줄, -2줄
+
+#### 3. **V0.5_PLAN.md 업데이트** ✅
+   - Phase A: ✅ Completed
+   - Phase C: ✅ Completed
+   - APK: 76.4MB ✅
 
 ---
 
-### 🔲 다음 세션 작업 (Session 115+)
+### 🔲 다음 세션 작업 (Session 116+)
 
 #### 🔴 최우선
-- **V0.5 Phase A 완료**: chat_screen + meetup_chat_screen 와이어링, i18n 키 추가, APK 빌드
-- **V0.5 Phase C**: 읽지 않은 메시지 뱃지, 스크롤 FAB
+- **V0.5 Phase B**: 유저 프로필 시트 (아바타 탭 → 프로필 바텀시트), 채널 정보 화면 (채널명 탭 → 멤버 목록/설정)
+- **V0.5 Phase D**: 채널 관리 (핀, 뮤트, 나가기)
 
 #### 🟡 중간 우선순위
-- **V0.5 Phase B**: 유저 프로필 시트, 채널 정보 화면
-- **V0.5 Phase D**: 채널 관리 (핀, 뮤트, 나가기)
 - **V0.5 Phase E**: 딥링크 핸들러 `almachat://invite/{code}`
-
-#### 🟢 낮은 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
+
+#### 🟢 낮은 우선순위
 - **Kindness AI 분석 MVP**: V0.5+
 - **메인넷 배포 준비**: Multi-sig, 감사
 - **토큰 로고 AI 생성**
