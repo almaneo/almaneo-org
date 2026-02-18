@@ -6,6 +6,7 @@ import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/notification_service.dart';
 import '../widgets/chat_widgets.dart';
+import '../widgets/message_actions_sheet.dart';
 import '../widgets/translated_message.dart';
 
 /// Meetup-specific chat screen with pinned meetup info header
@@ -20,6 +21,13 @@ class MeetupChatScreen extends ConsumerStatefulWidget {
 
 class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
   bool _showInfo = true;
+  late StreamMessageInputController _messageInputController;
+
+  @override
+  void initState() {
+    super.initState();
+    _messageInputController = StreamMessageInputController();
+  }
 
   @override
   void didChangeDependencies() {
@@ -30,14 +38,37 @@ class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
 
   @override
   void dispose() {
+    _messageInputController.dispose();
     NotificationService.instance.setActiveChannel(null);
     super.dispose();
+  }
+
+  void _showMessageActions(Message message, bool isMyMessage, Channel channel, String lang) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.alma.cardBg,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => MessageActionsSheet(
+        message: message,
+        isMyMessage: isMyMessage,
+        channel: channel,
+        lang: lang,
+        onReply: () {
+          setState(() {
+            _messageInputController.quotedMessage = message;
+          });
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final alma = context.alma;
     final channel = StreamChannel.of(context).channel;
+    final currentUserId = StreamChat.of(context).currentUser?.id;
     final langState = ref.watch(languageProvider);
     final lang = langState.languageCode;
 
@@ -117,12 +148,27 @@ class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
                 return TranslatedMessage(
                   message: details.message,
                   isMyMessage: details.isMyMessage,
+                  onLongPress: () => _showMessageActions(
+                    details.message,
+                    details.isMyMessage,
+                    channel,
+                    lang,
+                  ),
+                  onReply: () {
+                    setState(() {
+                      _messageInputController.quotedMessage = details.message;
+                    });
+                  },
+                  currentUserId: currentUserId,
+                  channel: channel,
                 );
               },
             ),
           ),
           TypingIndicator(lang: lang),
-          const StreamMessageInput(),
+          StreamMessageInput(
+            messageInputController: _messageInputController,
+          ),
         ],
       ),
     );

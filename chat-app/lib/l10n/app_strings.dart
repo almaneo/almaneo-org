@@ -321,6 +321,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Remove Participant',
     'meetup.removeConfirm': 'Remove {name} from this meetup?',
     'meetup.participantRemoved': 'Participant removed',
+    'message.copy': 'Copy',
+    'message.copied': 'Copied to clipboard',
+    'message.reply': 'Reply',
+    'message.delete': 'Delete',
+    'message.deleteConfirm': 'Delete Message',
+    'message.deleteConfirmDesc': 'Are you sure you want to delete this message?',
   },
 
   // ──────────────────────────────────────
@@ -616,6 +622,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': '참가자 제거',
     'meetup.removeConfirm': '{name}님을 이 밋업에서 제거하시겠습니까?',
     'meetup.participantRemoved': '참가자가 제거되었습니다',
+    'message.copy': '복사',
+    'message.copied': '클립보드에 복사됨',
+    'message.reply': '답장',
+    'message.delete': '삭제',
+    'message.deleteConfirm': '메시지 삭제',
+    'message.deleteConfirmDesc': '이 메시지를 삭제하시겠습니까?',
   },
 
   // ──────────────────────────────────────
@@ -830,6 +842,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': '移除参与者',
     'meetup.removeConfirm': '从聚会中移除{name}？',
     'meetup.participantRemoved': '参与者已移除',
+    'message.copy': '复制',
+    'message.copied': '已复制到剪贴板',
+    'message.reply': '回复',
+    'message.delete': '删除',
+    'message.deleteConfirm': '删除消息',
+    'message.deleteConfirmDesc': '确定要删除这条消息吗？',
   },
 
   // ──────────────────────────────────────
@@ -1044,6 +1062,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': '参加者を削除',
     'meetup.removeConfirm': '{name}をミートアップから削除しますか？',
     'meetup.participantRemoved': '参加者が削除されました',
+    'message.copy': 'コピー',
+    'message.copied': 'クリップボードにコピーしました',
+    'message.reply': '返信',
+    'message.delete': '削除',
+    'message.deleteConfirm': 'メッセージを削除',
+    'message.deleteConfirmDesc': 'このメッセージを削除しますか？',
   },
 
   // ──────────────────────────────────────
@@ -1258,6 +1282,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Eliminar participante',
     'meetup.removeConfirm': '¿Eliminar a {name} de este encuentro?',
     'meetup.participantRemoved': 'Participante eliminado',
+    'message.copy': 'Copiar',
+    'message.copied': 'Copiado al portapapeles',
+    'message.reply': 'Responder',
+    'message.delete': 'Eliminar',
+    'message.deleteConfirm': 'Eliminar mensaje',
+    'message.deleteConfirmDesc': '¿Estás seguro de que quieres eliminar este mensaje?',
   },
 
   // ──────────────────────────────────────
@@ -1472,6 +1502,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Retirer le participant',
     'meetup.removeConfirm': 'Retirer {name} de cette rencontre ?',
     'meetup.participantRemoved': 'Participant retiré',
+    'message.copy': 'Copier',
+    'message.copied': 'Copié dans le presse-papiers',
+    'message.reply': 'Répondre',
+    'message.delete': 'Supprimer',
+    'message.deleteConfirm': 'Supprimer le message',
+    'message.deleteConfirmDesc': 'Êtes-vous sûr de vouloir supprimer ce message ?',
   },
 
   // ──────────────────────────────────────
@@ -1686,6 +1722,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'إزالة المشارك',
     'meetup.removeConfirm': 'إزالة {name} من هذا اللقاء؟',
     'meetup.participantRemoved': 'تمت إزالة المشارك',
+    'message.copy': 'نسخ',
+    'message.copied': 'تم النسخ إلى الحافظة',
+    'message.reply': 'رد',
+    'message.delete': 'حذف',
+    'message.deleteConfirm': 'حذف الرسالة',
+    'message.deleteConfirmDesc': 'هل أنت متأكد من حذف هذه الرسالة؟',
   },
 
   // ──────────────────────────────────────
@@ -1900,6 +1942,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Xóa người tham gia',
     'meetup.removeConfirm': 'Xóa {name} khỏi buổi gặp?',
     'meetup.participantRemoved': 'Đã xóa người tham gia',
+    'message.copy': 'Sao chép',
+    'message.copied': 'Đã sao chép vào bộ nhớ tạm',
+    'message.reply': 'Trả lời',
+    'message.delete': 'Xóa',
+    'message.deleteConfirm': 'Xóa tin nhắn',
+    'message.deleteConfirmDesc': 'Bạn có chắc muốn xóa tin nhắn này?',
   },
 
   // ──────────────────────────────────────
@@ -2114,6 +2162,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'ลบผู้เข้าร่วม',
     'meetup.removeConfirm': 'ลบ {name} ออกจากมีทอัพนี้?',
     'meetup.participantRemoved': 'ลบผู้เข้าร่วมแล้ว',
+    'message.copy': 'คัดลอก',
+    'message.copied': 'คัดลอกไปยังคลิปบอร์ดแล้ว',
+    'message.reply': 'ตอบกลับ',
+    'message.delete': 'ลบ',
+    'message.deleteConfirm': 'ลบข้อความ',
+    'message.deleteConfirmDesc': 'คุณแน่ใจหรือไม่ว่าต้องการลบข้อความนี้?',
   },
 
   // ──────────────────────────────────────
@@ -2310,6 +2364,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Remover participante',
     'meetup.removeConfirm': 'Remover {name} deste encontro?',
     'meetup.participantRemoved': 'Participante removido',
+    'message.copy': 'Copiar',
+    'message.copied': 'Copiado para a área de transferência',
+    'message.reply': 'Responder',
+    'message.delete': 'Excluir',
+    'message.deleteConfirm': 'Excluir mensagem',
+    'message.deleteConfirmDesc': 'Tem certeza de que deseja excluir esta mensagem?',
   },
 
   // ──────────────────────────────────────
@@ -2506,6 +2566,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Hapus peserta',
     'meetup.removeConfirm': 'Hapus {name} dari pertemuan ini?',
     'meetup.participantRemoved': 'Peserta dihapus',
+    'message.copy': 'Salin',
+    'message.copied': 'Disalin ke papan klip',
+    'message.reply': 'Balas',
+    'message.delete': 'Hapus',
+    'message.deleteConfirm': 'Hapus Pesan',
+    'message.deleteConfirmDesc': 'Apakah Anda yakin ingin menghapus pesan ini?',
   },
 
   // ──────────────────────────────────────
@@ -2681,6 +2747,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'प्रतिभागी हटाएं',
     'meetup.removeConfirm': '{name} को इस मीटअप से हटाएं?',
     'meetup.participantRemoved': 'प्रतिभागी हटा दिया गया',
+    'message.copy': 'कॉपी',
+    'message.copied': 'क्लिपबोर्ड पर कॉपी किया गया',
+    'message.reply': 'जवाब दें',
+    'message.delete': 'हटाएं',
+    'message.deleteConfirm': 'संदेश हटाएं',
+    'message.deleteConfirmDesc': 'क्या आप वाकई इस संदेश को हटाना चाहते हैं?',
   },
 
   // ──────────────────────────────────────
@@ -2856,6 +2928,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Teilnehmer entfernen',
     'meetup.removeConfirm': '{name} aus diesem Treffen entfernen?',
     'meetup.participantRemoved': 'Teilnehmer entfernt',
+    'message.copy': 'Kopieren',
+    'message.copied': 'In die Zwischenablage kopiert',
+    'message.reply': 'Antworten',
+    'message.delete': 'Löschen',
+    'message.deleteConfirm': 'Nachricht löschen',
+    'message.deleteConfirmDesc': 'Möchten Sie diese Nachricht wirklich löschen?',
   },
 
   // ──────────────────────────────────────
@@ -3031,6 +3109,12 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Удалить участника',
     'meetup.removeConfirm': 'Удалить {name} из этой встречи?',
     'meetup.participantRemoved': 'Участник удалён',
+    'message.copy': 'Копировать',
+    'message.copied': 'Скопировано в буфер обмена',
+    'message.reply': 'Ответить',
+    'message.delete': 'Удалить',
+    'message.deleteConfirm': 'Удалить сообщение',
+    'message.deleteConfirmDesc': 'Вы уверены, что хотите удалить это сообщение?',
   },
 
   // ──────────────────────────────────────
@@ -3206,5 +3290,11 @@ final Map<String, Map<String, String>> _translations = {
     'meetup.removeParticipant': 'Katılımcıyı çıkar',
     'meetup.removeConfirm': '{name} bu buluşmadan çıkarılsın mı?',
     'meetup.participantRemoved': 'Katılımcı çıkarıldı',
+    'message.copy': 'Kopyala',
+    'message.copied': 'Panoya kopyalandı',
+    'message.reply': 'Yanıtla',
+    'message.delete': 'Sil',
+    'message.deleteConfirm': 'Mesajı Sil',
+    'message.deleteConfirmDesc': 'Bu mesajı silmek istediğinizden emin misiniz?',
   },
 };
