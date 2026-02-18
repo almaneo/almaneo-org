@@ -181,6 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildEmptyState(String lang) {
+    final alma = context.alma;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -193,14 +194,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             errorBuilder: (_, __, ___) => Icon(
               Icons.event_available,
               size: 56,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: alma.textTertiary,
             ),
           ),
           const SizedBox(height: 16),
           Text(
             tr('home.noMeetups', lang),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.5),
+              color: alma.textSecondary,
               fontSize: 16,
             ),
           ),
@@ -208,7 +209,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Text(
             tr('home.createFirst', lang),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: alma.textTertiary,
               fontSize: 13,
             ),
           ),
@@ -223,11 +224,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final locationController = TextEditingController();
     DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
     int maxParticipants = 20;
+    final alma = context.alma;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AlmaTheme.slateGray,
+      backgroundColor: alma.cardBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -251,29 +253,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     height: 4,
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: alma.divider,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
                 Text(
                   tr('home.createMeetup', lang),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: alma.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 16),
                 // Title
-                _inputField(titleController, tr('home.meetupTitle', lang)),
+                _inputField(titleController, tr('home.meetupTitle', lang), alma),
                 const SizedBox(height: 12),
                 // Description
-                _inputField(descController, tr('home.meetupDesc', lang),
+                _inputField(descController, tr('home.meetupDesc', lang), alma,
                     maxLines: 3),
                 const SizedBox(height: 12),
                 // Location
-                _inputField(locationController, tr('home.meetupLocation', lang),
+                _inputField(locationController, tr('home.meetupLocation', lang), alma,
                     icon: Icons.location_on),
                 const SizedBox(height: 12),
                 // Max Participants
@@ -281,12 +283,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     Icon(Icons.people,
                         size: 18,
-                        color: Colors.white.withValues(alpha: 0.4)),
+                        color: alma.textTertiary),
                     const SizedBox(width: 10),
                     Text(
                       tr('home.maxParticipants', lang),
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: alma.textSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -302,13 +304,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: AlmaTheme.deepNavy,
+                          color: alma.inputBg,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: AlmaTheme.electricBlue.withValues(alpha: 0.2),
                           ),
                         ),
-                        child: const Icon(Icons.remove, color: Colors.white, size: 18),
+                        child: Icon(Icons.remove, color: alma.textPrimary, size: 18),
                       ),
                     ),
                     SizedBox(
@@ -316,8 +318,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Text(
                         '$maxParticipants',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: alma.textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -334,13 +336,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: AlmaTheme.deepNavy,
+                          color: alma.inputBg,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: AlmaTheme.electricBlue.withValues(alpha: 0.2),
                           ),
                         ),
-                        child: const Icon(Icons.add, color: Colors.white, size: 18),
+                        child: Icon(Icons.add, color: alma.textPrimary, size: 18),
                       ),
                     ),
                   ],
@@ -377,7 +379,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: AlmaTheme.deepNavy,
+                      color: alma.inputBg,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: AlmaTheme.electricBlue.withValues(alpha: 0.3),
@@ -387,13 +389,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       children: [
                         Icon(Icons.calendar_today,
                             size: 18,
-                            color: Colors.white.withValues(alpha: 0.5)),
+                            color: alma.textTertiary),
                         const SizedBox(width: 10),
                         Text(
                           '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} '
                           '${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15),
+                          style: TextStyle(
+                              color: alma.textPrimary, fontSize: 15),
                         ),
                       ],
                     ),
@@ -463,21 +465,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _inputField(TextEditingController controller, String hint,
+  Widget _inputField(TextEditingController controller, String hint, AlmaColors alma,
       {int maxLines = 1, IconData? icon}) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
-      style: const TextStyle(color: Colors.white, fontSize: 15),
+      style: TextStyle(color: alma.textPrimary, fontSize: 15),
       cursorColor: AlmaTheme.electricBlue,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
+        hintStyle: TextStyle(color: alma.textTertiary),
         prefixIcon: icon != null
-            ? Icon(icon, size: 18, color: Colors.white.withValues(alpha: 0.4))
+            ? Icon(icon, size: 18, color: alma.textTertiary)
             : null,
         filled: true,
-        fillColor: AlmaTheme.deepNavy,
+        fillColor: alma.inputBg,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide:
@@ -510,6 +512,7 @@ class _MeetupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final title = meetup['title'] as String? ?? '';
     final description = meetup['description'] as String? ?? '';
     final location = meetup['location'] as String? ?? '';
@@ -530,12 +533,12 @@ class _MeetupCard extends StatelessWidget {
       child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AlmaTheme.slateGray.withValues(alpha: 0.5),
+        color: alma.cardBg,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isActive
               ? AlmaTheme.electricBlue.withValues(alpha: 0.15)
-              : Colors.white.withValues(alpha: 0.05),
+              : alma.divider,
         ),
       ),
       child: Column(
@@ -568,7 +571,7 @@ class _MeetupCard extends StatelessWidget {
                       Text(
                         _formatDate(meetingDate, lang),
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: alma.textTertiary,
                           fontSize: 12,
                         ),
                       ),
@@ -578,8 +581,8 @@ class _MeetupCard extends StatelessWidget {
                 // Title
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: alma.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -589,7 +592,7 @@ class _MeetupCard extends StatelessWidget {
                   Text(
                     description,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color: alma.textSecondary,
                       fontSize: 13,
                     ),
                     maxLines: 2,
@@ -608,7 +611,7 @@ class _MeetupCard extends StatelessWidget {
                       child: Text(
                         location,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: alma.textSecondary,
                           fontSize: 12,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -617,12 +620,12 @@ class _MeetupCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Icon(Icons.people_outline,
                         size: 14,
-                        color: Colors.white.withValues(alpha: 0.4)),
+                        color: alma.textTertiary),
                     const SizedBox(width: 4),
                     Text(
                       '$participantCount/$maxParticipants',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: alma.textTertiary,
                         fontSize: 12,
                       ),
                     ),

@@ -32,7 +32,7 @@ class WalletInfoCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AlmaTheme.glassCard(),
+      decoration: AlmaTheme.themedCard(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

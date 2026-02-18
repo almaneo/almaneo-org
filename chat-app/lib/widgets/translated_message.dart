@@ -157,7 +157,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               decoration: BoxDecoration(
                 color: widget.isMyMessage
                     ? AlmaTheme.electricBlue
-                    : AlmaTheme.slateGray,
+                    : alma.surfaceVariant,
                 borderRadius: BorderRadius.circular(16).copyWith(
                   bottomRight:
                       widget.isMyMessage ? const Radius.circular(4) : null,

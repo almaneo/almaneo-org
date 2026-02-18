@@ -22,7 +22,7 @@ class AmbassadorBadge extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AlmaTheme.glassCard(),
+      decoration: AlmaTheme.themedCard(context),
       child: Row(
         children: [
           // 티어 아이콘 (원형 배경)

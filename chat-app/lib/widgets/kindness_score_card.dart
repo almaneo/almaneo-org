@@ -24,7 +24,7 @@ class KindnessScoreCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AlmaTheme.glassCard(),
+      decoration: AlmaTheme.themedCard(context),
       child: Row(
         children: [
           // 원형 게이지
