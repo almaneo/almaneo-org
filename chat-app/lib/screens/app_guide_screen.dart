@@ -61,9 +61,6 @@ class _AppGuideScreenState extends ConsumerState<AppGuideScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenH = MediaQuery.of(context).size.height;
     final isCompact = screenH < 700;
-    final logoSize = isCompact ? 56.0 : 80.0;
-    final titleSize = isCompact ? 22.0 : 28.0;
-    final slideHeight = isCompact ? 160.0 : 200.0;
     final bottomPad = isCompact ? 16.0 : 32.0;
 
     return Scaffold(
@@ -103,32 +100,29 @@ class _AppGuideScreenState extends ConsumerState<AppGuideScreen>
               Expanded(
                 child: Column(
                   children: [
-                    const Spacer(flex: 1),
-                    AlmaLogo(size: logoSize),
-                    SizedBox(height: isCompact ? 10 : 16),
-                    Text(
-                      tr('app.name', lang),
-                      style: TextStyle(
-                        fontSize: titleSize,
-                        fontWeight: FontWeight.bold,
-                        color: alma.textPrimary,
-                        letterSpacing: 1,
+                    // Compact branding header
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: isCompact ? 8.0 : 12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AlmaLogo(size: isCompact ? 24.0 : 32.0),
+                          const SizedBox(width: 8),
+                          Text(
+                            tr('app.name', lang),
+                            style: TextStyle(
+                              fontSize: isCompact ? 16.0 : 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: alma.textPrimary,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      tr('app.tagline', lang),
-                      style: TextStyle(
-                        fontSize: isCompact ? 12 : 14,
-                        color: alma.textSecondary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Spacer(flex: 1),
 
-                    // Slides
-                    SizedBox(
-                      height: slideHeight,
+                    // Full-size slides
+                    Expanded(
                       child: PageView(
                         controller: _pageController,
                         onPageChanged: (index) {
@@ -188,7 +182,7 @@ class _AppGuideScreenState extends ConsumerState<AppGuideScreen>
                       ),
                     ),
 
-                    SizedBox(height: isCompact ? 12 : 20),
+                    SizedBox(height: isCompact ? 8.0 : 12.0),
 
                     // Dot indicators
                     Row(
@@ -210,7 +204,7 @@ class _AppGuideScreenState extends ConsumerState<AppGuideScreen>
                       }),
                     ),
 
-                    const Spacer(flex: 2),
+                    SizedBox(height: isCompact ? 12.0 : 16.0),
 
                     // Done button
                     Padding(
@@ -257,59 +251,60 @@ class _AppGuideScreenState extends ConsumerState<AppGuideScreen>
     required String desc,
     bool compact = false,
   }) {
-    final imgSize = compact ? 52.0 : 72.0;
     final titleFontSize = compact ? 17.0 : 20.0;
     final descFontSize = compact ? 13.0 : 15.0;
-    final hPad = compact ? 28.0 : 40.0;
     final alma = context.alma;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: hPad),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: imgSize,
-            height: imgSize,
-            child: Image.asset(
-              image,
-              width: imgSize,
-              height: imgSize,
-              fit: BoxFit.contain,
-              errorBuilder: (context2, err, stack) => Container(
-                width: imgSize * 0.78,
-                height: imgSize * 0.78,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: iconColor.withValues(alpha: 0.12),
-                ),
-                child: Icon(fallbackIcon, color: iconColor, size: imgSize * 0.39),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Full-width 16:9 image
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Image.asset(
+            image,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, err, stack) => Container(
+              color: iconColor.withValues(alpha: 0.15),
+              child: Center(
+                child: Icon(fallbackIcon, color: iconColor, size: 56),
               ),
             ),
           ),
-          SizedBox(height: compact ? 10 : 16),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: titleFontSize,
-              fontWeight: FontWeight.w700,
-              color: alma.textPrimary,
+        ),
+        // Title + desc centered in remaining space
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: compact ? 24.0 : 32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w700,
+                    color: alma.textPrimary,
+                  ),
+                ),
+                SizedBox(height: compact ? 6.0 : 10.0),
+                Text(
+                  desc,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: descFontSize,
+                    height: 1.5,
+                    color: alma.textSecondary,
+                  ),
+                  maxLines: compact ? 2 : 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
-          SizedBox(height: compact ? 6 : 10),
-          Text(
-            desc,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: descFontSize,
-              height: 1.5,
-              color: alma.textSecondary,
-            ),
-            maxLines: compact ? 2 : 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
