@@ -4271,14 +4271,78 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 112+)
+### ✅ 완료된 작업 (2026-02-19 - Session 112: Stream "api_key not valid" 진단)
 
-#### 🔴 높은 우선순위
-- **실기기 QA 테스트** ⭐
-  - 새 Stream 싱가포르 키로 로그인/채팅/알림 전체 테스트
-  - 라이트/다크 모드 전체 화면 점검
+#### 1. **문제 현상**
+   - Flutter 실기기 테스트: 로그인은 되나 채널 생성 실패 ("api_key not valid")
+   - `health.ts`를 통해 진단 → `streamConnected: false`, error code 2
+
+#### 2. **진단 과정**
+
+   | 시도 | 내용 | 결과 |
+   |------|------|------|
+   | Singapore baseURL 추가 | `chat-proxy-singapore.stream-io-api.com` | ❌ 여전히 실패 |
+   | US East 원래 키로 복원 | `zz454a2savzv` / `ndjrbz...` | ❌ 여전히 실패 |
+   | `getInstance()` → `new StreamChat()` | 싱글턴 캐시 문제 배제 | ❌ 여전히 실패 |
+   | raw HTTP 진단 추가 | `/app?api_key=...` 직접 호출 | 🔲 미확인 (다음 세션) |
+
+#### 3. **현재 코드 상태 (미해결)**
+
+   **`chat/lib/stream-client.ts`**:
+   - `StreamChat.getInstance()` → `new StreamChat()` 변경 (싱글턴 배제)
+   - `STREAM_BASE_URL` env var로 지역 URL 오버라이드 가능
+
+   **`chat/api/health.ts`** (v1.0.2):
+   - `streamKeyPrefix`: API 키 앞 8자리 표시
+   - `streamBaseURL`: 사용 중인 엔드포인트 표시
+   - `streamConnected`: SDK 연결 성공 여부
+   - `streamRawHttpStatus` + `streamRawHttpBody`: raw HTTP 진단 (신규 추가, 미확인)
+
+   **Vercel 환경변수** (chat 프로젝트):
+   ```
+   STREAM_API_KEY=zz454a2savzv
+   STREAM_API_SECRET=ndjrbz63ggcda3z22swpzgnb75rqs3wbqyswfm6t9sdz9wxuy6tmuxefa9nmr5qf
+   ```
+
+   **로컬 `.env` 파일** (동일):
+   ```
+   chat/.env: STREAM_API_KEY=zz454a2savzv
+   chat-app/.env: STREAM_API_KEY=zz454a2savzv
+   ```
+
+#### 4. **핵심 미해결 문제**
+   - `zz454a2savzv` 키가 Stream 서버에서 "api_key not valid" (error code 2) 반환
+   - 동일 키를 사용자가 직접 확인 ("키와 시크릿은 맞다")
+   - 원인 후보:
+     1. **raw HTTP 테스트 결과 확인 필요** — `streamRawHttpStatus` 값으로 SDK 문제 vs 키 무효 구분
+     2. Stream `almachat` 앱이 플랜 제한 또는 비활성 상태일 가능성
+     3. 키는 맞지만 Stream 서버사이드 API 호출 권한 문제 (무료 플랜 제한)
+
+#### 5. **커밋 내역**
+   - `dc1802d` - fix(chat): Add Singapore baseURL to Stream Chat server SDK
+   - `17800d2` - fix(chat): Add streamBaseURL to health diagnostic (v1.0.2)
+   - `71183d3` - fix(chat): Revert to US East almachat (zz454a2savzv) Stream app
+   - `4ca285c` - fix(chat): Fix misleading streamBaseURL in health diagnostic
+   - `74ee889` - fix(chat): Switch to new StreamChat() and add raw HTTP diagnostic
+
+---
+
+### 🔲 다음 세션 작업 (Session 113+)
+
+#### 🔴 최우선
+- **Stream "api_key not valid" 근본 해결** ⭐
+  1. health 엔드포인트 확인: `streamRawHttpStatus` 값 분석
+     - `200` → SDK/인증 문제 (키는 유효)
+     - `401/403` → 키 자체 무효 or 플랜 제한
+  2. Stream Dashboard에서 `almachat` 앱 상태 직접 확인
+     - 앱이 활성 상태인지
+     - 서버사이드 API 호출이 무료 플랜에서 허용되는지
+  3. 필요시 Stream 계정에서 새 앱 생성 후 새 키 사용
 
 #### 🟡 중간 우선순위
+- **실기기 QA 테스트** (Stream 연결 해결 후)
+  - 로그인/채팅/채널 생성/알림 전체 테스트
+  - 라이트/다크 모드 점검
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 
