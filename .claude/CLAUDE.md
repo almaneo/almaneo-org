@@ -4129,10 +4129,70 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 109+)
+### ✅ 완료된 작업 (2026-02-18 - Session 109: V0.4 Phase E 완료 & 온보딩 버그 수정)
+
+#### 1. **V0.4 Phase E — App Guide / Onboarding Redesign 완료** ✅
+   - 커밋: `3e8deb8` - feat(chat-app): V0.4 Phase E - App Guide & 6-slide onboarding
+
+   | 파일 | 변경 |
+   |------|------|
+   | `app_strings.dart` | 슬라이드 4~6 제목/설명 + `settings.appGuide` — 15개 언어 |
+   | `app_guide_screen.dart` | **신규** — 6슬라이드 독립 화면, X닫기 + 완료 버튼, 4초 자동전환 |
+   | `login_screen.dart` | 3→6 슬라이드 확장, `onboarding_completed` 첫 실행 플래그 |
+   | `settings_screen.dart` | "앱 가이드" 타일 추가 (Language ~ About 사이, cyan 아이콘) |
+
+   **슬라이드 구성 (6개):**
+   | # | 이미지 | 제목 | 폴백 아이콘 |
+   |---|--------|------|-------------|
+   | 1 | Auto_Translation.webp | Auto Translation | translate |
+   | 2 | Global_Community.webp | Global Community | public |
+   | 3 | Kindness_First.webp | Kindness First | favorite |
+   | 4 | Meetup_Together.webp | Meetup Together | event |
+   | 5 | Small_Heart.webp | Kindness Score | favorite_border |
+   | 6 | Get_Started.webp | Ready to Connect? | rocket_launch |
+
+   **동작:**
+   - 첫 실행 시 6슬라이드 표시 → "Get Started" 클릭 시 `onboarding_completed = true` 저장
+   - 이후 실행 시 슬라이드 건너뛰고 로그인 화면 직접 표시
+   - 설정 → "앱 가이드" 타일 → `AppGuideScreen` 다시 표시 (플래그 영향 없음)
+   - 4초마다 자동 전진, 슬라이드 6에서 정지
+   - 화면 높이 < 700px: compact 모드 (이미지/폰트 크기 축소)
+
+#### 2. **온보딩 플래그 Google 백업 문제 수정** ✅
+   - 커밋: `9ebc7f3` - fix(chat-app): Disable Android backup to prevent onboarding flag restore
+   - **원인**: `android:allowBackup` 기본값 `true` → 삭제+재설치 시 Google Drive에서 SharedPreferences 자동 복원 → `onboarding_completed = true` 유지
+   - **수정**: `AndroidManifest.xml`에 `android:allowBackup="false"` 추가
+   - **효과**: 재설치 시 항상 온보딩 슬라이드 표시
+
+   **진단 방법 (참고):**
+   ```bash
+   # 앱 데이터 확인
+   adb shell run-as org.almaneo.alma_chat \
+     cat /data/data/org.almaneo.alma_chat/shared_prefs/FlutterSharedPreferences.xml
+
+   # 앱 데이터 완전 삭제 (재설치 없이 초기화)
+   adb shell pm clear org.almaneo.alma_chat
+   ```
+
+   또는: **Android 설정 → 앱 → AlmaChat → 저장공간 → 데이터 삭제**
+
+#### 3. **실기기 확인** ✅
+   - 재설치 후 슬라이드 정상 표시 확인 (스크린샷 검증)
+   - APK: 76.1MB
+
+---
+
+### 🔲 다음 세션 작업 (Session 110+)
+
+#### 🔴 높은 우선순위
+- **온보딩 슬라이드 이미지 풀위드 리디자인** ⭐
+  - 현재: 작은 이미지가 중앙에 아이콘 크기로 표시 (72dp)
+  - 목표: 가로 화면 폭에 가득 차는 비주얼 이미지 표시
+  - 방향: `Image.asset` → 가로 full-width + 적절한 비율 유지
+  - 준비 필요: 각 슬라이드용 고해상도 .webp 이미지 6장 (와이드 비율 권장)
+  - 파일 위치: `chat-app/assets/images/` (Auto_Translation.webp 등 교체)
 
 #### 🟡 중간 우선순위
-- **Phase E**: App Guide / Onboarding Redesign (6 슬라이드)
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
 - **실기기 QA 테스트**: 라이트/다크 모드 전체 화면 점검
 
