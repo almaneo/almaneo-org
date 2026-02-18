@@ -20,7 +20,8 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
   const apiKey = process.env.STREAM_API_KEY || '';
   if (apiKey) {
     try {
-      const r = await fetch(`https://chat.stream-io-api.com/app?api_key=${apiKey}`);
+      const baseUrl = process.env.STREAM_BASE_URL || 'https://chat.stream-io-api.com';
+      const r = await fetch(`${baseUrl}/app?api_key=${apiKey}`);
       rawHttpStatus = r.status;
       rawHttpBody = await r.text();
     } catch (e) {
@@ -41,7 +42,7 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
   const status = {
     service: 'almachat-api',
-    version: '1.1.0',
+    version: '1.1.1',
     status: 'ok',
     timestamp: new Date().toISOString(),
     config: {
