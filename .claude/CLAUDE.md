@@ -4259,15 +4259,16 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - `2d63ef4` - feat(chat-app): Add app lifecycle reconnect & Stream Asia Pacific migration
    - APK: **76.3MB** ✅
 
-#### 5. **현재 Stream Chat 설정**
+#### 5. **현재 Stream Chat 설정** (Session 113 업데이트)
 
 | 항목 | 값 |
 |------|-----|
-| **API Key** | `hfbghwcu3sp3` |
-| **지역** | Asia Pacific (Singapore) |
+| **API Key** | `zz454a2savzv` |
+| **지역** | US East (기본) |
 | **FCM Provider** | `almachat` (V1 HTTP API) |
-| **Vercel Backend** | Singapore (`sin1`) |
+| **Vercel Backend** | US (`chat.almaneo.org`) |
 | **토큰 만료** | 24시간 |
+| **Health Endpoint** | v1.2.0, `streamConnected: true` ✅ |
 
 ---
 
@@ -4310,13 +4311,9 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    chat-app/.env: STREAM_API_KEY=zz454a2savzv
    ```
 
-#### 4. **핵심 미해결 문제**
-   - `zz454a2savzv` 키가 Stream 서버에서 "api_key not valid" (error code 2) 반환
-   - 동일 키를 사용자가 직접 확인 ("키와 시크릿은 맞다")
-   - 원인 후보:
-     1. **raw HTTP 테스트 결과 확인 필요** — `streamRawHttpStatus` 값으로 SDK 문제 vs 키 무효 구분
-     2. Stream `almachat` 앱이 플랜 제한 또는 비활성 상태일 가능성
-     3. 키는 맞지만 Stream 서버사이드 API 호출 권한 문제 (무료 플랜 제한)
+#### 4. **핵심 미해결 문제** → ✅ **Session 113에서 해결됨**
+   - 근본 원인: Vercel 환경변수 설정 시 `echo` 명령어의 trailing newline 문제
+   - Session 113에서 `printf`로 재설정하여 해결
 
 #### 5. **커밋 내역**
    - `dc1802d` - fix(chat): Add Singapore baseURL to Stream Chat server SDK
@@ -4327,25 +4324,55 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 113+)
+### ✅ 완료된 작업 (2026-02-19 - Session 113: Stream "api_key not valid" 근본 해결)
+
+#### 1. **근본 원인 확정 및 해결** ✅
+   - **증상**: Stream SDK `getAppSettings()` 호출 시 `"api_key not valid"` (error code 2) 반환
+   - **근본 원인**: Vercel CLI에서 `echo "value" | vercel env add` 사용 시 **trailing newline(`\n`) 포함**
+     - `zz454a2savzv\n` → Stream 서버에서 유효하지 않은 키로 인식
+   - **해결**: `printf "value" | vercel env add` 사용하여 개행 없이 재설정
+   - **교훈**: Vercel 환경변수를 CLI로 설정할 때 반드시 `printf` 사용 (echo 금지)
+
+#### 2. **싱가포르 프로젝트 정리** ✅
+   - 싱가포르 앱 (`hfbghwcu3sp3`) 삭제 (키가 Stream 서버에서 존재하지 않는 상태였음)
+   - US East 앱만 유지 (`zz454a2savzv`) — raw HTTP code 5 (키 유효, 인증 필요) 확인
+   - FCM Push Provider 설정 확인 완료
+
+#### 3. **진단 방법 확립** ✅
+   - **raw HTTP code 5** (`"stream-auth-type missing or invalid"`): 키가 유효함 (인증 헤더만 필요)
+   - **raw HTTP code 2** (`"api_key not found"`): 키가 존재하지 않음
+   - health 엔드포인트 v1.2.0: raw HTTP 테스트에 `STREAM_BASE_URL` 반영
+
+#### 4. **최종 상태**
+   ```
+   Health Endpoint (v1.2.0):
+   streamKeyPrefix: zz454a2s
+   streamConnected: true  ✅
+   streamBaseURL: https://chat.stream-io-api.com (default)
+   ```
+
+#### 5. **커밋 내역**
+   - `45026e9` - fix(chat): Switch to Singapore Stream Chat app (hfbghwcu3sp3)
+   - `a40269a` - fix(chat): Use Singapore regional endpoint for Stream Chat
+   - `4e7c430` - fix(chat): Fix trailing newline in Vercel env vars (v1.1.2)
+   - `4ced820` - fix(chat): Restore US East Stream Chat key (v1.2.0)
+
+---
+
+### 🔲 다음 세션 작업 (Session 114+)
 
 #### 🔴 최우선
-- **Stream "api_key not valid" 근본 해결** ⭐
-  1. health 엔드포인트 확인: `streamRawHttpStatus` 값 분석
-     - `200` → SDK/인증 문제 (키는 유효)
-     - `401/403` → 키 자체 무효 or 플랜 제한
-  2. Stream Dashboard에서 `almachat` 앱 상태 직접 확인
-     - 앱이 활성 상태인지
-     - 서버사이드 API 호출이 무료 플랜에서 허용되는지
-  3. 필요시 Stream 계정에서 새 앱 생성 후 새 키 사용
-
-#### 🟡 중간 우선순위
-- **실기기 QA 테스트** (Stream 연결 해결 후)
+- **실기기 QA 테스트** ⭐
   - 로그인/채팅/채널 생성/알림 전체 테스트
   - 라이트/다크 모드 점검
+  - 밋업 채팅 FAB 테스트
+
+#### 🟡 중간 우선순위
 - **딥링크 핸들러**: `almachat://invite/{code}` (Phase 5+)
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
+- **Governance 실제 제안 로드**: Mock 데이터 제거
 
 #### 🟢 낮은 우선순위
 - **Kindness AI 분석 MVP**: V0.5+
 - **메인넷 배포 준비**: Multi-sig, 감사
+- **토큰 로고 AI 생성**
