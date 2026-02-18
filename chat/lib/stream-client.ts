@@ -25,13 +25,13 @@ export function getStreamClient(): StreamChat {
       throw new Error('STREAM_API_KEY and STREAM_API_SECRET are required');
     }
 
-    // Optional region-specific base URL (e.g. Singapore: chat-proxy-singapore.stream-io-api.com)
-    // Defaults to the global edge endpoint if not set.
+    // Use new StreamChat() to avoid singleton cache issues across deployments.
+    // Optional region-specific base URL via STREAM_BASE_URL env var.
     const options = process.env.STREAM_BASE_URL
       ? { baseURL: process.env.STREAM_BASE_URL }
       : undefined;
 
-    client = StreamChat.getInstance(apiKey, apiSecret, options);
+    client = new StreamChat(apiKey, apiSecret, options);
   }
   return client;
 }

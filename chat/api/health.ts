@@ -14,6 +14,20 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
   let streamConnected = false;
   let streamError = '';
 
+  // First, test via raw HTTP (bypasses SDK) to rule out SDK issues
+  let rawHttpStatus = 0;
+  let rawHttpBody = '';
+  const apiKey = process.env.STREAM_API_KEY || '';
+  if (apiKey) {
+    try {
+      const r = await fetch(`https://chat.stream-io-api.com/app?api_key=${apiKey}`);
+      rawHttpStatus = r.status;
+      rawHttpBody = await r.text();
+    } catch (e) {
+      rawHttpBody = e instanceof Error ? e.message : String(e);
+    }
+  }
+
   if (isStreamConfigured()) {
     try {
       const sc = getStreamClient();
@@ -36,6 +50,8 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
       streamBaseURL: process.env.STREAM_BASE_URL || 'https://chat.stream-io-api.com (default)',
       streamConnected,
       streamError: streamError || undefined,
+      streamRawHttpStatus: rawHttpStatus || undefined,
+      streamRawHttpBody: rawHttpBody ? rawHttpBody.substring(0, 200) : undefined,
       supabase: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
       aiGateway: !!process.env.AI_GATEWAY_API_KEY,
       gemini: !!process.env.GEMINI_API_KEY,
