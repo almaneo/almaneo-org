@@ -39,11 +39,21 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
   String get _hostAddress => _meetup['host_address'] as String? ?? '';
   bool get _isHost => _userId == _hostAddress;
 
+  bool _didLoad = false;
+
   @override
   void initState() {
     super.initState();
     _meetup = Map<String, dynamic>.from(widget.meetup);
-    _loadDetails();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didLoad) {
+      _didLoad = true;
+      _loadDetails();
+    }
   }
 
   @override
@@ -122,16 +132,16 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
   }
 
   Future<void> _endMeetup(String lang) async {
-    // Stop recording if active
-    if (_isRecording) {
-      await _stopRecording(lang);
-    }
-
     final confirm = await _showConfirmDialog(
       tr('home.endMeetup', lang),
       tr('home.endMeetupConfirm', lang),
     );
     if (confirm != true) return;
+
+    // Stop recording if active (after user confirms)
+    if (_isRecording) {
+      await _stopRecording(lang);
+    }
 
     setState(() => _isLoading = true);
     final ok = await MeetupService.endMeetup(_meetupId);
@@ -228,13 +238,25 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
 
   Future<void> _openMeetupChat(String lang) async {
     final channelId = _meetup['channel_id'] as String?;
+
+    if (channelId == null || channelId.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('meetupChat.openFailed', lang)),
+            backgroundColor: AlmaTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+      return;
+    }
+
     final client = StreamChat.of(context).client;
 
-    // Determine the channel ID — from DB or fallback to convention
-    final cid = channelId ?? 'meetup-$_meetupId';
-
     try {
-      final channel = client.channel('messaging', id: cid);
+      final channel = client.channel('messaging', id: channelId);
       await channel.watch();
 
       if (!mounted) return;

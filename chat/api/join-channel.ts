@@ -3,14 +3,14 @@
  *
  * POST /api/join-channel
  * Request: { userId, channelId?, channelType? }
- * Response: { success, channelId, channelName }
+ * Response: { success, channelId }
  *
  * Server-side channel join - adds user as a member to the channel.
  * This bypasses client-side permission restrictions for guest users.
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isStreamConfigured } from '../lib/stream-client.js';
+import { getStreamClient, isStreamConfigured } from '../lib/stream-client.js';
 
 export const config = {
   maxDuration: 10,
@@ -52,30 +52,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // Dynamic import to avoid issues
-    const StreamChat = (await import('stream-chat')).StreamChat;
-    const sc = StreamChat.getInstance(
-      process.env.STREAM_API_KEY!,
-      process.env.STREAM_API_SECRET!,
-    );
+    const sc = getStreamClient();
 
-    // 서버 사이드에서 채널 생성/가져오기 + 유저 추가
-    const channel = sc.channel(channelType, channelId, {
-      name: 'AlmaChat Global',
-      description: 'Chat with kindness, across languages',
-      created_by_id: 'admin',
-    });
+    // Get existing channel without overwriting metadata
+    const channel = sc.channel(channelType, channelId);
 
-    // 채널이 없으면 생성, 있으면 가져오기
+    // Ensure channel exists (no-op if already created)
     await channel.create();
 
-    // 유저를 멤버로 추가
+    // Add user as member
     await channel.addMembers([userId]);
 
     return res.status(200).json({
       success: true,
       channelId,
-      channelName: 'AlmaChat Global',
     });
   } catch (error) {
     console.error('[JoinChannel] Error:', error);

@@ -9,7 +9,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isStreamConfigured } from '../lib/stream-client.js';
+import { getStreamClient, isStreamConfigured } from '../lib/stream-client.js';
 
 export const config = {
   maxDuration: 10,
@@ -51,11 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'userId and channelId are required' });
     }
 
-    const StreamChat = (await import('stream-chat')).StreamChat;
-    const sc = StreamChat.getInstance(
-      process.env.STREAM_API_KEY!,
-      process.env.STREAM_API_SECRET!,
-    );
+    const sc = getStreamClient();
 
     const channel = sc.channel(channelType, channelId);
     await channel.removeMembers([userId]);

@@ -11,7 +11,7 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { isStreamConfigured } from '../lib/stream-client.js';
+import { getStreamClient, isStreamConfigured } from '../lib/stream-client.js';
 
 export const config = {
   maxDuration: 10,
@@ -85,11 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Add user to channel via Stream Chat
-    const StreamChat = (await import('stream-chat')).StreamChat;
-    const sc = StreamChat.getInstance(
-      process.env.STREAM_API_KEY!,
-      process.env.STREAM_API_SECRET!,
-    );
+    const sc = getStreamClient();
 
     const channel = sc.channel(invite.channel_type, invite.channel_id);
 

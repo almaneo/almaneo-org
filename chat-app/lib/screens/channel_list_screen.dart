@@ -527,6 +527,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                       if (code.length < 4) return;
 
                       final user = StreamChat.of(context).currentUser;
+                      final client = StreamChat.of(context).client;
                       if (user == null) return;
 
                       setDialogState(() => isLoading = true);
@@ -569,7 +570,6 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
 
                         final channelId = data['channelId'] as String;
                         final channelType = data['channelType'] as String? ?? 'messaging';
-                        final client = StreamChat.of(context).client;
                         final channel = client.channel(channelType, id: channelId);
                         await channel.watch();
 

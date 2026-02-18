@@ -69,6 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
     );
 
+    bool dialogDismissed = false;
     try {
       final response = await http.post(
         Uri.parse('${Env.chatApiUrl}/api/create-invite'),
@@ -82,6 +83,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
       if (!mounted) return;
       Navigator.pop(context); // dismiss loading
+      dialogDismissed = true;
 
       if (response.statusCode != 200) {
         throw Exception('Server error: ${response.statusCode}');
@@ -100,7 +102,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       _showInviteBottomSheet(inviteCode, inviteUrl, shareText, lang);
     } catch (e) {
       if (mounted) {
-        Navigator.pop(context); // dismiss loading
+        if (!dialogDismissed) Navigator.pop(context); // dismiss loading only if not yet dismissed
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(tr('invite.createFailed', lang)),

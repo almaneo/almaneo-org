@@ -13,11 +13,21 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class RecordingService {
   static SupabaseClient get _db => Supabase.instance.client;
 
-  static final AudioRecorder _recorder = AudioRecorder();
+  static AudioRecorder? _recorder;
+  static AudioRecorder get _rec {
+    _recorder ??= AudioRecorder();
+    return _recorder!;
+  }
+
   static Timer? _durationTimer;
   static DateTime? _recordingStartTime;
   static String? _currentMeetupId;
   static String? _currentFilePath;
+  static bool _isStopping = false;
+
+  /// Callback invoked when auto-stop fires (max duration reached).
+  /// Set this from the UI to update state.
+  static VoidCallback? onAutoStop;
 
   /// Max recording duration: 2 hours
   static const int maxDurationSeconds = 7200;
@@ -28,7 +38,7 @@ class RecordingService {
 
   /// Check if microphone permission is granted
   static Future<bool> hasPermission() async {
-    return _recorder.hasPermission();
+    return _rec.hasPermission();
   }
 
   // ---------------------------------------------------------------------------
@@ -52,7 +62,7 @@ class RecordingService {
       final filePath = '${dir.path}/meetup_recording_${meetupId}_$timestamp.m4a';
 
       // Configure & start
-      await _recorder.start(
+      await _rec.start(
         const RecordConfig(
           encoder: AudioEncoder.aacLc,
           bitRate: 128000,
@@ -65,6 +75,7 @@ class RecordingService {
       _currentMeetupId = meetupId;
       _currentFilePath = filePath;
       _recordingStartTime = DateTime.now();
+      _isStopping = false;
 
       // Auto-stop after max duration
       _durationTimer?.cancel();
@@ -73,6 +84,7 @@ class RecordingService {
         () async {
           debugPrint('[Recording] Max duration reached, auto-stopping');
           await stopRecording();
+          onAutoStop?.call();
         },
       );
 
@@ -87,12 +99,16 @@ class RecordingService {
   /// Stop recording and return local file path + duration
   ///
   /// Returns `{path, durationSeconds}` or null on failure.
+  /// Guarded against concurrent calls.
   static Future<Map<String, dynamic>?> stopRecording() async {
+    if (_isStopping) return null;
+    _isStopping = true;
+
     try {
       _durationTimer?.cancel();
       _durationTimer = null;
 
-      final path = await _recorder.stop();
+      final path = await _rec.stop();
       if (path == null) {
         debugPrint('[Recording] stop returned null path');
         return null;
@@ -117,12 +133,14 @@ class RecordingService {
     } catch (e) {
       debugPrint('[Recording] stopRecording error: $e');
       return null;
+    } finally {
+      _isStopping = false;
     }
   }
 
   /// Whether the recorder is currently recording
   static Future<bool> isRecording() async {
-    return _recorder.isRecording();
+    return _rec.isRecording();
   }
 
   /// Get elapsed seconds since recording started
@@ -144,6 +162,7 @@ class RecordingService {
     required String localFilePath,
     required int durationSeconds,
   }) async {
+    String? recordId;
     try {
       final file = File(localFilePath);
       if (!file.existsSync()) {
@@ -166,7 +185,7 @@ class RecordingService {
         'status': 'uploading',
       }).select('id').single();
 
-      final recordId = insertResult['id'] as String;
+      recordId = insertResult['id'] as String;
 
       // Upload to Storage
       await _db.storage.from('meetup-recordings').upload(
@@ -199,6 +218,14 @@ class RecordingService {
       return publicUrl;
     } catch (e) {
       debugPrint('[Recording] uploadRecording error: $e');
+      // Mark orphaned DB record as failed
+      if (recordId != null) {
+        try {
+          await _db.from('meetup_recordings').update({
+            'status': 'failed',
+          }).eq('id', recordId);
+        } catch (_) {}
+      }
       return null;
     }
   }
@@ -226,16 +253,18 @@ class RecordingService {
   // Cleanup
   // ---------------------------------------------------------------------------
 
-  /// Dispose resources
+  /// Dispose resources — safe to call; re-creates recorder on next use.
   static Future<void> dispose() async {
     _durationTimer?.cancel();
     _durationTimer = null;
-    if (await _recorder.isRecording()) {
-      await _recorder.stop();
+    if (_recorder != null && await _recorder!.isRecording()) {
+      await _recorder!.stop();
     }
-    _recorder.dispose();
+    _recorder?.dispose();
+    _recorder = null;
     _recordingStartTime = null;
     _currentMeetupId = null;
     _currentFilePath = null;
+    onAutoStop = null;
   }
 }
