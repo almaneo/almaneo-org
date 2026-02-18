@@ -574,6 +574,28 @@ class _MainShellState extends ConsumerState<_MainShell> {
     return Icon(isActive ? Icons.person : Icons.person_outline);
   }
 
+  Widget _buildChatIcon({required bool isActive}) {
+    final icon = Icon(
+      isActive ? Icons.chat_bubble : Icons.chat_bubble_outline,
+    );
+    return StreamBuilder<int>(
+      stream: StreamChat.of(context).client.state.totalUnreadCountStream,
+      initialData: StreamChat.of(context).client.state.totalUnreadCount,
+      builder: (context, snapshot) {
+        final count = snapshot.data ?? 0;
+        if (count == 0) return icon;
+        return Badge(
+          label: Text(
+            count > 99 ? '99+' : '$count',
+            style: const TextStyle(fontSize: 10, color: Colors.white),
+          ),
+          backgroundColor: AlmaTheme.error,
+          child: icon,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
@@ -647,8 +669,8 @@ class _MainShellState extends ConsumerState<_MainShell> {
               label: tr('nav.home', lang),
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.chat_bubble_outline),
-              activeIcon: const Icon(Icons.chat_bubble),
+              icon: _buildChatIcon(isActive: false),
+              activeIcon: _buildChatIcon(isActive: true),
               label: tr('nav.chat', lang),
             ),
             BottomNavigationBarItem(

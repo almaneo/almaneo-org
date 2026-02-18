@@ -116,6 +116,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
   }
 
   void _navigateToChannel(Channel channel) {
+    channel.markRead();
     Navigator.push(
       context,
       MaterialPageRoute(

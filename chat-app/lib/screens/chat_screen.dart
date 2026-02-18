@@ -329,6 +329,35 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ConnectionBanner(lang: lang),
           Expanded(
             child: StreamMessageListView(
+              scrollToBottomBuilder: (unreadCount, scrollToBottom) {
+                final alma = context.alma;
+                return GestureDetector(
+                  onTap: () => scrollToBottom(unreadCount),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: alma.cardBg,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Badge(
+                      isLabelVisible: unreadCount > 0,
+                      label: Text(
+                        unreadCount > 99 ? '99+' : '$unreadCount',
+                        style: const TextStyle(fontSize: 9, color: Colors.white),
+                      ),
+                      backgroundColor: AlmaTheme.error,
+                      child: Icon(Icons.keyboard_arrow_down, color: alma.textPrimary, size: 22),
+                    ),
+                  ),
+                );
+              },
               messageBuilder: (context, details, messages, defaultWidget) {
                 return TranslatedMessage(
                   message: details.message,
