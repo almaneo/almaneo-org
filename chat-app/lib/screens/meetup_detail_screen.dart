@@ -576,28 +576,25 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
   }
 
   Future<void> _openMeetupChat(String lang) async {
-    final channelId = _meetup['channel_id'] as String?;
-
+    // Use stored channel_id, or fallback to predictable pattern
+    var channelId = _meetup['channel_id'] as String?;
     if (channelId == null || channelId.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(tr('meetupChat.openFailed', lang)),
-            backgroundColor: AlmaTheme.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-        );
-      }
-      return;
+      channelId = 'meetup-$_meetupId';
+      debugPrint('[MeetupChat] channel_id was null, using fallback: $channelId');
     }
 
     final client = StreamChat.of(context).client;
     final userId = _userId;
 
+    if (userId.isEmpty) {
+      debugPrint('[MeetupChat] userId is empty, cannot open chat');
+      return;
+    }
+
     try {
       // Ensure the current user is a member of the channel (server-side, idempotent).
-      await MeetupService.ensureChannelMember(channelId, userId);
+      final memberOk = await MeetupService.ensureChannelMember(channelId, userId);
+      debugPrint('[MeetupChat] ensureChannelMember($channelId, $userId) => $memberOk');
 
       final channel = client.channel('messaging', id: channelId);
       await channel.watch();
@@ -613,11 +610,11 @@ class _MeetupDetailScreenState extends ConsumerState<MeetupDetailScreen> {
         ),
       );
     } catch (e) {
-      debugPrint('Open meetup chat error: $e');
+      debugPrint('[MeetupChat] Error opening chat: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(tr('meetupChat.openFailed', lang)),
+            content: Text('${tr('meetupChat.openFailed', lang)}: $e'),
             backgroundColor: AlmaTheme.error,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
