@@ -392,18 +392,15 @@ class AlmaTheme {
     return StreamChatThemeData(
       brightness: Brightness.light,
       messageInputTheme: StreamMessageInputThemeData(
-        inputBackgroundColor: colors.inputBg,
+        inputBackgroundColor: colors.surface,
         inputTextStyle: GoogleFonts.inter(
           color: colors.textPrimary,
           fontSize: 15,
         ),
-        idleBorderGradient: LinearGradient(
-          colors: [colors.inputBorder, colors.inputBorder],
-        ),
         activeBorderGradient: const LinearGradient(
           colors: [electricBlue, electricBlue],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
       ),
       channelListHeaderTheme: StreamChannelListHeaderThemeData(
         color: colors.navBg,
