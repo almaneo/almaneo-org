@@ -33,7 +33,7 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
     config: {
       streamChat: !!(process.env.STREAM_API_KEY && process.env.STREAM_API_SECRET),
       streamKeyPrefix: process.env.STREAM_API_KEY?.substring(0, 8) || 'not-set',
-      streamBaseURL: process.env.STREAM_BASE_URL || 'https://chat-proxy-singapore.stream-io-api.com',
+      streamBaseURL: process.env.STREAM_BASE_URL || 'https://chat.stream-io-api.com (default)',
       streamConnected,
       streamError: streamError || undefined,
       supabase: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
