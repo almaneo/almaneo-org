@@ -42,7 +42,7 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
   const status = {
     service: 'almachat-api',
-    version: '1.1.1',
+    version: '1.1.2',
     status: 'ok',
     timestamp: new Date().toISOString(),
     config: {
