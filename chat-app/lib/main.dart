@@ -99,7 +99,8 @@ class AlmaChatApp extends ConsumerStatefulWidget {
   ConsumerState<AlmaChatApp> createState() => _AlmaChatAppState();
 }
 
-class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
+class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
+    with WidgetsBindingObserver {
   final _authService = AuthService();
   final _notificationService = NotificationService.instance;
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -107,11 +108,27 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
   bool _isCheckingSession = true;
   bool _isReconnecting = false; // 중복 재연결 방지 플래그
   StreamSubscription? _connectionStatusSub; // 단일 구독 유지
+  ConnectionStatus _lastKnownStatus = ConnectionStatus.disconnected; // 마지막 연결 상태 캐시
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this); // 앱 생명주기 감시 등록
     _checkExistingSession();
+  }
+
+  /// 앱 생명주기 변화 감지
+  /// resumed: 포그라운드 복귀 시 WebSocket 끊겼으면 재연결
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _isConnected && !_isReconnecting) {
+      if (_lastKnownStatus == ConnectionStatus.disconnected) {
+        debugPrint('[Lifecycle] App resumed — WebSocket disconnected, reconnecting...');
+        _attemptFullReconnect();
+      } else {
+        debugPrint('[Lifecycle] App resumed — WebSocket status: $_lastKnownStatus (OK)');
+      }
+    }
   }
 
   /// 세션 복원 순서:
@@ -294,11 +311,13 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
   /// SDK가 재연결을 포기(disconnected)하면 전체 재로그인 시도
   /// _connectionStatusSub로 단일 구독 유지, _isReconnecting으로 중복 방지
+  /// _lastKnownStatus를 캐시하여 생명주기 복귀 시 즉각 판단 가능
   void _listenConnectionStatus() {
     _connectionStatusSub?.cancel();
     _connectionStatusSub = widget.client.wsConnectionStatusStream.listen((status) {
+      _lastKnownStatus = status; // 상태 캐시 업데이트
       if (status == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
-        debugPrint('Stream disconnected — attempting full reconnection');
+        debugPrint('[Stream] WebSocket disconnected — attempting full reconnection');
         _attemptFullReconnect();
       }
     });
@@ -400,6 +419,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // 생명주기 감시 해제
     _connectionStatusSub?.cancel();
     widget.client.dispose();
     super.dispose();

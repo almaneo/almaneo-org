@@ -1,5 +1,6 @@
 /**
  * Stream Chat Token Generation API
+ * Migrated to Asia Pacific (Singapore) cluster — 2026-02-18
  *
  * POST /api/stream-token
  * Request: { userId, name?, image?, preferredLanguage?, walletAddress? }

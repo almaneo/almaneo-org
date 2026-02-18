@@ -130,25 +130,45 @@ class AuthService {
   }
 
   /// 백엔드 API에서 Stream Chat 토큰 발급
+  /// 네트워크 불안정 대응: 지수 백오프 재시도 (최대 3회)
+  /// 1차 실패 → 1s → 2차 실패 → 2s → 3차 실패 → 예외 throw
   Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
     final url = '${Env.chatApiUrl}/api/stream-token';
+    const maxRetries = 3;
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'userId': userId,
-        'name': name,
-        'preferredLanguage': preferredLanguage ?? 'en',
-      }),
-    );
+    for (int attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'userId': userId,
+            'name': name,
+            'preferredLanguage': preferredLanguage ?? 'en',
+          }),
+        ).timeout(const Duration(seconds: 15));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['token'] as String;
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          return data['token'] as String;
+        }
+
+        // 5xx 서버 에러는 재시도, 4xx 클라이언트 에러는 즉시 실패
+        if (response.statusCode < 500) {
+          throw Exception('Stream token error: ${response.statusCode}');
+        }
+      } catch (e) {
+        final isLastAttempt = attempt == maxRetries - 1;
+        if (isLastAttempt) rethrow;
+
+        // 지수 백오프: 1초, 2초 대기
+        final delay = Duration(seconds: 1 << attempt); // 1, 2
+        debugPrint('[AuthService] Token fetch failed (attempt ${attempt + 1}), retrying in ${delay.inSeconds}s: $e');
+        await Future.delayed(delay);
+      }
     }
 
-    throw Exception('Failed to get Stream token: ${response.statusCode}');
+    throw Exception('Failed to get Stream token after $maxRetries attempts');
   }
 
   /// Stream Chat user ID로 사용할 수 있도록 정제
