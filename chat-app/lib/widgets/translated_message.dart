@@ -193,7 +193,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                                 key: ValueKey(
                                     '$_showOriginal-${widget.message.id}'),
                                 style: TextStyle(
-                                  color: alma.textPrimary,
+                                  color: widget.isMyMessage
+                                      ? Colors.white
+                                      : alma.textPrimary,
                                   fontSize: 15,
                                 ),
                               ),

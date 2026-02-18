@@ -283,6 +283,8 @@ class AlmaTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: colors.scaffold,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: true,
         foregroundColor: colors.textPrimary,
         iconTheme: IconThemeData(color: colors.textPrimary),
@@ -389,6 +391,20 @@ class AlmaTheme {
     // Light theme
     return StreamChatThemeData(
       brightness: Brightness.light,
+      messageInputTheme: StreamMessageInputThemeData(
+        inputBackgroundColor: colors.inputBg,
+        inputTextStyle: GoogleFonts.inter(
+          color: colors.textPrimary,
+          fontSize: 15,
+        ),
+        idleBorderGradient: LinearGradient(
+          colors: [colors.inputBorder, colors.inputBorder],
+        ),
+        activeBorderGradient: const LinearGradient(
+          colors: [electricBlue, electricBlue],
+        ),
+        borderRadius: BorderRadius.circular(24),
+      ),
       channelListHeaderTheme: StreamChannelListHeaderThemeData(
         color: colors.navBg,
         titleStyle: GoogleFonts.inter(

@@ -115,7 +115,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'v0.1.0',
+                  'v0.4.0',
                   style: TextStyle(
                     color: alma.textTertiary,
                     fontSize: 11,
@@ -125,20 +125,57 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          _buildSettingsTile(
-            icon: Icons.favorite_outline,
-            iconColor: AlmaTheme.terracottaOrange,
-            title: tr('profile.mission', lang),
-            alma: alma,
-            trailing: Flexible(
-              child: Text(
-                tr('profile.missionText', lang),
-                style: TextStyle(
-                  color: alma.textTertiary,
-                  fontSize: 12,
+          Container(
+            decoration: BoxDecoration(
+              color: alma.cardBg,
+              borderRadius: BorderRadius.circular(12),
+              border: alma.cardBorder != Colors.transparent
+                  ? Border.all(color: alma.cardBorder)
+                  : null,
+              boxShadow: alma.cardShadow,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.favorite_outline,
+                    color: AlmaTheme.terracottaOrange,
+                    size: 20,
+                  ),
                 ),
-                textAlign: TextAlign.right,
-              ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tr('profile.mission', lang),
+                        style: TextStyle(
+                          color: alma.textPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        tr('profile.missionText', lang),
+                        style: TextStyle(
+                          color: alma.textTertiary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 4),
