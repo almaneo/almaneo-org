@@ -16,6 +16,7 @@ class AmbassadorBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final color = AlmaTheme.tierColors[tier] ?? Colors.white38;
     final icon = _tierIcon(tier);
 
@@ -58,12 +59,12 @@ class AmbassadorBadge extends StatelessWidget {
                         color: color.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
+                      child: Text(
                         'SBT',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white70,
+                          color: alma.textSecondary,
                         ),
                       ),
                     ),
@@ -74,7 +75,7 @@ class AmbassadorBadge extends StatelessWidget {
                   tierDesc,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: alma.textSecondary,
                   ),
                 ),
               ],

@@ -17,6 +17,7 @@ class KindnessScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final tierColor = AlmaTheme.tierColors[tier] ?? AlmaTheme.electricBlue;
     // 1000점 만점 기준 비율 (최대 100%)
     final progress = (score / 1000).clamp(0.0, 1.0);
@@ -34,6 +35,7 @@ class KindnessScoreCard extends StatelessWidget {
               painter: _ScoreGaugePainter(
                 progress: progress,
                 color: tierColor,
+                bgColor: alma.divider,
               ),
               child: Center(
                 child: Text(
@@ -55,10 +57,10 @@ class KindnessScoreCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: alma.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -66,7 +68,7 @@ class KindnessScoreCard extends StatelessWidget {
                   '$score / 1,000',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: alma.textSecondary,
                   ),
                 ),
               ],
@@ -81,8 +83,9 @@ class KindnessScoreCard extends StatelessWidget {
 class _ScoreGaugePainter extends CustomPainter {
   final double progress;
   final Color color;
+  final Color bgColor;
 
-  _ScoreGaugePainter({required this.progress, required this.color});
+  _ScoreGaugePainter({required this.progress, required this.color, required this.bgColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -91,7 +94,7 @@ class _ScoreGaugePainter extends CustomPainter {
 
     // 배경 원
     final bgPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.1)
+      ..color = bgColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
     canvas.drawCircle(center, radius, bgPaint);
@@ -113,5 +116,5 @@ class _ScoreGaugePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ScoreGaugePainter old) =>
-      old.progress != progress || old.color != color;
+      old.progress != progress || old.color != color || old.bgColor != bgColor;
 }

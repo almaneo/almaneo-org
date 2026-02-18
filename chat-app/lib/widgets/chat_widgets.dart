@@ -73,6 +73,7 @@ class TypingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final channel = StreamChannel.of(context).channel;
     final currentUser = StreamChat.of(context).currentUser;
 
@@ -109,7 +110,7 @@ class TypingIndicator extends StatelessWidget {
                   text,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: alma.textSecondary,
                     fontStyle: FontStyle.italic,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -188,6 +189,7 @@ class MemberCountBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return StreamBuilder<ChannelState>(
       stream: channel.state?.channelStateStream,
       builder: (context, snapshot) {
@@ -197,7 +199,7 @@ class MemberCountBadge extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: AlmaTheme.slateGray,
+            color: alma.cardBg,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
@@ -210,7 +212,7 @@ class MemberCountBadge extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: watcherCount > 0
                       ? AlmaTheme.success
-                      : Colors.white.withValues(alpha: 0.3),
+                      : alma.textTertiary,
                 ),
               ),
               const SizedBox(width: 4),
@@ -218,7 +220,7 @@ class MemberCountBadge extends StatelessWidget {
                 '$memberCount',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: alma.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

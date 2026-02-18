@@ -75,6 +75,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final langState = ref.watch(languageProvider);
     final userLang = langState.languageCode;
 
@@ -123,7 +124,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             if (!widget.isMyMessage)
               Padding(
                 padding: const EdgeInsets.only(right: 6, bottom: 18),
-                child: _buildAvatar(senderImage, senderName),
+                child: _buildAvatar(senderImage, senderName, alma),
               ),
 
             // 메시지 컬럼
@@ -170,7 +171,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                 children: [
                   // 첨부파일 렌더링 (이미지/비디오/파일)
                   if (hasAttachments)
-                    _buildAttachments(attachments),
+                    _buildAttachments(attachments, alma),
 
                   // 텍스트 + 번역 상태
                   if (hasText || isTranslating || isFailed)
@@ -191,14 +192,14 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                                 displayText,
                                 key: ValueKey(
                                     '$_showOriginal-${widget.message.id}'),
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: alma.textPrimary,
                                   fontSize: 15,
                                 ),
                               ),
                             ),
                           if (isTranslating)
-                            _buildTranslatingIndicator(userLang),
+                            _buildTranslatingIndicator(userLang, alma),
                           if (isFailed && !widget.isMyMessage)
                             _buildFailedIndicator(userLang),
                         ],
@@ -219,6 +220,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               userLang: userLang,
               isTranslating: isTranslating,
               isFailed: isFailed,
+              alma: alma,
             ),
                 ],
               ),
@@ -230,7 +232,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 사용자 아바타 (32dp 원형)
-  Widget _buildAvatar(String? imageUrl, String name) {
+  Widget _buildAvatar(String? imageUrl, String name, AlmaColors alma) {
     if (imageUrl != null && imageUrl.isNotEmpty) {
       return CircleAvatar(
         radius: 16,
@@ -246,8 +248,8 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
       backgroundColor: AlmaTheme.terracottaOrange.withValues(alpha: 0.3),
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: alma.textPrimary,
           fontSize: 13,
           fontWeight: FontWeight.w600,
         ),
@@ -256,7 +258,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 첨부파일 렌더링 (이미지, 비디오, 파일 등)
-  Widget _buildAttachments(List<Attachment> attachments) {
+  Widget _buildAttachments(List<Attachment> attachments, AlmaColors alma) {
     final imageAttachments = <Attachment>[];
     final fileAttachments = <Attachment>[];
 
@@ -273,7 +275,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
       children: [
         // 이미지 그리드
         if (imageAttachments.isNotEmpty)
-          _buildImageGrid(imageAttachments),
+          _buildImageGrid(imageAttachments, alma),
 
         // 파일/비디오 목록
         if (fileAttachments.isNotEmpty)
@@ -282,9 +284,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             child: Column(
               children: fileAttachments.map((a) {
                 if (a.type == 'video') {
-                  return _buildVideoAttachment(a);
+                  return _buildVideoAttachment(a, alma);
                 }
-                return _buildFileAttachment(a);
+                return _buildFileAttachment(a, alma);
               }).toList(),
             ),
           ),
@@ -293,9 +295,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 이미지 그리드 (1장: 전체, 2장: 2열, 3+: 2열 그리드)
-  Widget _buildImageGrid(List<Attachment> images) {
+  Widget _buildImageGrid(List<Attachment> images, AlmaColors alma) {
     if (images.length == 1) {
-      return _buildSingleImage(images[0]);
+      return _buildSingleImage(images[0], alma);
     }
 
     return Padding(
@@ -313,15 +315,15 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             child: Stack(
               fit: StackFit.expand,
               children: [
-                _buildImageThumbnail(attachment),
+                _buildImageThumbnail(attachment, alma),
                 if (isLast)
                   Container(
                     color: Colors.black54,
                     child: Center(
                       child: Text(
                         '+${images.length - 3}',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: alma.textPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
@@ -337,7 +339,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 단일 이미지 (전체 너비)
-  Widget _buildSingleImage(Attachment attachment) {
+  Widget _buildSingleImage(Attachment attachment, AlmaColors alma) {
     final url = attachment.imageUrl ??
         attachment.thumbUrl ??
         attachment.assetUrl ??
@@ -356,7 +358,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             width: double.infinity,
             placeholder: (_, _) => Container(
               height: 180,
-              color: Colors.white.withValues(alpha: 0.05),
+              color: alma.inputBg,
               child: const Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
@@ -366,9 +368,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             ),
             errorWidget: (_, _, _) => Container(
               height: 100,
-              color: Colors.white.withValues(alpha: 0.05),
-              child: const Center(
-                child: Icon(Icons.broken_image, color: Colors.white24, size: 32),
+              color: alma.inputBg,
+              child: Center(
+                child: Icon(Icons.broken_image, color: alma.textTertiary, size: 32),
               ),
             ),
           ),
@@ -378,7 +380,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 이미지 썸네일 (그리드용)
-  Widget _buildImageThumbnail(Attachment attachment) {
+  Widget _buildImageThumbnail(Attachment attachment, AlmaColors alma) {
     final url = attachment.thumbUrl ??
         attachment.imageUrl ??
         attachment.assetUrl ??
@@ -399,7 +401,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
           imageUrl: url,
           fit: BoxFit.cover,
           placeholder: (_, _) => Container(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: alma.inputBg,
             child: const Center(
               child: CircularProgressIndicator(
                 strokeWidth: 2,
@@ -408,9 +410,9 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             ),
           ),
           errorWidget: (_, _, _) => Container(
-            color: Colors.white.withValues(alpha: 0.05),
-            child: const Center(
-              child: Icon(Icons.broken_image, color: Colors.white24, size: 24),
+            color: alma.inputBg,
+            child: Center(
+              child: Icon(Icons.broken_image, color: alma.textTertiary, size: 24),
             ),
           ),
         ),
@@ -419,7 +421,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 비디오 첨부파일 (썸네일 + 재생 아이콘)
-  Widget _buildVideoAttachment(Attachment attachment) {
+  Widget _buildVideoAttachment(Attachment attachment, AlmaColors alma) {
     final thumbUrl = attachment.thumbUrl ?? '';
 
     return Padding(
@@ -437,31 +439,31 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                 height: 160,
                 placeholder: (_, _) => Container(
                   height: 160,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: alma.inputBg,
                 ),
                 errorWidget: (_, _, _) => Container(
                   height: 160,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: alma.inputBg,
                 ),
               )
             else
               Container(
                 height: 120,
                 width: double.infinity,
-                color: Colors.white.withValues(alpha: 0.05),
+                color: alma.inputBg,
               ),
-            // 재생 버튼 오버레이
+            // 재생 버튼 오버레이 (의도적 dark overlay 보존)
             Container(
               width: 48,
               height: 48,
               decoration: BoxDecoration(
                 color: Colors.black54,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white38, width: 1.5),
+                border: Border.all(color: alma.textTertiary, width: 1.5),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.play_arrow_rounded,
-                color: Colors.white,
+                color: alma.textPrimary,
                 size: 28,
               ),
             ),
@@ -479,8 +481,8 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                   ),
                   child: Text(
                     _formatFileSize(attachment.fileSize!),
-                    style: const TextStyle(
-                      color: Colors.white70,
+                    style: TextStyle(
+                      color: alma.textSecondary,
                       fontSize: 11,
                     ),
                   ),
@@ -493,17 +495,18 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 파일 첨부파일 (아이콘 + 파일명 + 크기)
-  Widget _buildFileAttachment(Attachment attachment) {
+  Widget _buildFileAttachment(Attachment attachment, AlmaColors alma) {
     final fileName = attachment.title ?? 'File';
     final fileSize = attachment.fileSize;
     final ext = fileName.split('.').last.toLowerCase();
+    final fileColor = _getFileColor(ext, alma);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: alma.chipBg,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -512,12 +515,12 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: _getFileColor(ext).withValues(alpha: 0.15),
+                color: fileColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 _getFileIcon(ext),
-                color: _getFileColor(ext),
+                color: fileColor,
                 size: 20,
               ),
             ),
@@ -528,8 +531,8 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                 children: [
                   Text(
                     fileName,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: alma.textPrimary,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
@@ -540,7 +543,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                     Text(
                       _formatFileSize(fileSize),
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: alma.textSecondary,
                         fontSize: 11,
                       ),
                     ),
@@ -549,7 +552,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             ),
             Icon(
               Icons.download_rounded,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: alma.textTertiary,
               size: 20,
             ),
           ],
@@ -571,7 +574,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 번역 중 인디케이터 (다국어 + 펄스 애니메이션)
-  Widget _buildTranslatingIndicator(String userLang) {
+  Widget _buildTranslatingIndicator(String userLang, AlmaColors alma) {
     final text = _translatingText[userLang] ?? _translatingText['en']!;
     return Padding(
       padding: const EdgeInsets.only(top: 6),
@@ -584,7 +587,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             text,
             style: TextStyle(
               fontSize: 11,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: alma.textSecondary,
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -626,6 +629,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     required String userLang,
     required bool isTranslating,
     required bool isFailed,
+    required AlmaColors alma,
   }) {
     return Padding(
       padding: const EdgeInsets.only(top: 2, left: 4, right: 4),
@@ -652,7 +656,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                       size: 12,
                       color: _showOriginal
                           ? AlmaTheme.terracottaOrange
-                          : Colors.white.withValues(alpha: 0.3),
+                          : alma.textTertiary,
                     ),
                     const SizedBox(width: 2),
                     Text(
@@ -663,7 +667,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                         fontSize: 11,
                         color: _showOriginal
                             ? AlmaTheme.terracottaOrange
-                            : Colors.white.withValues(alpha: 0.3),
+                            : alma.textTertiary,
                       ),
                     ),
                   ],
@@ -681,7 +685,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                     ? AlmaTheme.error.withValues(alpha: 0.1)
                     : isTranslating
                         ? AlmaTheme.warning.withValues(alpha: 0.1)
-                        : Colors.white.withValues(alpha: 0.08),
+                        : alma.chipBg,
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
@@ -693,7 +697,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
                       ? AlmaTheme.error.withValues(alpha: 0.5)
                       : isTranslating
                           ? AlmaTheme.warning.withValues(alpha: 0.5)
-                          : Colors.white.withValues(alpha: 0.3),
+                          : alma.textTertiary,
                 ),
               ),
             ),
@@ -704,14 +708,14 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
             _formatTime(widget.message.createdAt),
             style: TextStyle(
               fontSize: 11,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: alma.textTertiary,
             ),
           ),
 
           // 읽음 표시 (내 메시지만)
           if (widget.isMyMessage) ...[
             const SizedBox(width: 4),
-            _buildReadReceipt(),
+            _buildReadReceipt(alma),
           ],
         ],
       ),
@@ -719,7 +723,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
   }
 
   /// 읽음 표시 아이콘 (✓ 전송됨, ✓✓ 읽음)
-  Widget _buildReadReceipt() {
+  Widget _buildReadReceipt(AlmaColors alma) {
     final isRead = _isMessageReadByOthers();
 
     if (isRead) {
@@ -735,7 +739,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     return Icon(
       Icons.done,
       size: 14,
-      color: Colors.white.withValues(alpha: 0.4),
+      color: alma.textSecondary,
     );
   }
 
@@ -803,7 +807,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     }
   }
 
-  Color _getFileColor(String ext) {
+  Color _getFileColor(String ext, [AlmaColors? alma]) {
     switch (ext) {
       case 'pdf':
         return AlmaTheme.error;
@@ -826,7 +830,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
       case 'ogg':
         return AlmaTheme.cyan;
       default:
-        return Colors.white54;
+        return alma?.textSecondary ?? Colors.white54;
     }
   }
 }
@@ -858,6 +862,7 @@ class _PulsingDotsState extends State<_PulsingDots>
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return AnimatedBuilder(
       animation: _controller,
       builder: (_, _) {
@@ -873,7 +878,7 @@ class _PulsingDotsState extends State<_PulsingDots>
               margin: const EdgeInsets.symmetric(horizontal: 1),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: opacity),
+                color: alma.textSecondary.withValues(alpha: opacity),
               ),
             );
           }),

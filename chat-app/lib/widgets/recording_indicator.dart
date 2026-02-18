@@ -56,6 +56,7 @@ class _RecordingIndicatorState extends State<RecordingIndicator>
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -103,7 +104,7 @@ class _RecordingIndicatorState extends State<RecordingIndicator>
           Text(
             _formatTime(widget.elapsedSeconds),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: alma.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontFamily: 'monospace',
@@ -121,7 +122,7 @@ class _RecordingIndicatorState extends State<RecordingIndicator>
                   shape: BoxShape.circle,
                   color: AlmaTheme.error.withValues(alpha: 0.3),
                 ),
-                child: const Icon(Icons.stop, size: 14, color: Colors.white),
+                child: Icon(Icons.stop, size: 14, color: alma.textPrimary),
               ),
             ),
           ],

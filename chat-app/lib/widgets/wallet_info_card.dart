@@ -25,6 +25,7 @@ class WalletInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alma = context.alma;
     final truncatedAddress = walletAddress.length > 12
         ? '${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}'
         : walletAddress;
@@ -45,7 +46,7 @@ class WalletInfoCard extends StatelessWidget {
                 addressLabel,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: alma.textSecondary,
                 ),
               ),
               const Spacer(),
@@ -76,7 +77,7 @@ class WalletInfoCard extends StatelessWidget {
                 SnackBar(
                   content: Text(copiedMessage),
                   duration: const Duration(seconds: 2),
-                  backgroundColor: AlmaTheme.slateGray,
+                  backgroundColor: alma.cardBg,
                 ),
               );
             },
@@ -84,10 +85,10 @@ class WalletInfoCard extends StatelessWidget {
               children: [
                 Text(
                   truncatedAddress,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'monospace',
-                    color: Colors.white,
+                    color: alma.textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -95,12 +96,12 @@ class WalletInfoCard extends StatelessWidget {
                 Icon(
                   Icons.copy,
                   size: 14,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: alma.textTertiary,
                 ),
               ],
             ),
           ),
-          const Divider(color: Colors.white10, height: 24),
+          Divider(color: alma.divider, height: 24),
           // ALMAN 잔액
           Row(
             children: [
@@ -108,7 +109,7 @@ class WalletInfoCard extends StatelessWidget {
                 balanceLabel,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: alma.textSecondary,
                 ),
               ),
               const Spacer(),
@@ -121,7 +122,7 @@ class WalletInfoCard extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: tokenBalance > 0
                       ? AlmaTheme.terracottaOrange
-                      : Colors.white38,
+                      : alma.textTertiary,
                 ),
               ),
             ],
