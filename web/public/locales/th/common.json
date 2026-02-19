@@ -258,5 +258,16 @@
       "detailed": "ย่อมาจาก Decentralized Physical Infrastructure Network",
       "example": "เชื่อมต่อคอมพิวเตอร์ส่วนบุคคลเพื่อแบ่งปันพลังการคำนวณ AI"
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "แชทกับผู้เข้าร่วมมีทอัพ",
+      "bannerDesc": "เปิด AlmaChat เพื่อแชทกับสมาชิกในมีทอัพนี้แบบเรียลไทม์พร้อมการแปลภาษาอัตโนมัติ",
+      "download": "ดาวน์โหลด AlmaChat",
+      "detailTitle": "แชทมีทอัพบน AlmaChat",
+      "detailDesc": "สนทนากับสมาชิกในมีทอัพผ่าน AlmaChat พร้อมการแปลภาษาอัตโนมัติใน 15 ภาษา",
+      "openApp": "เปิด AlmaChat",
+      "downloadApp": "ดาวน์โหลดแอป"
+    }
   }
 }

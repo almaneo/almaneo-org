@@ -376,6 +376,15 @@
       "verifyFailed": "인증 제출에 실패했습니다.",
       "linkCopied": "링크가 복사되었습니다!",
       "preview": "미리보기"
+    },
+    "almachat": {
+      "bannerTitle": "AlmaChat으로 밋업 채팅하세요",
+      "bannerDesc": "밋업 그룹 채팅, 자동 번역, Kindness Score — 모두 AlmaChat에서",
+      "download": "다운로드",
+      "detailTitle": "AlmaChat에서 밋업 채팅에 참여하세요",
+      "detailDesc": "이 밋업의 그룹 채팅이 AlmaChat에 자동 생성되었습니다. 참가자들과 바로 대화하고, 15개 언어 자동 번역을 경험하세요.",
+      "openApp": "AlmaChat 열기",
+      "downloadApp": "앱 다운로드"
     }
   },
   "language": {

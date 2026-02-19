@@ -258,5 +258,16 @@
       "detailed": "Significa Decentralized Physical Infrastructure Network.",
       "example": "Conectar computadores pessoais para compartilhar poder computacional de IA."
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "Converse sobre seu meetup com AlmaChat",
+      "bannerDesc": "Chat de grupo do meetup, tradução automática, Kindness Score — tudo no AlmaChat",
+      "download": "Baixar",
+      "detailTitle": "Participe do chat do meetup no AlmaChat",
+      "detailDesc": "Um chat de grupo para este meetup foi criado automaticamente no AlmaChat. Converse com os participantes e experimente a tradução automática em 15 idiomas.",
+      "openApp": "Abrir AlmaChat",
+      "downloadApp": "Baixar App"
+    }
   }
 }

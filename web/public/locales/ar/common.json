@@ -258,5 +258,16 @@
       "detailed": "اختصار لـ Decentralized Physical Infrastructure Network.",
       "example": "ربط الحواسيب الشخصية لمشاركة قدرة الحوسبة للذكاء الاصطناعي."
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "تحدث عن لقائك مع AlmaChat",
+      "bannerDesc": "دردشة مجموعة اللقاء، ترجمة تلقائية، Kindness Score — كل شيء في AlmaChat",
+      "download": "تحميل",
+      "detailTitle": "انضم إلى دردشة اللقاء على AlmaChat",
+      "detailDesc": "تم إنشاء دردشة جماعية لهذا اللقاء تلقائياً في AlmaChat. تحدث مع المشاركين وجرّب الترجمة التلقائية بـ15 لغة.",
+      "openApp": "افتح AlmaChat",
+      "downloadApp": "تحميل التطبيق"
+    }
   }
 }

@@ -258,5 +258,16 @@
       "detailed": "Singkatan Decentralized Physical Infrastructure Network.",
       "example": "Menghubungkan komputer peribadi untuk berkongsi kuasa pengkomputeran AI."
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "Berbual tentang meetup anda dengan AlmaChat",
+      "bannerDesc": "Chat kumpulan meetup, terjemahan automatik, Kindness Score — semua ada dalam AlmaChat",
+      "download": "Muat Turun",
+      "detailTitle": "Sertai chat meetup di AlmaChat",
+      "detailDesc": "Chat kumpulan untuk meetup ini telah dicipta secara automatik dalam AlmaChat. Berbual dengan peserta dan alami terjemahan automatik dalam 15 bahasa.",
+      "openApp": "Buka AlmaChat",
+      "downloadApp": "Muat Turun App"
+    }
   }
 }

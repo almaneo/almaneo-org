@@ -19,6 +19,9 @@ import {
   UserPlus,
   UserMinus,
   Clock,
+  MessageCircle,
+  Smartphone,
+  Download,
 } from 'lucide-react';
 import { useWallet } from '../components/wallet';
 import { useMeetups } from '../hooks/useMeetups';
@@ -326,6 +329,39 @@ export default function MeetupDetail() {
             <div>
               <p className="text-slate-400 text-sm">{t('meetup.detail.meetupHost')}</p>
               <p className="text-jeong-orange font-bold">+{MEETUP_POINTS.HOST}{i18n.language === 'ko' ? '점' : ' pts'}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* AlmaChat CTA */}
+        <div className="card p-6 mb-8 bg-gradient-to-r from-neos-blue/10 to-cyan-500/10 border-neos-blue/30">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-neos-blue/15 flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-6 h-6 text-neos-blue" strokeWidth={1.5} />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-white mb-1">{t('meetup.almachat.detailTitle')}</h3>
+              <p className="text-slate-400 text-sm mb-3">{t('meetup.almachat.detailDesc')}</p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neos-blue/20 text-neos-blue text-sm font-medium hover:bg-neos-blue/30 transition-colors"
+                >
+                  <Smartphone className="w-4 h-4" />
+                  {t('meetup.almachat.openApp')}
+                </a>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  {t('meetup.almachat.downloadApp')}
+                </a>
+              </div>
             </div>
           </div>
         </div>

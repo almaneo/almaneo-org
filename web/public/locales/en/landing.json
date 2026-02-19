@@ -259,6 +259,59 @@
       }
     }
   },
+  "almachat": {
+    "tag": "AlmaChat",
+    "title": "AlmaChat",
+    "titleSuffix": "Connect Through",
+    "subtitle": "Chat with kind people worldwide, without language barriers",
+    "features": {
+      "translate": {
+        "title": "Auto Translation",
+        "description": "Real-time auto-translation across 15 languages. Send in your language, they read in theirs."
+      },
+      "meetupChat": {
+        "title": "Meetup Group Chat",
+        "description": "Create a meetup on web, group chat auto-created in AlmaChat. Connect with participants instantly."
+      },
+      "kindness": {
+        "title": "Kindness Score",
+        "description": "Earn Kindness Score through meetup participation and kind acts. Your kindness is recorded on-chain."
+      },
+      "ambassador": {
+        "title": "Ambassador SBT",
+        "description": "Progress from Friend to Guardian. Earn non-transferable Soulbound Tokens by building genuine connections."
+      }
+    },
+    "stats": {
+      "languages": {
+        "value": "15",
+        "label": "Languages"
+      },
+      "translate": {
+        "value": "Real-time",
+        "label": "Auto Translation"
+      },
+      "kindness": {
+        "value": "On-chain",
+        "label": "Kindness Score"
+      }
+    },
+    "download": {
+      "title": "Download Now",
+      "googlePlay": "Google Play",
+      "appStore": "App Store",
+      "directApk": "Download Android APK directly",
+      "comingSoon": "Coming Soon"
+    },
+    "phone": {
+      "greeting1": "안녕하세요! 🇰🇷",
+      "greeting1Translation": "Hello!",
+      "greeting2": "Xin chào! 🇻🇳",
+      "greeting2Translation": "Hello!",
+      "greeting3": "Bonjour! 🇫🇷",
+      "greeting3Translation": "Hello!"
+    }
+  },
   "team": {
     "title": "Our Team",
     "subtitle": "The people behind AlmaNEO",

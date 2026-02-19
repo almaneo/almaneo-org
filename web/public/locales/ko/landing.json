@@ -259,6 +259,59 @@
       }
     }
   },
+  "almachat": {
+    "tag": "AlmaChat",
+    "title": "AlmaChat",
+    "titleSuffix": "으로 연결하세요",
+    "subtitle": "언어의 장벽 없이, 전 세계 친절한 사람들과 대화하세요",
+    "features": {
+      "translate": {
+        "title": "자동 번역",
+        "description": "15개 언어 실시간 자동 번역으로 언어 장벽 없이 대화하세요. 한국어로 보내면 상대방은 자기 언어로 읽습니다."
+      },
+      "meetupChat": {
+        "title": "밋업 그룹 채팅",
+        "description": "웹에서 밋업을 만들면 AlmaChat에 그룹 채팅이 자동 생성됩니다. 참가자들과 바로 소통하세요."
+      },
+      "kindness": {
+        "title": "Kindness Score",
+        "description": "밋업 참가와 친절 활동으로 Kindness Score를 쌓으세요. 당신의 친절이 온체인에 기록됩니다."
+      },
+      "ambassador": {
+        "title": "Ambassador SBT",
+        "description": "Friend에서 Guardian까지. 진심 어린 연결을 쌓아 양도 불가능한 소울바운드 토큰을 획득하세요."
+      }
+    },
+    "stats": {
+      "languages": {
+        "value": "15",
+        "label": "지원 언어"
+      },
+      "translate": {
+        "value": "실시간",
+        "label": "자동 번역"
+      },
+      "kindness": {
+        "value": "온체인",
+        "label": "Kindness Score"
+      }
+    },
+    "download": {
+      "title": "지금 다운로드하세요",
+      "googlePlay": "Google Play",
+      "appStore": "App Store",
+      "directApk": "Android APK 직접 다운로드",
+      "comingSoon": "출시 예정"
+    },
+    "phone": {
+      "greeting1": "안녕하세요! 🇰🇷",
+      "greeting1Translation": "Hello!",
+      "greeting2": "Xin chào! 🇻🇳",
+      "greeting2Translation": "안녕하세요!",
+      "greeting3": "Bonjour! 🇫🇷",
+      "greeting3Translation": "안녕하세요!"
+    }
+  },
   "team": {
     "title": "팀 소개",
     "subtitle": "AlmaNEO를 만드는 사람들",

@@ -62,6 +62,17 @@
     "privacy": "Política de Privacidad",
     "terms": "Términos de Servicio"
   },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "Chatea con miembros del meetup en AlmaChat",
+      "bannerDesc": "Chat grupal de meetup, traducción automática, Kindness Score — todo en AlmaChat",
+      "download": "Descargar",
+      "detailTitle": "Únete al chat del meetup en AlmaChat",
+      "detailDesc": "Un chat grupal para este meetup fue creado automáticamente en AlmaChat. Chatea con los participantes con traducción automática en 15 idiomas.",
+      "openApp": "Abrir AlmaChat",
+      "downloadApp": "Descargar App"
+    }
+  },
   "language": {
     "select": "Seleccionar idioma",
     "current": "Idioma actual"

@@ -258,5 +258,16 @@
       "detailed": "Inasimamia Decentralized Physical Infrastructure Network.",
       "example": "Kuunganisha kompyuta binafsi kushiriki nguvu ya kompyuta ya AI."
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "Zungumza na Washiriki wa Meetup",
+      "bannerDesc": "Fungua AlmaChat ili kuzungumza na wanachama wa Meetup hii moja kwa moja na tafsiri ya moja kwa moja",
+      "download": "Pakua AlmaChat",
+      "detailTitle": "Mazungumzo ya Meetup kwenye AlmaChat",
+      "detailDesc": "Zungumza na wanachama wa Meetup kupitia AlmaChat na tafsiri ya moja kwa moja kwa lugha 15",
+      "openApp": "Fungua AlmaChat",
+      "downloadApp": "Pakua Programu"
+    }
   }
 }

@@ -237,6 +237,50 @@
       }
     }
   },
+  "almachat": {
+    "tag": "AlmaChat",
+    "title": "AlmaChat",
+    "titleSuffix": "Ungana na",
+    "subtitle": "Zungumza na watu wema duniani kote, bila vikwazo vya lugha",
+    "features": {
+      "translate": {
+        "title": "Tafsiri Kiotomatiki",
+        "description": "Tafsiri kiotomatiki ya wakati halisi katika lugha 15. Tuma kwa lugha yako, wanasoma kwa lugha yao."
+      },
+      "meetupChat": {
+        "title": "Gumzo la Kikundi la Meetup",
+        "description": "Unda meetup kwenye wavuti na gumzo la kikundi huundwa kiotomatiki katika AlmaChat. Unganisha na washiriki mara moja."
+      },
+      "kindness": {
+        "title": "Kindness Score",
+        "description": "Jenga Kindness Score kupitia ushiriki wa meetup na shughuli za upole. Upole wako umerekodiwa on-chain."
+      },
+      "ambassador": {
+        "title": "Ambassador SBT",
+        "description": "Kutoka Friend hadi Guardian. Jenga mahusiano ya kweli na upate Soulbound Token isiyoweza kuhamishwa."
+      }
+    },
+    "stats": {
+      "languages": { "value": "15", "label": "Lugha" },
+      "translate": { "value": "Wakati halisi", "label": "Tafsiri" },
+      "kindness": { "value": "On-chain", "label": "Kindness Score" }
+    },
+    "download": {
+      "title": "Pakua Sasa",
+      "googlePlay": "Google Play",
+      "appStore": "App Store",
+      "directApk": "Pakua APK ya Android moja kwa moja",
+      "comingSoon": "Inakuja hivi karibuni"
+    },
+    "phone": {
+      "greeting1": "Habari! 🇰🇪",
+      "greeting1Translation": "Hello!",
+      "greeting2": "Xin chào! 🇻🇳",
+      "greeting2Translation": "Hello!",
+      "greeting3": "Bonjour! 🇫🇷",
+      "greeting3Translation": "Hello!"
+    }
+  },
   "team": {
     "title": "Timu Yetu",
     "subtitle": "Watu nyuma ya AlmaNEO",

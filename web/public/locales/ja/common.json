@@ -62,6 +62,17 @@
     "privacy": "プライバシーポリシー",
     "terms": "利用規約"
   },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "AlmaChatでミートアップメンバーとチャット",
+      "bannerDesc": "ミートアップグループチャット、自動翻訳、Kindness Score — すべてAlmaChatで",
+      "download": "ダウンロード",
+      "detailTitle": "AlmaChatでミートアップチャットに参加",
+      "detailDesc": "このミートアップのグループチャットがAlmaChatに自動生成されました。参加者とすぐに交流し、15言語の自動翻訳を体験しましょう。",
+      "openApp": "AlmaChatを開く",
+      "downloadApp": "アプリをダウンロード"
+    }
+  },
   "language": {
     "select": "言語を選択",
     "current": "現在の言語"

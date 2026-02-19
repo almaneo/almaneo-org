@@ -376,6 +376,15 @@
       "verifyFailed": "Failed to submit verification.",
       "linkCopied": "Link copied!",
       "preview": "Preview"
+    },
+    "almachat": {
+      "bannerTitle": "Chat with meetup members on AlmaChat",
+      "bannerDesc": "Meetup group chat, auto-translation, Kindness Score — all in AlmaChat",
+      "download": "Download",
+      "detailTitle": "Join the meetup chat on AlmaChat",
+      "detailDesc": "A group chat was auto-created for this meetup in AlmaChat. Chat with participants instantly with auto-translation across 15 languages.",
+      "openApp": "Open AlmaChat",
+      "downloadApp": "Download App"
     }
   },
   "language": {

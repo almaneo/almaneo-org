@@ -13,6 +13,8 @@ import {
   Plus,
   Search,
   Loader2,
+  Smartphone,
+  ArrowRight,
 } from 'lucide-react';
 import { useMeetups } from '../hooks/useMeetups';
 import type { DbMeetup } from '../supabase';
@@ -145,6 +147,28 @@ export default function MeetupList() {
                 {filterLabels[f]}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* AlmaChat CTA Banner */}
+        <div className="mb-8 card p-5 bg-gradient-to-r from-jeong-orange/5 to-amber-500/5 border-jeong-orange/20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-jeong-orange/15 flex items-center justify-center flex-shrink-0">
+              <Smartphone className="w-6 h-6 text-jeong-orange" strokeWidth={1.5} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-white font-semibold">{t('meetup.almachat.bannerTitle')}</h3>
+              <p className="text-slate-400 text-sm">{t('meetup.almachat.bannerDesc')}</p>
+            </div>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium text-jeong-orange hover:text-orange-300 transition-colors whitespace-nowrap"
+            >
+              {t('meetup.almachat.download')}
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 

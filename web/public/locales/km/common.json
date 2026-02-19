@@ -258,5 +258,16 @@
       "detailed": "តំណាងឱ្យ Decentralized Physical Infrastructure Network។",
       "example": "ភ្ជាប់កុំព្យូទ័រផ្ទាល់ខ្លួនដើម្បីចែករំលែកថាមពលកុំព្យូទ័រ AI។"
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "ជជែកជាមួយអ្នកចូលរួម Meetup",
+      "bannerDesc": "បើក AlmaChat ដើម្បីជជែកជាមួយសមាជិក Meetup នេះភ្លាមៗ ជាមួយការបកប្រែដោយស្វ័យប្រវត្តិ",
+      "download": "ទាញយក AlmaChat",
+      "detailTitle": "ជជែក Meetup នៅលើ AlmaChat",
+      "detailDesc": "ជជែកជាមួយសមាជិក Meetup តាម AlmaChat ជាមួយការបកប្រែដោយស្វ័យប្រវត្តិទៅ 15 ភាសា",
+      "openApp": "បើក AlmaChat",
+      "downloadApp": "ទាញយកកម្មវិធី"
+    }
   }
 }

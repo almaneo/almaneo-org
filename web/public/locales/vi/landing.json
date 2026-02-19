@@ -237,6 +237,50 @@
       }
     }
   },
+  "almachat": {
+    "tag": "AlmaChat",
+    "title": "AlmaChat",
+    "titleSuffix": "Kết nối với",
+    "subtitle": "Trò chuyện với những người tử tế trên toàn thế giới, không rào cản ngôn ngữ",
+    "features": {
+      "translate": {
+        "title": "Dịch Tự Động",
+        "description": "Dịch tự động theo thời gian thực bằng 15 ngôn ngữ. Gửi bằng ngôn ngữ của bạn, họ đọc bằng ngôn ngữ của họ."
+      },
+      "meetupChat": {
+        "title": "Chat Nhóm Meetup",
+        "description": "Tạo meetup trên web và chat nhóm được tự động tạo trong AlmaChat. Kết nối với người tham gia ngay lập tức."
+      },
+      "kindness": {
+        "title": "Kindness Score",
+        "description": "Tích lũy Kindness Score qua việc tham gia meetup và hoạt động tốt bụng. Lòng tốt của bạn được ghi lại on-chain."
+      },
+      "ambassador": {
+        "title": "Ambassador SBT",
+        "description": "Từ Friend đến Guardian. Xây dựng kết nối chân thực và nhận Soulbound Token không thể chuyển nhượng."
+      }
+    },
+    "stats": {
+      "languages": { "value": "15", "label": "Ngôn ngữ" },
+      "translate": { "value": "Thời gian thực", "label": "Dịch thuật" },
+      "kindness": { "value": "On-chain", "label": "Kindness Score" }
+    },
+    "download": {
+      "title": "Tải ngay",
+      "googlePlay": "Google Play",
+      "appStore": "App Store",
+      "directApk": "Tải APK Android trực tiếp",
+      "comingSoon": "Sắp ra mắt"
+    },
+    "phone": {
+      "greeting1": "Xin chào! 🇻🇳",
+      "greeting1Translation": "Hello!",
+      "greeting2": "สวัสดี! 🇹🇭",
+      "greeting2Translation": "Hello!",
+      "greeting3": "Bonjour! 🇫🇷",
+      "greeting3Translation": "Hello!"
+    }
+  },
   "team": {
     "title": "Đội ngũ",
     "subtitle": "Những người đứng sau AlmaNEO",

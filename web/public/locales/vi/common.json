@@ -258,5 +258,16 @@
       "detailed": "Viết tắt của Decentralized Physical Infrastructure Network.",
       "example": "Kết nối máy tính cá nhân để chia sẻ sức mạnh tính toán AI."
     }
+  },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "Chat với người tham gia meetup",
+      "bannerDesc": "Mở AlmaChat để trò chuyện với thành viên trong meetup này theo thời gian thực với dịch tự động",
+      "download": "Tải AlmaChat",
+      "detailTitle": "Chat meetup trên AlmaChat",
+      "detailDesc": "Trò chuyện với thành viên meetup qua AlmaChat với dịch tự động sang 15 ngôn ngữ",
+      "openApp": "Mở AlmaChat",
+      "downloadApp": "Tải ứng dụng"
+    }
   }
 }

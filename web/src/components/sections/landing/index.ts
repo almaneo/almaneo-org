@@ -4,6 +4,7 @@ export { SolutionSection } from './SolutionSection';
 export { TokenomicsSection } from './TokenomicsSection';
 export { EcosystemSection } from './EcosystemSection';
 export { Web3AuthSection } from './Web3AuthSection';
+export { AlmaChatSection } from './AlmaChatSection';
 export { TeamSection } from './TeamSection';
 export { PartnersSection } from './PartnersSection';
 export { RoadmapSection } from './RoadmapSection';

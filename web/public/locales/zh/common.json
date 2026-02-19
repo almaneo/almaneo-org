@@ -62,6 +62,17 @@
     "privacy": "隐私政策",
     "terms": "服务条款"
   },
+  "meetup": {
+    "almachat": {
+      "bannerTitle": "在AlmaChat上与聚会成员聊天",
+      "bannerDesc": "聚会群聊、自动翻译、Kindness Score — 尽在AlmaChat",
+      "download": "下载",
+      "detailTitle": "在AlmaChat上加入聚会群聊",
+      "detailDesc": "此聚会的群聊已在AlmaChat中自动创建。立即与参与者交流，体验15种语言的自动翻译。",
+      "openApp": "打开AlmaChat",
+      "downloadApp": "下载应用"
+    }
+  },
   "language": {
     "select": "选择语言",
     "current": "当前语言"

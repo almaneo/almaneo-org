@@ -8,6 +8,7 @@ import {
   TokenomicsSection,
   EcosystemSection,
   Web3AuthSection,
+  AlmaChatSection,
   TeamSection,
   PartnersSection,
   RoadmapSection,
@@ -63,6 +64,7 @@ export default function NEOSLanding() {
       <TokenomicsSection />
       <EcosystemSection />
       <Web3AuthSection />
+      <AlmaChatSection />
       <RoadmapSection />
       <TeamSection />
       <PartnersSection />

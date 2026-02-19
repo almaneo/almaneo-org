@@ -229,6 +229,50 @@
       }
     }
   },
+  "almachat": {
+    "tag": "AlmaChat",
+    "title": "AlmaChat",
+    "titleSuffix": "连接世界",
+    "subtitle": "无语言障碍，与全世界友善的人们交流",
+    "features": {
+      "translate": {
+        "title": "自动翻译",
+        "description": "支持15种语言的实时自动翻译。用中文发送，对方用自己的语言阅读。"
+      },
+      "meetupChat": {
+        "title": "线下聚会群聊",
+        "description": "在网页创建聚会后，AlmaChat会自动生成群聊。立即与参与者沟通。"
+      },
+      "kindness": {
+        "title": "Kindness Score",
+        "description": "通过参加聚会和友善活动积累Kindness Score。您的善意将被记录在链上。"
+      },
+      "ambassador": {
+        "title": "Ambassador SBT",
+        "description": "从Friend到Guardian。建立真诚的连接，获得不可转让的灵魂绑定代币。"
+      }
+    },
+    "stats": {
+      "languages": { "value": "15", "label": "支持语言" },
+      "translate": { "value": "实时", "label": "自动翻译" },
+      "kindness": { "value": "链上", "label": "Kindness Score" }
+    },
+    "download": {
+      "title": "立即下载",
+      "googlePlay": "Google Play",
+      "appStore": "App Store",
+      "directApk": "直接下载 Android APK",
+      "comingSoon": "即将推出"
+    },
+    "phone": {
+      "greeting1": "你好！🇨🇳",
+      "greeting1Translation": "Hello!",
+      "greeting2": "Xin chào! 🇻🇳",
+      "greeting2Translation": "你好！",
+      "greeting3": "Bonjour ! 🇫🇷",
+      "greeting3Translation": "你好！"
+    }
+  },
   "team": {
     "title": "团队介绍",
     "subtitle": "创造AlmaNEO的人们",
