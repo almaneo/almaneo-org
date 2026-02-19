@@ -4571,10 +4571,79 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 119+)
+### ✅ 완료된 작업 (2026-02-19 - Session 119: Stream Chat 연결 끊김 근본 해결)
+
+#### 1. **근본 원인 분석 (3가지)** ✅
+   - **원인 1 (가장 치명적): 파괴적 재연결 패턴**
+     - `_attemptFullReconnect()`가 WebSocket 5초 끊김 시 `disconnectUser()` 호출
+     - SDK v9.23의 내부 지수 백오프 재연결을 파괴 (tokenManager.reset() 포함)
+     - Stream SDK는 자체적으로 재연결하는데, 5초만에 이를 파괴하고 있었음
+   - **원인 2: 5초 디바운스가 너무 짧음**
+     - 베트남→US East 연결에서 SDK 내부 재연결에 10-30초 필요
+     - 5초 디바운스는 SDK가 자체 복구하기 전에 파괴적 재연결을 발동
+   - **원인 3: 재연결 실패 시 백오프 없음**
+     - 실패 후 즉시 재시도 → 무한 실패 루프 → CPU/배터리 낭비
+
+#### 2. **3-Tier 재연결 전략 구현** ✅
+   - `chat-app/lib/main.dart` — 유일한 수정 파일 (+178줄, -55줄)
+
+   | Tier | 시간 | 동작 | 특징 |
+   |------|------|------|------|
+   | **Tier 1** | 0-30초 | SDK 자체 재연결 (간섭 없음) | 대부분의 일시적 끊김 해결 |
+   | **Tier 2** | 30-60초 | `closeConnection()` + `openConnection()` | 유저/토큰 보존, HTTP 불필요 |
+   | **Tier 3** | 60초+ | `disconnectUser()` + `connectUserWithProvider()` | 최대 3회, 30/60/120초 백오프 |
+
+   **타이밍 다이어그램:**
+   ```
+   T=0s    : WebSocket 끊김 → Tier 1 타이머 시작 (30초)
+   T=0-30s : [TIER 1] SDK 자체 재연결 (지수 백오프, 최대 6회)
+   T=30s   : Tier 1 만료 → Tier 2 시작
+   T=~31s  : [TIER 2-1] closeConnection + openConnection
+   T=~37s  : [TIER 2-2] 재시도 (5초 대기 후)
+   T=~67s  : [TIER 3-1] disconnectUser + refreshToken + connectUserWithProvider
+   T=~127s : [TIER 3-2] 재시도 (60초 백오프)
+   T=~247s : [TIER 3-3] 최종 시도 (120초 백오프)
+             총 ~4분 후 포기 (기존: 무한 루프)
+   ```
+
+#### 3. **추가 수정사항** ✅
+   - `_connectUserWithRetry`에서 미사용 `token` 파라미터 제거 (이중 토큰 요청 방지)
+   - 앱 포그라운드 복귀 시 Tier 1 건너뛰고 **Tier 2 직접 시작** (백그라운드에서 SDK 재연결 이미 소진)
+   - 재연결 성공 후 `_listenConnectionStatus()` 재등록 (기존 누락 수정)
+   - `_onConnectionRestored()`로 모든 카운터/타이머 일괄 리셋
+   - `_waitForConnection()` 유틸리티 메서드 추가 (연결 대기 + 타임아웃)
+
+#### 4. **신규/변경 메서드**
+   | 메서드 | 상태 | 설명 |
+   |--------|------|------|
+   | `_listenConnectionStatus()` | 변경 | 5초 디바운스 → 30초 Tier 1 대기 |
+   | `_onConnectionRestored()` | **신규** | 연결 복구 시 모든 상태 리셋 |
+   | `_attemptSoftReconnect()` | **신규** | Tier 2: closeConnection + openConnection |
+   | `_attemptHardReconnect()` | **신규** | Tier 3: disconnectUser + connectUserWithProvider (백오프) |
+   | `_waitForConnection()` | **신규** | 연결 대기 유틸리티 (polling) |
+   | `_attemptFullReconnect()` | **삭제** | Tier 3로 대체 |
+   | `_connectUserWithRetry()` | 변경 | 미사용 `token` 파라미터 제거 |
+   | `didChangeAppLifecycleState()` | 변경 | Tier 2 직접 시작 |
+
+#### 5. **테스트 결과**
+   - 실기기 테스트: 이전보다 훨씬 안정적으로 작동 확인
+   - APK: 76.8MB
+   - `flutter analyze`: No issues found
+
+#### 6. **커밋**
+   - `bd578b7` - fix(chat-app): Replace destructive reconnect with 3-tier strategy
+   - 1개 파일, +178줄, -55줄
+
+---
+
+### 🔲 다음 세션 작업 (Session 120+)
 
 #### 🔴 높은 우선순위
-- **V0.5 실기기 재테스트**: 5개 버그 수정 확인 (리액션, DM 이름, 파일 업로드 등)
+- **3-Tier 재연결 실기기 심화 테스트**: 비행기 모드 시나리오별 로그 확인
+  - 5초 끊김 → Tier 1 자동 복구
+  - 35초 끊김 → Tier 2 로그
+  - 70초 끊김 → Tier 3 로그
+  - 백그라운드 1분 → 포그라운드 복귀 → Tier 2 직접 시작
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
