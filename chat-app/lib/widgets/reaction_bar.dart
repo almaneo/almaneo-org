@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/theme.dart';
+import 'reaction_picker.dart';
 
 /// Displays grouped reaction counts below a message bubble.
 /// Tap own reaction to remove, tap others' to add same.
@@ -59,7 +60,7 @@ class ReactionBar extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(type, style: const TextStyle(fontSize: 14)),
+                  Text(reactionToEmoji(type), style: const TextStyle(fontSize: 14)),
                   if (count > 1) ...[
                     const SizedBox(width: 3),
                     Text(

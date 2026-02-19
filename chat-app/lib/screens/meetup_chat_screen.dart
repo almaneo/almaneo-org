@@ -185,26 +185,31 @@ class _MeetupChatScreenState extends ConsumerState<MeetupChatScreen> {
                 );
               },
               messageBuilder: (context, details, messages, defaultWidget) {
-                return TranslatedMessage(
-                  message: details.message,
-                  isMyMessage: details.isMyMessage,
-                  onLongPress: () => _showMessageActions(
-                    details.message,
-                    details.isMyMessage,
-                    channel,
-                    lang,
-                  ),
-                  onReply: () {
-                    setState(() {
-                      _messageInputController.quotedMessage = details.message;
-                    });
-                  },
-                  currentUserId: currentUserId,
-                  channel: channel,
-                  onAvatarTap: (user) {
-                    UserProfileSheet.show(context, user: user, lang: lang);
-                  },
-                );
+                try {
+                  return TranslatedMessage(
+                    message: details.message,
+                    isMyMessage: details.isMyMessage,
+                    onLongPress: () => _showMessageActions(
+                      details.message,
+                      details.isMyMessage,
+                      channel,
+                      lang,
+                    ),
+                    onReply: () {
+                      setState(() {
+                        _messageInputController.quotedMessage = details.message;
+                      });
+                    },
+                    currentUserId: currentUserId,
+                    channel: channel,
+                    onAvatarTap: (user) {
+                      UserProfileSheet.show(context, user: user, lang: lang);
+                    },
+                  );
+                } catch (e) {
+                  debugPrint('[MeetupChat] messageBuilder error: $e');
+                  return defaultWidget;
+                }
               },
             ),
           ),

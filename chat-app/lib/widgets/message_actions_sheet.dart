@@ -103,9 +103,9 @@ class MessageActionsSheet extends StatelessWidget {
   }
 
   void _toggleReaction(BuildContext context, String type) {
+    // Capture userId BEFORE popping (context becomes invalid after pop)
+    final currentUserId = StreamChat.of(context).currentUser?.id;
     Navigator.pop(context);
-    final currentUserId =
-        StreamChat.of(context).currentUser?.id;
     if (currentUserId == null) return;
 
     // Check if user already reacted with this type
@@ -117,7 +117,7 @@ class MessageActionsSheet extends StatelessWidget {
     if (existing != null && existing.type == type) {
       channel.deleteReaction(message, existing);
     } else {
-      channel.sendReaction(message, type);
+      channel.sendReaction(message, type, enforceUnique: true);
     }
   }
 
@@ -141,7 +141,7 @@ class MessageActionsSheet extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              tr('meetup.cancel', lang),
+              tr('common.cancel', lang),
               style: TextStyle(color: alma.textSecondary),
             ),
           ),

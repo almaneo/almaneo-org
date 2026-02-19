@@ -317,13 +317,26 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   /// SDK가 재연결을 포기(disconnected)하면 전체 재로그인 시도
   /// _connectionStatusSub로 단일 구독 유지, _isReconnecting으로 중복 방지
   /// _lastKnownStatus를 캐시하여 생명주기 복귀 시 즉각 판단 가능
+  /// 5초 디바운스: 일시적 끊김(파일 업로드 중 등)에서 불필요한 재연결 방지
+  Timer? _reconnectDebounceTimer;
+
   void _listenConnectionStatus() {
     _connectionStatusSub?.cancel();
     _connectionStatusSub = widget.client.wsConnectionStatusStream.listen((status) {
       _lastKnownStatus = status; // 상태 캐시 업데이트
       if (status == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
-        debugPrint('[Stream] WebSocket disconnected — attempting full reconnection');
-        _attemptFullReconnect();
+        // 5초 디바운스: SDK 자체 재연결을 먼저 시도하도록 대기
+        _reconnectDebounceTimer?.cancel();
+        _reconnectDebounceTimer = Timer(const Duration(seconds: 5), () {
+          // 5초 후에도 여전히 disconnected면 전체 재연결
+          if (_lastKnownStatus == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
+            debugPrint('[Stream] WebSocket still disconnected after 5s — attempting full reconnection');
+            _attemptFullReconnect();
+          }
+        });
+      } else if (status == ConnectionStatus.connected) {
+        // 재연결 성공 시 타이머 취소
+        _reconnectDebounceTimer?.cancel();
       }
     });
   }
@@ -477,6 +490,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // 생명주기 감시 해제
+    _reconnectDebounceTimer?.cancel();
     _connectionStatusSub?.cancel();
     _deepLinkService.dispose();
     widget.client.dispose();

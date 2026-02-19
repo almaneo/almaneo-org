@@ -168,6 +168,7 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
         channel: channel,
         lang: lang,
         isPinned: _pinnedChannelIds.contains(cid),
+        currentUserId: StreamChat.of(context).currentUser?.id,
         onPin: () => _togglePin(channel, lang),
         onMute: () => _toggleMute(channel, lang),
         onLeave: () => _leaveChannel(channel, lang),

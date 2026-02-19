@@ -9,6 +9,7 @@ class ChannelActionsSheet extends StatelessWidget {
   final Channel channel;
   final String lang;
   final bool isPinned;
+  final String? currentUserId;
   final VoidCallback onPin;
   final VoidCallback onMute;
   final VoidCallback onLeave;
@@ -18,6 +19,7 @@ class ChannelActionsSheet extends StatelessWidget {
     required this.channel,
     required this.lang,
     required this.isPinned,
+    this.currentUserId,
     required this.onPin,
     required this.onMute,
     required this.onLeave,
@@ -27,8 +29,21 @@ class ChannelActionsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final alma = context.alma;
     final isMuted = channel.isMuted;
-    final channelName =
-        channel.extraData['name'] as String? ?? channel.id ?? 'Chat';
+    final members = channel.state?.members ?? [];
+    final memberCount = channel.memberCount ?? members.length;
+    final customName = channel.extraData['name'] as String?;
+    final isDM = (customName == null || customName.isEmpty) && memberCount == 2;
+
+    String channelName;
+    if (isDM) {
+      final otherMember = members.firstWhere(
+        (m) => m.userId != currentUserId,
+        orElse: () => members.first,
+      );
+      channelName = otherMember.user?.name ?? otherMember.userId ?? 'Chat';
+    } else {
+      channelName = customName ?? channel.id ?? 'Chat';
+    }
 
     return SafeArea(
       child: Padding(

@@ -280,7 +280,7 @@ class _TranslatedMessageState extends ConsumerState<TranslatedMessage>
     if (existing != null && existing.type == type) {
       channel.deleteReaction(widget.message, existing);
     } else {
-      channel.sendReaction(widget.message, type);
+      channel.sendReaction(widget.message, type, enforceUnique: true);
     }
   }
 

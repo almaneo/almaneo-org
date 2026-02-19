@@ -125,15 +125,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       final inviteCode = data['code'] as String;
-      final inviteUrl = data['inviteUrl'] as String;
+      final deepLink = 'almachat://invite/$inviteCode';
 
       final shareText = tr('invite.message', lang, args: {
         'name': channelName,
-        'link': inviteUrl,
+        'link': deepLink,
       });
 
       if (!mounted) return;
-      _showInviteBottomSheet(inviteCode, inviteUrl, shareText, lang);
+      _showInviteBottomSheet(inviteCode, deepLink, shareText, lang);
     } catch (e) {
       if (mounted) {
         if (!dialogDismissed) Navigator.pop(context); // dismiss loading only if not yet dismissed
@@ -391,26 +391,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 );
               },
               messageBuilder: (context, details, messages, defaultWidget) {
-                return TranslatedMessage(
-                  message: details.message,
-                  isMyMessage: details.isMyMessage,
-                  onLongPress: () => _showMessageActions(
-                    details.message,
-                    details.isMyMessage,
-                    channel,
-                    lang,
-                  ),
-                  onReply: () {
-                    setState(() {
-                      _messageInputController.quotedMessage = details.message;
-                    });
-                  },
-                  currentUserId: currentUserId,
-                  channel: channel,
-                  onAvatarTap: (user) {
-                    UserProfileSheet.show(context, user: user, lang: lang);
-                  },
-                );
+                try {
+                  return TranslatedMessage(
+                    message: details.message,
+                    isMyMessage: details.isMyMessage,
+                    onLongPress: () => _showMessageActions(
+                      details.message,
+                      details.isMyMessage,
+                      channel,
+                      lang,
+                    ),
+                    onReply: () {
+                      setState(() {
+                        _messageInputController.quotedMessage = details.message;
+                      });
+                    },
+                    currentUserId: currentUserId,
+                    channel: channel,
+                    onAvatarTap: (user) {
+                      UserProfileSheet.show(context, user: user, lang: lang);
+                    },
+                  );
+                } catch (e) {
+                  debugPrint('[ChatScreen] messageBuilder error: $e');
+                  return defaultWidget;
+                }
               },
             ),
           ),

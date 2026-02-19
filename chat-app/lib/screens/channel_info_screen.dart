@@ -19,11 +19,28 @@ class ChannelInfoScreen extends ConsumerWidget {
     final lang = ref.watch(languageProvider).languageCode;
     final currentUserId = StreamChat.of(context).currentUser?.id;
 
-    final channelName = channel.extraData['name'] as String? ?? channel.id ?? 'Chat';
-    final description = channel.extraData['description'] as String? ?? '';
-    final memberCount = channel.memberCount ?? channel.state?.members.length ?? 0;
-    final createdAt = channel.createdAt;
     final members = channel.state?.members ?? [];
+    final memberCount = channel.memberCount ?? members.length;
+    final createdAt = channel.createdAt;
+
+    // Detect DM: no custom name + exactly 2 members
+    final customName = channel.extraData['name'] as String?;
+    final isDM = (customName == null || customName.isEmpty) && memberCount == 2;
+
+    // For DM, show the other user's name; otherwise show channel name
+    String channelName;
+    String? dmUserImage;
+    if (isDM) {
+      final otherMember = members.firstWhere(
+        (m) => m.userId != currentUserId,
+        orElse: () => members.first,
+      );
+      channelName = otherMember.user?.name ?? otherMember.userId ?? 'Chat';
+      dmUserImage = otherMember.user?.image;
+    } else {
+      channelName = customName ?? channel.id ?? 'Chat';
+    }
+    final description = channel.extraData['description'] as String? ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -39,15 +56,22 @@ class ChannelInfoScreen extends ConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundColor: AlmaTheme.electricBlue.withValues(alpha: 0.15),
-                  child: Text(
-                    channelName.isNotEmpty ? channelName[0].toUpperCase() : '#',
-                    style: const TextStyle(
-                      color: AlmaTheme.electricBlue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 32,
-                    ),
-                  ),
+                  backgroundColor: isDM
+                      ? AlmaTheme.terracottaOrange.withValues(alpha: 0.15)
+                      : AlmaTheme.electricBlue.withValues(alpha: 0.15),
+                  backgroundImage: (dmUserImage != null && dmUserImage.isNotEmpty)
+                      ? NetworkImage(dmUserImage)
+                      : null,
+                  child: (dmUserImage == null || dmUserImage.isEmpty)
+                      ? Text(
+                          channelName.isNotEmpty ? channelName[0].toUpperCase() : '#',
+                          style: TextStyle(
+                            color: isDM ? AlmaTheme.terracottaOrange : AlmaTheme.electricBlue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                          ),
+                        )
+                      : null,
                 ),
                 const SizedBox(height: 12),
                 Padding(
@@ -100,26 +124,28 @@ class ChannelInfoScreen extends ConsumerWidget {
                   value: _formatDate(createdAt, lang),
                   alma: alma,
                 ),
-              _InfoRow(
-                icon: Icons.tag,
-                label: tr('channelInfo.channelId', lang),
-                value: channel.id ?? '',
-                alma: alma,
-                onTap: () {
-                  if (channel.id != null) {
-                    Clipboard.setData(ClipboardData(text: channel.id!));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(tr('channelInfo.idCopied', lang)),
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                },
-              ),
+              // Hide channel ID for DM channels (hash IDs are meaningless to users)
+              if (!isDM)
+                _InfoRow(
+                  icon: Icons.tag,
+                  label: tr('channelInfo.channelId', lang),
+                  value: channel.id ?? '',
+                  alma: alma,
+                  onTap: () {
+                    if (channel.id != null) {
+                      Clipboard.setData(ClipboardData(text: channel.id!));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(tr('channelInfo.idCopied', lang)),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
+                ),
             ],
           ),
           const SizedBox(height: 12),

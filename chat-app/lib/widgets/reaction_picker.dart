@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import '../config/theme.dart';
 
-/// Default emoji reactions available for messages
-const defaultReactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+/// Reaction type IDs used by Stream Chat (simple string identifiers)
+const reactionTypes = ['like', 'love', 'haha', 'wow', 'sad', 'pray'];
+
+/// Map from reaction type ID to display emoji
+const reactionEmojis = <String, String>{
+  'like': '👍',
+  'love': '❤️',
+  'haha': '😂',
+  'wow': '😮',
+  'sad': '😢',
+  'pray': '🙏',
+};
+
+/// Get emoji for a reaction type (fallback to type itself if unknown)
+String reactionToEmoji(String type) => reactionEmojis[type] ?? type;
 
 /// Horizontal emoji picker row for message reactions
 class ReactionPicker extends StatelessWidget {
@@ -28,13 +41,13 @@ class ReactionPicker extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: defaultReactions.map((emoji) {
+        children: reactionTypes.map((type) {
           return GestureDetector(
-            onTap: () => onReactionSelected(emoji),
+            onTap: () => onReactionSelected(type),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Text(
-                emoji,
+                reactionToEmoji(type),
                 style: const TextStyle(fontSize: 24),
               ),
             ),
