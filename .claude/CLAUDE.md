@@ -4520,7 +4520,61 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 118+)
+### ✅ 완료된 작업 (2026-02-19 - Session 118: V0.5 버그 수정 5건)
+
+#### 1. **Bug 1: 리액션 추가 후 사라지는 문제 수정** ✅
+   - **근본 원인**: Stream Chat SDK가 이모지 문자(👍, ❤️)를 reaction type으로 인식하지 못함
+   - **수정**: 이모지 → 문자열 ID(`like`, `love`, `haha`, `wow`, `sad`, `pray`) 전환
+   - `reaction_picker.dart`: `reactionTypes` 문자열 배열 + `reactionEmojis` 매핑 + `reactionToEmoji()` 함수
+   - `reaction_bar.dart`: `reactionToEmoji(type)`으로 표시 시 이모지 변환
+   - `message_actions_sheet.dart`: `_toggleReaction`에서 `StreamChat.of(context)` 캡처를 `Navigator.pop` 전으로 이동
+   - `translated_message.dart`: `enforceUnique: true` 추가
+
+#### 2. **Bug 2: 삭제 다이얼로그 Cancel 번역 수정** ✅
+   - **원인**: `tr('meetup.cancel', lang)` → `tr('common.cancel', lang)` 키 오류
+   - `message_actions_sheet.dart` 수정
+
+#### 3. **Bug 3: DM 채널에서 해시 ID 대신 상대방 이름 표시** ✅
+   - `channel_info_screen.dart`: DM 감지 로직 (이름 없음 + 2명) → 상대방 이름/아바타 표시, 채널 ID 행 숨김
+   - `channel_actions_sheet.dart`: 동일 DM 감지 로직 추가, `currentUserId` 파라미터 추가
+   - `channel_list_screen.dart`: `ChannelActionsSheet`에 `currentUserId` 전달
+
+#### 4. **Bug 4: 파일 첨부 시 채팅화면 연결 끊김 수정** ✅
+   - **근본 원인**: WebSocket 일시 끊김 시 `_listenConnectionStatus`가 즉시 `_attemptFullReconnect()` 호출 → `disconnectUser()`로 진행 중인 HTTP 파일 업로드 중단
+   - **수정**: 5초 디바운스 타이머 추가 — SDK 자체 재연결을 먼저 시도하도록 대기
+   - `main.dart`: `_reconnectDebounceTimer` 추가, 재연결 성공 시 타이머 취소, dispose에서 정리
+
+#### 5. **Bug 5: 딥링크 공유 URL 수정** ✅
+   - `chat_screen.dart`: `https://chat.almaneo.org/invite/{code}` → `almachat://invite/{code}` 변경
+   - 딥링크 등록 가이드 제공 (Android App Links / iOS Associated Domains — 앱 스토어 출시 전 설정)
+
+#### 6. **커밋**
+   - `357772c` - fix(chat-app): Fix 5 V0.5 bugs - reactions, DM names, file upload, deep links
+   - 10개 파일, +171줄, -91줄
+
+#### 7. **딥링크 등록 가이드**
+   - **현재 상태**: `almachat://` 커스텀 스킴은 Android에서 이미 작동 (AndroidManifest.xml intent-filter)
+   - **향후 작업 (앱 스토어 출시 전)**:
+     - Android App Links: `chat.almaneo.org/.well-known/assetlinks.json` + `autoVerify="true"`
+     - iOS Associated Domains: `apple-app-site-association` + Xcode capability
+     - iOS URL Scheme: `Info.plist`에 `almachat` 스킴 추가
+
+#### 8. **리액션 시스템 매핑 (확정)**
+   | 타입 ID | 이모지 | 용도 |
+   |---------|--------|------|
+   | `like` | 👍 | 좋아요 |
+   | `love` | ❤️ | 사랑 |
+   | `haha` | 😂 | 웃음 |
+   | `wow` | 😮 | 놀라움 |
+   | `sad` | 😢 | 슬픔 |
+   | `pray` | 🙏 | 감사 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 119+)
+
+#### 🔴 높은 우선순위
+- **V0.5 실기기 재테스트**: 5개 버그 수정 확인 (리액션, DM 이름, 파일 업로드 등)
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
