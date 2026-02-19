@@ -4480,17 +4480,55 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 117+)
+### ✅ 완료된 작업 (2026-02-19 - Session 117: V0.5 Phase D+E 완료)
 
-#### 🔴 최우선
-- **V0.5 Phase D**: 채널 관리 & 안전 (채널 롱프레스 → 핀, 뮤트, 나가기)
-- **V0.5 Phase E**: 딥링크 핸들러 `almachat://invite/{code}`
+#### 1. **V0.5 Phase D — 채널 관리 & 안전** ✅
+   - 커밋: `3871b7c` - feat(chat-app): V0.5 Phase D+E - Add channel actions, deep links & pull-to-refresh
+
+   **신규 파일:**
+   | 파일 | 기능 |
+   |------|------|
+   | `lib/widgets/channel_actions_sheet.dart` | 채널 롱프레스 바텀시트 (핀, 뮤트, 나가기) |
+
+   **수정 파일:**
+   | 파일 | 변경 |
+   |------|------|
+   | `channel_list_screen.dart` | onLongPress → ChannelActionsSheet, 핀 정렬, 뮤트 아이콘, SharedPreferences 핀 저장 |
+   | `chat_screen.dart` | 뮤트 배너 (notifications_off 아이콘 + 안내 텍스트) |
+   | `app_strings.dart` | 12개 키 × 15개 언어 = 180 항목 (channelActions.*, chat.mutedBanner) |
+
+#### 2. **V0.5 Phase E — 딥링크 & 폴리싱** ✅
+
+   **신규 파일:**
+   | 파일 | 기능 |
+   |------|------|
+   | `lib/services/deep_link_service.dart` | `almachat://invite/{code}` 딥링크 핸들러 (cold/warm start) |
+
+   **수정 파일:**
+   | 파일 | 변경 |
+   |------|------|
+   | `main.dart` | DeepLinkService 초기화, `_initDeepLinks()`, `_onDeepLinkJoin()`, `_onDeepLinkError()` |
+   | `channel_list_screen.dart` | RefreshIndicator + StreamChannelListController 추출 |
+   | `AndroidManifest.xml` | `almachat://invite` intent-filter 추가 |
+   | `pubspec.yaml` | `app_links: ^6.4.0` 추가 |
+   | `app_strings.dart` | 5개 키 × 15개 언어 = 75 항목 (deepLink.*) |
+
+#### 3. **V0.5 전체 완료** ✅
+   - 모든 5개 Phase (A, B, C, D, E) 완료
+   - APK: 76.7MB
+   - 10개 파일, +822줄
+
+---
+
+### 🔲 다음 세션 작업 (Session 118+)
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
+- **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
 
 #### 🟢 낮은 우선순위
-- **Kindness AI 분석 MVP**: V0.5+
+- **Kindness AI 분석 MVP**: V0.6+
 - **메인넷 배포 준비**: Multi-sig, 감사
 - **토큰 로고 AI 생성**
+- **모바일 실기기 QA 테스트**
