@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../config/env.dart';
 import '../config/theme.dart';
@@ -11,6 +12,7 @@ import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/auth_service.dart';
 import '../widgets/alma_logo.dart';
+import '../widgets/channel_actions_sheet.dart';
 import 'browse_channels_screen.dart';
 import 'chat_screen.dart';
 import 'create_channel_screen.dart';
@@ -39,12 +41,36 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
   List<Channel>? _searchResults;
   bool _isLoadingSearch = false;
   String _filter = 'all'; // 'all', 'dm', 'group'
+  Set<String> _pinnedChannelIds = {};
+  StreamChannelListController? _channelListController;
+
+  static const _pinnedKey = 'pinned_channel_ids';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPinnedChannels();
+  }
+
+  Future<void> _loadPinnedChannels() async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = prefs.getStringList(_pinnedKey) ?? [];
+    if (mounted) {
+      setState(() => _pinnedChannelIds = list.toSet());
+    }
+  }
+
+  Future<void> _savePinnedChannels() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_pinnedKey, _pinnedChannelIds.toList());
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
     _searchFocusNode.dispose();
     _debounce?.cancel();
+    _channelListController?.dispose();
     super.dispose();
   }
 
@@ -126,6 +152,155 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
         ),
       ),
     );
+  }
+
+  void _showChannelActions(Channel channel, String lang) {
+    final cid = channel.cid;
+    if (cid == null) return;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.alma.cardBg,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => ChannelActionsSheet(
+        channel: channel,
+        lang: lang,
+        isPinned: _pinnedChannelIds.contains(cid),
+        onPin: () => _togglePin(channel, lang),
+        onMute: () => _toggleMute(channel, lang),
+        onLeave: () => _leaveChannel(channel, lang),
+      ),
+    );
+  }
+
+  void _togglePin(Channel channel, String lang) {
+    final cid = channel.cid;
+    if (cid == null) return;
+
+    setState(() {
+      if (_pinnedChannelIds.contains(cid)) {
+        _pinnedChannelIds.remove(cid);
+      } else {
+        _pinnedChannelIds.add(cid);
+      }
+    });
+    _savePinnedChannels();
+
+    final isPinned = _pinnedChannelIds.contains(cid);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isPinned
+              ? tr('channelActions.pinned', lang)
+              : tr('channelActions.unpinned', lang),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> _toggleMute(Channel channel, String lang) async {
+    try {
+      if (channel.isMuted) {
+        await channel.unmute();
+      } else {
+        await channel.mute();
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              channel.isMuted
+                  ? tr('channelActions.muted', lang)
+                  : tr('channelActions.unmuted', lang),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AlmaTheme.success.withValues(alpha: 0.9),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        setState(() {}); // refresh UI
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('channelInfo.actionFailed', lang)),
+            backgroundColor: AlmaTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _leaveChannel(Channel channel, String lang) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        final alma = ctx.alma;
+        return AlertDialog(
+          backgroundColor: alma.cardBg,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(
+            tr('channelActions.leaveConfirmTitle', lang),
+            style: TextStyle(color: alma.textPrimary, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            tr('channelActions.leaveConfirmDesc', lang),
+            style: TextStyle(color: alma.textSecondary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(tr('common.cancel', lang), style: TextStyle(color: alma.textTertiary)),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AlmaTheme.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text(tr('channelActions.leave', lang)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    try {
+      final currentUserId = StreamChat.of(context).currentUser?.id;
+      if (currentUserId != null) {
+        await channel.removeMembers([currentUserId]);
+      }
+      // Remove from pinned if it was pinned
+      final cid = channel.cid;
+      if (cid != null && _pinnedChannelIds.contains(cid)) {
+        setState(() => _pinnedChannelIds.remove(cid));
+        _savePinnedChannels();
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tr('channelInfo.actionFailed', lang)),
+            backgroundColor: AlmaTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -221,15 +396,29 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                   onChanged: (f) => setState(() => _filter = f),
                 ),
                 Expanded(
-                  child: StreamChannelListView(
-                    controller: StreamChannelListController(
+                  child: RefreshIndicator(
+                    color: AlmaTheme.electricBlue,
+                    onRefresh: () async {
+                      await _channelListController?.refresh();
+                    },
+                    child: StreamChannelListView(
+                    controller: _channelListController ??= StreamChannelListController(
                       client: StreamChat.of(context).client,
                       filter: Filter.in_('members', [user?.id ?? '']),
                       channelStateSort: const [SortOption.desc('last_message_at')],
                       limit: 20,
                     ),
                     itemBuilder: (context, channels, index, defaultWidget) {
-                      final channel = channels[index];
+                      // Sort: pinned channels first
+                      final sorted = List<Channel>.from(channels);
+                      sorted.sort((a, b) {
+                        final aPinned = _pinnedChannelIds.contains(a.cid);
+                        final bPinned = _pinnedChannelIds.contains(b.cid);
+                        if (aPinned && !bPinned) return -1;
+                        if (!aPinned && bPinned) return 1;
+                        return 0;
+                      });
+                      final channel = sorted[index];
                       final isDM = _isDMChannel(channel, user);
 
                       // Apply filter
@@ -245,11 +434,14 @@ class _ChannelListScreenState extends ConsumerState<ChannelListScreen> {
                         currentUser: user,
                         isDM: isDM,
                         lang: lang,
+                        isPinned: _pinnedChannelIds.contains(channel.cid),
                         onTap: () => _navigateToChannel(channel),
+                        onLongPress: () => _showChannelActions(channel, lang),
                       );
                     },
                     onChannelTap: _navigateToChannel,
                     emptyBuilder: (context) => _buildEmptyState(context, lang),
+                  ),
                   ),
                 ),
               ],
@@ -876,14 +1068,18 @@ class _ChannelTile extends StatelessWidget {
   final User? currentUser;
   final bool isDM;
   final String lang;
+  final bool isPinned;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   const _ChannelTile({
     required this.channel,
     required this.currentUser,
     required this.isDM,
     required this.lang,
+    this.isPinned = false,
     required this.onTap,
+    this.onLongPress,
   });
 
   @override
@@ -955,8 +1151,11 @@ class _ChannelTile extends StatelessWidget {
       }
     }
 
+    final isMuted = channel.isMuted;
+
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
@@ -1001,6 +1200,24 @@ class _ChannelTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if (isMuted)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Icon(
+                            Icons.notifications_off,
+                            size: 14,
+                            color: alma.textTertiary,
+                          ),
+                        ),
+                      if (isPinned)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Icon(
+                            Icons.push_pin,
+                            size: 14,
+                            color: AlmaTheme.sandGold.withValues(alpha: 0.7),
+                          ),
+                        ),
                       if (lastMessageAt != null)
                         Text(
                           _formatTime(lastMessageAt),

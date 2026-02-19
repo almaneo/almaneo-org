@@ -44,6 +44,15 @@
                     android:scheme="w3a"
                     android:host="org.almaneo.alma_chat" />
             </intent-filter>
+            <!-- AlmaChat Invite Deep Link -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="almachat"
+                    android:host="invite" />
+            </intent-filter>
         </activity>
         <!-- FCM 기본 알림 채널 설정 (Android 8+) -->
         <meta-data

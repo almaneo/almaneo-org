@@ -17,6 +17,7 @@ import 'l10n/app_strings.dart';
 import 'providers/language_provider.dart';
 import 'providers/theme_provider.dart';
 import 'services/auth_service.dart';
+import 'services/deep_link_service.dart';
 import 'services/notification_service.dart';
 import 'services/profile_service.dart';
 import 'screens/login_screen.dart';
@@ -103,6 +104,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
     with WidgetsBindingObserver {
   final _authService = AuthService();
   final _notificationService = NotificationService.instance;
+  final _deepLinkService = DeepLinkService();
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isConnected = false;
   bool _isCheckingSession = true;
@@ -166,6 +168,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
         await _syncProfileImageFromDB();
 
         await _initNotifications();
+        await _initDeepLinks();
         if (mounted) setState(() => _isConnected = true);
         debugPrint('Session restored from local storage: ${restored.session.userId}');
         return;
@@ -216,6 +219,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
 
       await _syncProfileImageFromDB();
       await _initNotifications();
+      await _initDeepLinks();
     } catch (e) {
       debugPrint('Guest login post-connect error: $e');
     }
@@ -245,6 +249,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
       await _syncProfileImageFromDB(socialAvatar: image);
 
       await _initNotifications();
+      await _initDeepLinks();
     } catch (e) {
       debugPrint('Social login post-connect error: $e');
       // 세션은 이미 저장됨 — Stream 연결 실패해도 홈 화면으로 진입
@@ -363,6 +368,58 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
     }
   }
 
+  /// 딥링크 서비스 초기화 (almachat://invite/{code})
+  Future<void> _initDeepLinks() async {
+    _deepLinkService.userId = _authService.userId;
+    _deepLinkService.onJoinChannel = _onDeepLinkJoin;
+    _deepLinkService.onError = _onDeepLinkError;
+    await _deepLinkService.initialize();
+  }
+
+  /// 딥링크로 채널 참여 성공 시 → 채널로 이동
+  void _onDeepLinkJoin(String channelId, String channelType) async {
+    try {
+      final channel = widget.client.channel(channelType, id: channelId);
+      await channel.watch();
+
+      _navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => StreamChannel(
+            channel: channel,
+            child: const ChatScreen(),
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('[DeepLink] Navigate error: $e');
+    }
+  }
+
+  /// 딥링크 에러 → SnackBar 표시
+  void _onDeepLinkError(String errorType) {
+    final context = _navigatorKey.currentContext;
+    if (context == null) return;
+
+    String message;
+    switch (errorType) {
+      case 'invalid_code':
+        message = 'Invalid invite code';
+      case 'expired_code':
+        message = 'Invite code has expired';
+      default:
+        message = 'Failed to join channel';
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AlmaTheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
+
   /// 푸시 알림 초기화
   Future<void> _initNotifications() async {
     try {
@@ -421,6 +478,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // 생명주기 감시 해제
     _connectionStatusSub?.cancel();
+    _deepLinkService.dispose();
     widget.client.dispose();
     super.dispose();
   }

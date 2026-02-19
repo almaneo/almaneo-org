@@ -339,6 +339,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: Column(
         children: [
           ConnectionBanner(lang: lang),
+          if (channel.isMuted)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              color: AlmaTheme.warning.withValues(alpha: 0.12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.notifications_off, size: 14, color: AlmaTheme.warning.withValues(alpha: 0.8)),
+                  const SizedBox(width: 6),
+                  Text(
+                    tr('chat.mutedBanner', lang),
+                    style: TextStyle(
+                      color: AlmaTheme.warning.withValues(alpha: 0.8),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Expanded(
             child: StreamMessageListView(
               scrollToBottomBuilder: (unreadCount, scrollToBottom) {
