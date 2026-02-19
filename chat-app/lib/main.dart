@@ -112,6 +112,23 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   StreamSubscription? _connectionStatusSub; // 단일 구독 유지
   ConnectionStatus _lastKnownStatus = ConnectionStatus.disconnected; // 마지막 연결 상태 캐시
 
+  // 3-Tier 재연결 시스템
+  Timer? _tier1WaitTimer;
+  static const _tier1Duration = Duration(seconds: 30);
+
+  int _softReconnectAttempts = 0;
+  static const _maxSoftReconnectAttempts = 2;
+
+  int _hardReconnectAttempts = 0;
+  static const _maxHardReconnectAttempts = 3;
+  static const _hardReconnectBackoffs = [
+    Duration(seconds: 30),
+    Duration(seconds: 60),
+    Duration(seconds: 120),
+  ];
+
+  DateTime? _disconnectedSince;
+
   @override
   void initState() {
     super.initState();
@@ -120,13 +137,14 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   }
 
   /// 앱 생명주기 변화 감지
-  /// resumed: 포그라운드 복귀 시 WebSocket 끊겼으면 재연결
+  /// resumed: 포그라운드 복귀 시 WebSocket 끊겼으면 Tier 2 직접 시작
+  /// (백그라운드에서 SDK 내부 재연결이 이미 소진되었으므로 Tier 1 건너뜀)
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && _isConnected && !_isReconnecting) {
       if (_lastKnownStatus == ConnectionStatus.disconnected) {
-        debugPrint('[Lifecycle] App resumed — WebSocket disconnected, reconnecting...');
-        _attemptFullReconnect();
+        debugPrint('[Lifecycle] App resumed — WebSocket disconnected, starting Tier 2');
+        _attemptSoftReconnect();
       } else {
         debugPrint('[Lifecycle] App resumed — WebSocket status: $_lastKnownStatus (OK)');
       }
@@ -161,7 +179,6 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
             name: restored.session.userName,
             extraData: {'preferred_language': restored.session.languageCode},
           ),
-          restored.token,
         );
 
         // DB에서 프로필 이미지 읽어 Stream에 동기화
@@ -205,7 +222,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   /// 게스트 로그인
   Future<void> _handleGuestLogin(String name) async {
     final langState = ref.read(languageProvider);
-    final token = await _authService.loginAsGuest(name, langState.languageCode);
+    await _authService.loginAsGuest(name, langState.languageCode);
 
     try {
       await _connectUserWithRetry(
@@ -214,7 +231,6 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
           name: _authService.userName,
           extraData: {'preferred_language': langState.languageCode},
         ),
-        token,
       );
 
       await _syncProfileImageFromDB();
@@ -233,7 +249,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
         'socialAvatar=${image ?? "null"}');
 
     final langCode = lang ?? ref.read(languageProvider).languageCode;
-    final token = await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
+    await _authService.loginWithSocial(verifierId, name, image, langCode, privateKey);
 
     try {
       await _connectUserWithRetry(
@@ -242,7 +258,6 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
           name: name,
           extraData: {'preferred_language': langCode},
         ),
-        token,
       );
 
       // DB에서 프로필 이미지 읽어 Stream에 동기화 (없으면 소셜 아바타 폴백)
@@ -288,7 +303,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
 
   /// Stream Chat 연결 — tokenProvider 방식 사용
   /// SDK가 401/토큰만료 시 자동으로 tokenProvider를 호출하여 토큰 갱신
-  Future<void> _connectUserWithRetry(User user, String token, {int retries = 1}) async {
+  Future<void> _connectUserWithRetry(User user, {int retries = 1}) async {
     try {
       await widget.client.connectUserWithProvider(
         user,
@@ -305,7 +320,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
       if (retries > 0) {
         debugPrint('Retrying connection...');
         await Future.delayed(const Duration(seconds: 2));
-        return _connectUserWithRetry(user, token, retries: retries - 1);
+        return _connectUserWithRetry(user, retries: retries - 1);
       }
       rethrow;
     }
@@ -314,71 +329,179 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
     _listenConnectionStatus();
   }
 
-  /// SDK가 재연결을 포기(disconnected)하면 전체 재로그인 시도
-  /// _connectionStatusSub로 단일 구독 유지, _isReconnecting으로 중복 방지
-  /// _lastKnownStatus를 캐시하여 생명주기 복귀 시 즉각 판단 가능
-  /// 5초 디바운스: 일시적 끊김(파일 업로드 중 등)에서 불필요한 재연결 방지
-  Timer? _reconnectDebounceTimer;
-
+  /// 3-Tier 재연결 전략:
+  /// Tier 1 (0-30초): SDK 내부 재연결에 맡김 — 아무것도 하지 않음
+  /// Tier 2 (30-60초): Soft reconnect — closeConnection + openConnection (유저/토큰 보존)
+  /// Tier 3 (60초+): Hard reconnect — disconnectUser + connectUserWithProvider (최후 수단, 최대 3회)
   void _listenConnectionStatus() {
     _connectionStatusSub?.cancel();
     _connectionStatusSub = widget.client.wsConnectionStatusStream.listen((status) {
       _lastKnownStatus = status; // 상태 캐시 업데이트
-      if (status == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
-        // 5초 디바운스: SDK 자체 재연결을 먼저 시도하도록 대기
-        _reconnectDebounceTimer?.cancel();
-        _reconnectDebounceTimer = Timer(const Duration(seconds: 5), () {
-          // 5초 후에도 여전히 disconnected면 전체 재연결
-          if (_lastKnownStatus == ConnectionStatus.disconnected && _isConnected && !_isReconnecting) {
-            debugPrint('[Stream] WebSocket still disconnected after 5s — attempting full reconnection');
-            _attemptFullReconnect();
+
+      if (status == ConnectionStatus.connected) {
+        // 연결 복구 — 모든 재연결 상태 리셋
+        _onConnectionRestored();
+        return;
+      }
+
+      if (status == ConnectionStatus.connecting) {
+        // SDK가 재연결 시도 중 — 간섭하지 않음
+        debugPrint('[Reconnect] SDK reconnecting... (Tier 1 active)');
+        return;
+      }
+
+      // disconnected — Tier 1 타이머 시작
+      if (_isConnected && !_isReconnecting) {
+        _disconnectedSince ??= DateTime.now();
+        _tier1WaitTimer?.cancel();
+        _tier1WaitTimer = Timer(_tier1Duration, () {
+          // 30초 후에도 여전히 disconnected면 Tier 2로 에스컬레이션
+          if (_lastKnownStatus != ConnectionStatus.connected && _isConnected && !_isReconnecting) {
+            debugPrint('[Reconnect] Tier 1 expired (30s) — escalating to Tier 2');
+            _attemptSoftReconnect();
           }
         });
-      } else if (status == ConnectionStatus.connected) {
-        // 재연결 성공 시 타이머 취소
-        _reconnectDebounceTimer?.cancel();
+        debugPrint('[Reconnect] Disconnected — Tier 1 started (waiting 30s for SDK auto-reconnect)');
       }
     });
   }
 
-  /// 전체 재연결: 기존 연결 해제 → 토큰 재발급 → 재연결
-  Future<void> _attemptFullReconnect() async {
-    if (_isReconnecting) return; // 이미 재연결 중이면 무시
+  /// 연결 복구 시 모든 재연결 상태 리셋
+  void _onConnectionRestored() {
+    _tier1WaitTimer?.cancel();
+    _softReconnectAttempts = 0;
+    _hardReconnectAttempts = 0;
+    _isReconnecting = false;
+    _disconnectedSince = null;
+    debugPrint('[Reconnect] Connection restored — all counters reset');
+  }
+
+  /// Tier 2: 비파괴적 재연결 — closeConnection + openConnection
+  /// 유저/토큰을 보존한 상태에서 WebSocket만 재연결
+  /// 백엔드 HTTP 요청 불필요 (가장 중요한 차이)
+  Future<void> _attemptSoftReconnect() async {
+    if (_isReconnecting) return;
     _isReconnecting = true;
 
-    try {
-      final userId = _authService.userId;
-      if (userId == null) return;
+    while (_softReconnectAttempts < _maxSoftReconnectAttempts) {
+      _softReconnectAttempts++;
+      debugPrint('[Reconnect] Tier 2 attempt $_softReconnectAttempts/$_maxSoftReconnectAttempts');
 
-      // 기존 연결 해제 후 재연결 (이미 연결된 상태에서 connectUserWithProvider 재호출 시 에러 방지)
       try {
-        await widget.client.disconnectUser();
+        widget.client.closeConnection();
+        await Future.delayed(const Duration(seconds: 1));
+        await widget.client.openConnection();
+
+        // 리스너 재등록 (closeConnection 후 필요)
+        _listenConnectionStatus();
+
+        // 연결 성공 확인 대기 (최대 10초)
+        final connected = await _waitForConnection(const Duration(seconds: 10));
+        if (connected) {
+          debugPrint('[Reconnect] Tier 2 succeeded on attempt $_softReconnectAttempts');
+          _onConnectionRestored();
+          return;
+        }
       } catch (e) {
-        debugPrint('disconnectUser during reconnect: $e');
+        debugPrint('[Reconnect] Tier 2 attempt $_softReconnectAttempts failed: $e');
       }
 
-      final newToken = await _authService.refreshToken();
-      if (newToken == null) {
-        debugPrint('Token refresh returned null — skipping reconnect');
-        return;
+      // 실패 시 5초 대기 후 재시도
+      if (_softReconnectAttempts < _maxSoftReconnectAttempts) {
+        await Future.delayed(const Duration(seconds: 5));
+        // 대기 중 연결이 복구되면 중단
+        if (_lastKnownStatus == ConnectionStatus.connected) {
+          _onConnectionRestored();
+          return;
+        }
       }
-
-      await widget.client.connectUserWithProvider(
-        User(id: userId, name: _authService.userName),
-        (uid) async {
-          final t = await _authService.refreshToken();
-          if (t == null) throw Exception('Token refresh failed');
-          return t;
-        },
-      );
-
-      await _syncProfileImageFromDB();
-      debugPrint('Full reconnection successful');
-    } catch (e) {
-      debugPrint('Full reconnection failed: $e');
-    } finally {
-      _isReconnecting = false;
     }
+
+    // Tier 2 실패 — Tier 3로 에스컬레이션
+    debugPrint('[Reconnect] Tier 2 exhausted — escalating to Tier 3');
+    _isReconnecting = false;
+    _attemptHardReconnect();
+  }
+
+  /// Tier 3: 파괴적 재연결 — disconnectUser + connectUserWithProvider
+  /// 최후 수단, 최대 3회, 지수 백오프 (30초, 60초, 120초)
+  Future<void> _attemptHardReconnect() async {
+    if (_isReconnecting) return;
+    _isReconnecting = true;
+
+    while (_hardReconnectAttempts < _maxHardReconnectAttempts) {
+      final attempt = _hardReconnectAttempts;
+      _hardReconnectAttempts++;
+      debugPrint('[Reconnect] Tier 3 attempt $_hardReconnectAttempts/$_maxHardReconnectAttempts');
+
+      try {
+        final userId = _authService.userId;
+        if (userId == null) {
+          debugPrint('[Reconnect] Tier 3 — no userId, aborting');
+          _isReconnecting = false;
+          return;
+        }
+
+        // 기존 연결 해제
+        try {
+          await widget.client.disconnectUser();
+        } catch (e) {
+          debugPrint('[Reconnect] disconnectUser: $e');
+        }
+
+        // 새 토큰 발급 (백엔드 HTTP 요청)
+        final newToken = await _authService.refreshToken();
+        if (newToken == null) {
+          debugPrint('[Reconnect] Token refresh returned null');
+          // 백오프 후 재시도
+        } else {
+          await widget.client.connectUserWithProvider(
+            User(id: userId, name: _authService.userName),
+            (uid) async {
+              final t = await _authService.refreshToken();
+              if (t == null) throw Exception('Token refresh failed');
+              return t;
+            },
+          );
+
+          // 리스너 재등록 (기존 누락 수정)
+          _listenConnectionStatus();
+
+          await _syncProfileImageFromDB();
+          debugPrint('[Reconnect] Tier 3 succeeded on attempt $_hardReconnectAttempts');
+          _onConnectionRestored();
+          return;
+        }
+      } catch (e) {
+        debugPrint('[Reconnect] Tier 3 attempt $_hardReconnectAttempts failed: $e');
+      }
+
+      // 지수 백오프 대기
+      if (_hardReconnectAttempts < _maxHardReconnectAttempts) {
+        final backoff = _hardReconnectBackoffs[attempt];
+        debugPrint('[Reconnect] Tier 3 backoff: ${backoff.inSeconds}s');
+        await Future.delayed(backoff);
+        // 백오프 대기 중 연결 복구 시 중단
+        if (_lastKnownStatus == ConnectionStatus.connected) {
+          _onConnectionRestored();
+          return;
+        }
+      }
+    }
+
+    // 모든 시도 소진 (~4분 후)
+    debugPrint('[Reconnect] All tiers exhausted after $_hardReconnectAttempts hard attempts. Giving up.');
+    _isReconnecting = false;
+  }
+
+  /// 연결 상태가 connected가 될 때까지 대기 (최대 timeout)
+  Future<bool> _waitForConnection(Duration timeout) async {
+    final deadline = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(deadline)) {
+      if (_lastKnownStatus == ConnectionStatus.connected) return true;
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    return _lastKnownStatus == ConnectionStatus.connected;
   }
 
   /// 딥링크 서비스 초기화 (almachat://invite/{code})
@@ -490,7 +613,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // 생명주기 감시 해제
-    _reconnectDebounceTimer?.cancel();
+    _tier1WaitTimer?.cancel();
     _connectionStatusSub?.cancel();
     _deepLinkService.dispose();
     widget.client.dispose();
