@@ -2786,11 +2786,11 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 59 기준)
+### 📊 페이지별 상태 요약 (Session 120 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
-| Landing | ✅ | 완료 + SEO 최적화 |
+| Landing | ✅ | 완료 + SEO + AlmaChat 섹션 (Session 120) |
 | GAII Dashboard | ✅ | 세계지도 + 50개국 + i18n (ko/en) |
 | GAII Report | ✅ | PDF 다운로드 + i18n (ko/en) |
 | AI Hub | ✅ | Gemini + Groq |
@@ -4636,14 +4636,51 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 120+)
+### ✅ 완료된 작업 (2026-02-19 - Session 120: AlmaChat 랜딩 섹션 & 밋업 CTA 추가)
+
+#### 1. **AlmaChatSection 랜딩 섹션 생성** ✅
+   - `web/src/components/sections/landing/AlmaChatSection.tsx` (신규)
+   - 2컬럼 레이아웃: CSS 폰 목업 (왼쪽) + 4개 피처 카드 (오른쪽)
+   - **4가지 특징 카드**: Auto Translation, Meetup Group Chat, Kindness Score, Ambassador SBT
+   - **통계 행**: 15 Languages / Real-time / On-chain
+   - **다운로드 버튼**: Google Play + App Store + Direct APK (플레이스홀더 `#`)
+   - 커스텀 SVG 아이콘: GooglePlayIcon, AppleIcon (CTASection 패턴)
+   - Warm overlay + `07.webp` 배경
+   - Web3AuthSection과 RoadmapSection 사이에 배치
+
+#### 2. **MeetupList AlmaChat 프로모션 배너** ✅
+   - `web/src/pages/MeetupList.tsx` 수정
+   - 검색/필터 바와 밋업 목록 사이에 warm 그라디언트 카드 배치
+   - Smartphone 아이콘 + 다운로드 버튼
+
+#### 3. **MeetupDetail AlmaChat CTA** ✅
+   - `web/src/pages/MeetupDetail.tsx` 수정
+   - Points Info 섹션 아래에 blue 그라디언트 카드 배치
+   - "AlmaChat 열기" + "앱 다운로드" 버튼 2개
+
+#### 4. **14개 언어 번역 완료** ✅
+   - `landing.json`: `almachat` 섹션 (features, stats, download, phone greetings)
+   - `common.json`: `meetup.almachat` 섹션 (bannerTitle, bannerDesc, detailTitle, detailDesc, openApp, downloadApp)
+   - 대상 언어: ko, en, zh, ja, es, fr, ar, pt, id, ms, th, vi, km, sw
+
+#### 5. **빌드 & 커밋**
+   - 빌드 성공 (33.56초)
+   - 커밋: `2ffea4b` - feat(web): Add AlmaChat landing section and meetup CTAs with 14-language i18n
+   - 33개 파일, +1,094줄
+
+#### 6. **앱스토어 URL 플레이스홀더** (추후 업데이트)
+   - Google Play: `#` (출시 후 업데이트)
+   - App Store: `#` (Apple Developer 등록 후)
+   - APK 직접 다운로드: `#` (호스팅 설정 후)
+
+---
+
+### 🔲 다음 세션 작업 (Session 121+)
 
 #### 🔴 높은 우선순위
+- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크 실제 URL로 교체
+- **Apple Developer 등록 & iOS 빌드**: Codemagic 등 클라우드 빌드 설정
 - **3-Tier 재연결 실기기 심화 테스트**: 비행기 모드 시나리오별 로그 확인
-  - 5초 끊김 → Tier 1 자동 복구
-  - 35초 끊김 → Tier 2 로그
-  - 70초 끊김 → Tier 3 로그
-  - 백그라운드 1분 → 포그라운드 복귀 → Tier 2 직접 시작
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
