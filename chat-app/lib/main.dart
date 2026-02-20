@@ -24,6 +24,7 @@ import 'screens/login_screen.dart';
 import 'screens/channel_list_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/partner_list_screen.dart';
 import 'screens/profile_screen.dart';
 import 'widgets/alma_logo.dart';
 
@@ -701,7 +702,7 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
   }
 }
 
-/// Bottom navigation shell with 3 tabs: Home | Chat | Profile
+/// Bottom navigation shell with 4 tabs: Home | Chat | Partners | Profile
 class _MainShell extends ConsumerStatefulWidget {
   final VoidCallback onLogout;
   final AuthService authService;
@@ -834,6 +835,7 @@ class _MainShellState extends ConsumerState<_MainShell> {
             onLogout: widget.onLogout,
             authService: widget.authService,
           ),
+          const PartnerListScreen(),
           ProfileScreen(
             onLogout: widget.onLogout,
             authService: widget.authService,
@@ -867,6 +869,11 @@ class _MainShellState extends ConsumerState<_MainShell> {
               icon: _buildChatIcon(isActive: false),
               activeIcon: _buildChatIcon(isActive: true),
               label: tr('nav.chat', lang),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.storefront_outlined),
+              activeIcon: const Icon(Icons.storefront),
+              label: tr('nav.partners', lang),
             ),
             BottomNavigationBarItem(
               icon: _buildProfileIcon(isActive: false),

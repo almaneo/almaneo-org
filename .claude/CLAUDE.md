@@ -2786,7 +2786,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 120 기준)
+### 📊 페이지별 상태 요약 (Session 121 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2802,6 +2802,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
 | **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어 음성 TTS, iOS 호환, PDF 다운로드) |
+| **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어 (Session 121) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
@@ -4675,14 +4676,99 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 121+)
+### ✅ 완료된 작업 (2026-02-20 - Session 121: AlmaChat Partner System Phase 1)
+
+#### 1. **Supabase 마이그레이션 생성** ✅
+   - `supabase/migrations/20260220100000_partner_system.sql` (신규)
+   - 5개 테이블: `partner_categories`, `partners`, `vouchers`, `voucher_redemptions`, `partner_photos`
+   - 5개 초기 카테고리 시드: cafe, restaurant, coworking, cultural, other
+   - 인덱스: category_id, lat/lng, owner_user_id, is_active, qr_code 등
+   - RLS 정책: 모든 테이블 public read, authenticated write
+   - Storage 버킷: `partner-photos` (10MB 제한, 이미지 MIME types)
+   - Storage RLS 정책 (읽기/쓰기/수정/삭제)
+
+#### 2. **PartnerService 생성** ✅
+   - `chat-app/lib/services/partner_service.dart` (신규)
+   - `getCategories()`: 카테고리 목록 조회
+   - `getPartners({categoryId, search, lat, lng, radiusKm})`: 바운딩 박스 필터 + Haversine 거리 정렬
+   - `getPartnerById(id)`: 파트너 상세 (카테고리 조인)
+   - `getPartnerPhotos(partnerId)`: 사진 갤러리
+   - `getVouchers(partnerId)`: 활성 바우처 (날짜 필터)
+   - `generateQrCode({voucherId, userId, partnerId})`: 8자리 영숫자 코드, 5분 만료
+   - `redeemVoucher(qrCode)`: 코드 검증 + 만료 확인 + 상태 업데이트
+   - `_haversineDistance()`, `formatDistance()` 헬퍼
+
+#### 3. **PartnerListScreen 생성** ✅
+   - `chat-app/lib/screens/partner_list_screen.dart` (신규)
+   - ConsumerStatefulWidget, 지도/목록 토글, 카테고리 필터 칩, 검색 바
+   - 지도 뷰: GoogleMap 위젯 + 마커 + 다크 맵 스타일
+   - 목록 뷰: RefreshIndicator + ListView.builder + 파트너 카드
+   - FAB: "Near Me" GPS 위치 요청 (Geolocator)
+   - StreamChat.of(context).currentUser?.id로 userId 전달
+
+#### 4. **PartnerDetailScreen 생성** ✅
+   - `chat-app/lib/screens/partner_detail_screen.dart` (신규)
+   - SliverAppBar 커버 이미지, 비즈니스 정보, 주소, 전화, 웹사이트
+   - "Open in Maps" → Google Maps URL 실행
+   - 사진 갤러리 가로 스크롤
+   - 바우처 카드: 할인 뱃지 (percentage/fixed/free_item), 조건, 유효기간
+   - QR 코드 다이얼로그: QrImageView + 5분 카운트다운 타이머
+   - `widget.userId` 파라미터 패턴 사용
+
+#### 5. **4번째 하단 네비 탭 추가** ✅
+   - `chat-app/lib/main.dart`: Home | Chat | **Partners** | Profile (4탭)
+   - IndexedStack에 PartnerListScreen 추가 (index 2)
+   - Profile은 index 2 → 3으로 이동
+   - 아이콘: `Icons.storefront_outlined` / `Icons.storefront`
+
+#### 6. **패키지 설치** ✅
+   - `google_maps_flutter: ^2.14.2` — Google Maps
+   - `geolocator: ^14.0.2` — GPS 위치 서비스
+   - `qr_flutter: ^4.1.0` — QR 코드 생성
+
+#### 7. **Google Maps 설정** ✅
+   - `chat-app/lib/config/env.dart`: `googleMapsApiKey` getter 추가
+   - `AndroidManifest.xml`: `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION` 권한 추가
+   - `AndroidManifest.xml`: `com.google.android.geo.API_KEY` meta-data 추가 (PLACEHOLDER)
+   - ⚠️ **사용자 작업 필요**: Google Cloud Console에서 API 키 발급 → `.env`에 `GOOGLE_MAPS_API_KEY=<key>` 설정 → AndroidManifest PLACEHOLDER 교체
+
+#### 8. **i18n 15개 언어 번역** ✅
+   - `chat-app/lib/l10n/app_strings.dart`: 37개 키 × 15개 언어 = 555 항목
+   - 키 범위: `nav.partners`, `partners.title/search/nearMe/mapView/listView/noResults`
+   - 카테고리: `partners.categories.all/cafe/restaurant/coworking/cultural/other`
+   - 상세: `partners.detail.address/phone/website/openInMaps/description/photos/vouchers/noVouchers/useVoucher`
+   - 바우처: `partners.voucher.discount/fixedDiscount/freeItem/validUntil/terms/qrTitle/qrExpires/qrExpired/qrGenerating/redeemed/redeemSuccess/redeemFailed`
+   - 거리: `partners.distance.km/m/nearby`
+
+#### 9. **빌드 성공** ✅
+   - APK: **78.2MB** (이전: 76.8MB — 신규 패키지 추가)
+   - QR 스타일 수정: `QrEyeShape.roundedRect` → `QrEyeShape.square` (qr_flutter 4.1.0 호환)
+
+#### 10. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `supabase/migrations/20260220100000_partner_system.sql` | **신규** — DB 스키마 5 테이블 |
+   | `chat-app/lib/services/partner_service.dart` | **신규** — 파트너 서비스 |
+   | `chat-app/lib/screens/partner_list_screen.dart` | **신규** — 지도/목록 화면 |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | **신규** — 상세 + 바우처 + QR |
+   | `chat-app/lib/main.dart` | 수정 — 4번째 탭 추가 |
+   | `chat-app/lib/config/env.dart` | 수정 — Google Maps API 키 |
+   | `chat-app/android/app/src/main/AndroidManifest.xml` | 수정 — 위치 권한 + Maps 키 |
+   | `chat-app/pubspec.yaml` | 수정 — 3개 패키지 추가 |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — 555 번역 항목 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 122+)
 
 #### 🔴 높은 우선순위
-- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크 실제 URL로 교체
-- **Apple Developer 등록 & iOS 빌드**: Codemagic 등 클라우드 빌드 설정
-- **3-Tier 재연결 실기기 심화 테스트**: 비행기 모드 시나리오별 로그 확인
+- **Google Maps API 키 설정**: Google Cloud Console에서 키 발급 → `.env` + AndroidManifest 적용
+- **Supabase 마이그레이션 적용**: `supabase db push` 또는 Dashboard에서 SQL 직접 실행
+- **파트너 실기기 테스트**: 목록/지도/QR 코드 기능 확인
+- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
 #### 🟡 중간 우선순위
+- **PartnerSBT 스마트 컨트랙트** (Phase 4): ERC-721 Soulbound + 시간 제한 유효성
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
 - **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
