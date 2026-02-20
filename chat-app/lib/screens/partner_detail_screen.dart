@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/partner_service.dart';
+import 'partner_register_screen.dart';
+import 'voucher_create_screen.dart';
 
 class PartnerDetailScreen extends ConsumerStatefulWidget {
   final String partnerId;
@@ -24,6 +27,11 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
   List<Map<String, dynamic>> _vouchers = [];
   List<Map<String, dynamic>> _photos = [];
 
+  bool get _isOwner =>
+      widget.userId != null &&
+      _partner != null &&
+      widget.userId == _partner!['owner_user_id'];
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +43,9 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
     try {
       final results = await Future.wait([
         PartnerService.getPartnerById(widget.partnerId),
-        PartnerService.getVouchers(widget.partnerId),
+        _isOwner
+            ? PartnerService.getOwnerVouchers(widget.partnerId)
+            : PartnerService.getVouchers(widget.partnerId),
         PartnerService.getPartnerPhotos(widget.partnerId),
       ]);
       if (mounted) {
@@ -45,10 +55,21 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
           _photos = results[2] as List<Map<String, dynamic>>;
           _isLoading = false;
         });
+        // Reload vouchers with correct owner context after partner loaded
+        if (_partner != null) {
+          _reloadVouchers();
+        }
       }
     } catch (e) {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  Future<void> _reloadVouchers() async {
+    final vouchers = _isOwner
+        ? await PartnerService.getOwnerVouchers(widget.partnerId)
+        : await PartnerService.getVouchers(widget.partnerId);
+    if (mounted) setState(() => _vouchers = vouchers);
   }
 
   Future<void> _openInMaps() async {
@@ -74,6 +95,185 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
         partnerId: widget.partnerId,
         userId: userId,
         lang: lang,
+      ),
+    );
+  }
+
+  void _navigateToEdit() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PartnerRegisterScreen(
+          userId: widget.userId,
+          existingPartner: _partner,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) _loadData();
+    });
+  }
+
+  void _navigateToCreateVoucher() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VoucherCreateScreen(partnerId: widget.partnerId),
+      ),
+    ).then((result) {
+      if (result == true) _reloadVouchers();
+    });
+  }
+
+  void _navigateToEditVoucher(Map<String, dynamic> voucher) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VoucherCreateScreen(
+          partnerId: widget.partnerId,
+          existingVoucher: voucher,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) _reloadVouchers();
+    });
+  }
+
+  Future<void> _addPhoto() async {
+    final lang = ref.read(languageProvider).languageCode;
+    final alma = context.alma;
+
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: alma.cardBg,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40, height: 4,
+              decoration: BoxDecoration(
+                color: alma.textTertiary,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(
+                  color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.photo_library_outlined, color: AlmaTheme.electricBlue),
+              ),
+              title: Text(tr('partners.edit.fromGallery', lang), style: TextStyle(color: alma.textPrimary)),
+              onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+            ),
+            ListTile(
+              leading: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(
+                  color: AlmaTheme.cyan.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.camera_alt_outlined, color: AlmaTheme.cyan),
+              ),
+              title: Text(tr('partners.edit.fromCamera', lang), style: TextStyle(color: alma.textPrimary)),
+              onTap: () => Navigator.pop(ctx, ImageSource.camera),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null) return;
+
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: source,
+        maxWidth: 1200,
+        maxHeight: 900,
+        imageQuality: 85,
+      );
+      if (picked == null || !mounted) return;
+
+      _showSnackBar(tr('partners.photo.uploading', lang));
+
+      final result = await PartnerService.addPartnerPhoto(
+        partnerId: widget.partnerId,
+        filePath: picked.path,
+        uploadedBy: widget.userId,
+      );
+
+      if (mounted) {
+        if (result != null) {
+          _showSnackBar(tr('partners.photo.uploaded', lang));
+          _loadData();
+        } else {
+          _showSnackBar(tr('partners.photo.uploadFailed', lang), isError: true);
+        }
+      }
+    } catch (e) {
+      debugPrint('[PartnerDetail] addPhoto error: $e');
+    }
+  }
+
+  Future<void> _deletePhoto(String photoId) async {
+    final lang = ref.read(languageProvider).languageCode;
+    final alma = context.alma;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: alma.cardBg,
+        title: Text(tr('partners.photo.deleteTitle', lang), style: TextStyle(color: alma.textPrimary)),
+        content: Text(tr('partners.photo.deleteDesc', lang), style: TextStyle(color: alma.textSecondary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(tr('common.cancel', lang), style: TextStyle(color: alma.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(tr('partners.photo.deleteConfirm', lang), style: const TextStyle(color: AlmaTheme.error)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    final success = await PartnerService.deletePartnerPhoto(photoId);
+    if (mounted) {
+      if (success) {
+        _loadData();
+      } else {
+        _showSnackBar(tr('partners.photo.deleteFailed', lang), isError: true);
+      }
+    }
+  }
+
+  Future<void> _toggleVoucherActive(Map<String, dynamic> voucher) async {
+    final isActive = voucher['is_active'] as bool? ?? true;
+    final success = isActive
+        ? await PartnerService.deactivateVoucher(voucher['id'])
+        : await PartnerService.updateVoucher(voucherId: voucher['id'], isActive: true);
+    if (mounted && success) {
+      _reloadVouchers();
+    }
+  }
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? AlmaTheme.error : AlmaTheme.success,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -195,6 +395,42 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                     ],
                   ),
 
+                  // Owner action bar
+                  if (_isOwner) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: _navigateToEdit,
+                            icon: const Icon(Icons.edit, size: 18),
+                            label: Text(tr('partners.owner.edit', lang)),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AlmaTheme.electricBlue,
+                              side: const BorderSide(color: AlmaTheme.electricBlue),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: _navigateToCreateVoucher,
+                            icon: const Icon(Icons.local_offer, size: 18),
+                            label: Text(tr('partners.owner.addVoucher', lang)),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AlmaTheme.terracottaOrange,
+                              side: const BorderSide(color: AlmaTheme.terracottaOrange),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+
                   const SizedBox(height: 20),
 
                   // Address
@@ -259,31 +495,99 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                     ),
                   ],
 
-                  // Photos
-                  if (_photos.isNotEmpty) ...[
-                    const SizedBox(height: 20),
+                  // Photos section
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        tr('partners.detail.photos', lang),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: alma.textPrimary,
+                        ),
+                      ),
+                      const Spacer(),
+                      // Add photo button (all users)
+                      TextButton.icon(
+                        onPressed: _addPhoto,
+                        icon: const Icon(Icons.add_a_photo, size: 16),
+                        label: Text(tr('partners.photo.add', lang)),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AlmaTheme.electricBlue,
+                          textStyle: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  if (_photos.isEmpty)
+                    Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: alma.chipBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: alma.borderDefault),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.photo_library_outlined, size: 32, color: alma.textTertiary),
+                            const SizedBox(height: 4),
+                            Text(
+                              tr('partners.photo.noPhotos', lang),
+                              style: TextStyle(color: alma.textTertiary, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
                     SizedBox(
                       height: 120,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: _photos.length,
                         itemBuilder: (context, index) {
+                          final photo = _photos[index];
                           return Padding(
                             padding: EdgeInsets.only(right: index < _photos.length - 1 ? 8 : 0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                _photos[index]['photo_url'],
-                                width: 160,
-                                height: 120,
-                                fit: BoxFit.cover,
-                              ),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    photo['photo_url'],
+                                    width: 160,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                // Delete button for owner
+                                if (_isOwner)
+                                  Positioned(
+                                    top: 4,
+                                    right: 4,
+                                    child: GestureDetector(
+                                      onTap: () => _deletePhoto(photo['id']),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withValues(alpha: 0.6),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(Icons.close, color: Colors.white, size: 16),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           );
                         },
                       ),
                     ),
-                  ],
 
                   // Vouchers
                   const SizedBox(height: 24),
@@ -357,6 +661,9 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
     final validUntil = voucher['valid_until'] != null
         ? DateTime.tryParse(voucher['valid_until'])
         : null;
+    final isActive = voucher['is_active'] as bool? ?? true;
+    final currentRedemptions = voucher['current_redemptions'] as int? ?? 0;
+    final maxRedemptions = voucher['max_redemptions'] as int?;
 
     String discountLabel;
     switch (discountType) {
@@ -370,82 +677,138 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
         discountLabel = 'Discount';
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: alma.cardBg,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: alma.borderDefault),
-        boxShadow: alma.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // Discount badge
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  discountLabel,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: AlmaTheme.terracottaOrange,
+    return Opacity(
+      opacity: isActive ? 1.0 : 0.5,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: alma.cardBg,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: isActive ? alma.borderDefault : alma.divider),
+          boxShadow: alma.cardShadow,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                // Discount badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    discountLabel,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: AlmaTheme.terracottaOrange,
+                    ),
                   ),
                 ),
+                if (!isActive) ...[
+                  const SizedBox(width: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: alma.chipBg,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      tr('partners.voucher.inactive', lang),
+                      style: TextStyle(fontSize: 11, color: alma.textTertiary),
+                    ),
+                  ),
+                ],
+                const Spacer(),
+                if (validUntil != null)
+                  Text(
+                    '${tr('partners.voucher.validUntil', lang)} ${validUntil.month}/${validUntil.day}',
+                    style: TextStyle(fontSize: 12, color: alma.textTertiary),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              voucher['title'] ?? '',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: alma.textPrimary,
               ),
-              const Spacer(),
-              if (validUntil != null)
-                Text(
-                  '${tr('partners.voucher.validUntil', lang)} ${validUntil.month}/${validUntil.day}',
-                  style: TextStyle(fontSize: 12, color: alma.textTertiary),
-                ),
+            ),
+            if (voucher['description'] != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                voucher['description'],
+                style: TextStyle(fontSize: 13, color: alma.textSecondary),
+              ),
             ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            voucher['title'] ?? '',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: alma.textPrimary,
-            ),
-          ),
-          if (voucher['description'] != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              voucher['description'],
-              style: TextStyle(fontSize: 13, color: alma.textSecondary),
-            ),
-          ],
-          if (voucher['terms'] != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              '${tr('partners.voucher.terms', lang)}: ${voucher['terms']}',
-              style: TextStyle(fontSize: 12, color: alma.textTertiary, fontStyle: FontStyle.italic),
-            ),
-          ],
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => _showQrDialog(voucher, lang),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AlmaTheme.electricBlue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+            if (voucher['terms'] != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                '${tr('partners.voucher.terms', lang)}: ${voucher['terms']}',
+                style: TextStyle(fontSize: 12, color: alma.textTertiary, fontStyle: FontStyle.italic),
               ),
-              child: Text(tr('partners.detail.useVoucher', lang)),
-            ),
-          ),
-        ],
+            ],
+
+            // Owner: redemption stats + controls
+            if (_isOwner) ...[
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Icon(Icons.confirmation_number_outlined, size: 14, color: alma.textTertiary),
+                  const SizedBox(width: 4),
+                  Text(
+                    maxRedemptions != null
+                        ? '$currentRedemptions / $maxRedemptions ${tr('partners.voucher.redeemed', lang)}'
+                        : '$currentRedemptions ${tr('partners.voucher.redeemed', lang)}',
+                    style: TextStyle(fontSize: 12, color: alma.textTertiary),
+                  ),
+                  const Spacer(),
+                  // Edit button
+                  IconButton(
+                    icon: Icon(Icons.edit_outlined, size: 18, color: alma.textSecondary),
+                    onPressed: () => _navigateToEditVoucher(voucher),
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(6),
+                  ),
+                  const SizedBox(width: 4),
+                  // Toggle active
+                  IconButton(
+                    icon: Icon(
+                      isActive ? Icons.toggle_on : Icons.toggle_off,
+                      size: 28,
+                      color: isActive ? AlmaTheme.success : alma.textTertiary,
+                    ),
+                    onPressed: () => _toggleVoucherActive(voucher),
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(4),
+                  ),
+                ],
+              ),
+            ] else ...[
+              // Regular user: Use Voucher button
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isActive ? () => _showQrDialog(voucher, lang) : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AlmaTheme.electricBlue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Text(tr('partners.detail.useVoucher', lang)),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

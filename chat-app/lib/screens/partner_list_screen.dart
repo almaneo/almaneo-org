@@ -8,6 +8,7 @@ import '../l10n/app_strings.dart';
 import '../providers/language_provider.dart';
 import '../services/partner_service.dart';
 import 'partner_detail_screen.dart';
+import 'partner_register_screen.dart';
 
 class PartnerListScreen extends ConsumerStatefulWidget {
   const PartnerListScreen({super.key});
@@ -175,10 +176,34 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: _getCurrentLocation,
-        backgroundColor: AlmaTheme.electricBlue,
-        child: const Icon(Icons.my_location, color: Colors.white, size: 20),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton.small(
+            heroTag: 'location',
+            onPressed: _getCurrentLocation,
+            backgroundColor: AlmaTheme.electricBlue,
+            child: const Icon(Icons.my_location, color: Colors.white, size: 20),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'register',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PartnerRegisterScreen(
+                    userId: StreamChat.of(context).currentUser?.id,
+                  ),
+                ),
+              ).then((result) {
+                if (result == true) _loadData();
+              });
+            },
+            backgroundColor: AlmaTheme.terracottaOrange,
+            child: const Icon(Icons.add_business, color: Colors.white),
+          ),
+        ],
       ),
     );
   }
@@ -254,6 +279,10 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
     final categoryData = partner['partner_categories'] as Map<String, dynamic>?;
     final categoryName = categoryData?['name'] as String? ?? 'other';
     final distance = partner['_distance_km'] as double?;
+    final coverUrl = partner['cover_image_url'] as String?;
+    final currentUserId = StreamChat.of(context).currentUser?.id;
+    final isMine = currentUserId != null &&
+        partner['owner_user_id'] == currentUserId;
 
     return GestureDetector(
       onTap: () {
@@ -262,7 +291,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
           MaterialPageRoute(
             builder: (_) => PartnerDetailScreen(
                       partnerId: partner['id'],
-                      userId: StreamChat.of(context).currentUser?.id,
+                      userId: currentUserId,
                     ),
           ),
         ).then((_) => _loadData());
@@ -280,7 +309,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
         ),
         child: Row(
           children: [
-            // Logo
+            // Cover image / icon
             Container(
               width: 56,
               height: 56,
@@ -288,11 +317,13 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
                 color: alma.chipBg,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: partner['logo_url'] != null
+              child: coverUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
-                        partner['logo_url'],
+                        coverUrl,
+                        width: 56,
+                        height: 56,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) =>
                             Icon(Icons.storefront, color: alma.textTertiary),
@@ -307,15 +338,38 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    partner['business_name'] ?? '',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                      color: alma.textPrimary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          partner['business_name'] ?? '',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: alma.textPrimary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (isMine)
+                        Container(
+                          margin: const EdgeInsets.only(left: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: AlmaTheme.terracottaOrange.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            tr('partners.myBadge', lang),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: AlmaTheme.terracottaOrange,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Row(

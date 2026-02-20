@@ -1,3 +1,4 @@
+import 'dart:io' as io;
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -202,6 +203,295 @@ class PartnerService {
       debugPrint('[PartnerService] redeemVoucher error: $e');
       return {'error': 'unknown'};
     }
+  }
+
+  // ── Create / Update ──
+
+  static Future<Map<String, dynamic>?> createPartner({
+    required String businessName,
+    required int categoryId,
+    String? ownerUserId,
+    String? description,
+    String? address,
+    double? latitude,
+    double? longitude,
+    String? phone,
+    String? website,
+    String? coverImageUrl,
+  }) async {
+    try {
+      // Check if ownerUserId exists in users table (FK constraint)
+      String? validOwner;
+      if (ownerUserId != null) {
+        final user = await _db
+            .from('users')
+            .select('wallet_address')
+            .eq('wallet_address', ownerUserId)
+            .maybeSingle();
+        validOwner = user != null ? ownerUserId : null;
+      }
+
+      final data = await _db.from('partners').insert({
+        'business_name': businessName,
+        'category_id': categoryId,
+        'owner_user_id': validOwner,
+        'description': description,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'phone': phone,
+        'website': website,
+        'cover_image_url': coverImageUrl,
+        'is_active': true,
+      }).select().single();
+      return data;
+    } catch (e) {
+      debugPrint('[PartnerService] createPartner error: $e');
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> updatePartner({
+    required String partnerId,
+    required String businessName,
+    required int categoryId,
+    String? description,
+    String? address,
+    double? latitude,
+    double? longitude,
+    String? phone,
+    String? website,
+    String? coverImageUrl,
+  }) async {
+    try {
+      final updates = <String, dynamic>{
+        'business_name': businessName,
+        'category_id': categoryId,
+        'description': description,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'phone': phone,
+        'website': website,
+      };
+      if (coverImageUrl != null) {
+        updates['cover_image_url'] = coverImageUrl;
+      }
+      final data = await _db
+          .from('partners')
+          .update(updates)
+          .eq('id', partnerId)
+          .select()
+          .single();
+      return data;
+    } catch (e) {
+      debugPrint('[PartnerService] updatePartner error: $e');
+      return null;
+    }
+  }
+
+  static Future<bool> deactivatePartner(String partnerId) async {
+    try {
+      await _db
+          .from('partners')
+          .update({'is_active': false})
+          .eq('id', partnerId);
+      return true;
+    } catch (e) {
+      debugPrint('[PartnerService] deactivatePartner error: $e');
+      return false;
+    }
+  }
+
+  // ── Photos ──
+
+  static Future<String?> uploadCoverImage({
+    required String partnerId,
+    required String filePath,
+  }) async {
+    try {
+      final bytes = await _getFile(filePath);
+      final ext = filePath.split('.').last.toLowerCase();
+      final storagePath = 'partners/$partnerId/cover.$ext';
+      await _db.storage.from('partner-photos').uploadBinary(
+        storagePath,
+        bytes,
+        fileOptions: const FileOptions(upsert: true),
+      );
+      final url = _db.storage.from('partner-photos').getPublicUrl(storagePath);
+      final cacheBustedUrl = '$url?v=${DateTime.now().millisecondsSinceEpoch}';
+      // Update partner record
+      await _db
+          .from('partners')
+          .update({'cover_image_url': cacheBustedUrl})
+          .eq('id', partnerId);
+      return cacheBustedUrl;
+    } catch (e) {
+      debugPrint('[PartnerService] uploadCoverImage error: $e');
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> addPartnerPhoto({
+    required String partnerId,
+    required String filePath,
+    String? uploadedBy,
+    String? caption,
+  }) async {
+    try {
+      final bytes = await _getFile(filePath);
+      final ext = filePath.split('.').last.toLowerCase();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final storagePath = 'partners/$partnerId/gallery/$timestamp.$ext';
+      await _db.storage.from('partner-photos').uploadBinary(
+        storagePath,
+        bytes,
+        fileOptions: const FileOptions(upsert: true),
+      );
+      final url = _db.storage.from('partner-photos').getPublicUrl(storagePath);
+
+      // Get current max sort_order
+      final existing = await _db
+          .from('partner_photos')
+          .select('sort_order')
+          .eq('partner_id', partnerId)
+          .order('sort_order', ascending: false)
+          .limit(1);
+      final nextOrder = existing.isNotEmpty
+          ? ((existing[0]['sort_order'] as int?) ?? 0) + 1
+          : 0;
+
+      final data = await _db.from('partner_photos').insert({
+        'partner_id': partnerId,
+        'photo_url': url,
+        'uploaded_by': uploadedBy,
+        'caption': caption,
+        'sort_order': nextOrder,
+      }).select().single();
+      return data;
+    } catch (e) {
+      debugPrint('[PartnerService] addPartnerPhoto error: $e');
+      return null;
+    }
+  }
+
+  static Future<bool> deletePartnerPhoto(String photoId) async {
+    try {
+      await _db.from('partner_photos').delete().eq('id', photoId);
+      return true;
+    } catch (e) {
+      debugPrint('[PartnerService] deletePartnerPhoto error: $e');
+      return false;
+    }
+  }
+
+  static Future<String?> uploadPartnerPhoto({
+    required String partnerId,
+    required String filePath,
+    required String fileName,
+  }) async {
+    try {
+      final file = await _getFile(filePath);
+      final storagePath = 'partners/$partnerId/$fileName';
+      await _db.storage.from('partner-photos').uploadBinary(
+        storagePath,
+        file,
+        fileOptions: const FileOptions(upsert: true),
+      );
+      final url = _db.storage.from('partner-photos').getPublicUrl(storagePath);
+      return url;
+    } catch (e) {
+      debugPrint('[PartnerService] uploadPartnerPhoto error: $e');
+      return null;
+    }
+  }
+
+  // ── Voucher Management ──
+
+  static Future<Map<String, dynamic>?> createVoucher({
+    required String partnerId,
+    required String title,
+    required String discountType,
+    double? discountValue,
+    String? description,
+    String? terms,
+    int? maxRedemptions,
+    DateTime? validUntil,
+  }) async {
+    try {
+      final data = await _db.from('vouchers').insert({
+        'partner_id': partnerId,
+        'title': title,
+        'discount_type': discountType,
+        'discount_value': discountValue,
+        'description': description,
+        'terms': terms,
+        'max_redemptions': maxRedemptions,
+        'valid_until': validUntil?.toIso8601String(),
+        'is_active': true,
+      }).select().single();
+      return data;
+    } catch (e) {
+      debugPrint('[PartnerService] createVoucher error: $e');
+      return null;
+    }
+  }
+
+  static Future<bool> updateVoucher({
+    required String voucherId,
+    String? title,
+    String? description,
+    String? terms,
+    bool? isActive,
+    DateTime? validUntil,
+  }) async {
+    try {
+      final updates = <String, dynamic>{};
+      if (title != null) updates['title'] = title;
+      if (description != null) updates['description'] = description;
+      if (terms != null) updates['terms'] = terms;
+      if (isActive != null) updates['is_active'] = isActive;
+      if (validUntil != null) updates['valid_until'] = validUntil.toIso8601String();
+      if (updates.isEmpty) return true;
+
+      await _db.from('vouchers').update(updates).eq('id', voucherId);
+      return true;
+    } catch (e) {
+      debugPrint('[PartnerService] updateVoucher error: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> deactivateVoucher(String voucherId) async {
+    try {
+      await _db
+          .from('vouchers')
+          .update({'is_active': false})
+          .eq('id', voucherId);
+      return true;
+    } catch (e) {
+      debugPrint('[PartnerService] deactivateVoucher error: $e');
+      return false;
+    }
+  }
+
+  /// Get all vouchers for owner (including inactive)
+  static Future<List<Map<String, dynamic>>> getOwnerVouchers(String partnerId) async {
+    try {
+      final data = await _db
+          .from('vouchers')
+          .select()
+          .eq('partner_id', partnerId)
+          .order('created_at', ascending: false);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      debugPrint('[PartnerService] getOwnerVouchers error: $e');
+      return [];
+    }
+  }
+
+  static Future<Uint8List> _getFile(String path) async {
+    return await io.File(path).readAsBytes();
   }
 
   // ── Helpers ──

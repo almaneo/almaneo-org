@@ -4759,16 +4759,146 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 122+)
+### ✅ 완료된 작업 (2026-02-20 - Session 122: Partner Registration & FK Fix)
+
+#### 1. **Google Maps API 키 설정** ✅
+   - Google Cloud Console에서 Maps SDK for Android API 키 발급
+   - `chat-app/.env` + `android/local.properties`에서 관리 (git 미추적)
+   - `AndroidManifest.xml`: gradle manifest placeholder (`${GOOGLE_MAPS_API_KEY}`) 사용
+
+#### 2. **Supabase 마이그레이션 적용** ✅
+   - `supabase migration repair --status reverted 20260217` (orphan 히스토리 복구)
+   - `supabase db push --include-all` 성공
+   - 5개 테이블, Storage 버킷, 인덱스, RLS 정책 모두 적용 확인
+
+#### 3. **파트너 실기기 테스트** ✅
+   - Partners 탭 표시, 지도 뷰, 목록 뷰, Near Me GPS 위치 요청 — 4개 항목 모두 정상
+   - 샘플 Starbucks 데이터 SQL 직접 등록 → 목록에 정상 표시
+
+#### 4. **PartnerRegisterScreen 구현** ✅
+   - `chat-app/lib/screens/partner_register_screen.dart` (신규)
+   - ConsumerStatefulWidget, Form 유효성 검사
+   - 필드: 비즈니스 이름 (필수), 카테고리 칩 (필수), 설명, 주소, 전화, 웹사이트
+   - GoogleMap 위치 선택기 (탭하여 마커 배치, 드래그 가능, 다크 맵 스타일)
+   - "My Location" GPS 버튼 (Geolocator)
+   - 기본 맵 중심: Ho Chi Minh City (10.7769, 106.7009)
+   - 제출 시 `PartnerService.createPartner()` 호출, 성공 시 목록으로 복귀
+
+#### 5. **PartnerService.createPartner 메서드 추가** ✅
+   - `chat-app/lib/services/partner_service.dart` 수정
+   - `createPartner()`: partners 테이블 INSERT + `.select().single()` 반환
+   - `uploadPartnerPhoto()`: Supabase Storage 업로드 (partner-photos 버킷)
+   - `_getFile()`: `dart:io` File 읽기 헬퍼
+
+#### 6. **FK 제약 위반 버그 수정** ✅
+   - **문제**: `owner_user_id TEXT REFERENCES users(wallet_address)` — Stream Chat 유저 ID가 users 테이블에 없어 INSERT 실패
+   - **수정**: `createPartner()` 호출 시 `ownerUserId`가 users 테이블에 존재하는지 먼저 확인 (`.maybeSingle()`), 없으면 `null`로 전달
+   - 수정 후 앱에서 파트너 등록 → 목록에 정상 표시 확인
+
+#### 7. **PartnerListScreen 등록 FAB 추가** ✅
+   - 기존 단일 FAB → Column에 두 개 FAB
+   - 위: GPS 위치 FAB (파란색, `my_location` 아이콘, heroTag: 'location')
+   - 아래: 등록 FAB (주황색/terracottaOrange, `add_business` 아이콘, heroTag: 'register')
+   - 등록 완료 후 `Navigator.pop(context, true)` → 목록 자동 새로고침
+
+#### 8. **i18n 15개 언어 번역 추가** ✅
+   - `app_strings.dart`: 22개 키 × 15개 언어 = 330 항목
+   - 키: `partners.register.title/businessName/businessNameHint/category/selectCategory/description/descriptionHint/address/addressHint/location/pickOnMap/hideMap/useMyLocation/tapToPlace/phone/phoneHint/website/websiteHint/submit/success/failed/required`
+
+#### 9. **빌드 성공** ✅
+   - APK: **78.5MB**
+
+#### 10. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `chat-app/lib/screens/partner_register_screen.dart` | **신규** — 파트너 등록 폼 |
+   | `chat-app/lib/services/partner_service.dart` | 수정 — createPartner, uploadPartnerPhoto, FK 검증 |
+   | `chat-app/lib/screens/partner_list_screen.dart` | 수정 — 등록 FAB 추가 |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — 330 번역 항목 |
+   | `chat-app/android/app/src/main/AndroidManifest.xml` | 수정 — Google Maps API 키 |
+   - **총 5개 파일**, +909줄, -5줄
+
+---
+
+### ✅ 완료된 작업 (2026-02-21 - Session 123: Partner System Feature Expansion)
+
+#### 1. **DB 마이그레이션** ✅
+   - `supabase/migrations/20260221100000_partner_expansion.sql` (신규)
+   - `partner_photos` 테이블에 `uploaded_by TEXT`, `caption TEXT` 컬럼 추가
+   - `partner_photos` UPDATE/DELETE RLS 정책 추가
+   - `vouchers` DELETE RLS 정책 추가
+   - `increment_voucher_redemptions` RPC 함수 생성
+   - `partners` 테이블 `updated_at` 자동 갱신 트리거
+
+#### 2. **PartnerService 확장 (9개 메서드)** ✅
+   - `updatePartner()` — 파트너 정보 UPDATE
+   - `deactivatePartner(id)` — SET is_active = false (soft-delete)
+   - `uploadCoverImage(partnerId, filePath)` — Storage 업로드 + cover_image_url UPDATE
+   - `addPartnerPhoto(partnerId, filePath, uploadedBy?, caption?)` — 갤러리 사진 추가
+   - `deletePartnerPhoto(photoId)` — 사진 삭제
+   - `uploadPartnerPhoto(partnerId, filePath, fileName)` — Storage 업로드 헬퍼
+   - `createVoucher(partnerId, title, discountType, ...)` — 바우처 생성
+   - `updateVoucher(voucherId, ...)` — 바우처 수정
+   - `deactivateVoucher(voucherId)` — 바우처 비활성화
+   - `getOwnerVouchers(partnerId)` — 비활성 포함 전체 조회
+
+#### 3. **파트너 등록 → 수정 모드 확장** ✅
+   - `existingPartner` 옵션 파라미터로 edit 모드 전환
+   - 폼 필드 pre-fill, AppBar/버튼 텍스트 변경
+   - 커버 이미지 피커: 갤러리/카메라/삭제 바텀시트 (image_picker 사용)
+   - 비활성화(soft-delete) 버튼 + 확인 다이얼로그
+
+#### 4. **상세 화면 Owner 관리 확장** ✅
+   - Owner 감지: `widget.userId == _partner?['owner_user_id']`
+   - Owner 액션 바: "Edit" + "Add Voucher" 버튼
+   - 사진 갤러리: 모든 사용자 "Add Photo", Owner 삭제 X 오버레이
+   - 바우처 Owner 관리: 활성/비활성 토글, 사용 횟수(current/max), 수정 아이콘
+   - 비활성 바우처 Opacity(0.5) + "inactive" 뱃지
+
+#### 5. **바우처 생성 화면** ✅
+   - `chat-app/lib/screens/voucher_create_screen.dart` (신규)
+   - 폼: Title, Description, Discount Type (3 ChoiceChips), Discount Value, Terms, Max Redemptions, Valid Until (DatePicker)
+   - `existingVoucher` 파라미터로 수정 모드 지원
+
+#### 6. **목록 화면 개선** ✅
+   - 파트너 카드에 cover_image_url 썸네일 표시 (기존 storefront 아이콘 대체)
+   - Owner 파트너에 "My" 뱃지 표시 (terracottaOrange)
+
+#### 7. **i18n 15개 언어 번역** ✅
+   - 46개 키 × 15개 언어 = **690 번역 항목** 추가
+   - 키 그룹: partners.register (13키), partners.detail (10키), partners.myBadge (1키), voucher (22키)
+   - 지원 언어: ko, en, zh, ja, es, fr, ar, vi, th, pt, id, hi, de, ru, tr
+
+#### 8. **Supabase 마이그레이션 적용** ✅
+   - `supabase migration repair --status reverted 20260217` (orphan 히스토리 복구)
+   - `supabase db push --include-all` 성공
+
+#### 9. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `supabase/migrations/20260221100000_partner_expansion.sql` | **신규** — DB 확장 |
+   | `chat-app/lib/screens/voucher_create_screen.dart` | **신규** — 바우처 생성/수정 |
+   | `chat-app/lib/services/partner_service.dart` | 수정 — 9개 메서드 추가 (+220줄) |
+   | `chat-app/lib/screens/partner_register_screen.dart` | 수정 — Edit 모드 + 커버 이미지 |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | 수정 — Owner 관리 확장 |
+   | `chat-app/lib/screens/partner_list_screen.dart` | 수정 — 커버 이미지 + My 뱃지 |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — 690 번역 항목 |
+   - **총 7개 파일** (신규 2개, 수정 5개), +2,314줄, -113줄
+   - **APK**: 78.8MB
+
+#### 10. **커밋**
+   - `e13a90c` - feat(chat-app): Add partner edit/delete, photo upload, voucher creation & i18n
+
+---
+
+### 🔲 다음 세션 작업 (Session 124+)
 
 #### 🔴 높은 우선순위
-- **Google Maps API 키 설정**: Google Cloud Console에서 키 발급 → `.env` + AndroidManifest 적용
-- **Supabase 마이그레이션 적용**: `supabase db push` 또는 Dashboard에서 SQL 직접 실행
-- **파트너 실기기 테스트**: 목록/지도/QR 코드 기능 확인
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
+- **실기기 테스트**: 파트너 수정/삭제, 커버 이미지 업로드, 바우처 생성, 사진 갤러리 확인
 
 #### 🟡 중간 우선순위
-- **PartnerSBT 스마트 컨트랙트** (Phase 4): ERC-721 Soulbound + 시간 제한 유효성
+- **PartnerSBT 스마트 컨트랙트**: ERC-721 Soulbound + 시간 제한 유효성
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
 - **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
