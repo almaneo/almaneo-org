@@ -2802,7 +2802,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
 | **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어 음성 TTS, iOS 호환, PDF 다운로드) |
-| **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어 (Session 121) |
+| **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어, 버그 수정 완료 (Session 121-124) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
@@ -4891,11 +4891,56 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 124+)
+### ✅ 완료된 작업 (2026-02-21 - Session 124: Partner System 코드 리뷰 & 버그 수정)
+
+#### 1. **코드 리뷰 (5개 파일 병렬 검토)** ✅
+   - 3개 병렬 에이전트로 Partner System 전체 코드 리뷰 수행
+   - 15+ 버그 발견 및 수정
+
+#### 2. **코드 리뷰 발견 버그 수정** ✅
+
+   | 파일 | 수정 내용 |
+   |------|----------|
+   | `partner_list_screen.dart` | 검색 디바운스 타이머, `Geolocator.isLocationServiceEnabled()` 체크, LatLng 타입 캐스트 |
+   | `partner_detail_screen.dart` | Google Maps URL `Uri.https()` 인코딩, website URL try-catch + scheme prefix, 하드코딩 텍스트 `tr()` 전환 |
+   | `partner_register_screen.dart` | `_isSaving = false` 리셋, `Geolocator` 서비스 체크 |
+   | `voucher_create_screen.dart` | edit 모드 discountType/Value/maxRedemptions 전달, DatePicker brightness-aware |
+   | `partner_service.dart` | `updatePartner` cover_image_url 항상 포함, `updateVoucher` 파라미터 확장, `redeemVoucher` max_redemptions 체크 |
+
+#### 3. **실기기 테스트 버그 2개 수정** ✅
+
+   **Bug 1: 지도 GPS 버튼 누르면 목록/핀 사라짐**
+   - **근본 원인**: `_loadData()`에서 GPS 위치가 있으면 50km 반경 바운딩 박스 필터 적용 → 범위 밖 파트너 전부 제외
+   - **수정**: `radiusKm` 파라미터 및 바운딩 박스 필터 제거 — GPS는 거리 정렬에만 사용, 필터링 없음
+   - 수정 파일: `partner_list_screen.dart`, `partner_service.dart`
+
+   **Bug 2: 번역키가 원문 키값으로 표시**
+   - **근본 원인**: Session 123에서 `partners.edit.*`, `partners.photo.*`, `partners.owner.*` 프리픽스 사용했으나 번역은 `partners.register.*`, `partners.detail.*` 프리픽스로 정의되어 있음
+   - **수정**: 2개 파일에서 29개 번역키 경로 수정 + 4개 누락 키를 15개 언어에 추가
+   - 수정 파일: `partner_detail_screen.dart` (14개 키), `partner_register_screen.dart` (15개 키), `app_strings.dart` (4개 키 × 15개 언어 = 60 항목)
+
+#### 4. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `chat-app/lib/services/partner_service.dart` | 수정 — radius 필터 제거, updatePartner/Voucher/redeemVoucher 개선 |
+   | `chat-app/lib/screens/partner_list_screen.dart` | 수정 — radiusKm 제거, 검색 디바운스, GPS 체크 |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | 수정 — 14개 번역키 수정, URL 인코딩, website 안전 처리 |
+   | `chat-app/lib/screens/partner_register_screen.dart` | 수정 — 15개 번역키 수정, _isSaving 리셋 |
+   | `chat-app/lib/screens/voucher_create_screen.dart` | 수정 — edit 모드 파라미터, DatePicker brightness |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — 4개 누락 키 × 15개 언어 추가 |
+   - **총 6개 파일**, +173줄, -64줄
+   - **APK**: 78.8MB
+
+#### 5. **커밋**
+   - `6cb192e` - fix(chat-app): Fix GPS radius filter and 29 translation key mismatches in Partner System
+
+---
+
+### 🔲 다음 세션 작업 (Session 125+)
 
 #### 🔴 높은 우선순위
+- **실기기 재테스트**: GPS 정렬, 번역키 표시, 파트너 수정/삭제, 커버 이미지 업로드, 바우처 생성 확인
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
-- **실기기 테스트**: 파트너 수정/삭제, 커버 이미지 업로드, 바우처 생성, 사진 갤러리 확인
 
 #### 🟡 중간 우선순위
 - **PartnerSBT 스마트 컨트랙트**: ERC-721 Soulbound + 시간 제한 유효성
