@@ -53,6 +53,7 @@ dependencies:
   app_links: ^6.4.0
   google_maps_flutter: ^2.14.2
   geolocator: ^14.0.2
+  geocoding: ^3.0.0
   qr_flutter: ^4.1.0
 
 dependency_overrides:

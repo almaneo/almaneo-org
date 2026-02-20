@@ -75,18 +75,11 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
   Future<void> _openInMaps() async {
     final lat = _partner?['latitude'];
     final lng = _partner?['longitude'];
-    final name = _partner?['business_name'] ?? '';
     if (lat == null || lng == null) return;
 
-    final uri = Uri.https('www.google.com', '/maps/search/', {
-      'api': '1',
-      'query': '$lat,$lng',
-      'query_place_id': name,
-    });
+    final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
     try {
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       debugPrint('[PartnerDetail] openInMaps error: $e');
     }
@@ -742,7 +735,9 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                 const Spacer(),
                 if (validUntil != null)
                   Text(
-                    '${tr('partners.voucher.validUntil', lang)} ${validUntil.month}/${validUntil.day}',
+                    tr('partners.voucher.validUntil', lang, args: {
+                      'date': '${validUntil.month}/${validUntil.day}',
+                    }),
                     style: TextStyle(fontSize: 12, color: alma.textTertiary),
                   ),
               ],
@@ -1014,7 +1009,9 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
                     Icon(Icons.timer, size: 16, color: alma.textTertiary),
                     const SizedBox(width: 4),
                     Text(
-                      '${tr('partners.voucher.qrExpires', widget.lang)} ${_formatTime(_remainingSeconds)}',
+                      tr('partners.voucher.qrExpires', widget.lang, args: {
+                        'time': _formatTime(_remainingSeconds),
+                      }),
                       style: TextStyle(
                         fontSize: 14,
                         color: _remainingSeconds < 60

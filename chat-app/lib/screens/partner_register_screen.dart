@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:image_picker/image_picker.dart';
 import '../config/theme.dart';
 import '../l10n/app_strings.dart';
@@ -34,7 +35,8 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
   // Map
   LatLng? _selectedLocation;
   GoogleMapController? _mapController;
-  bool _showMap = false;
+  bool _showMap = true;
+  bool _isGeocoding = false;
 
   // Cover image
   String? _coverImageUrl;
@@ -110,6 +112,32 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
       _mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, 16));
     } catch (e) {
       debugPrint('[PartnerRegister] Location error: $e');
+    }
+  }
+
+  Future<void> _geocodeAddress() async {
+    final address = _addressController.text.trim();
+    if (address.isEmpty) return;
+
+    setState(() => _isGeocoding = true);
+    try {
+      final locations = await geo.locationFromAddress(address);
+      if (locations.isNotEmpty && mounted) {
+        final loc = locations.first;
+        final latLng = LatLng(loc.latitude, loc.longitude);
+        setState(() {
+          _selectedLocation = latLng;
+          _showMap = true;
+        });
+        _mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, 16));
+      }
+    } catch (e) {
+      debugPrint('[PartnerRegister] Geocode error: $e');
+      if (mounted) {
+        _showSnackBar(tr('partners.register.geocodeFailed', _lang), isError: true);
+      }
+    } finally {
+      if (mounted) setState(() => _isGeocoding = false);
     }
   }
 
@@ -445,7 +473,25 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                     style: TextStyle(color: alma.textPrimary),
                     decoration: _inputDecoration(
                       tr('partners.register.addressHint', lang), alma,
+                    ).copyWith(
+                      suffixIcon: _isGeocoding
+                          ? const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                width: 20, height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AlmaTheme.electricBlue,
+                                ),
+                              ),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.location_searching, color: AlmaTheme.electricBlue),
+                              tooltip: tr('partners.register.findOnMap', lang),
+                              onPressed: _geocodeAddress,
+                            ),
                     ),
+                    onFieldSubmitted: (_) => _geocodeAddress(),
                   ),
 
                   const SizedBox(height: 20),
@@ -733,7 +779,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
         if (_showMap) ...[
           const SizedBox(height: 8),
           Container(
-            height: 250,
+            height: 350,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: alma.borderDefault),
@@ -760,7 +806,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                   onMapCreated: (c) => _mapController = c,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
+                  zoomControlsEnabled: true,
                   mapToolbarEnabled: false,
                   style: Theme.of(context).brightness == Brightness.dark
                       ? _darkMapStyle
@@ -770,7 +816,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                 Positioned(
                   bottom: 8,
                   left: 8,
-                  right: 8,
+                  right: 50,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
