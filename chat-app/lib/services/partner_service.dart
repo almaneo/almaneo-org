@@ -28,7 +28,6 @@ class PartnerService {
     String? search,
     double? lat,
     double? lng,
-    double? radiusKm,
   }) async {
     try {
       var query = _db
@@ -42,17 +41,6 @@ class PartnerService {
 
       if (search != null && search.isNotEmpty) {
         query = query.ilike('business_name', '%$search%');
-      }
-
-      // Bounding box filter for location-based queries
-      if (lat != null && lng != null && radiusKm != null) {
-        final latDelta = radiusKm / 111.0; // ~111km per degree latitude
-        final lngDelta = radiusKm / (111.0 * cos(lat * pi / 180));
-        query = query
-            .gte('latitude', lat - latDelta)
-            .lte('latitude', lat + latDelta)
-            .gte('longitude', lng - lngDelta)
-            .lte('longitude', lng + lngDelta);
       }
 
       final data = await query.order('created_at', ascending: false);
@@ -184,6 +172,20 @@ class PartnerService {
         return {'error': 'expired'};
       }
 
+      // Check max_redemptions before redeeming
+      final voucher = await _db
+          .from('vouchers')
+          .select('max_redemptions, current_redemptions')
+          .eq('id', redemption['voucher_id'])
+          .maybeSingle();
+      if (voucher != null) {
+        final maxR = voucher['max_redemptions'] as int?;
+        final currentR = voucher['current_redemptions'] as int? ?? 0;
+        if (maxR != null && currentR >= maxR) {
+          return {'error': 'max_redemptions_reached'};
+        }
+      }
+
       // Mark as redeemed
       await _db.from('voucher_redemptions').update({
         'status': 'redeemed',
@@ -274,9 +276,7 @@ class PartnerService {
         'phone': phone,
         'website': website,
       };
-      if (coverImageUrl != null) {
-        updates['cover_image_url'] = coverImageUrl;
-      }
+      updates['cover_image_url'] = coverImageUrl;
       final data = await _db
           .from('partners')
           .update(updates)
@@ -441,16 +441,22 @@ class PartnerService {
     required String voucherId,
     String? title,
     String? description,
+    String? discountType,
+    double? discountValue,
     String? terms,
     bool? isActive,
+    int? maxRedemptions,
     DateTime? validUntil,
   }) async {
     try {
       final updates = <String, dynamic>{};
       if (title != null) updates['title'] = title;
       if (description != null) updates['description'] = description;
+      if (discountType != null) updates['discount_type'] = discountType;
+      if (discountValue != null) updates['discount_value'] = discountValue;
       if (terms != null) updates['terms'] = terms;
       if (isActive != null) updates['is_active'] = isActive;
+      if (maxRedemptions != null) updates['max_redemptions'] = maxRedemptions;
       if (validUntil != null) updates['valid_until'] = validUntil.toIso8601String();
       if (updates.isEmpty) return true;
 

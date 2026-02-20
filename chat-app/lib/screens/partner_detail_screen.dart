@@ -78,9 +78,17 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
     final name = _partner?['business_name'] ?? '';
     if (lat == null || lng == null) return;
 
-    final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng&query_place_id=$name');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final uri = Uri.https('www.google.com', '/maps/search/', {
+      'api': '1',
+      'query': '$lat,$lng',
+      'query_place_id': name,
+    });
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      debugPrint('[PartnerDetail] openInMaps error: $e');
     }
   }
 
@@ -170,7 +178,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                 ),
                 child: const Icon(Icons.photo_library_outlined, color: AlmaTheme.electricBlue),
               ),
-              title: Text(tr('partners.edit.fromGallery', lang), style: TextStyle(color: alma.textPrimary)),
+              title: Text(tr('partners.register.fromGallery', lang), style: TextStyle(color: alma.textPrimary)),
               onTap: () => Navigator.pop(ctx, ImageSource.gallery),
             ),
             ListTile(
@@ -182,7 +190,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                 ),
                 child: const Icon(Icons.camera_alt_outlined, color: AlmaTheme.cyan),
               ),
-              title: Text(tr('partners.edit.fromCamera', lang), style: TextStyle(color: alma.textPrimary)),
+              title: Text(tr('partners.register.fromCamera', lang), style: TextStyle(color: alma.textPrimary)),
               onTap: () => Navigator.pop(ctx, ImageSource.camera),
             ),
             const SizedBox(height: 16),
@@ -203,7 +211,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
       );
       if (picked == null || !mounted) return;
 
-      _showSnackBar(tr('partners.photo.uploading', lang));
+      _showSnackBar(tr('partners.detail.photoUploading', lang));
 
       final result = await PartnerService.addPartnerPhoto(
         partnerId: widget.partnerId,
@@ -213,10 +221,10 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
 
       if (mounted) {
         if (result != null) {
-          _showSnackBar(tr('partners.photo.uploaded', lang));
+          _showSnackBar(tr('partners.detail.photoUploaded', lang));
           _loadData();
         } else {
-          _showSnackBar(tr('partners.photo.uploadFailed', lang), isError: true);
+          _showSnackBar(tr('partners.detail.photoUploadFailed', lang), isError: true);
         }
       }
     } catch (e) {
@@ -231,8 +239,8 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: alma.cardBg,
-        title: Text(tr('partners.photo.deleteTitle', lang), style: TextStyle(color: alma.textPrimary)),
-        content: Text(tr('partners.photo.deleteDesc', lang), style: TextStyle(color: alma.textSecondary)),
+        title: Text(tr('partners.detail.deletePhoto', lang), style: TextStyle(color: alma.textPrimary)),
+        content: Text(tr('partners.detail.deletePhotoConfirm', lang), style: TextStyle(color: alma.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -240,7 +248,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(tr('partners.photo.deleteConfirm', lang), style: const TextStyle(color: AlmaTheme.error)),
+            child: Text(tr('partners.detail.deleteConfirmBtn', lang), style: const TextStyle(color: AlmaTheme.error)),
           ),
         ],
       ),
@@ -253,7 +261,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
       if (success) {
         _loadData();
       } else {
-        _showSnackBar(tr('partners.photo.deleteFailed', lang), isError: true);
+        _showSnackBar(tr('partners.detail.photoDeleteFailed', lang), isError: true);
       }
     }
   }
@@ -404,7 +412,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _navigateToEdit,
                             icon: const Icon(Icons.edit, size: 18),
-                            label: Text(tr('partners.owner.edit', lang)),
+                            label: Text(tr('partners.detail.edit', lang)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AlmaTheme.electricBlue,
                               side: const BorderSide(color: AlmaTheme.electricBlue),
@@ -418,7 +426,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _navigateToCreateVoucher,
                             icon: const Icon(Icons.local_offer, size: 18),
-                            label: Text(tr('partners.owner.addVoucher', lang)),
+                            label: Text(tr('partners.detail.addVoucher', lang)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AlmaTheme.terracottaOrange,
                               side: const BorderSide(color: AlmaTheme.terracottaOrange),
@@ -460,9 +468,17 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                   if (partner['website'] != null)
                     GestureDetector(
                       onTap: () async {
-                        final uri = Uri.parse(partner['website']);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        try {
+                          var url = partner['website'] as String;
+                          if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                            url = 'https://$url';
+                          }
+                          final uri = Uri.parse(url);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          }
+                        } catch (e) {
+                          debugPrint('[PartnerDetail] website launch error: $e');
                         }
                       },
                       child: _infoRow(
@@ -512,7 +528,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                       TextButton.icon(
                         onPressed: _addPhoto,
                         icon: const Icon(Icons.add_a_photo, size: 16),
-                        label: Text(tr('partners.photo.add', lang)),
+                        label: Text(tr('partners.detail.addPhoto', lang)),
                         style: TextButton.styleFrom(
                           foregroundColor: AlmaTheme.electricBlue,
                           textStyle: const TextStyle(fontSize: 13),
@@ -537,7 +553,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                             Icon(Icons.photo_library_outlined, size: 32, color: alma.textTertiary),
                             const SizedBox(height: 4),
                             Text(
-                              tr('partners.photo.noPhotos', lang),
+                              tr('partners.detail.noPhotos', lang),
                               style: TextStyle(color: alma.textTertiary, fontSize: 13),
                             ),
                           ],
@@ -718,7 +734,7 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      tr('partners.voucher.inactive', lang),
+                      tr('partners.detail.inactive', lang),
                       style: TextStyle(fontSize: 11, color: alma.textTertiary),
                     ),
                   ),
@@ -920,15 +936,15 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
             const SizedBox(height: 20),
 
             if (_isGenerating)
-              const SizedBox(
+              SizedBox(
                 height: 200,
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator(color: AlmaTheme.electricBlue),
-                      SizedBox(height: 12),
-                      Text('Generating...'),
+                      const CircularProgressIndicator(color: AlmaTheme.electricBlue),
+                      const SizedBox(height: 12),
+                      Text(tr('partners.voucher.qrGenerating', widget.lang)),
                     ],
                   ),
                 ),

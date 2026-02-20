@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,6 +30,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
 
   Position? _currentPosition;
   GoogleMapController? _mapController;
+  Timer? _searchDebounce;
 
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     _searchController.dispose();
     _mapController?.dispose();
     super.dispose();
@@ -52,7 +55,6 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
         search: _searchQuery.isNotEmpty ? _searchQuery : null,
         lat: _currentPosition?.latitude,
         lng: _currentPosition?.longitude,
-        radiusKm: _currentPosition != null ? 50 : null,
       );
       if (mounted) {
         setState(() {
@@ -68,6 +70,9 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
 
   Future<void> _getCurrentLocation() async {
     try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -146,7 +151,10 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
               ),
               onChanged: (value) {
                 setState(() => _searchQuery = value);
-                _loadData();
+                _searchDebounce?.cancel();
+                _searchDebounce = Timer(const Duration(milliseconds: 400), () {
+                  _loadData();
+                });
               },
             ),
           ),
@@ -437,7 +445,10 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
         .where((p) => p['latitude'] != null && p['longitude'] != null)
         .map((p) => Marker(
               markerId: MarkerId(p['id']),
-              position: LatLng(p['latitude'], p['longitude']),
+              position: LatLng(
+                (p['latitude'] as num).toDouble(),
+                (p['longitude'] as num).toDouble(),
+              ),
               infoWindow: InfoWindow(
                 title: p['business_name'],
                 snippet: p['address'],

@@ -344,6 +344,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Photo deleted',
     'partners.detail.inactive': 'Inactive',
     'partners.detail.redemptions': 'Redemptions',
+    'partners.detail.photoUploading': 'Uploading photo...',
+    'partners.detail.photoDeleteFailed': 'Failed to delete photo',
+    'partners.detail.noPhotos': 'No photos yet',
+    'partners.detail.deleteConfirmBtn': 'Delete',
 
     // Partner List
     'partners.myBadge': 'My',
@@ -800,6 +804,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': '사진이 삭제되었습니다',
     'partners.detail.inactive': '비활성',
     'partners.detail.redemptions': '사용 횟수',
+    'partners.detail.photoUploading': '사진 업로드 중...',
+    'partners.detail.photoDeleteFailed': '사진 삭제에 실패했습니다',
+    'partners.detail.noPhotos': '아직 사진이 없습니다',
+    'partners.detail.deleteConfirmBtn': '삭제',
 
     // 파트너 목록
     'partners.myBadge': 'My',
@@ -1179,6 +1187,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': '照片已删除',
     'partners.detail.inactive': '未激活',
     'partners.detail.redemptions': '使用次数',
+    'partners.detail.photoUploading': '正在上传照片...',
+    'partners.detail.photoDeleteFailed': '照片删除失败',
+    'partners.detail.noPhotos': '暂无照片',
+    'partners.detail.deleteConfirmBtn': '删除',
 
     // 合作伙伴列表
     'partners.myBadge': 'My',
@@ -1557,6 +1569,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': '写真が削除されました',
     'partners.detail.inactive': '無効',
     'partners.detail.redemptions': '使用回数',
+    'partners.detail.photoUploading': '写真アップロード中...',
+    'partners.detail.photoDeleteFailed': '写真の削除に失敗しました',
+    'partners.detail.noPhotos': 'まだ写真がありません',
+    'partners.detail.deleteConfirmBtn': '削除',
 
     // パートナーリスト
     'partners.myBadge': 'My',
@@ -1935,6 +1951,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Foto eliminada',
     'partners.detail.inactive': 'Inactivo',
     'partners.detail.redemptions': 'Canjes',
+    'partners.detail.photoUploading': 'Subiendo foto...',
+    'partners.detail.photoDeleteFailed': 'Error al eliminar la foto',
+    'partners.detail.noPhotos': 'Aún no hay fotos',
+    'partners.detail.deleteConfirmBtn': 'Eliminar',
 
     // Lista de Socios
     'partners.myBadge': 'Mío',
@@ -2313,6 +2333,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Photo supprimée',
     'partners.detail.inactive': 'Inactif',
     'partners.detail.redemptions': 'Utilisations',
+    'partners.detail.photoUploading': 'Téléchargement de la photo...',
+    'partners.detail.photoDeleteFailed': 'Échec de la suppression de la photo',
+    'partners.detail.noPhotos': 'Pas encore de photos',
+    'partners.detail.deleteConfirmBtn': 'Supprimer',
 
     // Liste des partenaires
     'partners.myBadge': 'Mon',
@@ -2691,6 +2715,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'تم حذف الصورة',
     'partners.detail.inactive': 'غير نشط',
     'partners.detail.redemptions': 'الاستخدامات',
+    'partners.detail.photoUploading': 'جاري رفع الصورة...',
+    'partners.detail.photoDeleteFailed': 'فشل حذف الصورة',
+    'partners.detail.noPhotos': 'لا توجد صور بعد',
+    'partners.detail.deleteConfirmBtn': 'حذف',
 
     // قائمة الشركاء
     'partners.myBadge': 'خاص بي',
@@ -3069,6 +3097,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Đã xóa ảnh',
     'partners.detail.inactive': 'Không hoạt động',
     'partners.detail.redemptions': 'Lượt sử dụng',
+    'partners.detail.photoUploading': 'Đang tải ảnh lên...',
+    'partners.detail.photoDeleteFailed': 'Xóa ảnh thất bại',
+    'partners.detail.noPhotos': 'Chưa có ảnh nào',
+    'partners.detail.deleteConfirmBtn': 'Xóa',
 
     // Danh sách đối tác
     'partners.myBadge': 'Của tôi',
@@ -3447,6 +3479,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'ลบรูปภาพแล้ว',
     'partners.detail.inactive': 'ไม่ใช้งาน',
     'partners.detail.redemptions': 'จำนวนการใช้',
+    'partners.detail.photoUploading': 'กำลังอัปโหลดรูปภาพ...',
+    'partners.detail.photoDeleteFailed': 'ลบรูปภาพไม่สำเร็จ',
+    'partners.detail.noPhotos': 'ยังไม่มีรูปภาพ',
+    'partners.detail.deleteConfirmBtn': 'ลบ',
 
     // รายชื่อพาร์ทเนอร์
     'partners.myBadge': 'ของฉัน',
@@ -3807,6 +3843,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Foto excluída',
     'partners.detail.inactive': 'Inativo',
     'partners.detail.redemptions': 'Resgates',
+    'partners.detail.photoUploading': 'Enviando foto...',
+    'partners.detail.photoDeleteFailed': 'Falha ao excluir a foto',
+    'partners.detail.noPhotos': 'Ainda não há fotos',
+    'partners.detail.deleteConfirmBtn': 'Excluir',
 
     // Lista de Parceiros
     'partners.myBadge': 'Meu',
@@ -4167,6 +4207,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Foto dihapus',
     'partners.detail.inactive': 'Tidak aktif',
     'partners.detail.redemptions': 'Penggunaan',
+    'partners.detail.photoUploading': 'Mengunggah foto...',
+    'partners.detail.photoDeleteFailed': 'Gagal menghapus foto',
+    'partners.detail.noPhotos': 'Belum ada foto',
+    'partners.detail.deleteConfirmBtn': 'Hapus',
 
     // Daftar Mitra
     'partners.myBadge': 'Milik Saya',
@@ -4506,6 +4550,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'फ़ोटो हटाई गई',
     'partners.detail.inactive': 'निष्क्रिय',
     'partners.detail.redemptions': 'उपयोग',
+    'partners.detail.photoUploading': 'फ़ोटो अपलोड हो रही है...',
+    'partners.detail.photoDeleteFailed': 'फ़ोटो हटाने में विफल',
+    'partners.detail.noPhotos': 'अभी तक कोई फ़ोटो नहीं',
+    'partners.detail.deleteConfirmBtn': 'हटाएं',
 
     // पार्टनर सूची
     'partners.myBadge': 'मेरा',
@@ -4845,6 +4893,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Foto gelöscht',
     'partners.detail.inactive': 'Inaktiv',
     'partners.detail.redemptions': 'Einlösungen',
+    'partners.detail.photoUploading': 'Foto wird hochgeladen...',
+    'partners.detail.photoDeleteFailed': 'Foto konnte nicht gelöscht werden',
+    'partners.detail.noPhotos': 'Noch keine Fotos',
+    'partners.detail.deleteConfirmBtn': 'Löschen',
 
     // Partnerliste
     'partners.myBadge': 'Mein',
@@ -5184,6 +5236,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Фото удалено',
     'partners.detail.inactive': 'Неактивный',
     'partners.detail.redemptions': 'Использования',
+    'partners.detail.photoUploading': 'Загрузка фото...',
+    'partners.detail.photoDeleteFailed': 'Не удалось удалить фото',
+    'partners.detail.noPhotos': 'Пока нет фотографий',
+    'partners.detail.deleteConfirmBtn': 'Удалить',
 
     // Список партнёров
     'partners.myBadge': 'Моё',
@@ -5523,6 +5579,10 @@ final Map<String, Map<String, String>> _translations = {
     'partners.detail.photoDeleted': 'Fotoğraf silindi',
     'partners.detail.inactive': 'Pasif',
     'partners.detail.redemptions': 'Kullanımlar',
+    'partners.detail.photoUploading': 'Fotoğraf yükleniyor...',
+    'partners.detail.photoDeleteFailed': 'Fotoğraf silinemedi',
+    'partners.detail.noPhotos': 'Henüz fotoğraf yok',
+    'partners.detail.deleteConfirmBtn': 'Sil',
 
     // Ortak Listesi
     'partners.myBadge': 'Benim',

@@ -87,7 +87,10 @@ class _VoucherCreateScreenState extends ConsumerState<VoucherCreateScreen> {
           voucherId: widget.existingVoucher!['id'],
           title: title,
           description: description.isNotEmpty ? description : null,
+          discountType: _discountType,
+          discountValue: discountValue,
           terms: terms.isNotEmpty ? terms : null,
+          maxRedemptions: maxRedemptions,
           validUntil: _validUntil,
         );
         if (mounted) {
@@ -142,13 +145,20 @@ class _VoucherCreateScreenState extends ConsumerState<VoucherCreateScreen> {
       lastDate: now.add(const Duration(days: 365 * 3)),
       builder: (context, child) {
         final alma = context.alma;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: AlmaTheme.electricBlue,
-              surface: alma.cardBg,
-              onSurface: alma.textPrimary,
-            ),
+            colorScheme: isDark
+                ? ColorScheme.dark(
+                    primary: AlmaTheme.electricBlue,
+                    surface: alma.cardBg,
+                    onSurface: alma.textPrimary,
+                  )
+                : ColorScheme.light(
+                    primary: AlmaTheme.electricBlue,
+                    surface: alma.cardBg,
+                    onSurface: alma.textPrimary,
+                  ),
           ),
           child: child!,
         );

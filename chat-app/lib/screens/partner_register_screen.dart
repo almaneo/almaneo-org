@@ -92,6 +92,9 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
 
   Future<void> _getCurrentLocation() async {
     try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -142,7 +145,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                 ),
                 child: const Icon(Icons.photo_library_outlined, color: AlmaTheme.electricBlue),
               ),
-              title: Text(tr('partners.edit.fromGallery', lang), style: TextStyle(color: alma.textPrimary)),
+              title: Text(tr('partners.register.fromGallery', lang), style: TextStyle(color: alma.textPrimary)),
               onTap: () {
                 Navigator.pop(ctx);
                 _selectCoverImage(ImageSource.gallery);
@@ -157,7 +160,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                 ),
                 child: const Icon(Icons.camera_alt_outlined, color: AlmaTheme.cyan),
               ),
-              title: Text(tr('partners.edit.fromCamera', lang), style: TextStyle(color: alma.textPrimary)),
+              title: Text(tr('partners.register.fromCamera', lang), style: TextStyle(color: alma.textPrimary)),
               onTap: () {
                 Navigator.pop(ctx);
                 _selectCoverImage(ImageSource.camera);
@@ -173,7 +176,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                   ),
                   child: const Icon(Icons.delete_outline, color: AlmaTheme.error),
                 ),
-                title: Text(tr('partners.edit.removeCover', lang), style: const TextStyle(color: AlmaTheme.error)),
+                title: Text(tr('partners.register.removePhoto', lang), style: const TextStyle(color: AlmaTheme.error)),
                 onTap: () {
                   Navigator.pop(ctx);
                   setState(() {
@@ -255,10 +258,10 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
       if (mounted) {
         setState(() => _isSaving = false);
         if (result != null) {
-          _showSnackBar(tr('partners.edit.updateSuccess', _lang));
+          _showSnackBar(tr('partners.register.updateSuccess', _lang));
           Navigator.pop(context, true);
         } else {
-          _showSnackBar(tr('partners.edit.updateFailed', _lang), isError: true);
+          _showSnackBar(tr('partners.register.updateFailed', _lang), isError: true);
         }
       }
     } else {
@@ -280,8 +283,11 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
         if (_coverImageLocalPath != null) {
           await _uploadCoverIfNeeded(result['id'] as String);
         }
-        _showSnackBar(tr('partners.register.success', _lang));
-        Navigator.pop(context, true);
+        if (mounted) {
+          setState(() => _isSaving = false);
+          _showSnackBar(tr('partners.register.success', _lang));
+          Navigator.pop(context, true);
+        }
       } else if (mounted) {
         setState(() => _isSaving = false);
         _showSnackBar(tr('partners.register.failed', _lang), isError: true);
@@ -296,8 +302,8 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: alma.cardBg,
-        title: Text(tr('partners.edit.deleteTitle', lang), style: TextStyle(color: alma.textPrimary)),
-        content: Text(tr('partners.edit.deleteDesc', lang), style: TextStyle(color: alma.textSecondary)),
+        title: Text(tr('partners.register.deactivate', lang), style: TextStyle(color: alma.textPrimary)),
+        content: Text(tr('partners.register.deactivateConfirm', lang), style: TextStyle(color: alma.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -305,7 +311,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(tr('partners.edit.deleteConfirm', lang), style: const TextStyle(color: AlmaTheme.error)),
+            child: Text(tr('partners.register.deactivate', lang), style: const TextStyle(color: AlmaTheme.error)),
           ),
         ],
       ),
@@ -318,10 +324,10 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
     if (mounted) {
       setState(() => _isSaving = false);
       if (success) {
-        _showSnackBar(tr('partners.edit.deleteSuccess', lang));
+        _showSnackBar(tr('partners.register.deactivateSuccess', lang));
         Navigator.pop(context, true);
       } else {
-        _showSnackBar(tr('partners.edit.deleteFailed', lang), isError: true);
+        _showSnackBar(tr('partners.register.deactivateFailed', lang), isError: true);
       }
     }
   }
@@ -347,7 +353,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
       appBar: AppBar(
         title: Text(
           _isEditMode
-              ? tr('partners.edit.title', lang)
+              ? tr('partners.register.editTitle', lang)
               : tr('partners.register.title', lang),
           style: TextStyle(fontWeight: FontWeight.w600, color: alma.textPrimary),
         ),
@@ -376,7 +382,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                   const SizedBox(height: 20),
 
                   // Cover Image
-                  _buildLabel(tr('partners.edit.coverImage', lang), alma),
+                  _buildLabel(tr('partners.register.coverImage', lang), alma),
                   const SizedBox(height: 6),
                   _buildCoverImageSection(lang, alma),
 
@@ -500,7 +506,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                             )
                           : Text(
                               _isEditMode
-                                  ? tr('partners.edit.save', lang)
+                                  ? tr('partners.register.save', lang)
                                   : tr('partners.register.submit', lang),
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -521,7 +527,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         child: Text(
-                          tr('partners.edit.deactivate', lang),
+                          tr('partners.register.deactivate', lang),
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -601,7 +607,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
         Icon(Icons.add_photo_alternate_outlined, size: 40, color: alma.textTertiary),
         const SizedBox(height: 8),
         Text(
-          tr('partners.edit.addCoverImage', lang),
+          tr('partners.register.selectPhoto', lang),
           style: TextStyle(color: alma.textTertiary, fontSize: 13),
         ),
       ],
