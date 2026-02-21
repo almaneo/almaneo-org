@@ -28,6 +28,13 @@ import {
   Proposal,
   Tokenomics,
 } from './pages';
+import {
+  AdminLayout,
+  AdminDashboard,
+  AdminPartners,
+  AdminMeetups,
+  AdminUsers,
+} from './pages/admin';
 
 // Loading component for i18n
 function LoadingFallback() {
@@ -51,6 +58,14 @@ function App() {
               <Routes>
                 {/* Proposal Viewer (풀스크린, MainLayout 외부) */}
                 <Route path="/proposals/:proposalId" element={<Proposal />} />
+
+                {/* Admin Panel (풀스크린, MainLayout 외부) */}
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="partners" element={<AdminPartners />} />
+                  <Route path="meetups" element={<AdminMeetups />} />
+                  <Route path="users" element={<AdminUsers />} />
+                </Route>
 
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Home />} />
