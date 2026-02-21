@@ -2802,7 +2802,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Governance | ⚠️ | Mock 데이터 |
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
 | **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어 음성 TTS, iOS 호환, PDF 다운로드) |
-| **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어, 버그 수정 완료 (Session 121-124) |
+| **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어, PartnerSBT 인증 배지 (Session 121-127) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
@@ -2913,6 +2913,7 @@ VITE_WEB3AUTH_CLIENT_ID=BI8Q1xvlSCu52eYqU2lhkxuvIghBW6LSkXvQXZmbEvTv4PVZe97eUdML
 ALMANToken:       0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63  # 8B Total Supply
 JeongSBT:         0x41588D71373A6cf9E6f848250Ff7322d67Bb393c
 AmbassadorSBT:    0xf368d239a0b756533ff5688021A04Bc62Ab3c27B  # Session 26 (별도)
+PartnerSBT:       0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08  # Session 127 (별도)
 ALMANStaking:     0xB691a0DF657A06209A3a4EF1A06a139B843b945B  # 1B ALMAN 보유
 ALMANTimelock:    0x464bca66C5B53b2163A89088213B1f832F0dF7c0
 ALMANGovernor:    0x30E0FDEb1A730B517bF8851b7485107D7bc9dE33
@@ -5041,17 +5042,86 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 127+)
+### ✅ 완료된 작업 (2026-02-21 - Session 127: Partner SBT 온체인 인증 시스템)
+
+#### 1. **PartnerSBT.sol 스마트 컨트랙트 작성** ✅
+   - `blockchain/contracts/PartnerSBT.sol` (신규)
+   - ERC-721 Soulbound Token (양도 불가, UUPS Upgradeable)
+   - 단일 "Verified Partner" 등급 (등급 없음)
+   - 유효기간 1년, 활동 기반 자동 갱신
+   - Roles: DEFAULT_ADMIN, MINTER_ROLE, UPGRADER_ROLE, RENEWER_ROLE
+   - 핵심 함수: `mintPartnerSBT`, `renewPartnerSBT`, `revokePartnerSBT`, `isValid`, `getPartnerByAddress`, `daysUntilExpiry`
+   - 이벤트: PartnerMinted, PartnerRenewed, PartnerRevoked
+
+#### 2. **Polygon Amoy 배포 & Verify** ✅
+   - 컨트랙트 주소: `0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08`
+   - RENEWER_ROLE → Verifier 지갑 (`0x30073c2f47D41539dA6147324bb9257E0638144E`)
+   - 배포 결과: `blockchain/deployments/amoy-partner-sbt-deployment.json`
+
+#### 3. **Backend API** ✅
+   - `web/api/partner-sbt.ts` (신규) — Vercel Serverless Function
+   - 5개 액션: `mintPartner` (ADMIN), `renewPartner` (VERIFIER), `revokePartner` (ADMIN), `checkValidity` (public), `getPartnerData` (public)
+   - Supabase 동기화: mint/renew 후 `partners` 테이블 `sbt_token_id`, `partnership_expires_at` 업데이트
+
+#### 4. **프론트엔드 주소/타입 업데이트** ✅
+   - `web/src/contracts/addresses.ts`: PartnerSBT 주소 추가
+   - `shared/contracts/addresses.ts`: 동일
+   - `shared/types/contracts.ts`: `ContractAddresses`에 `PartnerSBT` 추가
+   - `web/src/components/sections/landing/Footer.tsx`: Core Contracts 목록에 추가
+
+#### 5. **ABI 파일** ✅
+   - `web/src/contracts/abis/PartnerSBT.ts` (신규)
+   - view 함수 ABI + OnchainPartnerData 인터페이스
+
+#### 6. **AlmaChat 앱 배지 표시** ✅
+   - `partner_list_screen.dart`: 인증 파트너 상단 정렬 + `Icons.verified` (electricBlue) 배지
+   - `partner_detail_screen.dart`: 헤더에 "Verified Partner" 배지 + 만료일 표시
+   - `app_strings.dart`: 15개 언어 번역 (`partners.verified`, `partners.verifiedUntil`, `partners.verifiedPartner`)
+
+#### 7. **빌드 검증** ✅
+   - Web: 34.72초 성공
+   - Flutter APK: 78.9MB 성공
+
+#### 8. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `blockchain/contracts/PartnerSBT.sol` | **신규** — SBT 컨트랙트 |
+   | `blockchain/scripts/deploy-partner-sbt.js` | **신규** — 배포 스크립트 |
+   | `blockchain/deployments/amoy-partner-sbt-deployment.json` | **신규** — 배포 결과 |
+   | `web/api/partner-sbt.ts` | **신규** — 백엔드 API |
+   | `web/src/contracts/abis/PartnerSBT.ts` | **신규** — ABI 파일 |
+   | `web/src/contracts/addresses.ts` | 수정 — PartnerSBT 주소 |
+   | `shared/contracts/addresses.ts` | 수정 — 동일 |
+   | `shared/types/contracts.ts` | 수정 — 타입 추가 |
+   | `web/src/components/sections/landing/Footer.tsx` | 수정 — Core Contracts |
+   | `chat-app/lib/screens/partner_list_screen.dart` | 수정 — 인증 배지 + 정렬 |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | 수정 — 인증 배지 + 만료일 |
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — 45 번역 항목 |
+   - **총 13개 파일** (신규 5개, 수정 8개), +1,604줄
+   - 커밋: `7b0caa2`
+
+#### 9. **PartnerSBT 설계 결정사항**
+   | 항목 | 결정 |
+   |------|------|
+   | 등급 | 단일 "Verified Partner" (등급 없음) |
+   | 유효기간 | 1년, 활동 기반 자동 갱신 |
+   | 발급 | 어드민 직접 발급 (MINTER_ROLE) |
+   | 갱신 조건 | 지난 1년간 바우처 발행/사용 활동 시 자동 갱신 |
+   | 혜택 | 인증 배지 + 노출 우선 + NFT 수수료 15% 할인 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 128+)
 
 #### 🔴 높은 우선순위
-- **실기기 재테스트**: reverse geocoding 주소 표시, QR 5분 카운트다운, 지도 제스처 확인
+- **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
 #### 🟡 중간 우선순위
-- **PartnerSBT 스마트 컨트랙트**: ERC-721 Soulbound + 시간 제한 유효성
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
 - **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
+- **AlmaPaymentManager 수수료 할인 연동**: PartnerSBT 15% 할인 (NFT 마켓 활성화 후)
 
 #### 🟢 낮은 우선순위
 - **Google Places Autocomplete**: 주소 입력 시 자동완성 + 비즈니스 검색 (유료 API)
