@@ -77,7 +77,16 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
     final lng = _partner?['longitude'];
     if (lat == null || lng == null) return;
 
-    final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+    // Build a search query: "Business Name, Address" so Google Maps
+    // can match an existing listing instead of showing raw coordinates.
+    final name = _partner?['business_name'] as String? ?? '';
+    final address = _partner?['address'] as String? ?? '';
+    final queryParts = [name, address].where((s) => s.isNotEmpty).join(', ');
+    final query = queryParts.isNotEmpty
+        ? Uri.encodeComponent(queryParts)
+        : '$lat,$lng';
+
+    final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$query');
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {

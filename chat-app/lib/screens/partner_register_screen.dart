@@ -36,6 +36,7 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
 
   // Map
   LatLng? _selectedLocation;
+  String? _resolvedAddress; // reverse-geocoded address for display
   GoogleMapController? _mapController;
   bool _showMap = true;
   bool _isGeocoding = false;
@@ -110,8 +111,12 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
         locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
       final latLng = LatLng(position.latitude, position.longitude);
-      setState(() => _selectedLocation = latLng);
+      setState(() {
+        _selectedLocation = latLng;
+        _resolvedAddress = null;
+      });
       _mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, 16));
+      _reverseGeocode(latLng);
     } catch (e) {
       debugPrint('[PartnerRegister] Location error: $e');
     }
@@ -140,6 +145,52 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
       }
     } finally {
       if (mounted) setState(() => _isGeocoding = false);
+    }
+  }
+
+  /// Called when user taps the map or drags the marker to a new position.
+  /// Sets the pin and reverse-geocodes the coordinates to a readable address.
+  void _onMapLocationSelected(LatLng latLng) {
+    setState(() {
+      _selectedLocation = latLng;
+      _resolvedAddress = null; // clear while loading
+    });
+    _reverseGeocode(latLng);
+  }
+
+  /// Reverse geocode coordinates → human-readable address.
+  /// Auto-fills the address field if it's currently empty.
+  Future<void> _reverseGeocode(LatLng latLng) async {
+    try {
+      final placemarks = await geo.placemarkFromCoordinates(
+        latLng.latitude,
+        latLng.longitude,
+      );
+      if (placemarks.isNotEmpty && mounted) {
+        final p = placemarks.first;
+        // Build readable address from placemark parts
+        final parts = <String>[
+          p.street ?? '',
+          p.subLocality ?? '',
+          p.locality ?? '',
+          p.subAdministrativeArea ?? '',
+          p.administrativeArea ?? '',
+          p.country ?? '',
+        ].where((s) => s.isNotEmpty).toList();
+        // Remove consecutive duplicates (e.g. "District 1, District 1")
+        final deduped = <String>[];
+        for (final part in parts) {
+          if (deduped.isEmpty || deduped.last != part) deduped.add(part);
+        }
+        final address = deduped.join(', ');
+        setState(() => _resolvedAddress = address);
+        // Auto-fill address field if empty
+        if (_addressController.text.trim().isEmpty && address.isNotEmpty) {
+          _addressController.text = address;
+        }
+      }
+    } catch (e) {
+      debugPrint('[PartnerRegister] Reverse geocode error: $e');
     }
   }
 
@@ -723,14 +774,17 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '${_selectedLocation!.latitude.toStringAsFixed(5)}, ${_selectedLocation!.longitude.toStringAsFixed(5)}',
+                    _resolvedAddress ?? '${_selectedLocation!.latitude.toStringAsFixed(5)}, ${_selectedLocation!.longitude.toStringAsFixed(5)}',
                     style: TextStyle(color: alma.textSecondary, fontSize: 13),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 IconButton(
                   icon: Icon(Icons.clear, size: 18, color: alma.textTertiary),
                   onPressed: () => setState(() {
                     _selectedLocation = null;
+                    _resolvedAddress = null;
                     _showMap = false;
                   }),
                 ),
@@ -800,11 +854,11 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                             markerId: const MarkerId('selected'),
                             position: _selectedLocation!,
                             draggable: true,
-                            onDragEnd: (pos) => setState(() => _selectedLocation = pos),
+                            onDragEnd: _onMapLocationSelected,
                           ),
                         }
                       : {},
-                  onTap: (latLng) => setState(() => _selectedLocation = latLng),
+                  onTap: _onMapLocationSelected,
                   onMapCreated: (c) => _mapController = c,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
