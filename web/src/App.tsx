@@ -34,6 +34,7 @@ import {
   AdminPartners,
   AdminMeetups,
   AdminUsers,
+  AdminAccess,
 } from './pages/admin';
 
 // Loading component for i18n
@@ -65,6 +66,7 @@ function App() {
                   <Route path="partners" element={<AdminPartners />} />
                   <Route path="meetups" element={<AdminMeetups />} />
                   <Route path="users" element={<AdminUsers />} />
+                  <Route path="access" element={<AdminAccess />} />
                 </Route>
 
                 <Route element={<MainLayout />}>

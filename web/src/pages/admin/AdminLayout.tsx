@@ -1,8 +1,9 @@
 /**
  * AdminLayout - Auth gate + sidebar navigation for platform admin
- * Only accessible by hardcoded admin wallet addresses
+ * Fetches admin wallets from Supabase with Foundation fallback
  */
 
+import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -16,20 +17,30 @@ import {
   Wallet,
   Copy,
   ExternalLink,
+  KeyRound,
 } from 'lucide-react';
 import { useWallet } from '../../components/wallet';
+import { supabase } from '../../supabase';
 
-const ADMIN_ADDRESSES = [
-  '0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE', // Foundation
-  '0x30073c2f47D41539dA6147324bb9257E0638144E', // Verifier
-];
+// Foundation wallet always has access (hardcoded fallback)
+const FOUNDATION_ADDRESS = '0x7BD8194c22b79B0BBa6B2AFDfe36c658707024FE';
 
-const MENU_ITEMS = [
+interface AdminWallet {
+  wallet_address: string;
+  role: 'foundation' | 'verifier';
+  label: string | null;
+}
+
+const BASE_MENU_ITEMS = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { path: '/admin/partners', label: 'Partners', icon: Store, exact: false },
   { path: '/admin/meetups', label: 'Meetups', icon: CalendarCheck, exact: false },
   { path: '/admin/users', label: 'Users', icon: Users, exact: false },
 ];
+
+const ACCESS_MENU_ITEM = {
+  path: '/admin/access', label: 'Access', icon: KeyRound, exact: false,
+};
 
 function truncateAddress(addr: string) {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -38,9 +49,36 @@ function truncateAddress(addr: string) {
 export default function AdminLayout() {
   const { isConnected, address, isLoading, connect } = useWallet();
   const location = useLocation();
+  const [adminWallets, setAdminWallets] = useState<AdminWallet[]>([]);
+  const [dbLoading, setDbLoading] = useState(true);
+
+  // Fetch admin wallets from Supabase
+  useEffect(() => {
+    async function fetchAdminWallets() {
+      try {
+        const { data, error } = await supabase
+          .from('admin_wallets')
+          .select('wallet_address, role, label');
+
+        if (error) {
+          console.warn('[Admin] Failed to fetch admin wallets:', error.message);
+          // Fallback: Foundation only
+          setAdminWallets([{ wallet_address: FOUNDATION_ADDRESS, role: 'foundation', label: 'Foundation' }]);
+        } else {
+          setAdminWallets(data || []);
+        }
+      } catch {
+        // DB unreachable: Foundation fallback
+        setAdminWallets([{ wallet_address: FOUNDATION_ADDRESS, role: 'foundation', label: 'Foundation' }]);
+      } finally {
+        setDbLoading(false);
+      }
+    }
+    fetchAdminWallets();
+  }, []);
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || dbLoading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -70,8 +108,12 @@ export default function AdminLayout() {
     );
   }
 
-  // Check admin access
-  const isAdmin = ADMIN_ADDRESSES.some(a => a.toLowerCase() === address.toLowerCase());
+  // Check admin access from DB (+ Foundation fallback)
+  const matchedWallet = adminWallets.find(
+    w => w.wallet_address.toLowerCase() === address.toLowerCase()
+  );
+  const isFoundationFallback = !matchedWallet && address.toLowerCase() === FOUNDATION_ADDRESS.toLowerCase();
+  const isAdmin = !!matchedWallet || isFoundationFallback;
 
   if (!isAdmin) {
     return (
@@ -94,8 +136,14 @@ export default function AdminLayout() {
   }
 
   // Determine admin role
-  const adminRole = address.toLowerCase() === ADMIN_ADDRESSES[0].toLowerCase() ? 'Foundation' : 'Verifier';
-  const roleColor = adminRole === 'Foundation' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400';
+  const adminRole = matchedWallet?.role === 'foundation' || isFoundationFallback ? 'Foundation' : 'Verifier';
+  const isFoundation = adminRole === 'Foundation';
+  const roleColor = isFoundation ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400';
+
+  // Build menu items (Access only for Foundation)
+  const menuItems = isFoundation
+    ? [...BASE_MENU_ITEMS, ACCESS_MENU_ITEM]
+    : BASE_MENU_ITEMS;
 
   return (
     <div className="min-h-screen bg-slate-950 flex">
@@ -129,7 +177,7 @@ export default function AdminLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 p-3 space-y-1">
-          {MENU_ITEMS.map((item) => {
+          {menuItems.map((item) => {
             const isActive = item.exact
               ? location.pathname === item.path
               : location.pathname.startsWith(item.path);
