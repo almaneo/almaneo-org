@@ -1,6 +1,6 @@
 /**
- * Ambassador API (viem version)
- * Vercel Serverless Function for AmbassadorSBT contract interactions
+ * Ambassador API (lightweight edge version)
+ * Vercel Edge Function for AmbassadorSBT contract interactions
  *
  * POST /api/ambassador
  * Actions:
@@ -10,127 +10,81 @@
  *
  * Security:
  * - Uses VERIFIER_PRIVATE_KEY to sign transactions (VERIFIER_ROLE on contract)
+ *
+ * Uses raw fetch() + @noble/curves — no viem, no ethers (edge-safe < 4 MB)
  */
 
 import {
-  createWalletClient,
-  http,
-  fallback,
+  sendTransaction,
   isAddress,
-  parseAbi,
-} from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { polygonAmoy, polygon } from 'viem/chains';
-
-const AMBASSADOR_SBT_ABI = parseAbi([
-  'function recordMeetupAttendance(address account) external',
-  'function recordMeetupHosted(address account) external',
-  'function updateKindnessScore(address account, uint256 newScore) external',
-  'function recordReferral(address referrer, address referee) external',
-  'function hasAmbassadorSBT(address account) view returns (bool)',
-  'function getAmbassadorByAddress(address account) view returns (uint256 tokenId, uint8 tier, uint256 meetupsAttended, uint256 meetupsHosted, uint256 kindnessScore, uint256 referralCount, uint256 mintedAt)',
-]);
-
-const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
-  80002: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B',
-  137: '0x0000000000000000000000000000000000000000',
-};
-
-const RPC_URLS: Record<number, string[]> = {
-  80002: [
-    'https://rpc-amoy.polygon.technology',
-    'https://polygon-amoy-bor-rpc.publicnode.com',
-    'https://amoy.drpc.org',
-  ],
-  137: [
-    'https://polygon-rpc.com',
-    'https://polygon-bor-rpc.publicnode.com',
-  ],
-};
+  AmbassadorSBT,
+  jsonResponse,
+  CORS_HEADERS,
+} from './_lib/rpc';
 
 const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 
-const chain = CHAIN_ID === 137 ? polygon : polygonAmoy;
+const CONTRACT_ADDRESSES: Record<number, string> = {
+  80002: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B',
+  137: '0x0000000000000000000000000000000000000000',
+};
 
 export const config = {
   runtime: 'edge',
   regions: ['icn1'],
 };
 
-function getWalletClient() {
-  if (!VERIFIER_PRIVATE_KEY) throw new Error('VERIFIER_PRIVATE_KEY not configured');
-
-  const key = VERIFIER_PRIVATE_KEY.startsWith('0x')
-    ? (VERIFIER_PRIVATE_KEY as `0x${string}`)
-    : (`0x${VERIFIER_PRIVATE_KEY}` as `0x${string}`);
-
-  const account = privateKeyToAccount(key);
-  const urls = RPC_URLS[CHAIN_ID] || [];
-  const transport = fallback(urls.map(url => http(url, { timeout: 15_000 })));
-  const walletClient = createWalletClient({ chain, transport, account });
-
-  return { walletClient, account };
-}
-
 export default async function handler(request: Request): Promise<Response> {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  };
-
   if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders });
+    return new Response(null, { status: 200, headers: CORS_HEADERS });
   }
 
   if (request.method !== 'POST') {
-    return jsonResponse({ success: false, error: 'Method not allowed' }, 405, corsHeaders);
+    return jsonResponse({ success: false, error: 'Method not allowed' }, 405, CORS_HEADERS);
   }
 
   if (!VERIFIER_PRIVATE_KEY) {
-    return jsonResponse({ success: false, error: 'Server configuration error' }, 500, corsHeaders);
+    return jsonResponse({ success: false, error: 'Server configuration error' }, 500, CORS_HEADERS);
   }
 
   const contractAddress = CONTRACT_ADDRESSES[CHAIN_ID];
   if (!contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
-    return jsonResponse({ success: false, error: 'Contract not available' }, 500, corsHeaders);
+    return jsonResponse({ success: false, error: 'Contract not available' }, 500, CORS_HEADERS);
   }
 
   try {
     const body = await request.json();
     const { action } = body;
-
-    const { walletClient, account } = getWalletClient();
+    const pk = VERIFIER_PRIVATE_KEY;
 
     console.log(`[Ambassador API] Action: ${action}, Chain: ${CHAIN_ID}`);
 
-    switch (action) {
-      case 'recordMeetupVerification':
-        return handleMeetupVerification(body, contractAddress, walletClient, account, corsHeaders);
-      case 'updateKindnessScore':
-        return handleUpdateScore(body, contractAddress, walletClient, account, corsHeaders);
-      case 'recordReferral':
-        return handleRecordReferral(body, contractAddress, walletClient, account, corsHeaders);
-      default:
-        return jsonResponse({ success: false, error: 'Invalid action' }, 400, corsHeaders);
+    if (action === 'recordMeetupVerification') {
+      return handleMeetupVerification(body, contractAddress, pk);
     }
+    if (action === 'updateKindnessScore') {
+      return handleUpdateScore(body, contractAddress, pk);
+    }
+    if (action === 'recordReferral') {
+      return handleRecordReferral(body, contractAddress, pk);
+    }
+
+    return jsonResponse({ success: false, error: 'Invalid action' }, 400, CORS_HEADERS);
   } catch (error) {
     console.error('[Ambassador API] Error:', error);
     return jsonResponse(
       { success: false, error: error instanceof Error ? error.message : 'Internal server error' },
       500,
-      corsHeaders
+      CORS_HEADERS
     );
   }
 }
 
 async function handleMeetupVerification(
   body: { meetupId: string; hostAddress: string; attendedAddresses: string[] },
-  contractAddress: `0x${string}`,
-  walletClient: ReturnType<typeof createWalletClient>,
-  account: ReturnType<typeof privateKeyToAccount>,
-  corsHeaders: Record<string, string>
+  contractAddress: string,
+  pk: string,
 ): Promise<Response> {
   const { meetupId, hostAddress, attendedAddresses } = body;
 
@@ -138,7 +92,7 @@ async function handleMeetupVerification(
     return jsonResponse(
       { success: false, error: 'Missing required fields: meetupId, hostAddress, attendedAddresses' },
       400,
-      corsHeaders
+      CORS_HEADERS
     );
   }
 
@@ -154,14 +108,8 @@ async function handleMeetupVerification(
       continue;
     }
     try {
-      const hash = await walletClient.writeContract({
-        address: contractAddress,
-        abi: AMBASSADOR_SBT_ABI,
-        functionName: 'recordMeetupAttendance',
-        args: [addr as `0x${string}`],
-        account,
-        chain,
-      });
+      const data = AmbassadorSBT.recordMeetupAttendance(addr);
+      const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
       txHashes.push(hash);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
@@ -172,14 +120,8 @@ async function handleMeetupVerification(
   // Record host's meetup
   if (isAddress(hostAddress)) {
     try {
-      const hash = await walletClient.writeContract({
-        address: contractAddress,
-        abi: AMBASSADOR_SBT_ABI,
-        functionName: 'recordMeetupHosted',
-        args: [hostAddress as `0x${string}`],
-        account,
-        chain,
-      });
+      const data = AmbassadorSBT.recordMeetupHosted(hostAddress);
+      const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
       txHashes.push(hash);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
@@ -191,7 +133,7 @@ async function handleMeetupVerification(
     return jsonResponse(
       { success: false, error: `All transactions failed: ${errors.join('; ')}` },
       500,
-      corsHeaders
+      CORS_HEADERS
     );
   }
 
@@ -202,93 +144,66 @@ async function handleMeetupVerification(
       message: `Recorded ${txHashes.length} transactions. ${errors.length > 0 ? `Errors: ${errors.join('; ')}` : ''}`,
     },
     200,
-    corsHeaders
+    CORS_HEADERS
   );
 }
 
 async function handleUpdateScore(
   body: { userAddress: string; newScore: number },
-  contractAddress: `0x${string}`,
-  walletClient: ReturnType<typeof createWalletClient>,
-  account: ReturnType<typeof privateKeyToAccount>,
-  corsHeaders: Record<string, string>
+  contractAddress: string,
+  pk: string,
 ): Promise<Response> {
   const { userAddress, newScore } = body;
 
   if (!userAddress || newScore === undefined) {
-    return jsonResponse({ success: false, error: 'Missing required fields: userAddress, newScore' }, 400, corsHeaders);
+    return jsonResponse({ success: false, error: 'Missing required fields: userAddress, newScore' }, 400, CORS_HEADERS);
   }
   if (!isAddress(userAddress)) {
-    return jsonResponse({ success: false, error: 'Invalid user address' }, 400, corsHeaders);
+    return jsonResponse({ success: false, error: 'Invalid user address' }, 400, CORS_HEADERS);
   }
 
   try {
-    const hash = await walletClient.writeContract({
-      address: contractAddress,
-      abi: AMBASSADOR_SBT_ABI,
-      functionName: 'updateKindnessScore',
-      args: [userAddress as `0x${string}`, BigInt(newScore)],
-      account,
-      chain,
-    });
+    const data = AmbassadorSBT.updateKindnessScore(userAddress, BigInt(newScore));
+    const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
 
     return jsonResponse(
       { success: true, txHashes: [hash], message: `Kindness score updated to ${newScore}` },
       200,
-      corsHeaders
+      CORS_HEADERS
     );
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
     console.error(`[Ambassador API] Failed to update score:`, errorMsg);
-    return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
+    return jsonResponse({ success: false, error: errorMsg }, 500, CORS_HEADERS);
   }
 }
 
 async function handleRecordReferral(
   body: { referrerAddress: string; refereeAddress: string },
-  contractAddress: `0x${string}`,
-  walletClient: ReturnType<typeof createWalletClient>,
-  account: ReturnType<typeof privateKeyToAccount>,
-  corsHeaders: Record<string, string>
+  contractAddress: string,
+  pk: string,
 ): Promise<Response> {
   const { referrerAddress, refereeAddress } = body;
 
   if (!referrerAddress || !refereeAddress) {
-    return jsonResponse({ success: false, error: 'Missing required fields: referrerAddress, refereeAddress' }, 400, corsHeaders);
+    return jsonResponse({ success: false, error: 'Missing required fields: referrerAddress, refereeAddress' }, 400, CORS_HEADERS);
   }
   if (!isAddress(referrerAddress) || !isAddress(refereeAddress)) {
-    return jsonResponse({ success: false, error: 'Invalid address' }, 400, corsHeaders);
+    return jsonResponse({ success: false, error: 'Invalid address' }, 400, CORS_HEADERS);
   }
 
   try {
-    const hash = await walletClient.writeContract({
-      address: contractAddress,
-      abi: AMBASSADOR_SBT_ABI,
-      functionName: 'recordReferral',
-      args: [referrerAddress as `0x${string}`, refereeAddress as `0x${string}`],
-      account,
-      chain,
-    });
+    const data = AmbassadorSBT.recordReferral(referrerAddress, refereeAddress);
+    const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
 
     return jsonResponse(
       { success: true, txHashes: [hash], message: `Referral recorded: ${referrerAddress} -> ${refereeAddress}` },
       200,
-      corsHeaders
+      CORS_HEADERS
     );
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
     console.error(`[Ambassador API] Failed to record referral:`, errorMsg);
-    return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
+    return jsonResponse({ success: false, error: errorMsg }, 500, CORS_HEADERS);
   }
-}
-
-function jsonResponse(
-  data: Record<string, unknown>,
-  status: number,
-  headers: Record<string, string>
-): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...headers, 'Content-Type': 'application/json' },
-  });
 }
