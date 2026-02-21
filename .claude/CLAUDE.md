@@ -2786,7 +2786,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 121 기준)
+### 📊 페이지별 상태 요약 (Session 128 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2803,6 +2803,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | Airdrop | ✅ | 컨트랙트 연동 완료 |
 | **Proposal** | ✅ | 피치덱 뷰어 (한국어/영어 음성 TTS, iOS 호환, PDF 다운로드) |
 | **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어, PartnerSBT 인증 배지 (Session 121-127) |
+| **Admin** | ✅ | Partner SBT 관리, 밋업 검증, 유저 관리 (Session 128) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
 | Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
 
@@ -5142,12 +5143,78 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 128+)
+### ✅ 완료된 작업 (2026-02-21 - Session 128: Platform Admin Panel 구현)
+
+#### 1. **Platform Admin Panel 구현 완료** ✅
+   - `almaneo.org/admin` 에 플랫폼 전체 관리 페이지 구현
+   - NFT Admin(`nft.almaneo.org/admin`)은 마켓플레이스 전용으로 유지
+
+#### 2. **Admin 페이지 7개 파일 생성** ✅
+   | 파일 | 기능 |
+   |------|------|
+   | `web/src/pages/admin/index.ts` | Re-export 모든 admin 컴포넌트 |
+   | `web/src/pages/admin/AdminLayout.tsx` | Auth gate + sidebar (Foundation/Verifier 지갑 체크) |
+   | `web/src/pages/admin/AdminDashboard.tsx` | 통계 카드 4개 + 최근 유저/밋업 테이블 + 컨트랙트 주소 |
+   | `web/src/pages/admin/AdminPartners.tsx` | Partner SBT 발급/갱신/취소, 검색/필터, 온체인 데이터 |
+   | `web/src/pages/admin/AdminMeetups.tsx` | 밋업 사진 확인, 승인/거절, 온체인 Ambassador 기록 |
+   | `web/src/pages/admin/AdminUsers.tsx` | 유저 검색, Kindness Score, 활동 내역 모달 |
+   | `web/api/admin-action.ts` | Vercel Serverless Function (직접 ethers.js 실행) |
+
+#### 3. **Admin 인증** ✅
+   - Client-side: `useWallet().address` → `ADMIN_ADDRESSES` 배열 비교 (case-insensitive)
+   - Foundation `0x7BD8...24FE`, Verifier `0x3007...44E`
+   - 미연결/미인가 시 각각 안내 화면 표시
+
+#### 4. **Admin Action API 재작성** ✅
+   - **문제**: 초기 프록시 패턴(self-fetch to `/api/partner-sbt`)이 Vercel에서 504/HTML 에러
+   - **해결**: ethers.js로 컨트랙트 직접 실행하도록 재작성
+   - `VERIFIER_PRIVATE_KEY`로 트랜잭션 서명
+   - Partner SBT: mintPartner, renewPartner, revokePartner
+   - Ambassador: recordMeetupVerification, updateKindnessScore
+
+#### 5. **Web3Auth 소셜 로그인 ID 호환성 수정** ✅
+   - **문제**: `owner_user_id`가 이메일 기반 ID(`seanft_io_gmail_com`)로 저장 → 온체인 enrichment 504 타임아웃, Mint 폼에 비-주소 자동입력
+   - **해결**: `isEthAddress()` 검증 헬퍼 추가
+     - 비-0x ID에 대해 온체인 enrichment 건너뜀
+     - Owner 컬럼: eth 주소는 PolygonScan 링크, 소셜 ID는 `(social)` 라벨
+     - Mint: 유효한 eth 주소만 자동입력, 아닐 때 빈 칸 (수동 입력)
+     - Renew/Revoke: 유효한 eth 주소가 있는 파트너에게만 표시
+     - Mint 모달: 주소 유효성 검사 경고 + 버튼 비활성화
+
+#### 6. **라우팅 (App.tsx)**
+   ```
+   <Route path="/admin" element={<AdminLayout />}>
+     <Route index element={<AdminDashboard />} />
+     <Route path="partners" element={<AdminPartners />} />
+     <Route path="meetups" element={<AdminMeetups />} />
+     <Route path="users" element={<AdminUsers />} />
+   </Route>
+   ```
+
+#### 7. **환경변수**
+   - `ADMIN_API_SECRET`: `52daaf2e512aebeb3e16a40d7f7a6ec0cc0206716c380f911949cefcef911698` (Vercel 대시보드에서 설정 완료)
+   - `VERIFIER_PRIVATE_KEY`: 기존 설정 사용
+
+#### 8. **커밋 내역**
+   | 커밋 | 내용 |
+   |------|------|
+   | `92b60fe` | feat(web): Add platform admin panel (8 files, +2,054 lines) |
+   | `1bf2c36` | fix(web): Rewrite admin-action to direct contract execution |
+   | `7061c5f` | fix(web): Handle non-Ethereum owner_user_id in AdminPartners |
+
+#### 9. **다음 세션에서 테스트 필요**
+   - Vercel 배포 후 Partner SBT 민팅 테스트 (유효한 0x 지갑 주소 입력)
+   - Renew/Revoke 기능 테스트
+   - Meetup 승인 플로우 테스트
+   - Users 검색/상세 테스트
+
+---
+
+### 🔲 다음 세션 작업 (Session 129+)
 
 #### 🔴 높은 우선순위
-- **플랫폼 Admin 페이지 설계 & 구현**: `almaneo.org/admin` (토론 후 계획 → 구현)
+- **Admin Panel 실기기 테스트**: Partner SBT 민팅, Meetup 승인, Users 검색
 - **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
-- **Vercel 환경변수 설정**: `ADMIN_API_SECRET` (PartnerSBT mint/revoke용)
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
