@@ -4936,10 +4936,66 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 125+)
+### ✅ 완료된 작업 (2026-02-21 - Session 125: Partner System 모바일 QA 버그 4건 수정)
+
+#### 1. **Bug 1: Open in Maps 링크 연결 안됨** ✅
+   - **근본 원인**: `Uri.https`에 `query_place_id` 잘못된 파라미터 + `canLaunchUrl`이 Android 11+에서 패키지 가시성 문제로 실패
+   - **수정**: `Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng')` 직접 URL + `canLaunchUrl` 제거, try-catch로 전환
+   - 수정 파일: `partner_detail_screen.dart` `_openInMaps()` 메서드
+
+#### 2. **Bug 2: Voucher valid date {{date}} 표시 안됨** ✅
+   - **근본 원인**: `tr()` 함수가 `{key}` 단일 중괄호만 지원했으나, 파트너 번역에서 `{{date}}` 이중 중괄호 사용. 또한 `tr()` 호출 시 args 미전달
+   - **수정**: `tr('partners.voucher.validUntil', lang, args: {'date': '...'})` args 전달
+   - 수정 파일: `partner_detail_screen.dart` 바우처 카드 validUntil 표시
+
+#### 3. **Bug 3: QR 다이얼로그 {{time}}과 common.close 번역 안됨** ✅
+   - **근본 원인**: QR 만료 카운트다운에 args 미전달 + `common.close` 번역 키가 15개 언어 모두에서 누락
+   - **수정**: `tr('partners.voucher.qrExpires', lang, args: {'time': _formatTime(...)})` args 전달 + 15개 언어에 `common.close` 키 추가
+   - 수정 파일: `partner_detail_screen.dart` QR 다이얼로그, `app_strings.dart` 15개 언어
+
+#### 4. **Bug 4: 주소 입력 시 지도 핀 자동 표시 + 지도 UX 개선** ✅
+   - **근본 원인**: 사용자가 주소를 텍스트로만 입력하고 지도에서 핀을 찍지 않음 → lat/lng null → 지도에 표시 안됨. 지도가 너무 작고(250px) 줌 불가
+   - **수정 (3가지)**:
+     1. `geocoding: ^3.0.0` 패키지 추가 — 주소 입력 후 📍 버튼 탭 시 자동 좌표 변환 + 핀 배치
+     2. 지도 높이 250px → 350px, `zoomControlsEnabled: true` 활성화
+     3. 지도 기본 표시 (`_showMap = true`) — 토글 없이 바로 보임
+   - 수정 파일: `partner_register_screen.dart` (geocode 메서드, 주소 필드 suffixIcon, 지도 설정), `pubspec.yaml`
+
+#### 5. **tr() 함수 이중/단일 중괄호 호환 수정** ✅
+   - 기존: `text.replaceAll('{$k}', v)` — 단일 중괄호만 지원 (237+ 기존 번역)
+   - 파트너 시스템: `{{date}}`, `{{time}}` 이중 중괄호 사용 (~30개)
+   - **수정**: 이중 중괄호 먼저 치환 → 단일 중괄호 치환 (양쪽 모두 지원)
+   ```dart
+   args.forEach((k, v) {
+     text = text.replaceAll('{{$k}}', v); // double braces first
+     text = text.replaceAll('{$k}', v);   // then single braces
+   });
+   ```
+
+#### 6. **i18n 번역 추가** ✅
+   - `common.close`: 15개 언어 (en=Close, ko=닫기, zh=关闭, ja=閉じる 등)
+   - `partners.register.findOnMap`: 15개 언어 (지도에서 찾기)
+   - `partners.register.geocodeFailed`: 15개 언어 (주소에서 위치를 찾을 수 없습니다)
+
+#### 7. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `chat-app/lib/l10n/app_strings.dart` | 수정 — tr() 이중+단일 중괄호 지원, common.close 15개 언어, geocode 번역 30개 |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | 수정 — Open in Maps URL, voucher date args, QR timer args |
+   | `chat-app/lib/screens/partner_register_screen.dart` | 수정 — geocoding 자동 변환, 지도 350px, 줌 컨트롤, 주소 검색 버튼 |
+   | `chat-app/pubspec.yaml` | 수정 — `geocoding: ^3.0.0` 추가 |
+   - **총 5개 파일**, +138줄, -16줄
+   - **APK**: 78.8MB
+
+#### 8. **커밋**
+   - `6ae5426` - fix(chat-app): Fix 4 Partner System bugs - maps link, voucher date, QR translations, geocoding
+
+---
+
+### 🔲 다음 세션 작업 (Session 126+)
 
 #### 🔴 높은 우선순위
-- **실기기 재테스트**: GPS 정렬, 번역키 표시, 파트너 수정/삭제, 커버 이미지 업로드, 바우처 생성 확인
+- **실기기 재테스트**: geocoding 주소→핀 변환, Open in Maps, 바우처 날짜/QR 표시 확인
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
 #### 🟡 중간 우선순위
