@@ -1,5 +1,5 @@
 /**
- * Ambassador API
+ * Ambassador API (viem version)
  * Vercel Serverless Function for AmbassadorSBT contract interactions
  *
  * POST /api/ambassador
@@ -10,28 +10,32 @@
  *
  * Security:
  * - Uses VERIFIER_PRIVATE_KEY to sign transactions (VERIFIER_ROLE on contract)
- * - Should only be called from trusted backend services
  */
 
-import { ethers } from 'ethers';
+import {
+  createWalletClient,
+  http,
+  fallback,
+  isAddress,
+  parseAbi,
+} from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { polygonAmoy, polygon } from 'viem/chains';
 
-// Contract ABI (only the functions we need)
-const AMBASSADOR_SBT_ABI = [
+const AMBASSADOR_SBT_ABI = parseAbi([
   'function recordMeetupAttendance(address account) external',
   'function recordMeetupHosted(address account) external',
   'function updateKindnessScore(address account, uint256 newScore) external',
   'function recordReferral(address referrer, address referee) external',
   'function hasAmbassadorSBT(address account) view returns (bool)',
   'function getAmbassadorByAddress(address account) view returns (uint256 tokenId, uint8 tier, uint256 meetupsAttended, uint256 meetupsHosted, uint256 kindnessScore, uint256 referralCount, uint256 mintedAt)',
-];
+]);
 
-// Contract addresses by network
-const CONTRACT_ADDRESSES: Record<number, string> = {
-  80002: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B', // Polygon Amoy
-  137: '', // Polygon Mainnet (not deployed yet)
+const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
+  80002: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B',
+  137: '0x0000000000000000000000000000000000000000',
 };
 
-// RPC URLs (multiple fallbacks for reliability)
 const RPC_URLS: Record<number, string[]> = {
   80002: [
     'https://rpc-amoy.polygon.technology',
@@ -44,144 +48,93 @@ const RPC_URLS: Record<number, string[]> = {
   ],
 };
 
-const RPC_TIMEOUT_MS = 15000; // 15 second timeout per RPC call
-
-// Environment variables
 const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 
-/**
- * Create a provider with timeout for reliability
- */
-function createProvider(chainId: number): ethers.JsonRpcProvider {
-  const urls = RPC_URLS[chainId];
-  if (!urls || urls.length === 0) {
-    throw new Error(`No RPC URLs configured for chain ${chainId}`);
-  }
-  const fetchReq = new ethers.FetchRequest(urls[0]);
-  fetchReq.timeout = RPC_TIMEOUT_MS;
-  return new ethers.JsonRpcProvider(fetchReq, chainId, { staticNetwork: true });
-}
-
-// Request types
-interface MeetupVerificationRequest {
-  action: 'recordMeetupVerification';
-  meetupId: string;
-  hostAddress: string;
-  attendedAddresses: string[];
-}
-
-interface UpdateScoreRequest {
-  action: 'updateKindnessScore';
-  userAddress: string;
-  newScore: number;
-}
-
-interface RecordReferralRequest {
-  action: 'recordReferral';
-  referrerAddress: string;
-  refereeAddress: string;
-}
-
-type AmbassadorRequest = MeetupVerificationRequest | UpdateScoreRequest | RecordReferralRequest;
-
-// Response types
-interface SuccessResponse {
-  success: true;
-  txHashes?: string[];
-  message: string;
-}
-
-interface ErrorResponse {
-  success: false;
-  error: string;
-}
-
-type AmbassadorResponse = SuccessResponse | ErrorResponse;
+const chain = CHAIN_ID === 137 ? polygon : polygonAmoy;
 
 export const config = {
-  runtime: 'nodejs', // Need nodejs for ethers.js
-  maxDuration: 60, // Allow up to 60 seconds for multiple transactions
+  runtime: 'nodejs',
+  maxDuration: 60,
 };
 
+function getWalletClient() {
+  if (!VERIFIER_PRIVATE_KEY) throw new Error('VERIFIER_PRIVATE_KEY not configured');
+
+  const key = VERIFIER_PRIVATE_KEY.startsWith('0x')
+    ? (VERIFIER_PRIVATE_KEY as `0x${string}`)
+    : (`0x${VERIFIER_PRIVATE_KEY}` as `0x${string}`);
+
+  const account = privateKeyToAccount(key);
+  const urls = RPC_URLS[CHAIN_ID] || [];
+  const transport = fallback(urls.map(url => http(url, { timeout: 15_000 })));
+  const walletClient = createWalletClient({ chain, transport, account });
+
+  return { walletClient, account };
+}
+
 export default async function handler(request: Request): Promise<Response> {
-  // CORS headers
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   };
 
-  // Preflight request
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
-  // POST only
   if (request.method !== 'POST') {
     return jsonResponse({ success: false, error: 'Method not allowed' }, 405, corsHeaders);
   }
 
-  // Check environment variables
   if (!VERIFIER_PRIVATE_KEY) {
-    console.error('[Ambassador API] VERIFIER_PRIVATE_KEY is not set');
     return jsonResponse({ success: false, error: 'Server configuration error' }, 500, corsHeaders);
   }
 
   const contractAddress = CONTRACT_ADDRESSES[CHAIN_ID];
-  if (!contractAddress) {
-    console.error('[Ambassador API] Contract not deployed on chain:', CHAIN_ID);
+  if (!contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
     return jsonResponse({ success: false, error: 'Contract not available' }, 500, corsHeaders);
   }
 
   try {
-    const body = (await request.json()) as AmbassadorRequest;
+    const body = await request.json();
     const { action } = body;
 
-    // Initialize provider and wallet
-    const provider = createProvider(CHAIN_ID);
-    const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
-    const contract = new ethers.Contract(contractAddress, AMBASSADOR_SBT_ABI, wallet);
+    const { walletClient, account } = getWalletClient();
 
     console.log(`[Ambassador API] Action: ${action}, Chain: ${CHAIN_ID}`);
 
     switch (action) {
       case 'recordMeetupVerification':
-        return handleMeetupVerification(body as MeetupVerificationRequest, contract, corsHeaders);
-
+        return handleMeetupVerification(body, contractAddress, walletClient, account, corsHeaders);
       case 'updateKindnessScore':
-        return handleUpdateScore(body as UpdateScoreRequest, contract, corsHeaders);
-
+        return handleUpdateScore(body, contractAddress, walletClient, account, corsHeaders);
       case 'recordReferral':
-        return handleRecordReferral(body as RecordReferralRequest, contract, corsHeaders);
-
+        return handleRecordReferral(body, contractAddress, walletClient, account, corsHeaders);
       default:
         return jsonResponse({ success: false, error: 'Invalid action' }, 400, corsHeaders);
     }
   } catch (error) {
     console.error('[Ambassador API] Error:', error);
     return jsonResponse(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : 'Internal server error',
-      },
+      { success: false, error: error instanceof Error ? error.message : 'Internal server error' },
       500,
       corsHeaders
     );
   }
 }
 
-/**
- * Handle meetup verification - record attendance for all participants and host
- */
 async function handleMeetupVerification(
-  body: MeetupVerificationRequest,
-  contract: ethers.Contract,
+  body: { meetupId: string; hostAddress: string; attendedAddresses: string[] },
+  contractAddress: `0x${string}`,
+  walletClient: ReturnType<typeof createWalletClient>,
+  account: ReturnType<typeof privateKeyToAccount>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
   const { meetupId, hostAddress, attendedAddresses } = body;
 
-  if (!meetupId || !hostAddress || !attendedAddresses || !Array.isArray(attendedAddresses)) {
+  if (!meetupId || !hostAddress || !Array.isArray(attendedAddresses)) {
     return jsonResponse(
       { success: false, error: 'Missing required fields: meetupId, hostAddress, attendedAddresses' },
       400,
@@ -195,38 +148,43 @@ async function handleMeetupVerification(
   console.log(`[Ambassador API] Recording meetup ${meetupId} with ${attendedAddresses.length} attendees`);
 
   // Record attendance for each participant
-  for (const address of attendedAddresses) {
+  for (const addr of attendedAddresses) {
+    if (!isAddress(addr)) {
+      errors.push(`Invalid address: ${addr}`);
+      continue;
+    }
     try {
-      if (!ethers.isAddress(address)) {
-        errors.push(`Invalid address: ${address}`);
-        continue;
-      }
-
-      console.log(`[Ambassador API] Recording attendance for ${address}`);
-      const tx = await contract.recordMeetupAttendance(address);
-      await tx.wait(1, 45000);
-      txHashes.push(tx.hash);
-      console.log(`[Ambassador API] Attendance recorded: ${tx.hash}`);
+      const hash = await walletClient.writeContract({
+        address: contractAddress,
+        abi: AMBASSADOR_SBT_ABI,
+        functionName: 'recordMeetupAttendance',
+        args: [addr as `0x${string}`],
+        account,
+        chain,
+      });
+      txHashes.push(hash);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`[Ambassador API] Failed to record attendance for ${address}:`, errorMsg);
-      errors.push(`${address}: ${errorMsg}`);
+      errors.push(`${addr}: ${errorMsg}`);
     }
   }
 
   // Record host's meetup
-  try {
-    if (ethers.isAddress(hostAddress)) {
-      console.log(`[Ambassador API] Recording host meetup for ${hostAddress}`);
-      const tx = await contract.recordMeetupHosted(hostAddress);
-      await tx.wait(1, 45000);
-      txHashes.push(tx.hash);
-      console.log(`[Ambassador API] Host recorded: ${tx.hash}`);
+  if (isAddress(hostAddress)) {
+    try {
+      const hash = await walletClient.writeContract({
+        address: contractAddress,
+        abi: AMBASSADOR_SBT_ABI,
+        functionName: 'recordMeetupHosted',
+        args: [hostAddress as `0x${string}`],
+        account,
+        chain,
+      });
+      txHashes.push(hash);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Host (${hostAddress}): ${errorMsg}`);
     }
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-    console.error(`[Ambassador API] Failed to record host:`, errorMsg);
-    errors.push(`Host (${hostAddress}): ${errorMsg}`);
   }
 
   if (txHashes.length === 0 && errors.length > 0) {
@@ -248,40 +206,34 @@ async function handleMeetupVerification(
   );
 }
 
-/**
- * Handle kindness score update
- */
 async function handleUpdateScore(
-  body: UpdateScoreRequest,
-  contract: ethers.Contract,
+  body: { userAddress: string; newScore: number },
+  contractAddress: `0x${string}`,
+  walletClient: ReturnType<typeof createWalletClient>,
+  account: ReturnType<typeof privateKeyToAccount>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
   const { userAddress, newScore } = body;
 
   if (!userAddress || newScore === undefined) {
-    return jsonResponse(
-      { success: false, error: 'Missing required fields: userAddress, newScore' },
-      400,
-      corsHeaders
-    );
+    return jsonResponse({ success: false, error: 'Missing required fields: userAddress, newScore' }, 400, corsHeaders);
   }
-
-  if (!ethers.isAddress(userAddress)) {
+  if (!isAddress(userAddress)) {
     return jsonResponse({ success: false, error: 'Invalid user address' }, 400, corsHeaders);
   }
 
   try {
-    console.log(`[Ambassador API] Updating score for ${userAddress} to ${newScore}`);
-    const tx = await contract.updateKindnessScore(userAddress, newScore);
-    await tx.wait(1, 45000);
-    console.log(`[Ambassador API] Score updated: ${tx.hash}`);
+    const hash = await walletClient.writeContract({
+      address: contractAddress,
+      abi: AMBASSADOR_SBT_ABI,
+      functionName: 'updateKindnessScore',
+      args: [userAddress as `0x${string}`, BigInt(newScore)],
+      account,
+      chain,
+    });
 
     return jsonResponse(
-      {
-        success: true,
-        txHashes: [tx.hash],
-        message: `Kindness score updated to ${newScore}`,
-      },
+      { success: true, txHashes: [hash], message: `Kindness score updated to ${newScore}` },
       200,
       corsHeaders
     );
@@ -292,40 +244,34 @@ async function handleUpdateScore(
   }
 }
 
-/**
- * Handle referral recording
- */
 async function handleRecordReferral(
-  body: RecordReferralRequest,
-  contract: ethers.Contract,
+  body: { referrerAddress: string; refereeAddress: string },
+  contractAddress: `0x${string}`,
+  walletClient: ReturnType<typeof createWalletClient>,
+  account: ReturnType<typeof privateKeyToAccount>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
   const { referrerAddress, refereeAddress } = body;
 
   if (!referrerAddress || !refereeAddress) {
-    return jsonResponse(
-      { success: false, error: 'Missing required fields: referrerAddress, refereeAddress' },
-      400,
-      corsHeaders
-    );
+    return jsonResponse({ success: false, error: 'Missing required fields: referrerAddress, refereeAddress' }, 400, corsHeaders);
   }
-
-  if (!ethers.isAddress(referrerAddress) || !ethers.isAddress(refereeAddress)) {
+  if (!isAddress(referrerAddress) || !isAddress(refereeAddress)) {
     return jsonResponse({ success: false, error: 'Invalid address' }, 400, corsHeaders);
   }
 
   try {
-    console.log(`[Ambassador API] Recording referral: ${referrerAddress} -> ${refereeAddress}`);
-    const tx = await contract.recordReferral(referrerAddress, refereeAddress);
-    await tx.wait(1, 45000);
-    console.log(`[Ambassador API] Referral recorded: ${tx.hash}`);
+    const hash = await walletClient.writeContract({
+      address: contractAddress,
+      abi: AMBASSADOR_SBT_ABI,
+      functionName: 'recordReferral',
+      args: [referrerAddress as `0x${string}`, refereeAddress as `0x${string}`],
+      account,
+      chain,
+    });
 
     return jsonResponse(
-      {
-        success: true,
-        txHashes: [tx.hash],
-        message: `Referral recorded: ${referrerAddress} -> ${refereeAddress}`,
-      },
+      { success: true, txHashes: [hash], message: `Referral recorded: ${referrerAddress} -> ${refereeAddress}` },
       200,
       corsHeaders
     );
@@ -336,11 +282,8 @@ async function handleRecordReferral(
   }
 }
 
-/**
- * Helper to create JSON response
- */
 function jsonResponse(
-  data: AmbassadorResponse,
+  data: Record<string, unknown>,
   status: number,
   headers: Record<string, string>
 ): Response {

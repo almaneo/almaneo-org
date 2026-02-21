@@ -1,15 +1,25 @@
 /**
- * Admin Action API
+ * Admin Action API (viem version)
  * Vercel Serverless Function that executes admin-only operations directly
  *
  * POST /api/admin-action
  * Body: { target: 'partner-sbt' | 'ambassador', action: string, params: object }
  *
  * Security: ADMIN_API_SECRET verified on each request
- * No proxy pattern - directly executes contract calls to avoid Vercel self-fetch issues
+ * Uses viem instead of ethers for faster cold starts and smaller bundle
  */
 
-import { ethers } from 'ethers';
+import {
+  createPublicClient,
+  createWalletClient,
+  http,
+  fallback,
+  isAddress,
+  parseAbi,
+  type Hash,
+} from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { polygonAmoy, polygon } from 'viem/chains';
 import { createClient } from '@supabase/supabase-js';
 
 const ADMIN_API_SECRET = process.env.ADMIN_API_SECRET;
@@ -17,6 +27,8 @@ const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
+
+const chain = CHAIN_ID === 137 ? polygon : polygonAmoy;
 
 const RPC_URLS: Record<number, string[]> = {
   80002: [
@@ -30,31 +42,29 @@ const RPC_URLS: Record<number, string[]> = {
   ],
 };
 
-const RPC_TIMEOUT_MS = 15000; // 15 second timeout per RPC call
-
-const PARTNER_SBT_ADDRESS: Record<number, string> = {
+const PARTNER_SBT_ADDRESS: Record<number, `0x${string}`> = {
   80002: '0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08',
-  137: '',
+  137: '0x0000000000000000000000000000000000000000',
 };
 
-const AMBASSADOR_SBT_ADDRESS: Record<number, string> = {
+const AMBASSADOR_SBT_ADDRESS: Record<number, `0x${string}`> = {
   80002: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B',
-  137: '',
+  137: '0x0000000000000000000000000000000000000000',
 };
 
-const PARTNER_SBT_ABI = [
+const PARTNER_SBT_ABI = parseAbi([
   'function mintPartnerSBT(address to, string businessName) external returns (uint256)',
   'function renewPartnerSBT(address partner) external',
   'function revokePartnerSBT(address partner, string reason) external',
   'function getPartnerByAddress(address account) view returns (uint256 tokenId, string businessName, uint256 mintedAt, uint256 expiresAt, uint256 lastRenewedAt, uint256 renewalCount, bool isRevoked, bool valid)',
-];
+]);
 
-const AMBASSADOR_SBT_ABI = [
+const AMBASSADOR_SBT_ABI = parseAbi([
   'function recordMeetupAttendance(address user) external',
   'function recordMeetupHosted(address user) external',
   'function updateKindnessScore(address user, uint256 newScore) external',
   'function recordReferral(address referrer) external',
-];
+]);
 
 export const config = {
   runtime: 'nodejs',
@@ -67,18 +77,21 @@ interface AdminActionRequest {
   params: Record<string, unknown>;
 }
 
-/**
- * Create a provider with timeout, trying multiple RPC endpoints
- */
-function createProvider(chainId: number): ethers.JsonRpcProvider {
-  const urls = RPC_URLS[chainId];
-  if (!urls || urls.length === 0) {
-    throw new Error(`No RPC URLs configured for chain ${chainId}`);
-  }
-  // Use FetchRequest with timeout for reliability
-  const fetchReq = new ethers.FetchRequest(urls[0]);
-  fetchReq.timeout = RPC_TIMEOUT_MS;
-  return new ethers.JsonRpcProvider(fetchReq, chainId, { staticNetwork: true });
+function getClients() {
+  if (!VERIFIER_PRIVATE_KEY) throw new Error('VERIFIER_PRIVATE_KEY not configured');
+
+  const key = VERIFIER_PRIVATE_KEY.startsWith('0x')
+    ? (VERIFIER_PRIVATE_KEY as `0x${string}`)
+    : (`0x${VERIFIER_PRIVATE_KEY}` as `0x${string}`);
+
+  const account = privateKeyToAccount(key);
+  const urls = RPC_URLS[CHAIN_ID] || [];
+  const transport = fallback(urls.map(url => http(url, { timeout: 15_000 })));
+
+  const publicClient = createPublicClient({ chain, transport });
+  const walletClient = createWalletClient({ chain, transport, account });
+
+  return { publicClient, walletClient, account };
 }
 
 export default async function handler(request: Request): Promise<Response> {
@@ -114,15 +127,14 @@ export default async function handler(request: Request): Promise<Response> {
 
     console.log(`[Admin Action] target=${target}, action=${action}`);
 
-    const provider = createProvider(CHAIN_ID);
-    const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
+    const { publicClient, walletClient, account } = getClients();
 
     if (target === 'partner-sbt') {
-      return handlePartnerSBT(action, params, wallet, corsHeaders);
+      return handlePartnerSBT(action, params, publicClient, walletClient, account, corsHeaders);
     }
 
     if (target === 'ambassador') {
-      return handleAmbassador(action, params, wallet, corsHeaders);
+      return handleAmbassador(action, params, publicClient, walletClient, account, corsHeaders);
     }
 
     return jsonResponse({ success: false, error: 'Invalid target' }, 400, corsHeaders);
@@ -141,40 +153,46 @@ export default async function handler(request: Request): Promise<Response> {
 async function handlePartnerSBT(
   action: string,
   params: Record<string, unknown>,
-  wallet: ethers.Wallet,
+  publicClient: ReturnType<typeof createPublicClient>,
+  walletClient: ReturnType<typeof createWalletClient>,
+  account: ReturnType<typeof privateKeyToAccount>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
-  const contractAddress = PARTNER_SBT_ADDRESS[CHAIN_ID];
-  if (!contractAddress) {
+  const address = PARTNER_SBT_ADDRESS[CHAIN_ID];
+  if (!address || address === '0x0000000000000000000000000000000000000000') {
     return jsonResponse({ success: false, error: 'PartnerSBT not deployed on this chain' }, 500, corsHeaders);
   }
-
-  const contract = new ethers.Contract(contractAddress, PARTNER_SBT_ABI, wallet);
 
   if (action === 'mintPartner') {
     const { partnerAddress, businessName } = params as { partnerAddress: string; businessName: string };
     if (!partnerAddress || !businessName) {
       return jsonResponse({ success: false, error: 'Missing partnerAddress or businessName' }, 400, corsHeaders);
     }
-    if (!ethers.isAddress(partnerAddress)) {
+    if (!isAddress(partnerAddress)) {
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
     try {
       console.log(`[Admin Action] Minting PartnerSBT for ${partnerAddress}: ${businessName}`);
-      const tx = await contract.mintPartnerSBT(partnerAddress, businessName);
-      await tx.wait(1, 45000);
-      console.log(`[Admin Action] Minted: ${tx.hash}`);
+      const hash = await walletClient.writeContract({
+        address,
+        abi: PARTNER_SBT_ABI,
+        functionName: 'mintPartnerSBT',
+        args: [partnerAddress as `0x${string}`, businessName],
+        account,
+        chain,
+      });
+      console.log(`[Admin Action] Tx sent: ${hash}`);
 
-      // Sync to Supabase
-      await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
+      // Best-effort Supabase sync (non-blocking, short timeout)
+      syncPartnerAfterTx(hash, partnerAddress, address, publicClient).catch(() => {});
 
-      return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT minted for ${businessName}` }, 200, corsHeaders);
+      return jsonResponse({ success: true, txHash: hash, message: `Partner SBT minted for ${businessName}` }, 200, corsHeaders);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[Admin Action] Mint failed:`, errorMsg);
       if (errorMsg.includes('AccessControl') || errorMsg.includes('account 0x')) {
-        return jsonResponse({ success: false, error: 'Mint requires MINTER_ROLE. Run grant-partner-roles.js to grant the role to the Verifier wallet.' }, 403, corsHeaders);
+        return jsonResponse({ success: false, error: 'Mint requires MINTER_ROLE. Run grant-partner-roles.js to grant the role.' }, 403, corsHeaders);
       }
       return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
     }
@@ -182,19 +200,25 @@ async function handlePartnerSBT(
 
   if (action === 'renewPartner') {
     const { partnerAddress } = params as { partnerAddress: string };
-    if (!partnerAddress || !ethers.isAddress(partnerAddress)) {
+    if (!partnerAddress || !isAddress(partnerAddress)) {
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
     try {
       console.log(`[Admin Action] Renewing PartnerSBT for ${partnerAddress}`);
-      const tx = await contract.renewPartnerSBT(partnerAddress);
-      await tx.wait(1, 45000);
-      console.log(`[Admin Action] Renewed: ${tx.hash}`);
+      const hash = await walletClient.writeContract({
+        address,
+        abi: PARTNER_SBT_ABI,
+        functionName: 'renewPartnerSBT',
+        args: [partnerAddress as `0x${string}`],
+        account,
+        chain,
+      });
+      console.log(`[Admin Action] Tx sent: ${hash}`);
 
-      await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
+      syncPartnerAfterTx(hash, partnerAddress, address, publicClient).catch(() => {});
 
-      return jsonResponse({ success: true, txHash: tx.hash, message: 'Partner SBT renewed' }, 200, corsHeaders);
+      return jsonResponse({ success: true, txHash: hash, message: 'Partner SBT renewed' }, 200, corsHeaders);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[Admin Action] Renew failed:`, errorMsg);
@@ -207,31 +231,39 @@ async function handlePartnerSBT(
     if (!partnerAddress || !reason) {
       return jsonResponse({ success: false, error: 'Missing partnerAddress or reason' }, 400, corsHeaders);
     }
-    if (!ethers.isAddress(partnerAddress)) {
+    if (!isAddress(partnerAddress)) {
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
     try {
       console.log(`[Admin Action] Revoking PartnerSBT for ${partnerAddress}: ${reason}`);
-      const tx = await contract.revokePartnerSBT(partnerAddress, reason);
-      await tx.wait(1, 45000);
-      console.log(`[Admin Action] Revoked: ${tx.hash}`);
+      const hash = await walletClient.writeContract({
+        address,
+        abi: PARTNER_SBT_ABI,
+        functionName: 'revokePartnerSBT',
+        args: [partnerAddress as `0x${string}`, reason],
+        account,
+        chain,
+      });
+      console.log(`[Admin Action] Tx sent: ${hash}`);
 
-      // Clear Supabase SBT data
+      // Clear Supabase SBT data (best-effort)
       if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
-        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-        await supabase
-          .from('partners')
-          .update({ sbt_token_id: null, partnership_expires_at: null })
-          .eq('owner_user_id', partnerAddress);
+        try {
+          const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+          await supabase
+            .from('partners')
+            .update({ sbt_token_id: null, partnership_expires_at: null })
+            .eq('owner_user_id', partnerAddress);
+        } catch { /* ignore */ }
       }
 
-      return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT revoked: ${reason}` }, 200, corsHeaders);
+      return jsonResponse({ success: true, txHash: hash, message: `Partner SBT revoked: ${reason}` }, 200, corsHeaders);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[Admin Action] Revoke failed:`, errorMsg);
       if (errorMsg.includes('AccessControl') || errorMsg.includes('account 0x')) {
-        return jsonResponse({ success: false, error: 'Revoke requires DEFAULT_ADMIN_ROLE (Foundation wallet only). Use the Foundation wallet to revoke Partner SBTs.' }, 403, corsHeaders);
+        return jsonResponse({ success: false, error: 'Revoke requires DEFAULT_ADMIN_ROLE (Foundation wallet only).' }, 403, corsHeaders);
       }
       return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
     }
@@ -245,15 +277,15 @@ async function handlePartnerSBT(
 async function handleAmbassador(
   action: string,
   params: Record<string, unknown>,
-  wallet: ethers.Wallet,
+  publicClient: ReturnType<typeof createPublicClient>,
+  walletClient: ReturnType<typeof createWalletClient>,
+  account: ReturnType<typeof privateKeyToAccount>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
-  const contractAddress = AMBASSADOR_SBT_ADDRESS[CHAIN_ID];
-  if (!contractAddress) {
+  const address = AMBASSADOR_SBT_ADDRESS[CHAIN_ID];
+  if (!address || address === '0x0000000000000000000000000000000000000000') {
     return jsonResponse({ success: false, error: 'AmbassadorSBT not deployed on this chain' }, 500, corsHeaders);
   }
-
-  const contract = new ethers.Contract(contractAddress, AMBASSADOR_SBT_ABI, wallet);
 
   if (action === 'recordMeetupVerification') {
     const { hostAddress, participantAddresses } = params as {
@@ -264,12 +296,18 @@ async function handleAmbassador(
     const results: string[] = [];
 
     // Record host
-    if (hostAddress && ethers.isAddress(hostAddress)) {
+    if (hostAddress && isAddress(hostAddress)) {
       try {
-        const tx = await contract.recordMeetupHosted(hostAddress);
-        await tx.wait(1, 45000);
-        results.push(`Host ${hostAddress}: ${tx.hash}`);
-      } catch (e) {
+        const hash = await walletClient.writeContract({
+          address,
+          abi: AMBASSADOR_SBT_ABI,
+          functionName: 'recordMeetupHosted',
+          args: [hostAddress as `0x${string}`],
+          account,
+          chain,
+        });
+        results.push(`Host ${hostAddress}: ${hash}`);
+      } catch {
         results.push(`Host ${hostAddress}: failed`);
       }
     }
@@ -277,12 +315,18 @@ async function handleAmbassador(
     // Record participants
     if (Array.isArray(participantAddresses)) {
       for (const addr of participantAddresses) {
-        if (ethers.isAddress(addr)) {
+        if (isAddress(addr)) {
           try {
-            const tx = await contract.recordMeetupAttendance(addr);
-            await tx.wait(1, 45000);
-            results.push(`Participant ${addr}: ${tx.hash}`);
-          } catch (e) {
+            const hash = await walletClient.writeContract({
+              address,
+              abi: AMBASSADOR_SBT_ABI,
+              functionName: 'recordMeetupAttendance',
+              args: [addr as `0x${string}`],
+              account,
+              chain,
+            });
+            results.push(`Participant ${addr}: ${hash}`);
+          } catch {
             results.push(`Participant ${addr}: failed`);
           }
         }
@@ -294,14 +338,20 @@ async function handleAmbassador(
 
   if (action === 'updateKindnessScore') {
     const { userAddress, score } = params as { userAddress: string; score: number };
-    if (!userAddress || !ethers.isAddress(userAddress) || score == null) {
+    if (!userAddress || !isAddress(userAddress) || score == null) {
       return jsonResponse({ success: false, error: 'Invalid userAddress or score' }, 400, corsHeaders);
     }
 
     try {
-      const tx = await contract.updateKindnessScore(userAddress, score);
-      await tx.wait(1, 45000);
-      return jsonResponse({ success: true, txHash: tx.hash, message: 'Kindness score updated on-chain' }, 200, corsHeaders);
+      const hash = await walletClient.writeContract({
+        address,
+        abi: AMBASSADOR_SBT_ABI,
+        functionName: 'updateKindnessScore',
+        args: [userAddress as `0x${string}`, BigInt(score)],
+        account,
+        chain,
+      });
+      return jsonResponse({ success: true, txHash: hash, message: 'Kindness score updated on-chain' }, 200, corsHeaders);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[Admin Action] updateKindnessScore failed:`, errorMsg);
@@ -314,20 +364,34 @@ async function handleAmbassador(
 
 // --- Helpers ---
 
-async function syncPartnerToSupabase(
+/**
+ * Best-effort: wait for tx receipt then sync on-chain data to Supabase
+ * Uses 10s timeout - if it fails, the next page load will re-fetch from chain
+ */
+async function syncPartnerAfterTx(
+  hash: Hash,
   partnerAddress: string,
-  contractAddress: string,
-  provider: ethers.Provider
+  contractAddress: `0x${string}`,
+  publicClient: ReturnType<typeof createPublicClient>
 ): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return;
 
   try {
-    const contract = new ethers.Contract(contractAddress, PARTNER_SBT_ABI, provider);
-    const [tokenId, , , expiresAt] = await contract.getPartnerByAddress(partnerAddress);
+    // Wait for receipt with short timeout
+    await publicClient.waitForTransactionReceipt({ hash, timeout: 15_000 });
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    // Read on-chain data
+    const result = await publicClient.readContract({
+      address: contractAddress,
+      abi: PARTNER_SBT_ABI,
+      functionName: 'getPartnerByAddress',
+      args: [partnerAddress as `0x${string}`],
+    });
+
+    const [tokenId, , , expiresAt] = result as [bigint, string, bigint, bigint, bigint, bigint, boolean, boolean];
     const expiresDate = new Date(Number(expiresAt) * 1000).toISOString();
 
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
     await supabase
       .from('partners')
       .update({
@@ -338,7 +402,7 @@ async function syncPartnerToSupabase(
 
     console.log(`[Admin Action] Supabase synced: tokenId=${tokenId}, expires=${expiresDate}`);
   } catch (error) {
-    console.error('[Admin Action] Supabase sync failed:', error);
+    console.error('[Admin Action] Supabase sync failed (best-effort):', error);
   }
 }
 

@@ -105,15 +105,18 @@ export default function AdminPartners() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ action: 'getPartnerData', partnerAddress: p.owner_user_id }),
             });
-            const result = await res.json();
+            if (!res.ok) return p;
+            const text = await res.text();
+            let result: { success: boolean; data?: Record<string, unknown> };
+            try { result = JSON.parse(text); } catch { return p; }
             if (result.success && result.data?.hasSBT) {
               return {
                 ...p,
                 onchain: {
-                  valid: result.data.valid,
-                  daysUntilExpiry: result.data.daysUntilExpiry,
-                  renewalCount: result.data.renewalCount,
-                  isRevoked: result.data.isRevoked,
+                  valid: result.data.valid as boolean,
+                  daysUntilExpiry: result.data.daysUntilExpiry as number,
+                  renewalCount: result.data.renewalCount as number,
+                  isRevoked: result.data.isRevoked as boolean,
                 },
               };
             }
@@ -168,8 +171,10 @@ export default function AdminPartners() {
           params: { partnerAddress: mintAddress, businessName: mintBusinessName },
         }),
       });
-      const result = await res.json();
-      setActionResult({ success: result.success, message: result.message || result.error });
+      const text = await res.text();
+      let result: { success: boolean; message?: string; error?: string };
+      try { result = JSON.parse(text); } catch { result = { success: false, error: text.slice(0, 200) }; }
+      setActionResult({ success: result.success, message: result.message || result.error || 'Unknown error' });
       if (result.success) {
         setMintAddress('');
         setMintBusinessName('');
@@ -196,8 +201,10 @@ export default function AdminPartners() {
           params: { partnerAddress },
         }),
       });
-      const result = await res.json();
-      setActionResult({ success: result.success, message: result.message || result.error });
+      const text = await res.text();
+      let result: { success: boolean; message?: string; error?: string };
+      try { result = JSON.parse(text); } catch { result = { success: false, error: text.slice(0, 200) }; }
+      setActionResult({ success: result.success, message: result.message || result.error || 'Unknown error' });
       if (result.success) {
         setTimeout(() => { setActionResult(null); loadPartners(); }, 1500);
       }
@@ -223,8 +230,10 @@ export default function AdminPartners() {
           params: { partnerAddress: revokeModal.owner_user_id, reason: revokeReason },
         }),
       });
-      const result = await res.json();
-      setActionResult({ success: result.success, message: result.message || result.error });
+      const text = await res.text();
+      let result: { success: boolean; message?: string; error?: string };
+      try { result = JSON.parse(text); } catch { result = { success: false, error: text.slice(0, 200) }; }
+      setActionResult({ success: result.success, message: result.message || result.error || 'Unknown error' });
       if (result.success) {
         setRevokeReason('');
         setTimeout(() => { setRevokeModal(null); setActionResult(null); loadPartners(); }, 1500);
