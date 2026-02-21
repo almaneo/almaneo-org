@@ -1,4 +1,6 @@
 import 'dart:io' as io;
+import 'package:flutter/foundation.dart' show Factory;
+import 'package:flutter/gestures.dart' show EagerGestureRecognizer, OneSequenceGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -807,7 +809,17 @@ class _PartnerRegisterScreenState extends ConsumerState<PartnerRegisterScreen> {
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   zoomControlsEnabled: true,
+                  scrollGesturesEnabled: true,
+                  zoomGesturesEnabled: true,
+                  rotateGesturesEnabled: true,
+                  tiltGesturesEnabled: true,
                   mapToolbarEnabled: false,
+                  // Eagerly consume gestures so ListView doesn't steal pan/zoom
+                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                    Factory<OneSequenceGestureRecognizer>(
+                      () => EagerGestureRecognizer(),
+                    ),
+                  },
                   style: Theme.of(context).brightness == Brightness.dark
                       ? _darkMapStyle
                       : null,
