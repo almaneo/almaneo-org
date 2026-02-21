@@ -170,15 +170,19 @@ export default function AdminPartners() {
     }
   }
 
-  // Renew Partner SBT (no secret needed)
+  // Renew Partner SBT
   async function handleRenew(partnerAddress: string) {
     setActionLoading(true);
     setActionResult(null);
     try {
-      const res = await fetch('/api/partner-sbt', {
+      const res = await fetch('/api/admin-action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'renewPartner', partnerAddress }),
+        body: JSON.stringify({
+          target: 'partner-sbt',
+          action: 'renewPartner',
+          params: { partnerAddress },
+        }),
       });
       const result = await res.json();
       setActionResult({ success: result.success, message: result.message || result.error });
