@@ -37,11 +37,33 @@ const CONTRACT_ADDRESSES: Record<number, string> = {
   137: '', // Polygon Mainnet (not deployed yet)
 };
 
-// RPC URLs
-const RPC_URLS: Record<number, string> = {
-  80002: 'https://rpc-amoy.polygon.technology',
-  137: 'https://polygon-rpc.com',
+// RPC URLs (multiple for fallback)
+const RPC_URLS: Record<number, string[]> = {
+  80002: [
+    'https://rpc-amoy.polygon.technology',
+    'https://polygon-amoy-bor-rpc.publicnode.com',
+    'https://amoy.drpc.org',
+  ],
+  137: [
+    'https://polygon-rpc.com',
+    'https://polygon-bor-rpc.publicnode.com',
+  ],
 };
+
+const RPC_TIMEOUT_MS = 15000; // 15 second timeout per RPC call
+
+/**
+ * Create a provider with timeout for reliability
+ */
+function createProvider(chainId: number): ethers.JsonRpcProvider {
+  const urls = RPC_URLS[chainId];
+  if (!urls || urls.length === 0) {
+    throw new Error(`No RPC URLs configured for chain ${chainId}`);
+  }
+  const fetchReq = new ethers.FetchRequest(urls[0]);
+  fetchReq.timeout = RPC_TIMEOUT_MS;
+  return new ethers.JsonRpcProvider(fetchReq, chainId, { staticNetwork: true });
+}
 
 // Environment variables
 const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
@@ -133,7 +155,7 @@ export default async function handler(request: Request): Promise<Response> {
 
     // Public read-only actions (no auth needed)
     if (action === 'checkValidity' || action === 'getPartnerData') {
-      const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+      const provider = createProvider(CHAIN_ID);
       const contract = new ethers.Contract(contractAddress, PARTNER_SBT_ABI, provider);
 
       if (action === 'checkValidity') {
@@ -153,7 +175,7 @@ export default async function handler(request: Request): Promise<Response> {
         return jsonResponse({ success: false, error: 'Server configuration error' }, 500, corsHeaders);
       }
 
-      const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+      const provider = createProvider(CHAIN_ID);
       const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
       const contract = new ethers.Contract(contractAddress, PARTNER_SBT_ABI, wallet);
 
@@ -169,7 +191,7 @@ export default async function handler(request: Request): Promise<Response> {
         return jsonResponse({ success: false, error: 'Server configuration error' }, 500, corsHeaders);
       }
 
-      const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+      const provider = createProvider(CHAIN_ID);
       const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
       const contract = new ethers.Contract(contractAddress, PARTNER_SBT_ABI, wallet);
 
@@ -414,7 +436,7 @@ async function syncPartnerToSupabase(partnerAddress: string): Promise<void> {
   }
 
   try {
-    const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+    const provider = createProvider(CHAIN_ID);
     const contract = new ethers.Contract(CONTRACT_ADDRESSES[CHAIN_ID], PARTNER_SBT_ABI, provider);
 
     const [tokenId, , , expiresAt] = await contract.getPartnerByAddress(partnerAddress);

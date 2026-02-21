@@ -67,7 +67,7 @@ class AuthService {
       _walletAddress = _deriveWalletAddress(privateKeyHex);
     }
 
-    final token = await _getStreamToken(_userId!, name, preferredLanguage);
+    final token = await _getStreamToken(_userId!, name, preferredLanguage, _walletAddress);
 
     // 세션 저장
     await SessionStorage.save(SessionData(
@@ -98,11 +98,12 @@ class AuthService {
       _isWeb3AuthUser = session.isWeb3AuthUser;
       _walletAddress = session.walletAddress;
 
-      // 백엔드에서 새 Stream Chat 토큰 발급
+      // 백엔드에서 새 Stream Chat 토큰 발급 (walletAddress도 전달하여 Supabase 동기화)
       final token = await _getStreamToken(
         session.userId,
         session.userName,
         session.languageCode,
+        session.walletAddress,
       );
 
       return (token: token, session: session);
@@ -132,20 +133,24 @@ class AuthService {
   /// 백엔드 API에서 Stream Chat 토큰 발급
   /// 네트워크 불안정 대응: 지수 백오프 재시도 (최대 3회)
   /// 1차 실패 → 1s → 2차 실패 → 2s → 3차 실패 → 예외 throw
-  Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage]) async {
+  Future<String> _getStreamToken(String userId, [String? name, String? preferredLanguage, String? walletAddress]) async {
     final url = '${Env.chatApiUrl}/api/stream-token';
     const maxRetries = 3;
 
     for (int attempt = 0; attempt < maxRetries; attempt++) {
       try {
+        final body = <String, dynamic>{
+          'userId': userId,
+          'name': name,
+          'preferredLanguage': preferredLanguage ?? 'en',
+        };
+        if (walletAddress != null) {
+          body['walletAddress'] = walletAddress;
+        }
         final response = await http.post(
           Uri.parse(url),
           headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'userId': userId,
-            'name': name,
-            'preferredLanguage': preferredLanguage ?? 'en',
-          }),
+          body: jsonEncode(body),
         ).timeout(const Duration(seconds: 15));
 
         if (response.statusCode == 200) {

@@ -32,6 +32,12 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
   GoogleMapController? _mapController;
   Timer? _searchDebounce;
 
+  /// Get wallet_address from Stream Chat user's extraData (set on login)
+  String? get _currentWalletAddress {
+    final user = StreamChat.of(context).currentUser;
+    return user?.extraData['wallet_address'] as String?;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -207,7 +213,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => PartnerRegisterScreen(
-                    userId: StreamChat.of(context).currentUser?.id,
+                    userId: _currentWalletAddress ?? StreamChat.of(context).currentUser?.id,
                   ),
                 ),
               ).then((result) {
@@ -294,9 +300,9 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
     final categoryName = categoryData?['name'] as String? ?? 'other';
     final distance = partner['_distance_km'] as double?;
     final coverUrl = partner['cover_image_url'] as String?;
-    final currentUserId = StreamChat.of(context).currentUser?.id;
-    final isMine = currentUserId != null &&
-        partner['owner_user_id'] == currentUserId;
+    final ownerWallet = _currentWalletAddress;
+    final isMine = ownerWallet != null &&
+        partner['owner_user_id'] == ownerWallet;
 
     return GestureDetector(
       onTap: () {
@@ -305,7 +311,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
           MaterialPageRoute(
             builder: (_) => PartnerDetailScreen(
                       partnerId: partner['id'],
-                      userId: currentUserId,
+                      userId: ownerWallet,
                     ),
           ),
         ).then((_) => _loadData());
@@ -469,7 +475,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
                     MaterialPageRoute(
                       builder: (_) => PartnerDetailScreen(
                         partnerId: p['id'],
-                        userId: StreamChat.of(context).currentUser?.id,
+                        userId: _currentWalletAddress,
                       ),
                     ),
                   ).then((_) => _loadData());

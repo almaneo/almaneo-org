@@ -18,10 +18,19 @@ const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
 
-const RPC_URLS: Record<number, string> = {
-  80002: 'https://rpc-amoy.polygon.technology',
-  137: 'https://polygon-rpc.com',
+const RPC_URLS: Record<number, string[]> = {
+  80002: [
+    'https://rpc-amoy.polygon.technology',
+    'https://polygon-amoy-bor-rpc.publicnode.com',
+    'https://amoy.drpc.org',
+  ],
+  137: [
+    'https://polygon-rpc.com',
+    'https://polygon-bor-rpc.publicnode.com',
+  ],
 };
+
+const RPC_TIMEOUT_MS = 15000; // 15 second timeout per RPC call
 
 const PARTNER_SBT_ADDRESS: Record<number, string> = {
   80002: '0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08',
@@ -58,6 +67,20 @@ interface AdminActionRequest {
   params: Record<string, unknown>;
 }
 
+/**
+ * Create a provider with timeout, trying multiple RPC endpoints
+ */
+function createProvider(chainId: number): ethers.JsonRpcProvider {
+  const urls = RPC_URLS[chainId];
+  if (!urls || urls.length === 0) {
+    throw new Error(`No RPC URLs configured for chain ${chainId}`);
+  }
+  // Use FetchRequest with timeout for reliability
+  const fetchReq = new ethers.FetchRequest(urls[0]);
+  fetchReq.timeout = RPC_TIMEOUT_MS;
+  return new ethers.JsonRpcProvider(fetchReq, chainId, { staticNetwork: true });
+}
+
 export default async function handler(request: Request): Promise<Response> {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -91,7 +114,7 @@ export default async function handler(request: Request): Promise<Response> {
 
     console.log(`[Admin Action] target=${target}, action=${action}`);
 
-    const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+    const provider = createProvider(CHAIN_ID);
     const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
 
     if (target === 'partner-sbt') {
@@ -137,15 +160,24 @@ async function handlePartnerSBT(
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
-    console.log(`[Admin Action] Minting PartnerSBT for ${partnerAddress}: ${businessName}`);
-    const tx = await contract.mintPartnerSBT(partnerAddress, businessName);
-    await tx.wait();
-    console.log(`[Admin Action] Minted: ${tx.hash}`);
+    try {
+      console.log(`[Admin Action] Minting PartnerSBT for ${partnerAddress}: ${businessName}`);
+      const tx = await contract.mintPartnerSBT(partnerAddress, businessName);
+      await tx.wait();
+      console.log(`[Admin Action] Minted: ${tx.hash}`);
 
-    // Sync to Supabase
-    await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
+      // Sync to Supabase
+      await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
 
-    return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT minted for ${businessName}` }, 200, corsHeaders);
+      return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT minted for ${businessName}` }, 200, corsHeaders);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[Admin Action] Mint failed:`, errorMsg);
+      if (errorMsg.includes('AccessControl') || errorMsg.includes('account 0x')) {
+        return jsonResponse({ success: false, error: 'Mint requires MINTER_ROLE. Run grant-partner-roles.js to grant the role to the Verifier wallet.' }, 403, corsHeaders);
+      }
+      return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
+    }
   }
 
   if (action === 'renewPartner') {
@@ -154,14 +186,20 @@ async function handlePartnerSBT(
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
-    console.log(`[Admin Action] Renewing PartnerSBT for ${partnerAddress}`);
-    const tx = await contract.renewPartnerSBT(partnerAddress);
-    await tx.wait();
-    console.log(`[Admin Action] Renewed: ${tx.hash}`);
+    try {
+      console.log(`[Admin Action] Renewing PartnerSBT for ${partnerAddress}`);
+      const tx = await contract.renewPartnerSBT(partnerAddress);
+      await tx.wait();
+      console.log(`[Admin Action] Renewed: ${tx.hash}`);
 
-    await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
+      await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
 
-    return jsonResponse({ success: true, txHash: tx.hash, message: 'Partner SBT renewed' }, 200, corsHeaders);
+      return jsonResponse({ success: true, txHash: tx.hash, message: 'Partner SBT renewed' }, 200, corsHeaders);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[Admin Action] Renew failed:`, errorMsg);
+      return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
+    }
   }
 
   if (action === 'revokePartner') {
@@ -173,21 +211,30 @@ async function handlePartnerSBT(
       return jsonResponse({ success: false, error: 'Invalid partner address' }, 400, corsHeaders);
     }
 
-    console.log(`[Admin Action] Revoking PartnerSBT for ${partnerAddress}: ${reason}`);
-    const tx = await contract.revokePartnerSBT(partnerAddress, reason);
-    await tx.wait();
-    console.log(`[Admin Action] Revoked: ${tx.hash}`);
+    try {
+      console.log(`[Admin Action] Revoking PartnerSBT for ${partnerAddress}: ${reason}`);
+      const tx = await contract.revokePartnerSBT(partnerAddress, reason);
+      await tx.wait();
+      console.log(`[Admin Action] Revoked: ${tx.hash}`);
 
-    // Clear Supabase SBT data
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
-      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-      await supabase
-        .from('partners')
-        .update({ sbt_token_id: null, partnership_expires_at: null })
-        .eq('owner_user_id', partnerAddress);
+      // Clear Supabase SBT data
+      if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+        await supabase
+          .from('partners')
+          .update({ sbt_token_id: null, partnership_expires_at: null })
+          .eq('owner_user_id', partnerAddress);
+      }
+
+      return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT revoked: ${reason}` }, 200, corsHeaders);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[Admin Action] Revoke failed:`, errorMsg);
+      if (errorMsg.includes('AccessControl') || errorMsg.includes('account 0x')) {
+        return jsonResponse({ success: false, error: 'Revoke requires DEFAULT_ADMIN_ROLE (Foundation wallet only). Use the Foundation wallet to revoke Partner SBTs.' }, 403, corsHeaders);
+      }
+      return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
     }
-
-    return jsonResponse({ success: true, txHash: tx.hash, message: `Partner SBT revoked: ${reason}` }, 200, corsHeaders);
   }
 
   return jsonResponse({ success: false, error: `Unknown partner-sbt action: ${action}` }, 400, corsHeaders);

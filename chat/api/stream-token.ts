@@ -8,9 +8,11 @@
  *
  * Generates a user token for Stream Chat client connection.
  * Also upserts the user in Stream Chat with AlmaNEO metadata.
+ * Also upserts the user in Supabase users table (for Admin panel & Kindness Protocol).
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
 import {
   isStreamConfigured,
   generateUserToken,
@@ -25,6 +27,34 @@ function setCors(res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
+/**
+ * Upsert user in Supabase users table.
+ * This ensures AlmaChat users appear in the Admin panel and Kindness Protocol.
+ */
+async function upsertSupabaseUser(walletAddress: string, nickname?: string) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return;
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const { error } = await supabase
+    .from('users')
+    .upsert(
+      {
+        wallet_address: walletAddress.toLowerCase(),
+        nickname: nickname || 'AlmaChat User',
+      },
+      { onConflict: 'wallet_address', ignoreDuplicates: true }
+    );
+
+  if (error) {
+    console.warn('[StreamToken] Supabase user upsert failed (non-fatal):', error.message);
+  } else {
+    console.log('[StreamToken] Supabase user upserted:', walletAddress.toLowerCase());
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -65,6 +95,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }).catch((err: unknown) => {
       console.warn('[StreamToken] upsertUser failed (non-fatal):', err);
     });
+
+    // Upsert user in Supabase (best-effort — for Admin panel & Kindness Protocol)
+    if (walletAddress) {
+      upsertSupabaseUser(walletAddress, name).catch((err: unknown) => {
+        console.warn('[StreamToken] Supabase upsert failed (non-fatal):', err);
+      });
+    }
 
     // Generate token (local JWT signing — does not require Stream API call)
     const token = generateUserToken(userId);

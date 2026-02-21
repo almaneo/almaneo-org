@@ -178,7 +178,11 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
           User(
             id: restored.session.userId,
             name: restored.session.userName,
-            extraData: {'preferred_language': restored.session.languageCode},
+            extraData: {
+              'preferred_language': restored.session.languageCode,
+              if (restored.session.walletAddress != null)
+                'wallet_address': restored.session.walletAddress,
+            },
           ),
         );
 
@@ -257,7 +261,11 @@ class _AlmaChatAppState extends ConsumerState<AlmaChatApp>
         User(
           id: _authService.userId!,
           name: name,
-          extraData: {'preferred_language': langCode},
+          extraData: {
+            'preferred_language': langCode,
+            if (_authService.walletAddress != null)
+              'wallet_address': _authService.walletAddress,
+          },
         ),
       );
 

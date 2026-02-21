@@ -222,15 +222,19 @@ class PartnerService {
     String? coverImageUrl,
   }) async {
     try {
-      // Check if ownerUserId exists in users table (FK constraint)
+      // Validate owner: must be a valid wallet_address in users table (FK constraint)
       String? validOwner;
       if (ownerUserId != null) {
+        final normalizedOwner = ownerUserId.toLowerCase();
         final user = await _db
             .from('users')
             .select('wallet_address')
-            .eq('wallet_address', ownerUserId)
+            .eq('wallet_address', normalizedOwner)
             .maybeSingle();
-        validOwner = user != null ? ownerUserId : null;
+        validOwner = user != null ? normalizedOwner : null;
+        if (validOwner == null) {
+          debugPrint('[PartnerService] owner_user_id "$ownerUserId" not found in users table');
+        }
       }
 
       final data = await _db.from('partners').insert({
