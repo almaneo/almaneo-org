@@ -31,15 +31,37 @@ const CONTRACT_ADDRESSES: Record<number, string> = {
   137: '', // Polygon Mainnet (not deployed yet)
 };
 
-// RPC URLs
-const RPC_URLS: Record<number, string> = {
-  80002: 'https://rpc-amoy.polygon.technology',
-  137: 'https://polygon-rpc.com',
+// RPC URLs (multiple fallbacks for reliability)
+const RPC_URLS: Record<number, string[]> = {
+  80002: [
+    'https://rpc-amoy.polygon.technology',
+    'https://polygon-amoy-bor-rpc.publicnode.com',
+    'https://amoy.drpc.org',
+  ],
+  137: [
+    'https://polygon-rpc.com',
+    'https://polygon-bor-rpc.publicnode.com',
+  ],
 };
+
+const RPC_TIMEOUT_MS = 15000; // 15 second timeout per RPC call
 
 // Environment variables
 const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
+
+/**
+ * Create a provider with timeout for reliability
+ */
+function createProvider(chainId: number): ethers.JsonRpcProvider {
+  const urls = RPC_URLS[chainId];
+  if (!urls || urls.length === 0) {
+    throw new Error(`No RPC URLs configured for chain ${chainId}`);
+  }
+  const fetchReq = new ethers.FetchRequest(urls[0]);
+  fetchReq.timeout = RPC_TIMEOUT_MS;
+  return new ethers.JsonRpcProvider(fetchReq, chainId, { staticNetwork: true });
+}
 
 // Request types
 interface MeetupVerificationRequest {
@@ -117,7 +139,7 @@ export default async function handler(request: Request): Promise<Response> {
     const { action } = body;
 
     // Initialize provider and wallet
-    const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+    const provider = createProvider(CHAIN_ID);
     const wallet = new ethers.Wallet(VERIFIER_PRIVATE_KEY, provider);
     const contract = new ethers.Contract(contractAddress, AMBASSADOR_SBT_ABI, wallet);
 
@@ -182,7 +204,7 @@ async function handleMeetupVerification(
 
       console.log(`[Ambassador API] Recording attendance for ${address}`);
       const tx = await contract.recordMeetupAttendance(address);
-      await tx.wait();
+      await tx.wait(1, 45000);
       txHashes.push(tx.hash);
       console.log(`[Ambassador API] Attendance recorded: ${tx.hash}`);
     } catch (error) {
@@ -197,7 +219,7 @@ async function handleMeetupVerification(
     if (ethers.isAddress(hostAddress)) {
       console.log(`[Ambassador API] Recording host meetup for ${hostAddress}`);
       const tx = await contract.recordMeetupHosted(hostAddress);
-      await tx.wait();
+      await tx.wait(1, 45000);
       txHashes.push(tx.hash);
       console.log(`[Ambassador API] Host recorded: ${tx.hash}`);
     }
@@ -251,7 +273,7 @@ async function handleUpdateScore(
   try {
     console.log(`[Ambassador API] Updating score for ${userAddress} to ${newScore}`);
     const tx = await contract.updateKindnessScore(userAddress, newScore);
-    await tx.wait();
+    await tx.wait(1, 45000);
     console.log(`[Ambassador API] Score updated: ${tx.hash}`);
 
     return jsonResponse(
@@ -295,7 +317,7 @@ async function handleRecordReferral(
   try {
     console.log(`[Ambassador API] Recording referral: ${referrerAddress} -> ${refereeAddress}`);
     const tx = await contract.recordReferral(referrerAddress, refereeAddress);
-    await tx.wait();
+    await tx.wait(1, 45000);
     console.log(`[Ambassador API] Referral recorded: ${tx.hash}`);
 
     return jsonResponse(

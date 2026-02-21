@@ -163,7 +163,7 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Minting PartnerSBT for ${partnerAddress}: ${businessName}`);
       const tx = await contract.mintPartnerSBT(partnerAddress, businessName);
-      await tx.wait();
+      await tx.wait(1, 45000);
       console.log(`[Admin Action] Minted: ${tx.hash}`);
 
       // Sync to Supabase
@@ -189,7 +189,7 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Renewing PartnerSBT for ${partnerAddress}`);
       const tx = await contract.renewPartnerSBT(partnerAddress);
-      await tx.wait();
+      await tx.wait(1, 45000);
       console.log(`[Admin Action] Renewed: ${tx.hash}`);
 
       await syncPartnerToSupabase(partnerAddress, contractAddress, wallet.provider!);
@@ -214,7 +214,7 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Revoking PartnerSBT for ${partnerAddress}: ${reason}`);
       const tx = await contract.revokePartnerSBT(partnerAddress, reason);
-      await tx.wait();
+      await tx.wait(1, 45000);
       console.log(`[Admin Action] Revoked: ${tx.hash}`);
 
       // Clear Supabase SBT data
@@ -267,7 +267,7 @@ async function handleAmbassador(
     if (hostAddress && ethers.isAddress(hostAddress)) {
       try {
         const tx = await contract.recordMeetupHosted(hostAddress);
-        await tx.wait();
+        await tx.wait(1, 45000);
         results.push(`Host ${hostAddress}: ${tx.hash}`);
       } catch (e) {
         results.push(`Host ${hostAddress}: failed`);
@@ -280,7 +280,7 @@ async function handleAmbassador(
         if (ethers.isAddress(addr)) {
           try {
             const tx = await contract.recordMeetupAttendance(addr);
-            await tx.wait();
+            await tx.wait(1, 45000);
             results.push(`Participant ${addr}: ${tx.hash}`);
           } catch (e) {
             results.push(`Participant ${addr}: failed`);
@@ -298,10 +298,15 @@ async function handleAmbassador(
       return jsonResponse({ success: false, error: 'Invalid userAddress or score' }, 400, corsHeaders);
     }
 
-    const tx = await contract.updateKindnessScore(userAddress, score);
-    await tx.wait();
-
-    return jsonResponse({ success: true, txHash: tx.hash, message: 'Kindness score updated on-chain' }, 200, corsHeaders);
+    try {
+      const tx = await contract.updateKindnessScore(userAddress, score);
+      await tx.wait(1, 45000);
+      return jsonResponse({ success: true, txHash: tx.hash, message: 'Kindness score updated on-chain' }, 200, corsHeaders);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[Admin Action] updateKindnessScore failed:`, errorMsg);
+      return jsonResponse({ success: false, error: errorMsg }, 500, corsHeaders);
+    }
   }
 
   return jsonResponse({ success: false, error: `Unknown ambassador action: ${action}` }, 400, corsHeaders);

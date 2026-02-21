@@ -31,16 +31,25 @@ interface AdminWallet {
   label: string | null;
 }
 
-const BASE_MENU_ITEMS = [
+interface MenuItem {
+  path: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact: boolean;
+}
+
+// Menus visible to all admin roles
+const COMMON_MENU_ITEMS: MenuItem[] = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { path: '/admin/partners', label: 'Partners', icon: Store, exact: false },
   { path: '/admin/meetups', label: 'Meetups', icon: CalendarCheck, exact: false },
-  { path: '/admin/users', label: 'Users', icon: Users, exact: false },
 ];
 
-const ACCESS_MENU_ITEM = {
-  path: '/admin/access', label: 'Access', icon: KeyRound, exact: false,
-};
+// Additional menus for Foundation role only
+const FOUNDATION_MENU_ITEMS: MenuItem[] = [
+  { path: '/admin/partners', label: 'Partners', icon: Store, exact: false },
+  { path: '/admin/users', label: 'Users', icon: Users, exact: false },
+  { path: '/admin/access', label: 'Access', icon: KeyRound, exact: false },
+];
 
 function truncateAddress(addr: string) {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -140,10 +149,10 @@ export default function AdminLayout() {
   const isFoundation = adminRole === 'Foundation';
   const roleColor = isFoundation ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400';
 
-  // Build menu items (Access only for Foundation)
+  // Build menu items (Partners/Users/Access only for Foundation)
   const menuItems = isFoundation
-    ? [...BASE_MENU_ITEMS, ACCESS_MENU_ITEM]
-    : BASE_MENU_ITEMS;
+    ? [...COMMON_MENU_ITEMS, ...FOUNDATION_MENU_ITEMS]
+    : COMMON_MENU_ITEMS;
 
   return (
     <div className="min-h-screen bg-slate-950 flex">

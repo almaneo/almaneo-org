@@ -44,6 +44,7 @@ interface RecentMeetup {
 }
 
 function truncateAddress(addr: string) {
+  if (!addr || addr.length < 10) return addr || '—';
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
@@ -227,7 +228,7 @@ export default function AdminDashboard() {
                     <td className="px-3 py-3 text-slate-300">
                       {u.nickname || <span className="text-slate-600">—</span>}
                     </td>
-                    <td className="px-3 py-3 text-right text-slate-300">{u.kindness_score}</td>
+                    <td className="px-3 py-3 text-right text-slate-300">{u.kindness_score ?? 0}</td>
                     <td className="px-5 py-3 text-right text-slate-500 text-xs">
                       {new Date(u.created_at).toLocaleDateString()}
                     </td>
@@ -339,7 +340,7 @@ function StatCard({
         </div>
         <p className="text-slate-400 text-sm">{label}</p>
       </div>
-      <p className="text-3xl font-bold text-white">{value.toLocaleString()}</p>
+      <p className="text-3xl font-bold text-white">{(Number.isFinite(value) ? value : 0).toLocaleString()}</p>
       {sub && <p className="text-slate-500 text-xs mt-1">{sub}</p>}
     </div>
   );

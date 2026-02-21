@@ -82,6 +82,7 @@ export default function AdminPartners() {
 
   // Revoke form
   const [revokeReason, setRevokeReason] = useState('');
+  const [revokeConfirmed, setRevokeConfirmed] = useState(false);
 
   const loadPartners = useCallback(async () => {
     setLoading(true);
@@ -469,7 +470,7 @@ export default function AdminPartners() {
 
       {/* Revoke Modal */}
       {revokeModal && (
-        <Modal onClose={() => { setRevokeModal(null); setActionResult(null); setRevokeReason(''); }}>
+        <Modal onClose={() => { setRevokeModal(null); setActionResult(null); setRevokeReason(''); setRevokeConfirmed(false); }}>
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
               <AlertCircle className="w-5 h-5 text-red-400" />
@@ -495,14 +496,39 @@ export default function AdminPartners() {
                 {actionResult.message}
               </div>
             )}
-            <button
-              onClick={handleRevoke}
-              disabled={actionLoading || !revokeReason}
-              className="w-full py-2.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 font-medium text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
-            >
-              {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
-              {actionLoading ? 'Revoking...' : 'Revoke SBT'}
-            </button>
+            {!revokeConfirmed ? (
+              <button
+                onClick={() => setRevokeConfirmed(true)}
+                disabled={!revokeReason}
+                className="w-full py-2.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 font-medium text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+              >
+                <XCircle className="w-4 h-4" />
+                Revoke SBT
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <div className="rounded-lg p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-300">
+                  <p className="font-medium mb-1">This action is irreversible.</p>
+                  <p className="text-red-400/80 text-xs">The Partner SBT for <strong>{revokeModal.business_name}</strong> will be permanently revoked on-chain. Are you sure?</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setRevokeConfirmed(false)}
+                    className="flex-1 py-2.5 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 font-medium text-sm transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleRevoke}
+                    disabled={actionLoading}
+                    className="flex-1 py-2.5 rounded-lg bg-red-500/30 text-red-300 hover:bg-red-500/40 font-medium text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                  >
+                    {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertCircle className="w-4 h-4" />}
+                    {actionLoading ? 'Revoking...' : 'Confirm Revoke'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </Modal>
       )}
