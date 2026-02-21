@@ -5270,10 +5270,60 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 130+)
+### ✅ 완료된 작업 (2026-02-22 - Session 130: Admin Panel 테스트 & 수정)
+
+#### 1. **Admin Panel 코드 리뷰 (40+ 이슈 발견)** ✅
+   - 8개 admin 파일 전체 코드 리뷰 수행
+   - CRITICAL 2건, HIGH 2건, MEDIUM 1건 발견 및 수정
+
+#### 2. **[CRITICAL] ambassador.ts RPC 타임아웃 누락 수정** ✅
+   - **문제**: `RPC_URLS`가 단일 공개 RPC URL만 사용, `ethers.JsonRpcProvider(url)` 타임아웃 없음
+   - **수정**: 3개 fallback RPC URL + `ethers.FetchRequest` 15초 타임아웃 + `createProvider()` 함수
+   - 모든 `tx.wait()` → `tx.wait(1, 45000)` (1 confirmation, 45초 타임아웃)
+
+#### 3. **[CRITICAL] admin-action.ts tx.wait() 타임아웃 + 에러 핸들링 개선** ✅
+   - **문제**: 모든 `tx.wait()` 호출에 타임아웃 없음 → Vercel 60초 제한 초과 시 504
+   - **수정**: 모든 `tx.wait()` → `tx.wait(1, 45000)` (replace_all)
+   - `updateKindnessScore` 액션 try-catch 블록 추가
+
+#### 4. **[HIGH] Verifier role 메뉴 제한** ✅
+   - **문제**: Verifier 지갑이 Partners/Users/Access 메뉴에 접근 가능 (Foundation 전용이어야 함)
+   - **수정**: `AdminLayout.tsx` 메뉴를 `COMMON_MENU_ITEMS` (Dashboard + Meetups) + `FOUNDATION_MENU_ITEMS` (Partners + Users + Access)로 분리
+   - Foundation: 전체 메뉴, Verifier: Dashboard + Meetups만 표시
+   - `MenuItem` TypeScript 인터페이스 추가
+
+#### 5. **[HIGH] AdminPartners Revoke 확인 다이얼로그 추가** ✅
+   - **문제**: Partner SBT Revoke 버튼이 단일 클릭으로 실행 (온체인 비가역 작업)
+   - **수정**: 2-step 확인 패턴 구현
+     - Step 1: "Revoke SBT" 클릭 → 경고 메시지 표시 (파트너 이름 포함)
+     - Step 2: "Confirm Revoke" / "Cancel" 버튼
+   - `revokeConfirmed` state 추가, 모달 닫을 때 리셋
+
+#### 6. **[MEDIUM] AdminDashboard NaN 방지** ✅
+   - StatCard: `Number.isFinite(value)` 가드 추가
+   - `truncateAddress()`: null/short string 가드 추가
+   - `kindness_score`: `?? 0` null coalescing 추가
+
+#### 7. **빌드 테스트 & 커밋** ✅
+   - `npm run build` 성공 (33.89초, 에러 없음)
+   - 커밋: `d1beeb1` - fix(web): Improve admin panel security, error handling and UX
+   - 5개 파일, +101줄, -38줄
+
+#### 8. **수정 파일 요약**
+   | 파일 | 수정 내용 |
+   |------|----------|
+   | `web/api/ambassador.ts` | RPC 3개 fallback + 15초 타임아웃 + tx.wait(1, 45000) |
+   | `web/api/admin-action.ts` | tx.wait(1, 45000) + updateKindnessScore try-catch |
+   | `web/src/pages/admin/AdminLayout.tsx` | COMMON/FOUNDATION 메뉴 분리, MenuItem 인터페이스 |
+   | `web/src/pages/admin/AdminPartners.tsx` | 2-step Revoke 확인 다이얼로그 |
+   | `web/src/pages/admin/AdminDashboard.tsx` | NaN 방지 + null 가드 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 131+)
 
 #### 🔴 높은 우선순위
-- **Admin Panel 실기기 테스트**: Access Management 추가/제거, Partner SBT 민팅, Meetup 승인, Users 검색
+- **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인, Users 검색, Access Management
 - **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
 
 #### 🟡 중간 우선순위
