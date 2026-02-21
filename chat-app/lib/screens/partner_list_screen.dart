@@ -56,6 +56,12 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
         lat: _currentPosition?.latitude,
         lng: _currentPosition?.longitude,
       );
+      // Sort: verified partners (sbt_token_id not null) first
+      partners.sort((a, b) {
+        final aVerified = a['sbt_token_id'] != null ? 0 : 1;
+        final bVerified = b['sbt_token_id'] != null ? 0 : 1;
+        return aVerified.compareTo(bVerified);
+      });
       if (mounted) {
         setState(() {
           _categories = categories;
@@ -360,6 +366,11 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if (partner['sbt_token_id'] != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: Icon(Icons.verified, size: 16, color: AlmaTheme.electricBlue),
+                        ),
                       if (isMine)
                         Container(
                           margin: const EdgeInsets.only(left: 6),

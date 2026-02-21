@@ -31,6 +31,7 @@ export interface ContractAddresses {
   // Kindness Protocol
   JeongSBT: ContractAddress;
   AmbassadorSBT: ContractAddress;
+  PartnerSBT: ContractAddress;
 
   // TGE
   TokenVesting: ContractAddress;

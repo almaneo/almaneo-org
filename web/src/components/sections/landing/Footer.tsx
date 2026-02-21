@@ -17,6 +17,7 @@ const CONTRACTS = {
     { name: 'Kindness Airdrop', address: '0xfb89843F5a36A5E7E48A727225334E7b68fE22ac', description: 'Merkle Proof Airdrop' },
     { name: 'Token Vesting', address: '0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E', description: 'Team Vesting (12mo cliff + 3yr)' },
     { name: 'Mining Pool', address: '0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9', description: 'Game Mining Rewards (800M)' },
+    { name: 'Partner SBT', address: '0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08', description: 'Verified Partner Certification' },
   ],
   nft: [
     { name: 'AlmaNEO NFT (ERC-721)', address: '0xbFbE2b1eDB0f7F0675D5E449E508adE3697B8dfa', description: 'Single NFT Contract' },

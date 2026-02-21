@@ -355,6 +355,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Partner List
     'partners.myBadge': 'My',
+    'partners.verified': 'Verified',
+    'partners.verifiedPartner': 'Verified Partner',
+    'partners.verifiedUntil': 'Verified until {{date}}',
 
     // Voucher Create/Edit
     'voucher.createTitle': 'Create Voucher',
@@ -818,6 +821,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // 파트너 목록
     'partners.myBadge': 'My',
+    'partners.verified': '인증됨',
+    'partners.verifiedPartner': '인증된 파트너',
+    'partners.verifiedUntil': '{{date}}까지 인증',
 
     // 바우처 생성/수정
     'voucher.createTitle': '바우처 만들기',
@@ -1204,6 +1210,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // 合作伙伴列表
     'partners.myBadge': 'My',
+    'partners.verified': '已认证',
+    'partners.verifiedPartner': '认证合作伙伴',
+    'partners.verifiedUntil': '认证有效期至 {{date}}',
 
     // 优惠券创建/编辑
     'voucher.createTitle': '创建优惠券',
@@ -1589,6 +1598,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // パートナーリスト
     'partners.myBadge': 'My',
+    'partners.verified': '認証済み',
+    'partners.verifiedPartner': '認証パートナー',
+    'partners.verifiedUntil': '{{date}}まで認証',
 
     // クーポン作成/編集
     'voucher.createTitle': 'クーポン作成',
@@ -1974,6 +1986,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Lista de Socios
     'partners.myBadge': 'Mío',
+    'partners.verified': 'Verificado',
+    'partners.verifiedPartner': 'Socio Verificado',
+    'partners.verifiedUntil': 'Verificado hasta {{date}}',
 
     // Crear/Editar Cupón
     'voucher.createTitle': 'Crear Cupón',
@@ -2359,6 +2374,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Liste des partenaires
     'partners.myBadge': 'Mon',
+    'partners.verified': 'Vérifié',
+    'partners.verifiedPartner': 'Partenaire Vérifié',
+    'partners.verifiedUntil': 'Vérifié jusqu\'au {{date}}',
 
     // Créer/Modifier un bon
     'voucher.createTitle': 'Créer un bon',
@@ -2744,6 +2762,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // قائمة الشركاء
     'partners.myBadge': 'خاص بي',
+    'partners.verified': 'موثّق',
+    'partners.verifiedPartner': 'شريك موثّق',
+    'partners.verifiedUntil': 'موثّق حتى {{date}}',
 
     // إنشاء/تعديل القسيمة
     'voucher.createTitle': 'إنشاء قسيمة',
@@ -3129,6 +3150,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Danh sách đối tác
     'partners.myBadge': 'Của tôi',
+    'partners.verified': 'Đã xác minh',
+    'partners.verifiedPartner': 'Đối tác Đã xác minh',
+    'partners.verifiedUntil': 'Xác minh đến {{date}}',
 
     // Tạo/Sửa Voucher
     'voucher.createTitle': 'Tạo Voucher',
@@ -3514,6 +3538,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // รายชื่อพาร์ทเนอร์
     'partners.myBadge': 'ของฉัน',
+    'partners.verified': 'ยืนยันแล้ว',
+    'partners.verifiedPartner': 'พาร์ทเนอร์ที่ยืนยันแล้ว',
+    'partners.verifiedUntil': 'ยืนยันถึง {{date}}',
 
     // สร้าง/แก้ไขคูปอง
     'voucher.createTitle': 'สร้างคูปอง',
@@ -3881,6 +3908,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Lista de Parceiros
     'partners.myBadge': 'Meu',
+    'partners.verified': 'Verificado',
+    'partners.verifiedPartner': 'Parceiro Verificado',
+    'partners.verifiedUntil': 'Verificado até {{date}}',
 
     // Criar/Editar Cupom
     'voucher.createTitle': 'Criar Cupom',
@@ -4248,6 +4278,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Daftar Mitra
     'partners.myBadge': 'Milik Saya',
+    'partners.verified': 'Terverifikasi',
+    'partners.verifiedPartner': 'Mitra Terverifikasi',
+    'partners.verifiedUntil': 'Terverifikasi hingga {{date}}',
 
     // Buat/Edit Voucher
     'voucher.createTitle': 'Buat Voucher',
@@ -4594,6 +4627,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // पार्टनर सूची
     'partners.myBadge': 'मेरा',
+    'partners.verified': 'सत्यापित',
+    'partners.verifiedPartner': 'सत्यापित पार्टनर',
+    'partners.verifiedUntil': '{{date}} तक सत्यापित',
 
     // वाउचर बनाएँ/संपादित करें
     'voucher.createTitle': 'वाउचर बनाएँ',
@@ -4940,6 +4976,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Partnerliste
     'partners.myBadge': 'Mein',
+    'partners.verified': 'Verifiziert',
+    'partners.verifiedPartner': 'Verifizierter Partner',
+    'partners.verifiedUntil': 'Verifiziert bis {{date}}',
 
     // Gutschein erstellen/bearbeiten
     'voucher.createTitle': 'Gutschein erstellen',
@@ -5286,6 +5325,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Список партнёров
     'partners.myBadge': 'Моё',
+    'partners.verified': 'Подтверждено',
+    'partners.verifiedPartner': 'Подтверждённый партнёр',
+    'partners.verifiedUntil': 'Подтверждено до {{date}}',
 
     // Создание/Редактирование купона
     'voucher.createTitle': 'Создать купон',
@@ -5632,6 +5674,9 @@ final Map<String, Map<String, String>> _translations = {
 
     // Ortak Listesi
     'partners.myBadge': 'Benim',
+    'partners.verified': 'Doğrulanmış',
+    'partners.verifiedPartner': 'Doğrulanmış Ortak',
+    'partners.verifiedUntil': '{{date}} tarihine kadar doğrulanmış',
 
     // Kupon Oluştur/Düzenle
     'voucher.createTitle': 'Kupon Oluştur',

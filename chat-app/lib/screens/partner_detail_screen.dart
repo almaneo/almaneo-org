@@ -288,6 +288,15 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
     );
   }
 
+  String _formatExpiryDate(String isoDate) {
+    try {
+      final date = DateTime.parse(isoDate);
+      return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    } catch (_) {
+      return isoDate;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(languageProvider).languageCode;
@@ -384,21 +393,63 @@ class _PartnerDetailScreenState extends ConsumerState<PartnerDetailScreen> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                tr('partners.categories.$categoryName', lang),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AlmaTheme.electricBlue,
-                                  fontWeight: FontWeight.w500,
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: AlmaTheme.electricBlue.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    tr('partners.categories.$categoryName', lang),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AlmaTheme.electricBlue,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                if (partner['sbt_token_id'] != null) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: AlmaTheme.electricBlue.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: AlmaTheme.electricBlue.withValues(alpha: 0.3)),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.verified, size: 14, color: AlmaTheme.electricBlue),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          tr('partners.verifiedPartner', lang),
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                            color: AlmaTheme.electricBlue,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            if (partner['sbt_token_id'] != null && partner['partnership_expires_at'] != null) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                tr('partners.verifiedUntil', lang, args: {
+                                  'date': _formatExpiryDate(partner['partnership_expires_at']),
+                                }),
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: alma.textTertiary,
                                 ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

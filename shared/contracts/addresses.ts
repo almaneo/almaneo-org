@@ -24,6 +24,7 @@ const AMOY_ADDRESSES: ContractAddresses = {
   // Kindness Protocol
   JeongSBT: '0x41588D71373A6cf9E6f848250Ff7322d67Bb393c' as ContractAddress,
   AmbassadorSBT: '0xf368d239a0b756533ff5688021A04Bc62Ab3c27B' as ContractAddress,
+  PartnerSBT: '0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08' as ContractAddress,
 
   // TGE
   TokenVesting: '0x02fB6851B6cDc6B9176B42065bC9e0E0F6cf8F0E' as ContractAddress,
@@ -56,6 +57,7 @@ const MAINNET_ADDRESSES: ContractAddresses = {
   // Kindness Protocol
   JeongSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
   AmbassadorSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
+  PartnerSBT: '0x0000000000000000000000000000000000000000' as ContractAddress,
 
   // TGE
   TokenVesting: '0x0000000000000000000000000000000000000000' as ContractAddress,
