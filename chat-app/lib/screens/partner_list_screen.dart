@@ -194,7 +194,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
             child: const Icon(Icons.my_location, color: Colors.white, size: 20),
           ),
           const SizedBox(height: 10),
-          FloatingActionButton(
+          FloatingActionButton.small(
             heroTag: 'register',
             onPressed: () {
               Navigator.push(
@@ -209,7 +209,7 @@ class _PartnerListScreenState extends ConsumerState<PartnerListScreen> {
               });
             },
             backgroundColor: AlmaTheme.terracottaOrange,
-            child: const Icon(Icons.add_business, color: Colors.white),
+            child: const Icon(Icons.add_business, color: Colors.white, size: 20),
           ),
         ],
       ),
