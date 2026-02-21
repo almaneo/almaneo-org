@@ -4992,10 +4992,59 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 126+)
+### ✅ 완료된 작업 (2026-02-21 - Session 126: Partner System UX 개선 5건)
+
+#### 1. **지도 팬/줌 제스처 활성화** ✅
+   - **문제**: 파트너 등록 화면에서 GoogleMap이 ListView 안에 있어 손으로 지도 이동 불가 (줌 +/- 버튼만 사용 가능)
+   - **수정**: `EagerGestureRecognizer`를 `gestureRecognizers`에 추가 → 지도가 터치 제스처를 우선 소비
+   - `scrollGesturesEnabled`, `zoomGesturesEnabled`, `rotateGesturesEnabled`, `tiltGesturesEnabled` 명시적 활성화
+   - 수정 파일: `partner_register_screen.dart`
+   - 커밋: `8fa68e1`
+
+#### 2. **QR 바우처 카운트다운 425분 버그 수정** ✅
+   - **문제**: QR 코드 생성 시 5분 카운트다운이 425분으로 표시
+   - **근본 원인**: `DateTime.now().toIso8601String()` → 로컬 시간(UTC+7)이 타임존 없이 저장 → Supabase가 UTC로 해석 → 7시간 + 5분 = 425분
+   - **수정**: `DateTime.now().toUtc()` 사용하여 생성/비교 모두 UTC 통일
+   - 수정 파일: `partner_service.dart`, `partner_detail_screen.dart`
+   - 커밋: `e314241`
+
+#### 3. **파트너 추가 FAB 사이즈 통일** ✅
+   - **문제**: 파트너 추가 FAB이 내 위치 FAB보다 크게 표시
+   - **수정**: `FloatingActionButton` → `FloatingActionButton.small`, 아이콘 size 20으로 통일
+   - 수정 파일: `partner_list_screen.dart`
+   - 커밋: `be62b10`
+
+#### 4. **Open in Maps 비즈니스 검색 개선** ✅
+   - **문제**: `query=10.7769,106.7009` 좌표만 전달 → 지도에서 핀만 표시
+   - **수정**: `query=Business+Name,+Address` 형식으로 변경 → Google Maps가 동일 상호 존재 시 해당 가게 정보 표시
+   - 수정 파일: `partner_detail_screen.dart`
+   - 커밋: `3279acb`
+
+#### 5. **지도 탭 시 Reverse Geocoding → 주소 자동 표시/입력** ✅
+   - **문제**: 지도에서 핀을 찍으면 좌표값만 표시 (`10.77690, 106.70090`)
+   - **수정**: `placemarkFromCoordinates()` reverse geocoding으로 실제 주소 표시 (예: "123 Nguyen Hue, District 1, Ho Chi Minh City, Vietnam")
+   - 지도 탭, 마커 드래그, GPS 위치 모두 적용
+   - 주소 입력 필드가 비어있으면 자동 채워넣기
+   - 연속 중복 제거 로직 (예: "District 1, District 1" 방지)
+   - 수정 파일: `partner_register_screen.dart`
+   - 커밋: `3279acb`
+
+#### 6. **수정 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `chat-app/lib/screens/partner_register_screen.dart` | 지도 제스처 + reverse geocoding |
+   | `chat-app/lib/screens/partner_detail_screen.dart` | QR 타임존 + Open in Maps URL |
+   | `chat-app/lib/screens/partner_list_screen.dart` | FAB 사이즈 통일 |
+   | `chat-app/lib/services/partner_service.dart` | QR 만료시간 UTC |
+   - **총 4개 파일**, 4개 커밋
+   - **APK**: 78.9MB
+
+---
+
+### 🔲 다음 세션 작업 (Session 127+)
 
 #### 🔴 높은 우선순위
-- **실기기 재테스트**: geocoding 주소→핀 변환, Open in Maps, 바우처 날짜/QR 표시 확인
+- **실기기 재테스트**: reverse geocoding 주소 표시, QR 5분 카운트다운, 지도 제스처 확인
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
 #### 🟡 중간 우선순위
@@ -5005,6 +5054,7 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 - **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
 
 #### 🟢 낮은 우선순위
+- **Google Places Autocomplete**: 주소 입력 시 자동완성 + 비즈니스 검색 (유료 API)
 - **Kindness AI 분석 MVP**: V0.6+
 - **메인넷 배포 준비**: Multi-sig, 감사
 - **토큰 로고 AI 생성**
