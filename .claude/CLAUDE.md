@@ -5111,17 +5111,50 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
+### 📋 Admin 페이지 설계 토론 (Session 127)
+
+#### NFT Admin 현황 분석
+- **위치**: `nft.almaneo.org/admin` (NFT 서버)
+- **페이지 7개**: Dashboard, Mint NFT, Collections, Payment Tokens, Marketplace, Hero Section, Settings
+- **인증**: 하드코딩 지갑 주소 (`0x883D5c...`) + OPERATOR_ROLE
+- **기술 스택**: React + MUI + ethers.js
+- **범위**: NFT 마켓플레이스 전용
+
+#### 결정: Web에 별도 플랫폼 Admin 페이지 생성
+- **라우트**: `almaneo.org/admin`
+- **NFT Admin은 그대로 유지** (마켓플레이스 전용)
+- **Web Admin은 플랫폼 전체 관리** 담당
+
+#### 이유
+1. **관심사 분리**: NFT Admin ≠ 플랫폼 Admin
+2. **API 위치**: `/api/partner-sbt`, `/api/ambassador` 등이 Web 서버에 있음
+3. **Supabase 연동**: partners, meetups, users 테이블이 Web에서 이미 연동
+4. **UI 일관성**: Web=Tailwind, NFT=MUI — 스타일 충돌 방지
+5. **확장성**: 밋업 검증, 에어드롭 관리, 사용자 관리 등 추가 가능
+
+#### 예상 관리 기능 (다음 세션에서 상세 설계)
+- **Partner SBT**: 발급/갱신/취소, 인증 상태 관리
+- **밋업 검증**: 사진 확인, 승인/거절, 점수 지급
+- **Ambassador SBT**: 티어 관리, 활동 기록 조회
+- **에어드롭 캠페인**: 캠페인 생성, Merkle Root 업로드
+- **사용자 관리**: Kindness Score 조회, 활동 내역
+- **대시보드**: 통계 (파트너 수, 밋업 수, 토큰 분배 현황)
+
+---
+
 ### 🔲 다음 세션 작업 (Session 128+)
 
 #### 🔴 높은 우선순위
+- **플랫폼 Admin 페이지 설계 & 구현**: `almaneo.org/admin` (토론 후 계획 → 구현)
 - **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
-- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
+- **Vercel 환경변수 설정**: `ADMIN_API_SECRET` (PartnerSBT mint/revoke용)
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
 - **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
 - **AlmaPaymentManager 수수료 할인 연동**: PartnerSBT 15% 할인 (NFT 마켓 활성화 후)
+- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
 #### 🟢 낮은 우선순위
 - **Google Places Autocomplete**: 주소 입력 시 자동완성 + 비즈니스 검색 (유료 API)
