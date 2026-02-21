@@ -127,7 +127,7 @@ class PartnerService {
   }) async {
     try {
       final code = _generateCode(8);
-      final expiresAt = DateTime.now().add(const Duration(minutes: 5));
+      final expiresAt = DateTime.now().toUtc().add(const Duration(minutes: 5));
 
       final data = await _db.from('voucher_redemptions').insert({
         'voucher_id': voucherId,

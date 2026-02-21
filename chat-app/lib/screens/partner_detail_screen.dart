@@ -871,9 +871,15 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
     );
 
     if (result != null && mounted) {
+      final parsed = DateTime.tryParse(result['qr_expires_at'] ?? '');
+      // Ensure expiresAt is in UTC for consistent comparison
+      final expiresUtc = parsed?.isUtc == true ? parsed : parsed?.toUtc();
       setState(() {
         _qrCode = result['qr_code'] as String?;
-        _expiresAt = DateTime.tryParse(result['qr_expires_at'] ?? '');
+        _expiresAt = expiresUtc;
+        _remainingSeconds = expiresUtc != null
+            ? expiresUtc.difference(DateTime.now().toUtc()).inSeconds.clamp(0, 300)
+            : 0;
         _isGenerating = false;
       });
       _startCountdown();
@@ -885,7 +891,7 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
   void _startCountdown() {
     if (_expiresAt == null) return;
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final remaining = _expiresAt!.difference(DateTime.now()).inSeconds;
+      final remaining = _expiresAt!.difference(DateTime.now().toUtc()).inSeconds;
       if (remaining <= 0) {
         _countdownTimer?.cancel();
         if (mounted) setState(() => _remainingSeconds = 0);
