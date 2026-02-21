@@ -140,39 +140,50 @@ async function handleGetStatus(
   contractAddress: string,
 ): Promise<Response> {
   try {
-    // Fetch all status in parallel
+    // Helper: safely call a view function (returns null on revert)
+    const safeCall = async (calldata: string): Promise<string | null> => {
+      try {
+        return await ethCall(CHAIN_ID, contractAddress, calldata);
+      } catch {
+        return null;
+      }
+    };
+
+    // Fetch all status in parallel (some may revert)
     const queries = [
-      ethCall(CHAIN_ID, contractAddress, MiningPool.getCurrentEpoch()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.remainingPool()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.totalClaimed()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.miningProgress()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.getDailyRemaining()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.getContractBalance()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.dailyClaimLimit()),
-      ethCall(CHAIN_ID, contractAddress, MiningPool.userDailyClaimLimit()),
+      safeCall(MiningPool.getCurrentEpoch()),
+      safeCall(MiningPool.remainingPool()),
+      safeCall(MiningPool.totalClaimed()),
+      safeCall(MiningPool.miningProgress()),
+      safeCall(MiningPool.getDailyRemaining()),
+      safeCall(MiningPool.getContractBalance()),
+      safeCall(MiningPool.dailyClaimLimit()),
+      safeCall(MiningPool.userDailyClaimLimit()),
     ];
 
     if (body.userAddress && isAddress(body.userAddress)) {
       queries.push(
-        ethCall(CHAIN_ID, contractAddress, MiningPool.getUserDailyRemaining(body.userAddress))
+        safeCall(MiningPool.getUserDailyRemaining(body.userAddress))
       );
     }
 
     const results = await Promise.all(queries);
 
+    const safeDecode = (hex: string | null): bigint => hex ? decodeUint256(hex) : 0n;
+
     const data: Record<string, unknown> = {
-      currentEpoch: Number(decodeUint256(results[0])),
-      remainingPool: formatEther(decodeUint256(results[1])),
-      totalClaimed: formatEther(decodeUint256(results[2])),
-      miningProgress: Number(decodeUint256(results[3])) / 100,
-      dailyRemaining: formatEther(decodeUint256(results[4])),
-      contractBalance: formatEther(decodeUint256(results[5])),
-      dailyClaimLimit: formatEther(decodeUint256(results[6])),
-      userDailyClaimLimit: formatEther(decodeUint256(results[7])),
+      currentEpoch: Number(safeDecode(results[0])),
+      remainingPool: formatEther(safeDecode(results[1])),
+      totalClaimed: formatEther(safeDecode(results[2])),
+      miningProgress: Number(safeDecode(results[3])) / 100,
+      dailyRemaining: formatEther(safeDecode(results[4])),
+      contractBalance: formatEther(safeDecode(results[5])),
+      dailyClaimLimit: formatEther(safeDecode(results[6])),
+      userDailyClaimLimit: formatEther(safeDecode(results[7])),
     };
 
     if (results.length > 8) {
-      data.userDailyRemaining = formatEther(decodeUint256(results[8]));
+      data.userDailyRemaining = formatEther(safeDecode(results[8]));
     }
 
     return jsonResponse({ success: true, data }, 200, CORS_HEADERS);
