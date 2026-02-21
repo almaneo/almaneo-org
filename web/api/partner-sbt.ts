@@ -66,8 +66,8 @@ function getTransport() {
 }
 
 export const config = {
-  runtime: 'nodejs',
-  maxDuration: 60,
+  runtime: 'edge',
+  regions: ['icn1'],
 };
 
 export default async function handler(request: Request): Promise<Response> {

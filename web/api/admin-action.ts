@@ -67,8 +67,8 @@ const AMBASSADOR_SBT_ABI = parseAbi([
 ]);
 
 export const config = {
-  runtime: 'nodejs',
-  maxDuration: 60,
+  runtime: 'edge',
+  regions: ['icn1'],
 };
 
 interface AdminActionRequest {

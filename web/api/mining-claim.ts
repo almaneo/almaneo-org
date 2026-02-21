@@ -1,6 +1,6 @@
 /**
- * Mining Claim API
- * Vercel Serverless Function for MiningPool contract interactions
+ * Mining Claim API (viem version)
+ * Vercel Edge Function for MiningPool contract interactions
  *
  * POST /api/mining-claim
  * Actions:
@@ -12,10 +12,20 @@
  * - Should only be called from trusted backend services (game server)
  */
 
-import { ethers } from 'ethers';
+import {
+  createPublicClient,
+  createWalletClient,
+  http,
+  fallback,
+  isAddress,
+  parseAbi,
+  parseEther,
+  formatEther,
+} from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { polygonAmoy, polygon } from 'viem/chains';
 
-// MiningPool ABI (only the functions we need)
-const MINING_POOL_ABI = [
+const MINING_POOL_ABI = parseAbi([
   'function claimForUser(address user, uint256 amount) external',
   'function getCurrentEpoch() view returns (uint256)',
   'function remainingPool() view returns (uint256)',
@@ -26,54 +36,33 @@ const MINING_POOL_ABI = [
   'function getContractBalance() view returns (uint256)',
   'function dailyClaimLimit() view returns (uint256)',
   'function userDailyClaimLimit() view returns (uint256)',
-];
+]);
 
-// Contract addresses by network
-const CONTRACT_ADDRESSES: Record<number, string> = {
-  80002: '0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9', // Polygon Amoy
-  137: '', // Polygon Mainnet (not deployed yet)
+const CONTRACT_ADDRESSES: Record<number, `0x${string}`> = {
+  80002: '0xD447078530b6Ec3a2B8fe0ceb5A2a994d4e464b9',
+  137: '0x0000000000000000000000000000000000000000',
 };
 
-// RPC URLs
-const RPC_URLS: Record<number, string> = {
-  80002: 'https://rpc-amoy.polygon.technology',
-  137: 'https://polygon-rpc.com',
+const RPC_URLS: Record<number, string[]> = {
+  80002: [
+    'https://rpc-amoy.polygon.technology',
+    'https://polygon-amoy-bor-rpc.publicnode.com',
+    'https://amoy.drpc.org',
+  ],
+  137: [
+    'https://polygon-rpc.com',
+    'https://polygon-bor-rpc.publicnode.com',
+  ],
 };
 
-// Environment variables
 const CLAIMER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 
-// Request types
-interface ClaimTokensRequest {
-  action: 'claimTokens';
-  userAddress: string;
-  amount: string; // ALMAN amount (not wei) - e.g. "100" for 100 ALMAN
-  gamePoints?: number;
-}
-
-interface GetStatusRequest {
-  action: 'getStatus';
-  userAddress?: string;
-}
-
-type MiningRequest = ClaimTokensRequest | GetStatusRequest;
-
-interface SuccessResponse {
-  success: true;
-  data: Record<string, unknown>;
-}
-
-interface ErrorResponse {
-  success: false;
-  error: string;
-}
-
-type MiningResponse = SuccessResponse | ErrorResponse;
+const chain = CHAIN_ID === 137 ? polygon : polygonAmoy;
 
 export const config = {
-  runtime: 'nodejs',
-  maxDuration: 30,
+  runtime: 'edge',
+  regions: ['icn1'],
 };
 
 export default async function handler(request: Request): Promise<Response> {
@@ -92,23 +81,22 @@ export default async function handler(request: Request): Promise<Response> {
   }
 
   const contractAddress = CONTRACT_ADDRESSES[CHAIN_ID];
-  if (!contractAddress) {
+  if (!contractAddress || contractAddress === '0x0000000000000000000000000000000000000000') {
     return jsonResponse({ success: false, error: 'Contract not available' }, 500, corsHeaders);
   }
 
   try {
-    const body = (await request.json()) as MiningRequest;
+    const body = await request.json();
     const { action } = body;
 
-    const provider = new ethers.JsonRpcProvider(RPC_URLS[CHAIN_ID]);
+    const urls = RPC_URLS[CHAIN_ID] || [];
+    const transport = fallback(urls.map(url => http(url, { timeout: 15_000 })));
 
     switch (action) {
       case 'claimTokens':
-        return handleClaimTokens(body as ClaimTokensRequest, provider, contractAddress, corsHeaders);
-
+        return handleClaimTokens(body, contractAddress, transport, corsHeaders);
       case 'getStatus':
-        return handleGetStatus(body as GetStatusRequest, provider, contractAddress, corsHeaders);
-
+        return handleGetStatus(body, contractAddress, transport, corsHeaders);
       default:
         return jsonResponse({ success: false, error: 'Invalid action' }, 400, corsHeaders);
     }
@@ -123,27 +111,21 @@ export default async function handler(request: Request): Promise<Response> {
 }
 
 async function handleClaimTokens(
-  body: ClaimTokensRequest,
-  provider: ethers.JsonRpcProvider,
-  contractAddress: string,
+  body: { userAddress: string; amount: string; gamePoints?: number },
+  contractAddress: `0x${string}`,
+  transport: ReturnType<typeof fallback>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
   if (!CLAIMER_PRIVATE_KEY) {
-    console.error('[Mining API] VERIFIER_PRIVATE_KEY is not set');
     return jsonResponse({ success: false, error: 'Server configuration error' }, 500, corsHeaders);
   }
 
   const { userAddress, amount, gamePoints } = body;
 
   if (!userAddress || !amount) {
-    return jsonResponse(
-      { success: false, error: 'Missing required fields: userAddress, amount' },
-      400,
-      corsHeaders
-    );
+    return jsonResponse({ success: false, error: 'Missing required fields: userAddress, amount' }, 400, corsHeaders);
   }
-
-  if (!ethers.isAddress(userAddress)) {
+  if (!isAddress(userAddress)) {
     return jsonResponse({ success: false, error: 'Invalid user address' }, 400, corsHeaders);
   }
 
@@ -151,44 +133,35 @@ async function handleClaimTokens(
   if (isNaN(amountNum) || amountNum <= 0) {
     return jsonResponse({ success: false, error: 'Amount must be positive' }, 400, corsHeaders);
   }
-
-  // Max 1000 ALMAN per claim (safety limit)
   if (amountNum > 1000) {
     return jsonResponse({ success: false, error: 'Amount exceeds maximum per claim (1000 ALMAN)' }, 400, corsHeaders);
   }
 
+  const key = CLAIMER_PRIVATE_KEY.startsWith('0x')
+    ? (CLAIMER_PRIVATE_KEY as `0x${string}`)
+    : (`0x${CLAIMER_PRIVATE_KEY}` as `0x${string}`);
+  const account = privateKeyToAccount(key);
+  const walletClient = createWalletClient({ chain, transport, account });
+
   try {
-    const wallet = new ethers.Wallet(CLAIMER_PRIVATE_KEY, provider);
-    const contract = new ethers.Contract(contractAddress, MINING_POOL_ABI, wallet);
-
-    const amountWei = ethers.parseEther(amount);
-
+    const amountWei = parseEther(amount);
     console.log(`[Mining API] Claiming ${amount} ALMAN for ${userAddress} (points: ${gamePoints || 'N/A'})`);
 
-    const tx = await contract.claimForUser(userAddress, amountWei);
-    const receipt = await tx.wait();
+    const hash = await walletClient.writeContract({
+      address: contractAddress,
+      abi: MINING_POOL_ABI,
+      functionName: 'claimForUser',
+      args: [userAddress as `0x${string}`, amountWei],
+      account,
+      chain,
+    });
 
-    console.log(`[Mining API] Claim success: ${tx.hash}`);
-
-    // Get updated status
-    const [currentEpoch, remaining, progress] = await Promise.all([
-      contract.getCurrentEpoch(),
-      contract.remainingPool(),
-      contract.miningProgress(),
-    ]);
+    console.log(`[Mining API] Claim tx sent: ${hash}`);
 
     return jsonResponse(
       {
         success: true,
-        data: {
-          txHash: tx.hash,
-          blockNumber: receipt.blockNumber,
-          amount,
-          userAddress,
-          currentEpoch: Number(currentEpoch),
-          remainingPool: ethers.formatEther(remaining),
-          miningProgress: Number(progress) / 100, // basis points to percentage
-        },
+        data: { txHash: hash, amount, userAddress },
       },
       200,
       corsHeaders
@@ -197,7 +170,6 @@ async function handleClaimTokens(
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
     console.error(`[Mining API] Claim failed:`, errorMsg);
 
-    // Parse common contract errors
     if (errorMsg.includes('Daily limit')) {
       return jsonResponse({ success: false, error: 'Daily claim limit reached' }, 429, corsHeaders);
     }
@@ -213,45 +185,51 @@ async function handleClaimTokens(
 }
 
 async function handleGetStatus(
-  body: GetStatusRequest,
-  provider: ethers.JsonRpcProvider,
-  contractAddress: string,
+  body: { userAddress?: string },
+  contractAddress: `0x${string}`,
+  transport: ReturnType<typeof fallback>,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
-  try {
-    const contract = new ethers.Contract(contractAddress, MINING_POOL_ABI, provider);
+  const publicClient = createPublicClient({ chain, transport });
 
-    const queries: Promise<unknown>[] = [
-      contract.getCurrentEpoch(),
-      contract.remainingPool(),
-      contract.totalClaimed(),
-      contract.miningProgress(),
-      contract.getDailyRemaining(),
-      contract.getContractBalance(),
-      contract.dailyClaimLimit(),
-      contract.userDailyClaimLimit(),
+  try {
+    const queries = [
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'getCurrentEpoch' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'remainingPool' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'totalClaimed' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'miningProgress' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'getDailyRemaining' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'getContractBalance' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'dailyClaimLimit' }),
+      publicClient.readContract({ address: contractAddress, abi: MINING_POOL_ABI, functionName: 'userDailyClaimLimit' }),
     ];
 
-    // Optionally get user-specific data
-    if (body.userAddress && ethers.isAddress(body.userAddress)) {
-      queries.push(contract.getUserDailyRemaining(body.userAddress));
+    if (body.userAddress && isAddress(body.userAddress)) {
+      queries.push(
+        publicClient.readContract({
+          address: contractAddress,
+          abi: MINING_POOL_ABI,
+          functionName: 'getUserDailyRemaining',
+          args: [body.userAddress as `0x${string}`],
+        })
+      );
     }
 
     const results = await Promise.all(queries);
 
     const data: Record<string, unknown> = {
       currentEpoch: Number(results[0]),
-      remainingPool: ethers.formatEther(results[1] as bigint),
-      totalClaimed: ethers.formatEther(results[2] as bigint),
+      remainingPool: formatEther(results[1] as bigint),
+      totalClaimed: formatEther(results[2] as bigint),
       miningProgress: Number(results[3]) / 100,
-      dailyRemaining: ethers.formatEther(results[4] as bigint),
-      contractBalance: ethers.formatEther(results[5] as bigint),
-      dailyClaimLimit: ethers.formatEther(results[6] as bigint),
-      userDailyClaimLimit: ethers.formatEther(results[7] as bigint),
+      dailyRemaining: formatEther(results[4] as bigint),
+      contractBalance: formatEther(results[5] as bigint),
+      dailyClaimLimit: formatEther(results[6] as bigint),
+      userDailyClaimLimit: formatEther(results[7] as bigint),
     };
 
     if (results.length > 8) {
-      data.userDailyRemaining = ethers.formatEther(results[8] as bigint);
+      data.userDailyRemaining = formatEther(results[8] as bigint);
     }
 
     return jsonResponse({ success: true, data }, 200, corsHeaders);
@@ -263,7 +241,7 @@ async function handleGetStatus(
 }
 
 function jsonResponse(
-  data: MiningResponse,
+  data: Record<string, unknown>,
   status: number,
   headers: Record<string, string>
 ): Response {

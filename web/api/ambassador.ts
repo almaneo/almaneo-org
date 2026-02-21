@@ -54,8 +54,8 @@ const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 const chain = CHAIN_ID === 137 ? polygon : polygonAmoy;
 
 export const config = {
-  runtime: 'nodejs',
-  maxDuration: 60,
+  runtime: 'edge',
+  regions: ['icn1'],
 };
 
 function getWalletClient() {
