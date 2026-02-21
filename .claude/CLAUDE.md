@@ -5320,7 +5320,59 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 131+)
+### ✅ 완료된 작업 (2026-02-22 - Session 131: Edge-Safe Blockchain API 마이그레이션)
+
+#### 1. **viem → 경량 rpc.ts 마이그레이션 (4개 API 전체 완료)** ✅
+   - **근본 문제**: Partner SBT 민팅 504 타임아웃 — viem 라이브러리(44MB)가 Vercel Edge Runtime 4MB 한도 초과 + 콜드스타트 지연
+   - **해결**: `web/api/_lib/rpc.ts` 경량 유틸리티 생성 (raw fetch() JSON-RPC + @noble/curves)
+   - 4개 API 파일 전부 rpc.ts로 재작성 완료
+
+   | API 파일 | 응답 시간 | 상태 |
+   |----------|----------|------|
+   | `admin-action.ts` | 0.90s | ✅ (기존 504 → 0.9s) |
+   | `partner-sbt.ts` | 0.93s | ✅ |
+   | `ambassador.ts` | 0.57s | ✅ |
+   | `mining-claim.ts` | 1.37s | ✅ |
+
+#### 2. **`web/api/_lib/rpc.ts` 경량 RPC 유틸리티** ✅
+   - **의존성**: `@noble/curves/secp256k1` + `@noble/hashes/sha3` (순수 JS, 수 KB)
+   - **제공 기능**:
+     - `ethCall()`, `sendTransaction()`, `waitForReceipt()` — raw JSON-RPC
+     - `isAddress()` — 주소 유효성 검사
+     - Calldata builders: `PartnerSBT.*`, `AmbassadorSBT.*`, `MiningPool.*`
+     - Decoders: `decodeUint256`, `decodeBool`, `decodeInt256`, `decodeHexString`
+     - Helpers: `formatEther`, `parseEther`, `jsonResponse`, `CORS_HEADERS`
+   - **EIP-155 트랜잭션 서명**: 수동 RLP 인코딩 + secp256k1 서명
+   - **RPC fallback**: 체인별 다중 RPC URL (Polygon Amoy 3개)
+
+#### 3. **mining-claim getStatus 리버트 핸들링** ✅
+   - **문제**: `MiningPool.getContractBalance()` 컨트랙트 리버트 → 전체 Promise.all 실패
+   - **수정**: `safeCall()` 래퍼 (리버트 시 null 반환) + `safeDecode()` (null → 0n)
+   - 커밋: `37c5aaf` - fix(web): Handle reverted view calls in mining-claim getStatus
+
+#### 4. **커밋 내역**
+   | 커밋 | 내용 |
+   |------|------|
+   | `5777945` | fix(web): Replace viem with lightweight rpc.ts for edge-safe blockchain APIs |
+   | `37c5aaf` | fix(web): Handle reverted view calls in mining-claim getStatus |
+
+#### 5. **수정/생성 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `web/api/_lib/rpc.ts` | **신규** — 경량 RPC 유틸리티 (fetch + @noble/curves) |
+   | `web/api/admin-action.ts` | 재작성 — viem → rpc.ts |
+   | `web/api/partner-sbt.ts` | 재작성 — viem → rpc.ts |
+   | `web/api/ambassador.ts` | 재작성 — viem → rpc.ts |
+   | `web/api/mining-claim.ts` | 재작성 — viem → rpc.ts + safeCall/safeDecode 패턴 |
+
+#### 6. **교훈: Vercel Edge Runtime에서 블록체인 라이브러리 사용 시**
+   - ethers.js (2MB+), viem (44MB) 모두 Edge Runtime 4MB 한도 초과
+   - raw fetch() JSON-RPC + @noble/curves가 가장 경량 (수 KB)
+   - ABI 인코딩은 수동으로 충분 (keccak256 함수 선택자 + encodeAddress/Uint256)
+
+---
+
+### 🔲 다음 세션 작업 (Session 132+)
 
 #### 🔴 높은 우선순위
 - **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인, Users 검색, Access Management
@@ -5329,7 +5381,7 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
-- **게임 서버 MiningPool 연동**: `web/api/mining-claim.ts`
+- **게임 서버 MiningPool 연동**: mining-claim API 활용
 - **AlmaPaymentManager 수수료 할인 연동**: PartnerSBT 15% 할인 (NFT 마켓 활성화 후)
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
