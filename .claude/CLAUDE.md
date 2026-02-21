@@ -5210,10 +5210,70 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 129+)
+### ✅ 완료된 작업 (2026-02-22 - Session 129: Admin 504 수정 & Access Management)
+
+#### 1. **Partner SBT 민팅 504 에러 수정** ✅
+   - **근본 원인 3가지**:
+     - Verifier 지갑에 MINTER_ROLE 누락
+     - Polygon Amoy 공개 RPC 불안정/느림
+     - RPC 타임아웃 미설정
+   - **해결**:
+     - `blockchain/scripts/grant-partner-roles.js` 생성 — MINTER_ROLE 부여 (tx: `0x0e7d47...`)
+     - `web/api/admin-action.ts` RPC 개선: 다중 fallback URL + 15초 타임아웃 + try-catch 에러 메시지
+     - `web/api/partner-sbt.ts` 동일 RPC 개선 적용
+
+#### 2. **seanft.io 파트너 owner_user_id 마이그레이션** ✅
+   - 문제: `owner_user_id`가 Stream Chat ID (`seanft_io_gmail_com`)로 저장되어 FK 위반
+   - 해결: `20260222100000_fix_seanft_partner_owner.sql` 마이그레이션
+     - users 테이블에 `0x73c544e63bc19b4fed62cf47d659e2aea175c2aa` (seanft.io) 추가
+     - partners의 `seanft_io_gmail_com` → 지갑 주소로 UPDATE
+   - Ruca Lee 파트너도 동일 패턴으로 수정 완료 (`20260221200000`)
+
+#### 3. **Admin Access Management 페이지 구현** ✅
+   - **`admin_wallets` Supabase 테이블** 생성 (Foundation + Verifier 시드)
+   - **`AdminLayout.tsx`** 수정:
+     - 하드코딩 `ADMIN_ADDRESSES` → Supabase에서 동적 fetch
+     - Foundation 지갑은 항상 접근 가능 (hardcoded fallback)
+     - "Access" 메뉴: Foundation 지갑에만 표시
+   - **`AdminAccess.tsx`** 신규 생성:
+     - 관리자 지갑 목록 테이블 (주소, 역할, 라벨, 추가일)
+     - Foundation 지갑 추가/제거 UI (모달 + 확인 다이얼로그)
+     - Foundation role은 "Permanent" 표시로 삭제 불가
+     - 주소 유효성 검사, 중복 검사
+   - 라우트: `/admin/access` 추가
+
+#### 4. **Verifier 지갑 프로세스 정리**
+   - **Client-side**: MetaMask 지갑 주소 → admin_wallets 테이블 조회 → UI 접근 제어
+   - **Server-side**: 모든 온체인 트랜잭션은 `VERIFIER_PRIVATE_KEY`로 서명 (어떤 admin이 연결되든 동일)
+   - Foundation/Verifier 모두 민팅 가능 (MINTER_ROLE 부여 완료)
+
+#### 5. **커밋 내역**
+   | 커밋 | 내용 |
+   |------|------|
+   | `d36078c` | fix(web): Fix 504 minting error with RPC reliability and role grant script |
+   | `e21d5ae` | fix(db): Migrate seanft.io partner owner_user_id to wallet address |
+   | `6904f6a` | feat(web): Add dynamic admin access management page |
+
+#### 6. **수정/생성 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `blockchain/scripts/grant-partner-roles.js` | **신규** — MINTER_ROLE 부여 스크립트 |
+   | `web/api/admin-action.ts` | 수정 — RPC 개선 + try-catch |
+   | `web/api/partner-sbt.ts` | 수정 — RPC 개선 |
+   | `supabase/migrations/20260221200000_fix_partner_owner.sql` | **신규** — Ruca Lee owner 수정 |
+   | `supabase/migrations/20260222100000_fix_seanft_partner_owner.sql` | **신규** — seanft.io owner 수정 |
+   | `supabase/migrations/20260222200000_admin_wallets.sql` | **신규** — admin_wallets 테이블 |
+   | `web/src/pages/admin/AdminLayout.tsx` | 수정 — Supabase fetch + Access 메뉴 |
+   | `web/src/pages/admin/AdminAccess.tsx` | **신규** — 접근 관리 페이지 |
+   | `web/src/pages/admin/index.ts` | 수정 — AdminAccess export |
+   | `web/src/App.tsx` | 수정 — /admin/access 라우트 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 130+)
 
 #### 🔴 높은 우선순위
-- **Admin Panel 실기기 테스트**: Partner SBT 민팅, Meetup 승인, Users 검색
+- **Admin Panel 실기기 테스트**: Access Management 추가/제거, Partner SBT 민팅, Meetup 승인, Users 검색
 - **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
 
 #### 🟡 중간 우선순위
