@@ -40,8 +40,15 @@ interface Partner {
 
 type FilterType = 'all' | 'active' | 'verified' | 'expired' | 'none';
 
+function isEthAddress(str: string): boolean {
+  return /^0x[a-fA-F0-9]{40}$/.test(str);
+}
+
 function truncateAddress(addr: string) {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  if (isEthAddress(addr)) return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  // For non-eth IDs (Web3Auth social login), show shortened version
+  if (addr.length > 20) return `${addr.slice(0, 18)}...`;
+  return addr;
 }
 
 function sbtStatusBadge(partner: Partner) {
@@ -87,10 +94,10 @@ export default function AdminPartners() {
       if (error) throw error;
       const partnerList = (data || []) as Partner[];
 
-      // Fetch on-chain data for partners with wallet addresses
+      // Fetch on-chain data only for partners with valid Ethereum addresses
       const enriched = await Promise.all(
         partnerList.map(async (p) => {
-          if (!p.owner_user_id) return p;
+          if (!p.owner_user_id || !isEthAddress(p.owner_user_id)) return p;
           try {
             const res = await fetch('/api/partner-sbt', {
               method: 'POST',
@@ -144,6 +151,10 @@ export default function AdminPartners() {
   // Mint Partner SBT
   async function handleMint() {
     if (!mintAddress || !mintBusinessName) return;
+    if (!isEthAddress(mintAddress)) {
+      setActionResult({ success: false, message: 'Invalid Ethereum address. Must start with 0x and be 42 characters.' });
+      return;
+    }
     setActionLoading(true);
     setActionResult(null);
     try {
@@ -319,15 +330,22 @@ export default function AdminPartners() {
                     </td>
                     <td className="px-3 py-3 font-mono text-slate-400 text-xs">
                       {p.owner_user_id ? (
-                        <a
-                          href={`https://amoy.polygonscan.com/address/${p.owner_user_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-neos-blue flex items-center gap-1"
-                        >
-                          {truncateAddress(p.owner_user_id)}
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
+                        isEthAddress(p.owner_user_id) ? (
+                          <a
+                            href={`https://amoy.polygonscan.com/address/${p.owner_user_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-neos-blue flex items-center gap-1"
+                          >
+                            {truncateAddress(p.owner_user_id)}
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <span className="text-slate-500" title={p.owner_user_id}>
+                            {truncateAddress(p.owner_user_id)}
+                            <span className="text-[10px] ml-1 text-slate-600">(social)</span>
+                          </span>
+                        )
                       ) : (
                         <span className="text-slate-600">—</span>
                       )}
@@ -345,18 +363,22 @@ export default function AdminPartners() {
                     </td>
                     <td className="px-5 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {/* No SBT → Mint */}
-                        {p.sbt_token_id == null && p.owner_user_id && (
+                        {/* No SBT → Mint (always available, address entered manually if not eth) */}
+                        {p.sbt_token_id == null && (
                           <button
-                            onClick={() => { setMintAddress(p.owner_user_id!); setMintBusinessName(p.business_name); setMintModal(true); }}
+                            onClick={() => {
+                              setMintAddress(p.owner_user_id && isEthAddress(p.owner_user_id) ? p.owner_user_id : '');
+                              setMintBusinessName(p.business_name);
+                              setMintModal(true);
+                            }}
                             className="text-xs px-2.5 py-1 rounded-md bg-neos-blue/15 text-neos-blue hover:bg-neos-blue/25 transition-colors"
                             disabled={actionLoading}
                           >
                             Mint
                           </button>
                         )}
-                        {/* Has SBT → Renew */}
-                        {p.sbt_token_id != null && p.owner_user_id && !p.onchain?.isRevoked && (
+                        {/* Has SBT + valid eth address → Renew */}
+                        {p.sbt_token_id != null && p.owner_user_id && isEthAddress(p.owner_user_id) && !p.onchain?.isRevoked && (
                           <button
                             onClick={() => handleRenew(p.owner_user_id!)}
                             className="text-xs px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 transition-colors"
@@ -365,8 +387,8 @@ export default function AdminPartners() {
                             Renew
                           </button>
                         )}
-                        {/* Has SBT → Revoke */}
-                        {p.sbt_token_id != null && p.owner_user_id && !p.onchain?.isRevoked && (
+                        {/* Has SBT + valid eth address → Revoke */}
+                        {p.sbt_token_id != null && p.owner_user_id && isEthAddress(p.owner_user_id) && !p.onchain?.isRevoked && (
                           <button
                             onClick={() => setRevokeModal(p)}
                             className="text-xs px-2.5 py-1 rounded-md bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-colors"
@@ -406,7 +428,7 @@ export default function AdminPartners() {
           </div>
           <div className="space-y-4">
             <div>
-              <label className="text-slate-400 text-xs block mb-1.5">Partner Address</label>
+              <label className="text-slate-400 text-xs block mb-1.5">Partner Wallet Address</label>
               <input
                 type="text"
                 value={mintAddress}
@@ -414,6 +436,9 @@ export default function AdminPartners() {
                 placeholder="0x..."
                 className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-slate-500 focus:border-neos-blue/50 focus:outline-none font-mono"
               />
+              {mintAddress && !isEthAddress(mintAddress) && (
+                <p className="text-amber-400 text-xs mt-1">Enter a valid Ethereum address (0x...)</p>
+              )}
             </div>
             <div>
               <label className="text-slate-400 text-xs block mb-1.5">Business Name</label>
@@ -432,7 +457,7 @@ export default function AdminPartners() {
             )}
             <button
               onClick={handleMint}
-              disabled={actionLoading || !mintAddress || !mintBusinessName}
+              disabled={actionLoading || !mintAddress || !mintBusinessName || !isEthAddress(mintAddress)}
               className="btn-primary w-full text-sm flex items-center justify-center gap-2"
             >
               {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
