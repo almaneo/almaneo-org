@@ -14,7 +14,7 @@
  */
 
 import {
-  sendTransaction,
+  sendTransactionAndWait,
   ethCall,
   waitForReceipt,
   isAddress,
@@ -122,10 +122,12 @@ async function handleMintPartner(
   try {
     console.log(`[PartnerSBT API] Minting for ${partnerAddress}: ${businessName}`);
     const data = PartnerSBT.mintPartnerSBT(partnerAddress, businessName);
-    const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-    console.log(`[PartnerSBT API] Tx sent: ${txHash}`);
+    const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+    console.log(`[PartnerSBT API] Mint confirmed: ${txHash}`);
 
-    syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch(() => {});
+    await syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch((e) => {
+      console.warn('[PartnerSBT API] Supabase sync failed (non-critical):', e);
+    });
 
     return jsonResponse({ success: true, txHash, message: `Partner SBT minted for ${businessName}` }, 200, CORS_HEADERS);
   } catch (error) {
@@ -148,10 +150,12 @@ async function handleRenewPartner(
   try {
     console.log(`[PartnerSBT API] Renewing for ${partnerAddress}`);
     const data = PartnerSBT.renewPartnerSBT(partnerAddress);
-    const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-    console.log(`[PartnerSBT API] Tx sent: ${txHash}`);
+    const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+    console.log(`[PartnerSBT API] Renew confirmed: ${txHash}`);
 
-    syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch(() => {});
+    await syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch((e) => {
+      console.warn('[PartnerSBT API] Supabase sync failed (non-critical):', e);
+    });
 
     return jsonResponse({ success: true, txHash, message: 'Partner SBT renewed' }, 200, CORS_HEADERS);
   } catch (error) {
@@ -177,8 +181,8 @@ async function handleRevokePartner(
   try {
     console.log(`[PartnerSBT API] Revoking for ${partnerAddress}: ${reason}`);
     const data = PartnerSBT.revokePartnerSBT(partnerAddress, reason);
-    const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-    console.log(`[PartnerSBT API] Tx sent: ${txHash}`);
+    const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+    console.log(`[PartnerSBT API] Revoke confirmed: ${txHash}`);
 
     // Clear Supabase SBT data
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {

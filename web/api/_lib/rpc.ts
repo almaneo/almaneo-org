@@ -200,7 +200,7 @@ export async function sendTransaction(
   privateKey: string,
   to: string,
   data: string,
-  gasLimit = 300_000n,
+  gasLimit = 500_000n,
 ): Promise<string> {
   const pk = privateKey.replace(/^0x/, '');
   const from = privateKeyToAddress(pk);
@@ -257,6 +257,30 @@ export async function sendTransaction(
 }
 
 /**
+ * Sign, send, wait for receipt, and verify success.
+ * Throws if the transaction reverts on-chain.
+ */
+export async function sendTransactionAndWait(
+  chainId: number,
+  privateKey: string,
+  to: string,
+  data: string,
+  gasLimit = 500_000n,
+  receiptTimeoutMs = 30_000,
+): Promise<{ txHash: string; receipt: Record<string, unknown> }> {
+  const txHash = await sendTransaction(chainId, privateKey, to, data, gasLimit);
+  const receipt = await waitForReceipt(chainId, txHash, receiptTimeoutMs);
+  if (!receipt) {
+    throw new Error(`Transaction ${txHash} not confirmed within ${receiptTimeoutMs / 1000}s`);
+  }
+  const status = receipt.status as string;
+  if (status === '0x0' || status === '0x00') {
+    throw new Error(`Transaction ${txHash} reverted on-chain (out of gas or contract error)`);
+  }
+  return { txHash, receipt };
+}
+
+/**
  * Derive the sender address from a private key.
  */
 export function getAddress(privateKey: string): `0x${string}` {
@@ -269,7 +293,7 @@ export function getAddress(privateKey: string): `0x${string}` {
 export async function waitForReceipt(
   chainId: number,
   txHash: string,
-  timeoutMs = 15_000,
+  timeoutMs = 30_000,
 ): Promise<Record<string, unknown> | null> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {

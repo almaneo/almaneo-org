@@ -11,6 +11,7 @@
 
 import {
   sendTransaction,
+  sendTransactionAndWait,
   ethCall,
   waitForReceipt,
   isAddress,
@@ -120,11 +121,13 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Minting PartnerSBT for ${partnerAddress}: ${businessName}`);
       const data = PartnerSBT.mintPartnerSBT(partnerAddress, businessName);
-      const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      console.log(`[Admin Action] Tx sent: ${txHash}`);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      console.log(`[Admin Action] Mint confirmed: ${txHash}`);
 
-      // Best-effort Supabase sync (non-blocking)
-      syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch(() => {});
+      // Sync Supabase (blocking — admin can wait)
+      await syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch((e) => {
+        console.warn('[Admin Action] Supabase sync failed (non-critical):', e);
+      });
 
       return jsonResponse({ success: true, txHash, message: `Partner SBT minted for ${businessName}` }, 200, CORS_HEADERS);
     } catch (error) {
@@ -132,6 +135,9 @@ async function handlePartnerSBT(
       console.error(`[Admin Action] Mint failed:`, errorMsg);
       if (errorMsg.includes('AccessControl') || errorMsg.includes('account 0x')) {
         return jsonResponse({ success: false, error: 'Mint requires MINTER_ROLE. Run grant-partner-roles.js to grant the role.' }, 403, CORS_HEADERS);
+      }
+      if (errorMsg.includes('reverted')) {
+        return jsonResponse({ success: false, error: `Transaction reverted on-chain. Check gas limit or contract state.` }, 500, CORS_HEADERS);
       }
       return jsonResponse({ success: false, error: errorMsg }, 500, CORS_HEADERS);
     }
@@ -146,10 +152,12 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Renewing PartnerSBT for ${partnerAddress}`);
       const data = PartnerSBT.renewPartnerSBT(partnerAddress);
-      const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      console.log(`[Admin Action] Tx sent: ${txHash}`);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      console.log(`[Admin Action] Renew confirmed: ${txHash}`);
 
-      syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch(() => {});
+      await syncPartnerAfterTx(txHash, partnerAddress, contractAddress).catch((e) => {
+        console.warn('[Admin Action] Supabase sync failed (non-critical):', e);
+      });
 
       return jsonResponse({ success: true, txHash, message: 'Partner SBT renewed' }, 200, CORS_HEADERS);
     } catch (error) {
@@ -171,10 +179,10 @@ async function handlePartnerSBT(
     try {
       console.log(`[Admin Action] Revoking PartnerSBT for ${partnerAddress}: ${reason}`);
       const data = PartnerSBT.revokePartnerSBT(partnerAddress, reason);
-      const txHash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      console.log(`[Admin Action] Tx sent: ${txHash}`);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      console.log(`[Admin Action] Revoke confirmed: ${txHash}`);
 
-      // Clear Supabase SBT data (best-effort)
+      // Clear Supabase SBT data
       if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
         try {
           const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
@@ -272,16 +280,14 @@ async function handleAmbassador(
 // --- Helpers ---
 
 async function syncPartnerAfterTx(
-  txHash: string,
+  _txHash: string,
   partnerAddress: string,
   contractAddress: string,
 ): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return;
 
   try {
-    await waitForReceipt(CHAIN_ID, txHash, 15_000);
-
-    // Read getPartnerByAddress — returns packed tuple
+    // Receipt already confirmed by sendTransactionAndWait — just read on-chain data
     const calldata = PartnerSBT.getPartnerByAddress(partnerAddress);
     const result = await ethCall(CHAIN_ID, contractAddress, calldata);
 
