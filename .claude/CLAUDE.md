@@ -5506,7 +5506,7 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### ✅ 완료된 작업 (2026-02-22 - Session 135: 앱 스토어 배포 준비)
+### ✅ 완료된 작업 (2026-02-22~23 - Session 135: 앱 스토어 배포 준비 & Codemagic CI/CD)
 
 #### 1. **Android 릴리스 서명 설정 완료** ✅
    - `upload-keystore.jks` 생성 (RSA 2048, AlmaNEO/AE)
@@ -5525,12 +5525,34 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
    - IARC 콘텐츠 등급 답변 준비
    - 필요한 스크린샷 목록
 
-#### 4. **Codemagic CI/CD 설정 파일** ✅
-   - `chat-app/codemagic.yaml` 생성
-   - iOS/Android 워크플로우 정의
-   - 자동 코드 서명 + TestFlight 업로드 설정
+#### 4. **Codemagic CI/CD 빌드 성공** ✅
+   - `codemagic.yaml`을 repo root로 이동 (모노레포 지원: `working_directory: chat-app`)
+   - iOS 워크플로우 주석 처리 (Apple Developer 계정 미등록)
+   - Android 워크플로우: 빌드 전용 (`android-build`)
+   - **4번의 빌드 오류 순차 수정**:
+     1. Validation: iOS App Store Connect integration 미존재 → iOS 워크플로우 주석 처리
+     2. `.env` 누락: `app_env` 환경변수 그룹에서 `.env` 파일 자동 생성 스크립트 추가
+     3. `google-services.json` 누락: `.gitignore`에서 제거 + `git add -f`로 커밋
+     4. `signReleaseBundle` NullPointerException: `key.properties` 자동 생성 스크립트 추가
+        (Codemagic `CM_KEYSTORE_PATH`/`CM_KEY_ALIAS`/`CM_KEY_PASSWORD`/`CM_KEYSTORE_PASSWORD` → `android/key.properties`)
+   - **빌드 성공**: 12분 30초, Mac mini M2, commit `052a44f`
+   - AAB 아티팩트 생성 완료
 
-#### 5. **스토어 배포 가이드 조사 완료** ✅
+#### 5. **Release 키스토어 SHA-1 추출** ✅
+   - `DE:29:54:62:6B:8E:F6:15:FB:5A:AD:D8:0E:A1:8A:71:E2:84:CF:72`
+   - Google Maps API 키 제한용 (패키지: `org.almaneo.alma_chat`)
+
+#### 6. **스토어 배포 가이드 조사 완료** ✅
+
+#### 7. **커밋 내역 (6개)**
+   | 커밋 | 내용 |
+   |------|------|
+   | `1e1ca75` | feat(chat-app): Add app store deployment config and Codemagic CI/CD |
+   | `c6791a5` | fix(ci): Comment out iOS workflow and remove publishing for build test |
+   | `846dc29` | fix(ci): Generate .env file from Codemagic environment variables |
+   | `2d1c368` | fix(ci): Remove google-services.json from .gitignore |
+   | `3788bd2` | fix(ci): Add google-services.json for Codemagic builds |
+   | `052a44f` | fix(ci): Create key.properties from Codemagic signing env vars |
 
 ---
 
@@ -5613,11 +5635,34 @@ chat-app/android/
 
 ### 스토어 메타데이터
 ```
-chat-app/
-├── STORE_LISTING.md        # 스토어 리스팅 콘텐츠 (영어/한국어)
-├── codemagic.yaml          # Codemagic CI/CD 설정
-└── assets/icons/
-    └── app_icon.png        # 512x512 앱 아이콘
+c:\DEV\ALMANEO\
+├── codemagic.yaml              # Codemagic CI/CD 설정 (repo root, 모노레포)
+└── chat-app/
+    ├── STORE_LISTING.md        # 스토어 리스팅 콘텐츠 (영어/한국어)
+    ├── android/
+    │   ├── upload-keystore.jks # 릴리스 키스토어 (git-ignored)
+    │   └── key.properties      # 키스토어 설정 (git-ignored)
+    └── assets/icons/
+        └── app_icon.png        # 512x512 앱 아이콘
+```
+
+### Codemagic CI/CD 설정
+```
+환경변수 그룹: app_env
+├── STREAM_API_KEY
+├── SUPABASE_URL
+├── SUPABASE_ANON_KEY
+├── CHAT_API_URL
+├── WEB3AUTH_CLIENT_ID
+└── GOOGLE_MAPS_API_KEY
+
+서명: almachat_keystore
+├── CM_KEYSTORE_PATH (자동)
+├── CM_KEY_ALIAS
+├── CM_KEY_PASSWORD
+└── CM_KEYSTORE_PASSWORD
+
+Release Keystore SHA-1: DE:29:54:62:6B:8E:F6:15:FB:5A:AD:D8:0E:A1:8A:71:E2:84:CF:72
 ```
 
 ### 비용 요약
