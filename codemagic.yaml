@@ -45,7 +45,19 @@ workflows:
       flutter: stable
       android_signing:
         - almachat_keystore
+      groups:
+        - app_env
     scripts:
+      - name: Create .env file
+        script: |
+          cat > .env << EOF
+          STREAM_API_KEY=$STREAM_API_KEY
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+          CHAT_API_URL=$CHAT_API_URL
+          WEB3AUTH_CLIENT_ID=$WEB3AUTH_CLIENT_ID
+          GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+          EOF
       - name: Get Flutter packages
         script: |
           flutter pub get
