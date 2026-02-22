@@ -15,7 +15,6 @@ import {
   Alert,
   CircularProgress,
   useMediaQuery,
-  Divider,
   Chip,
 } from '@mui/material';
 import {
@@ -30,8 +29,9 @@ import { useGameStore } from '@/hooks/useGameStore';
 import { useWeb3Auth } from '@/contexts/Web3AuthProvider';
 import { formatTokenAmount, formatGamePoints } from '@/lib/tokenReward';
 import { formatMiningProgress, formatConversionRate } from '@/lib/tokenMining';
-import { claimTokenReward, getTokenBalance } from '@/lib/smartContract';
-import { getEthersSigner, checkNetwork, switchToPolygonAmoy } from '@/lib/web3AuthHelpers';
+import { MINING_POOL_TOTAL } from '@/lib/tokenMining';
+import { claimTokenReward, getTokenBalance, getMiningPoolStatus } from '@/lib/smartContract';
+import type { MiningPoolStatus } from '@/lib/smartContract';
 import { getTxExplorerUrl } from '@/contracts/addresses';
 
 interface TokenClaimModalProps {
@@ -64,6 +64,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
   const [errorMessage, setErrorMessage] = useState('');
   const [txHash, setTxHash] = useState('');
   const [tokenBalance, setTokenBalance] = useState('0');
+  const [poolStatus, setPoolStatus] = useState<MiningPoolStatus | null>(null);
 
   // Mining stats
   const miningStats = getMiningStats();
@@ -71,10 +72,13 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
   const currentRate = getCurrentConversionRate();
   const canClaim = canClaimTokens();
 
-  // Load token balance
+  // Load token balance and mining pool status on modal open
   useEffect(() => {
-    if (open && isConnected && address && provider) {
-      loadTokenBalance();
+    if (open) {
+      loadMiningPoolStatus();
+      if (isConnected && address && provider) {
+        loadTokenBalance();
+      }
     }
   }, [open, isConnected, address, provider]);
 
@@ -92,9 +96,14 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
     }
   };
 
-  // Handle claim
+  const loadMiningPoolStatus = async () => {
+    const status = await getMiningPoolStatus(address || undefined);
+    if (status) setPoolStatus(status);
+  };
+
+  // Handle claim — calls backend API (no user signing needed)
   const handleClaim = async () => {
-    if (!provider || !address || !isConnected) {
+    if (!address || !isConnected) {
       setClaimStatus('error');
       setErrorMessage('Please connect your wallet');
       return;
@@ -112,20 +121,8 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
     setTxHash('');
 
     try {
-      // Check network
-      const isCorrectNetwork = await checkNetwork(provider);
-      if (!isCorrectNetwork) {
-        const switched = await switchToPolygonAmoy(provider);
-        if (!switched) {
-          throw new Error('Please switch to Polygon Amoy network');
-        }
-      }
-
-      // Get signer
-      const signer = await getEthersSigner(provider);
-
-      // Claim tokens
-      const result = await claimTokenReward(signer, claimableTokens, address);
+      // Call backend API — server signs the transaction with CLAIMER_ROLE
+      const result = await claimTokenReward(claimableTokens, address, totalPoints);
 
       if (result.success) {
         setClaimStatus('success');
@@ -134,8 +131,8 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
         // Record claim in game store
         recordTokenClaim(claimableTokens, result.transactionHash);
 
-        // Reload balance
-        await loadTokenBalance();
+        // Reload balance and pool status
+        await Promise.all([loadTokenBalance(), loadMiningPoolStatus()]);
       } else {
         setClaimStatus('error');
         setErrorMessage(result.error || 'Transaction failed');
@@ -284,7 +281,7 @@ export default function TokenClaimModal({ open, onClose }: TokenClaimModalProps)
                 {t('tokenClaim.poolCapacity')}
               </Typography>
               <Typography variant="body2" sx={{ color: 'white', fontWeight: 'bold', fontSize: isMobile ? 12 : undefined }}>
-                10,000,000
+                {poolStatus ? Number(poolStatus.remainingPool).toLocaleString(undefined, { maximumFractionDigits: 0 }) : MINING_POOL_TOTAL.toLocaleString()}
               </Typography>
             </Box>
           </Box>

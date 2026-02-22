@@ -89,6 +89,9 @@ async function rpcCall(chainId: number, method: string, params: unknown[]): Prom
       });
       const json = await res.json() as { result?: unknown; error?: { message: string; code: number } };
       if (json.error) throw new Error(json.error.message || `RPC error ${json.error.code}`);
+      if (json.result === undefined || json.result === null) {
+        throw new Error(`RPC returned empty result for ${method}`);
+      }
       return json.result;
     } catch (e) {
       lastError = e instanceof Error ? e : new Error(String(e));
@@ -204,10 +207,12 @@ export async function sendTransaction(
 
   // Get nonce
   const nonceHex = await rpcCall(chainId, 'eth_getTransactionCount', [from, 'latest']) as string;
+  if (!nonceHex) throw new Error(`Failed to get nonce for ${from}`);
   const nonce = BigInt(nonceHex);
 
   // Get gas price
   const gasPriceHex = await rpcCall(chainId, 'eth_gasPrice', []) as string;
+  if (!gasPriceHex) throw new Error('Failed to get gas price');
   const gasPrice = BigInt(gasPriceHex);
 
   // Build legacy tx fields

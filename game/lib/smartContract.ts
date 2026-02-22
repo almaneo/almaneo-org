@@ -1,11 +1,20 @@
 /**
  * Smart Contract Integration
  * AlmaNEO Kindness Game - ALMAN Token Claim System
+ *
+ * Token claims go through the web API (/api/mining-claim) which uses
+ * a server-side CLAIMER_ROLE key. Users do NOT need MINTER_ROLE.
  */
 
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESSES, NETWORK_CONFIG } from '@/contracts/addresses';
 import ALMANTokenABI from '../contracts/abis/ALMANToken.json';
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://almaneo.org';
 
 // ============================================================================
 // Types
@@ -21,6 +30,18 @@ export interface TokenClaimResult {
 export interface TokenBalance {
   balance: string;
   formatted: string;
+}
+
+export interface MiningPoolStatus {
+  currentEpoch: number;
+  remainingPool: string;
+  totalClaimed: string;
+  miningProgress: number;
+  dailyRemaining: string;
+  contractBalance: string;
+  dailyClaimLimit: string;
+  userDailyClaimLimit: string;
+  userDailyRemaining?: string;
 }
 
 // ============================================================================
@@ -46,7 +67,7 @@ export function getALMANTokenContract(
 // ============================================================================
 
 /**
- * Get user's MiMiG token balance
+ * Get user's ALMAN token balance
  * @param address - User wallet address
  * @param provider - Provider instance
  */
@@ -92,129 +113,98 @@ export async function getTokenInfo(provider: ethers.Provider) {
 }
 
 // ============================================================================
-// Write Functions (Transactions)
+// Mining Pool API Functions
 // ============================================================================
 
 /**
- * Claim token reward from game points
- * @param signer - User's signer
+ * Claim token reward via backend API (MiningPool contract)
+ * The server signs the transaction with CLAIMER_ROLE — no user signing needed.
+ *
  * @param amount - Token amount to claim (in token units, e.g., 1.5)
- * @param recipientAddress - Recipient address (usually same as signer)
+ * @param userAddress - Recipient wallet address
+ * @param gamePoints - Optional game points for logging
  */
 export async function claimTokenReward(
-  signer: ethers.Signer,
   amount: number,
-  recipientAddress: string
+  userAddress: string,
+  gamePoints?: number,
 ): Promise<TokenClaimResult> {
   try {
-    // Validate amount
     if (amount <= 0) {
-      return {
-        success: false,
-        error: 'Invalid token amount',
-      };
+      return { success: false, error: 'Invalid token amount' };
     }
 
-    // Get contract with signer
-    const contract = getALMANTokenContract(signer);
+    console.log('🎁 Claiming tokens via API:', { amount, userAddress, gamePoints });
 
-    // Get decimals
-    const decimals = await contract.decimals();
-
-    // Convert amount to wei (token base units)
-    const amountWei = ethers.parseUnits(amount.toString(), decimals);
-
-    console.log('🎁 Claiming tokens:', {
-      amount,
-      amountWei: amountWei.toString(),
-      recipient: recipientAddress,
+    const res = await fetch(`${API_BASE_URL}/api/mining-claim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'claimTokens',
+        userAddress,
+        amount: amount.toString(),
+        gamePoints,
+      }),
     });
 
-    // Send transaction (mint tokens)
-    // Note: This requires the signer to have MINTER_ROLE
-    // For game rewards, a backend service should handle minting
-    const tx = await contract.mint(recipientAddress, amountWei);
+    const json = await res.json();
 
-    console.log('📤 Transaction sent:', tx.hash);
-
-    // Wait for confirmation
-    const receipt = await tx.wait();
-
-    if (receipt.status === 1) {
-      console.log('✅ Transaction confirmed:', receipt.hash);
-
-      return {
-        success: true,
-        transactionHash: receipt.hash,
-        amount,
-      };
-    } else {
-      console.error('❌ Transaction failed:', receipt);
-
-      return {
-        success: false,
-        error: 'Transaction failed',
-      };
+    if (!res.ok || !json.success) {
+      const errorMsg = json.error || `HTTP ${res.status}`;
+      console.error('❌ Claim API error:', errorMsg);
+      return { success: false, error: errorMsg };
     }
-  } catch (error: any) {
-    console.error('❌ Error claiming tokens:', error);
 
-    // Parse error message
-    let errorMessage = 'Failed to claim tokens';
-
-    if (error.code === 'ACTION_REJECTED') {
-      errorMessage = 'Transaction rejected by user';
-    } else if (error.code === 'INSUFFICIENT_FUNDS') {
-      errorMessage = 'Insufficient funds for gas';
-    } else if (error.message) {
-      // Extract readable error message
-      if (error.message.includes('AccessControl')) {
-        errorMessage = 'Unauthorized: Missing MINTER_ROLE';
-      } else if (error.message.includes('execution reverted')) {
-        errorMessage = 'Transaction reverted';
-      } else {
-        errorMessage = error.message.substring(0, 100);
-      }
-    }
+    console.log('✅ Claim tx sent:', json.data?.txHash);
 
     return {
-      success: false,
-      error: errorMessage,
+      success: true,
+      transactionHash: json.data?.txHash,
+      amount,
     };
+  } catch (error: any) {
+    console.error('❌ Error claiming tokens:', error);
+    return {
+      success: false,
+      error: error.message || 'Failed to claim tokens',
+    };
+  }
+}
+
+/**
+ * Get MiningPool on-chain status via backend API
+ * @param userAddress - Optional user address for per-user daily remaining
+ */
+export async function getMiningPoolStatus(
+  userAddress?: string,
+): Promise<MiningPoolStatus | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/mining-claim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'getStatus',
+        ...(userAddress ? { userAddress } : {}),
+      }),
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      console.error('[MiningPool] Status error:', json.error);
+      return null;
+    }
+
+    return json.data as MiningPoolStatus;
+  } catch (error) {
+    console.error('[MiningPool] Status fetch failed:', error);
+    return null;
   }
 }
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
-
-/**
- * Estimate gas for token claim
- * @param signer - User's signer
- * @param amount - Token amount
- * @param recipientAddress - Recipient address
- */
-export async function estimateClaimGas(
-  signer: ethers.Signer,
-  amount: number,
-  recipientAddress: string
-): Promise<bigint> {
-  try {
-    const contract = getALMANTokenContract(signer);
-    const decimals = await contract.decimals();
-    const amountWei = ethers.parseUnits(amount.toString(), decimals);
-
-    const gasEstimate = await contract.mint.estimateGas(
-      recipientAddress,
-      amountWei
-    );
-
-    return gasEstimate;
-  } catch (error) {
-    console.error('Error estimating gas:', error);
-    throw new Error('Failed to estimate gas');
-  }
-}
 
 /**
  * Check if network is correct
@@ -265,7 +255,7 @@ export default {
   getTokenBalance,
   getTokenInfo,
   claimTokenReward,
-  estimateClaimGas,
+  getMiningPoolStatus,
   isCorrectNetwork,
   formatTokenAmount,
   parseTokenAmount,
