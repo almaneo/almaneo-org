@@ -48,8 +48,7 @@ app.*.map.json
 .env
 .env.local
 
-# Firebase (contains API keys)
-android/app/google-services.json
+# Firebase iOS (커밋 불필요 - Apple 계정 등록 후 추가)
 ios/Runner/GoogleService-Info.plist
 
 # Secrets
