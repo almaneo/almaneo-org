@@ -5506,22 +5506,150 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 135+)
+### ✅ 완료된 작업 (2026-02-22 - Session 135: 앱 스토어 배포 준비)
 
-#### 🔴 높은 우선순위
-- **Vercel `VITE_ADMIN_API_SECRET` 설정**: Vercel Dashboard에서 수동 추가 (CLI stale) → 재배포
-- **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인 전체 플로우
-- **게임 실기기 토큰 클레임 테스트**: game.almaneo.org에서 실제 토큰 클레임 UI 테스트
-- **새 파트너 민팅 시 자동 동기화 확인**: Admin에서 새 SBT 민팅 → Supabase 자동 반영 검증
+#### 1. **Android 릴리스 서명 설정 완료** ✅
+   - `upload-keystore.jks` 생성 (RSA 2048, AlmaNEO/AE)
+   - `android/key.properties` 설정 (git-ignored)
+   - `build.gradle.kts` signingConfigs.release 설정
+   - 릴리스 AAB 빌드 성공: `app-release.aab` (59.7MB)
+
+#### 2. **앱 버전 업데이트** ✅
+   - `pubspec.yaml`: `1.0.0+1` → `1.0.0+135`
+
+#### 3. **스토어 리스팅 콘텐츠 작성** ✅
+   - `chat-app/STORE_LISTING.md` 생성
+   - 영어/한국어 앱 설명 (Short + Full Description)
+   - Data Safety 선언 내용
+   - Financial Features 선언 (크립토 앱 요건)
+   - IARC 콘텐츠 등급 답변 준비
+   - 필요한 스크린샷 목록
+
+#### 4. **Codemagic CI/CD 설정 파일** ✅
+   - `chat-app/codemagic.yaml` 생성
+   - iOS/Android 워크플로우 정의
+   - 자동 코드 서명 + TestFlight 업로드 설정
+
+#### 5. **스토어 배포 가이드 조사 완료** ✅
+
+---
+
+## 앱 스토어 배포 가이드 (Session 135)
+
+### Google Play Store
+
+#### 계정 생성
+- **비용**: $25 (1회)
+- **계정 타입**: 개인 (Personal) — DUNS 번호 불필요
+- **등록**: https://play.google.com/console
+- **심사**: 2~7일
+
+#### 배포 프로세스 (신규 개발자 필수 절차)
+```
+1. Internal Testing (즉시)
+   → AAB 업로드, 최대 100명 테스터
+   → Google 심사 없음
+
+2. Closed Testing (필수! 14일)
+   → 최소 20명 테스터 × 14일 연속
+   → Google 심사 1~3일
+
+3. Production (출시)
+   → 프로덕션 접근 요청
+   → 심사 7~14일 (크립토 앱)
+```
+**총 소요: 계정 생성 → 출시까지 5~7주**
+
+#### 크립토 앱 주의사항
+- "mining" 대신 "rewards"/"earning" 사용
+- Financial Features Declaration 작성 필수
+- ALMAN 토큰 = "community rewards" 프레이밍
+- Google Play 30% 인앱결제 면제 (블록체인 트랜잭션)
+
+#### 빌드 명령어
+```bash
+# AAB (Play Store 필수)
+cd c:\DEV\ALMANEO\chat-app
+flutter build appbundle --release
+
+# 결과: build/app/outputs/bundle/release/app-release.aab
+```
+
+### Apple App Store (Mac 없이!)
+
+#### 계정 생성
+- **비용**: $99/년
+- **등록**: https://developer.apple.com/programs/enroll/
+- **Apple 기기 없이**: 전화로 Apple 지원팀에 2FA 대안 요청
+- **심사**: 1~2일
+
+#### Mac 없이 빌드: Codemagic CI/CD
+- **무료 티어**: 월 500분 (macOS M2), ~30빌드/월
+- **자동 코드 서명**: 인증서/프로비저닝 자동 생성
+- **TestFlight 자동 업로드**
+- **Mac/iPhone 불필요!**
+
+#### 설정 단계
+```
+1. Apple Developer Program 등록 ($99)
+2. App Store Connect API Key 생성 (.p8 파일)
+3. Codemagic 가입 (GitHub 연동)
+4. API Key 업로드 → 자동 코드 서명 활성화
+5. Push → 자동 빌드 → TestFlight 업로드
+6. 테스터 (iPhone 소유자 2~3명) 에게 TestFlight 초대
+```
+
+#### iOS 번들 ID 통일 필요
+- Android: `org.almaneo.alma_chat`
+- iOS: `org.almaneo.almaChat` → `org.almaneo.almachat`로 변경 예정
+
+### 릴리스 서명 파일 구조
+```
+chat-app/android/
+├── upload-keystore.jks     # 릴리스 키스토어 (git-ignored)
+├── key.properties          # 키스토어 설정 (git-ignored)
+└── app/build.gradle.kts    # signingConfigs.release 설정
+```
+
+### 스토어 메타데이터
+```
+chat-app/
+├── STORE_LISTING.md        # 스토어 리스팅 콘텐츠 (영어/한국어)
+├── codemagic.yaml          # Codemagic CI/CD 설정
+└── assets/icons/
+    └── app_icon.png        # 512x512 앱 아이콘
+```
+
+### 비용 요약
+| 항목 | 비용 | 빈도 |
+|------|------|------|
+| Google Play Console | $25 | 1회 |
+| Apple Developer Program | $99 | 매년 |
+| Codemagic (iOS 빌드) | $0 | 무료 티어 |
+| **총계** | **$124** | 첫해 |
+
+---
+
+### 🔲 다음 세션 작업 (Session 136+)
+
+#### 🔴 높은 우선순위 (앱 배포)
+- **Google Play Console 계정 등록** ($25, 개인 계정)
+- **Internal Testing 트랙에 AAB 업로드**
+- **Apple Developer Program 등록** ($99)
+- **Codemagic 설정 및 iOS 빌드 테스트**
+- **스크린샷 6장 생성** (앱 실행 → 캡처)
+
+#### 🟠 높은 우선순위 (기존)
+- **Vercel `VITE_ADMIN_API_SECRET` 설정**: Vercel Dashboard에서 수동 추가
+- **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소
+- **게임 실기기 토큰 클레임 테스트**: game.almaneo.org
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
-- **AlmaPaymentManager 수수료 할인 연동**: PartnerSBT 15% 할인 (NFT 마켓 활성화 후)
-- **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
+- **앱스토어 URL 업데이트**: 출시 후 다운로드 링크 반영
 
 #### 🟢 낮은 우선순위
-- **Google Places Autocomplete**: 주소 입력 시 자동완성 + 비즈니스 검색 (유료 API)
 - **Kindness AI 분석 MVP**: V0.6+
 - **메인넷 배포 준비**: Multi-sig, 감사
 - **토큰 로고 AI 생성**

@@ -1,7 +1,7 @@
 name: alma_chat
 description: "AlmaChat - AI-powered multilingual chat for kindness community"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+135
 
 environment:
   sdk: ^3.11.0
