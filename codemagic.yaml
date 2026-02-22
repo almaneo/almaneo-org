@@ -1,42 +1,43 @@
 workflows:
-  ios-release:
-    name: iOS Release
-    working_directory: chat-app
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: org.almaneo.almachat
-      flutter: stable
-      xcode: latest
-      groups:
-        - app_store_credentials
-      vars:
-        BUNDLE_ID: "org.almaneo.almachat"
-    scripts:
-      - name: Set up code signing settings on Xcode project
-        script: |
-          xcode-project use-profiles
-      - name: Get Flutter packages
-        script: |
-          flutter pub get
-      - name: Build iOS
-        script: |
-          flutter build ipa --release \
-            --build-name=1.0.0 \
-            --build-number=$PROJECT_BUILD_NUMBER \
-            --export-options-plist=/Users/builder/export_options.plist
-    artifacts:
-      - chat-app/build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        submit_to_app_store: false
+  # iOS - Apple Developer 계정 등록 후 활성화
+  # ios-release:
+  #   name: iOS Release
+  #   working_directory: chat-app
+  #   max_build_duration: 60
+  #   instance_type: mac_mini_m2
+  #   environment:
+  #     ios_signing:
+  #       distribution_type: app_store
+  #       bundle_identifier: org.almaneo.almachat
+  #     flutter: stable
+  #     xcode: latest
+  #     groups:
+  #       - app_store_credentials
+  #     vars:
+  #       BUNDLE_ID: "org.almaneo.almachat"
+  #   scripts:
+  #     - name: Set up code signing settings on Xcode project
+  #       script: |
+  #         xcode-project use-profiles
+  #     - name: Get Flutter packages
+  #       script: |
+  #         flutter pub get
+  #     - name: Build iOS
+  #       script: |
+  #         flutter build ipa --release \
+  #           --build-name=1.0.0 \
+  #           --build-number=$PROJECT_BUILD_NUMBER \
+  #           --export-options-plist=/Users/builder/export_options.plist
+  #   artifacts:
+  #     - chat-app/build/ios/ipa/*.ipa
+  #   publishing:
+  #     app_store_connect:
+  #       auth: integration
+  #       submit_to_testflight: true
+  #       submit_to_app_store: false
 
-  android-release:
-    name: Android Release
+  android-build:
+    name: Android Build Test
     working_directory: chat-app
     max_build_duration: 30
     instance_type: mac_mini_m2
@@ -44,8 +45,6 @@ workflows:
       flutter: stable
       android_signing:
         - almachat_keystore
-      groups:
-        - google_play_credentials
     scripts:
       - name: Get Flutter packages
         script: |
@@ -57,8 +56,12 @@ workflows:
             --build-number=$PROJECT_BUILD_NUMBER
     artifacts:
       - chat-app/build/app/outputs/bundle/release/*.aab
-    publishing:
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal
-        submit_as_draft: true
+
+  # Google Play 계정 등록 후 publishing 섹션 추가:
+  # android-release:
+  #   ...
+  #   publishing:
+  #     google_play:
+  #       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+  #       track: internal
+  #       submit_as_draft: true
