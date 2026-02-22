@@ -58,6 +58,14 @@ workflows:
           WEB3AUTH_CLIENT_ID=$WEB3AUTH_CLIENT_ID
           GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
           EOF
+      - name: Create key.properties for signing
+        script: |
+          cat > android/key.properties << EOF
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          storeFile=$CM_KEYSTORE_PATH
+          EOF
       - name: Get Flutter packages
         script: |
           flutter pub get
