@@ -2786,7 +2786,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 132 기준)
+### 📊 페이지별 상태 요약 (Session 133 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -5431,12 +5431,88 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 133+)
+### ✅ 완료된 작업 (2026-02-22 - Session 133: Partner SBT Supabase 동기화 수정)
+
+#### 1. **Partner SBT Supabase 동기화 실패 근본 원인 수정** ✅
+   - **문제**: Admin Panel에서 Partner SBT 민팅 후 온체인에는 성공하지만 Supabase `sbt_token_id`가 null로 유지 → 앱에서 인증 배지 미표시
+   - **근본 원인**: `SUPABASE_SERVICE_KEY` 환경변수가 Vercel에 설정되지 않음 → `syncPartnerAfterTx()`가 `if (!SUPABASE_KEY) return;`으로 조기 반환
+   - **수정**: `SUPABASE_KEY` fallback을 `VITE_SUPABASE_ANON_KEY`로 변경 (이미 Vercel에 설정됨)
+   - **추가 수정**: `.eq('owner_user_id', partnerAddress)` → `.eq('owner_user_id', partnerAddress.toLowerCase())` (대소문자 불일치 방지)
+   - 수정 파일: `web/api/admin-action.ts`, `web/api/partner-sbt.ts`
+
+#### 2. **기존 민팅된 SBT 수동 Supabase 동기화** ✅
+   - 온체인 데이터 확인 후 Supabase REST API로 수동 업데이트
+   - KINFRI (`0x2243ce77...`): tokenId=3, expires=2027-02-21
+   - 3T Cà Phê Trứng (`0x73c544e6...`): tokenId=4, expires=2027-02-21
+   - Katinat (동일 owner): tokenId=4, expires=2027-02-21
+
+#### 3. **앱 인증 배지 표시 확인**
+   - 앱 리빌드 불필요 — Supabase 데이터 업데이트만으로 배지 표시
+   - `partner['sbt_token_id'] != null` 조건으로 파란색 체크마크 표시
+
+#### 4. **커밋**
+   - `0481399` - fix(web): Fix Supabase sync for Partner SBT minting
+
+#### 5. **참고: Katinat/3T 공유 주소**
+   - PartnerSBT는 1주소당 1 SBT — Katinat과 3T가 동일 owner 주소 → 동일 tokenId(4)
+   - 별도 SBT가 필요하면 다른 owner 지갑 주소 필요
+
+---
+
+### ✅ 완료된 작업 (2026-02-22 - Session 134: Admin Panel 코드 리뷰 & 보안 강화)
+
+#### 1. **Admin Panel 코드 전체 점검** ✅
+   - 프론트엔드 6개 파일 + API 4개 파일 전수 코드 리뷰
+   - CRITICAL 2건, HIGH 2건, MEDIUM 1건 발견 및 수정
+
+#### 2. **[CRITICAL] ambassador.ts sendTransaction → sendTransactionAndWait** ✅
+   - **문제**: `sendTransaction()`은 TX 전송만 하고 온체인 확인 없이 반환 → TX가 리버트되어도 API는 "성공" 반환
+   - **수정**: 4개 호출 전부 `sendTransactionAndWait()`로 교체
+   - 영향: recordMeetupAttendance, recordMeetupHosted, updateKindnessScore, recordReferral
+
+#### 3. **[CRITICAL] admin-action.ts 인증 + TX 확인** ✅
+   - **문제 1**: Ambassador 섹션 3개 호출도 `sendTransaction` 사용 → 온체인 미확인
+   - **문제 2**: `X-Admin-Secret` 헤더 검증 추가 후 프론트엔드에서 헤더 미전송 → 401 에러
+   - **수정**: 3개 호출 `sendTransactionAndWait` 전환 + AdminPartners/AdminMeetups에 auth 헤더 추가
+
+#### 4. **[HIGH] AdminMeetups verified_by + kindness_score 수정** ✅
+   - `useWallet()` 훅으로 admin 지갑 주소 획득 → `verified_by: address` 감사 추적
+   - kindness_score 덮어쓰기 버그: `{ kindness_score: points }` → 현재 값 조회 후 `currentScore + points`로 증분
+   - `increment_kindness_score` RPC 실패 시 fallback read-then-write 패턴
+
+#### 5. **[HIGH] AdminPartners 주소 검증 강화** ✅
+   - mint 시 `partnerAddress.trim()` + `businessName.trim()` 추가
+   - renew/revoke API 호출에도 `X-Admin-Secret` 헤더 추가
+
+#### 6. **[MEDIUM] 에러 핸들링 개선** ✅
+   - AdminMeetups: bare `catch {}` → `catch (e) { console.warn(...) }` 로깅 추가
+   - AdminDashboard: `Number.isFinite()` 가드 (이전 세션에서 이미 수정됨)
+
+#### 7. **환경변수 설정** ✅
+   - `web/.env`에 `VITE_ADMIN_API_SECRET` 추가 (로컬)
+   - ⚠️ **Vercel Dashboard에서 수동 설정 필요**: `VITE_ADMIN_API_SECRET=52daaf2e...` (CLI 프로젝트 링크 stale)
+
+#### 8. **수정 파일 요약**
+   | 파일 | 수정 내용 |
+   |------|----------|
+   | `web/api/ambassador.ts` | sendTransaction → sendTransactionAndWait (4곳) |
+   | `web/api/admin-action.ts` | Ambassador 섹션 sendTransactionAndWait (3곳) |
+   | `web/src/pages/admin/AdminPartners.tsx` | 주소 trim + auth 헤더 3곳 |
+   | `web/src/pages/admin/AdminMeetups.tsx` | verified_by + kindness_score 증분 + auth 헤더 |
+   - 4개 파일, +55줄, -34줄
+
+#### 9. **커밋**
+   - `75ad81e` - fix(web): Harden admin panel APIs with auth headers and TX confirmation
+
+---
+
+### 🔲 다음 세션 작업 (Session 135+)
 
 #### 🔴 높은 우선순위
-- **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인, Users 검색, Access Management
+- **Vercel `VITE_ADMIN_API_SECRET` 설정**: Vercel Dashboard에서 수동 추가 (CLI stale) → 재배포
+- **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인 전체 플로우
 - **게임 실기기 토큰 클레임 테스트**: game.almaneo.org에서 실제 토큰 클레임 UI 테스트
-- **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
+- **새 파트너 민팅 시 자동 동기화 확인**: Admin에서 새 SBT 민팅 → Supabase 자동 반영 검증
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
