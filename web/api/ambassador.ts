@@ -15,7 +15,7 @@
  */
 
 import {
-  sendTransaction,
+  sendTransactionAndWait,
   isAddress,
   AmbassadorSBT,
   jsonResponse,
@@ -109,8 +109,8 @@ async function handleMeetupVerification(
     }
     try {
       const data = AmbassadorSBT.recordMeetupAttendance(addr);
-      const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      txHashes.push(hash);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      txHashes.push(txHash);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       errors.push(`${addr}: ${errorMsg}`);
@@ -121,8 +121,8 @@ async function handleMeetupVerification(
   if (isAddress(hostAddress)) {
     try {
       const data = AmbassadorSBT.recordMeetupHosted(hostAddress);
-      const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      txHashes.push(hash);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      txHashes.push(txHash);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       errors.push(`Host (${hostAddress}): ${errorMsg}`);
@@ -164,10 +164,10 @@ async function handleUpdateScore(
 
   try {
     const data = AmbassadorSBT.updateKindnessScore(userAddress, BigInt(newScore));
-    const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
+    const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
 
     return jsonResponse(
-      { success: true, txHashes: [hash], message: `Kindness score updated to ${newScore}` },
+      { success: true, txHashes: [txHash], message: `Kindness score updated to ${newScore}` },
       200,
       CORS_HEADERS
     );
@@ -194,10 +194,10 @@ async function handleRecordReferral(
 
   try {
     const data = AmbassadorSBT.recordReferral(referrerAddress, refereeAddress);
-    const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
+    const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
 
     return jsonResponse(
-      { success: true, txHashes: [hash], message: `Referral recorded: ${referrerAddress} -> ${refereeAddress}` },
+      { success: true, txHashes: [txHash], message: `Referral recorded: ${referrerAddress} -> ${refereeAddress}` },
       200,
       CORS_HEADERS
     );

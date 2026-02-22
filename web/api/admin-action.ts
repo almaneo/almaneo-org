@@ -10,7 +10,6 @@
  */
 
 import {
-  sendTransaction,
   sendTransactionAndWait,
   ethCall,
   isAddress,
@@ -64,6 +63,12 @@ export default async function handler(request: Request): Promise<Response> {
 
   if (!VERIFIER_PRIVATE_KEY) {
     return jsonResponse({ success: false, error: 'VERIFIER_PRIVATE_KEY not configured' }, 500, CORS_HEADERS);
+  }
+
+  // Verify admin secret
+  const authHeader = request.headers.get('X-Admin-Secret');
+  if (authHeader !== ADMIN_API_SECRET) {
+    return jsonResponse({ success: false, error: 'Unauthorized' }, 401, CORS_HEADERS);
   }
 
   try {
@@ -231,8 +236,8 @@ async function handleAmbassador(
     if (hostAddress && isAddress(hostAddress)) {
       try {
         const data = AmbassadorSBT.recordMeetupHosted(hostAddress);
-        const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-        results.push(`Host ${hostAddress}: ${hash}`);
+        const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+        results.push(`Host ${hostAddress}: ${txHash}`);
       } catch {
         results.push(`Host ${hostAddress}: failed`);
       }
@@ -244,8 +249,8 @@ async function handleAmbassador(
         if (isAddress(addr)) {
           try {
             const data = AmbassadorSBT.recordMeetupAttendance(addr);
-            const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-            results.push(`Participant ${addr}: ${hash}`);
+            const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+            results.push(`Participant ${addr}: ${txHash}`);
           } catch {
             results.push(`Participant ${addr}: failed`);
           }
@@ -264,8 +269,8 @@ async function handleAmbassador(
 
     try {
       const data = AmbassadorSBT.updateKindnessScore(userAddress, BigInt(score));
-      const hash = await sendTransaction(CHAIN_ID, pk, contractAddress, data);
-      return jsonResponse({ success: true, txHash: hash, message: 'Kindness score updated on-chain' }, 200, CORS_HEADERS);
+      const { txHash } = await sendTransactionAndWait(CHAIN_ID, pk, contractAddress, data);
+      return jsonResponse({ success: true, txHash, message: 'Kindness score updated on-chain' }, 200, CORS_HEADERS);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[Admin Action] updateKindnessScore failed:`, errorMsg);

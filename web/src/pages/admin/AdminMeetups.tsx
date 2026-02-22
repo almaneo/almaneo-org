@@ -20,6 +20,9 @@ import {
   Shield,
 } from 'lucide-react';
 import { supabase } from '../../supabase';
+import { useWallet } from '../../components/wallet';
+
+const ADMIN_SECRET = import.meta.env.VITE_ADMIN_API_SECRET || '';
 
 interface Meetup {
   id: string;
@@ -63,6 +66,7 @@ function statusColor(status: string) {
 }
 
 export default function AdminMeetups() {
+  const { address } = useWallet();
   const [meetups, setMeetups] = useState<Meetup[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>('pending');
@@ -143,6 +147,7 @@ export default function AdminMeetups() {
         .update({
           verified: true,
           verified_at: new Date().toISOString(),
+          verified_by: address || null,
           verification_notes: verifyNotes || 'Approved by admin',
         })
         .eq('id', selected.id);
@@ -164,19 +169,24 @@ export default function AdminMeetups() {
           verified: true,
         });
 
-        // Update user score
-        await supabase.rpc('increment_kindness_score', {
+        // Update user score (increment, not overwrite)
+        const rpcRes = await supabase.rpc('increment_kindness_score', {
           p_address: p.user_address,
           p_points: points,
-        }).then(res => {
-          // If RPC doesn't exist, try direct update
-          if (res.error) {
-            return supabase
-              .from('users')
-              .update({ kindness_score: points })
-              .eq('wallet_address', p.user_address);
-          }
         });
+        if (rpcRes.error) {
+          // Fallback: read current score then add
+          const { data: userData } = await supabase
+            .from('users')
+            .select('kindness_score')
+            .eq('wallet_address', p.user_address)
+            .maybeSingle();
+          const currentScore = userData?.kindness_score ?? 0;
+          await supabase
+            .from('users')
+            .update({ kindness_score: currentScore + points })
+            .eq('wallet_address', p.user_address);
+        }
       }
 
       // 3. Record on-chain (best-effort)
@@ -184,7 +194,7 @@ export default function AdminMeetups() {
         try {
           await fetch('/api/ambassador', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
             body: JSON.stringify({
               action: 'recordMeetupVerification',
               meetupId: selected.id,
@@ -192,7 +202,9 @@ export default function AdminMeetups() {
               attendedAddresses: attendedParticipants.map(p => p.user_address),
             }),
           });
-        } catch { /* on-chain is best-effort */ }
+        } catch (e) {
+          console.warn('[AdminMeetups] On-chain recording failed (best-effort):', e);
+        }
       }
 
       setActionResult({ success: true, message: `Meetup approved! ${attendedParticipants.length} participants awarded points.` });
@@ -214,6 +226,7 @@ export default function AdminMeetups() {
         .from('meetups')
         .update({
           status: 'cancelled',
+          verified_by: address || null,
           verification_notes: verifyNotes || 'Rejected by admin',
         })
         .eq('id', selected.id);

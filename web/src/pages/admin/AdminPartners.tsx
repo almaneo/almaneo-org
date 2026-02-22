@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../supabase';
 
+const ADMIN_SECRET = import.meta.env.VITE_ADMIN_API_SECRET || '';
+
 interface Partner {
   id: string;
   business_name: string;
@@ -154,8 +156,9 @@ export default function AdminPartners() {
 
   // Mint Partner SBT
   async function handleMint() {
-    if (!mintAddress || !mintBusinessName) return;
-    if (!isEthAddress(mintAddress)) {
+    const trimmedAddress = mintAddress.trim();
+    if (!trimmedAddress || !mintBusinessName) return;
+    if (!isEthAddress(trimmedAddress)) {
       setActionResult({ success: false, message: 'Invalid Ethereum address. Must start with 0x and be 42 characters.' });
       return;
     }
@@ -164,11 +167,11 @@ export default function AdminPartners() {
     try {
       const res = await fetch('/api/admin-action', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
         body: JSON.stringify({
           target: 'partner-sbt',
           action: 'mintPartner',
-          params: { partnerAddress: mintAddress, businessName: mintBusinessName },
+          params: { partnerAddress: trimmedAddress, businessName: mintBusinessName.trim() },
         }),
       });
       const text = await res.text();
@@ -194,7 +197,7 @@ export default function AdminPartners() {
     try {
       const res = await fetch('/api/admin-action', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
         body: JSON.stringify({
           target: 'partner-sbt',
           action: 'renewPartner',
@@ -223,7 +226,7 @@ export default function AdminPartners() {
     try {
       const res = await fetch('/api/admin-action', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
         body: JSON.stringify({
           target: 'partner-sbt',
           action: 'revokePartner',
