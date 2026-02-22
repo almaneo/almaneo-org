@@ -30,7 +30,7 @@ const VERIFIER_PRIVATE_KEY = process.env.VERIFIER_PRIVATE_KEY;
 const ADMIN_API_SECRET = process.env.ADMIN_API_SECRET;
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || '80002');
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
+const SUPABASE_KEY = process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
 const CONTRACT_ADDRESSES: Record<number, string> = {
   80002: '0xC4380DEA33056Ce2899AbD3FDf16f564AB90cC08',
@@ -185,13 +185,13 @@ async function handleRevokePartner(
     console.log(`[PartnerSBT API] Revoke confirmed: ${txHash}`);
 
     // Clear Supabase SBT data
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    if (SUPABASE_URL && SUPABASE_KEY) {
       try {
-        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
         await supabase
           .from('partners')
           .update({ sbt_token_id: null, partnership_expires_at: null })
-          .eq('owner_user_id', partnerAddress);
+          .eq('owner_user_id', partnerAddress.toLowerCase());
       } catch { /* ignore */ }
     }
 
@@ -322,7 +322,7 @@ async function syncPartnerAfterTx(
   partnerAddress: string,
   contractAddress: string,
 ): Promise<void> {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return;
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
 
   try {
     await waitForReceipt(CHAIN_ID, txHash, 15_000);
@@ -335,14 +335,14 @@ async function syncPartnerAfterTx(
     const expiresAt = BigInt('0x' + hex.slice(3 * 64, 4 * 64));
     const expiresDate = new Date(Number(expiresAt) * 1000).toISOString();
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     await supabase
       .from('partners')
       .update({
         sbt_token_id: Number(tokenId),
         partnership_expires_at: expiresDate,
       })
-      .eq('owner_user_id', partnerAddress);
+      .eq('owner_user_id', partnerAddress.toLowerCase());
 
     console.log(`[PartnerSBT API] Supabase synced: tokenId=${tokenId}, expires=${expiresDate}`);
   } catch (error) {
