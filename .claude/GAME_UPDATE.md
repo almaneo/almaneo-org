@@ -833,6 +833,45 @@ game/
 
 ---
 
+### Session 132 (2026-02-22) - MiningPool API 연동 완료 ✅
+> 게임 토큰 클레임을 직접 컨트랙트 호출에서 API 기반으로 전환
+
+- **smartContract.ts 전면 재작성** ✅ (Session 131에서 시작, Session 132에서 완료)
+  - 기존: `contract.mint(amount)` 직접 호출 (사용자 지갑에 MINTER_ROLE 필요)
+  - 변경: `POST /api/mining-claim` API 호출 (서버가 CLAIMER_ROLE로 대신 전송)
+  - `claimTokenReward(amount, userAddress, gamePoints?)`: API 기반 토큰 클레임
+  - `getMiningPoolStatus(userAddress?)`: API 기반 풀 상태 조회
+  - `MiningPoolStatus` 인터페이스: remainingPool, totalClaimed, dailyRemaining 등
+
+- **TokenClaimModal.tsx 풀 잔액 표시 수정** ✅
+  - 하드코딩 `10,000,000` (구 MiMiG 풀) → 온체인 `poolStatus.remainingPool`
+  - 풀백: `MINING_POOL_TOTAL.toLocaleString()` (800,000,000)
+
+- **.env.local 컨트랙트 주소 업데이트** ✅
+  - 6개 컨트랙트 주소를 TGE 배포 주소로 갱신
+  - `NEXT_PUBLIC_API_BASE_URL=https://almaneo.org` 추가
+
+- **rpc.ts undefined 가드 추가** ✅
+  - `rpcCall()`: undefined/null 결과 체크
+  - `sendTransaction()`: nonce, gasPrice undefined 가드
+
+- **CLAIMER_ROLE 부여** ✅
+  - `blockchain/scripts/grant-mining-claimer-role.js` 생성
+  - Verifier 지갑에 MiningPool CLAIMER_ROLE 부여
+  - TX `0x39889a4d...` confirmed (block #34,303,612)
+
+- **E2E 테스트 성공** ✅
+  - `getStatus` API → 800M 풀 잔액 정상 반환
+  - `claimTokens` API → 1 ALMAN 클레임 성공 (TX status: 0x1)
+  - MiningPool 잔액: 799,999,999 ALMAN 확인
+
+- **Vercel 환경변수 업데이트** ✅ (Game 프로젝트)
+  - `printf` 사용 (echo 아닌) — trailing newline 방지
+
+- 빌드 성공, 커밋: `2aa41de`, `e34d49f`
+
+---
+
 ## 설계 메모
 
 ### 화면 전환 플로우
@@ -990,4 +1029,39 @@ game/public/images/story/intro-5.webp  → Scene 5: 함께, 80억의 친절한 �
 #### 스토리 텍스트/프롬프트 참조
 ```
 .claude/story.md
+```
+
+### MiningPool 토큰 클레임 아키텍처 (Session 132)
+
+#### 플로우
+```
+Game UI (TokenClaimModal)
+  ↓ claimTokenReward(amount, userAddress, gamePoints)
+smartContract.ts
+  ↓ POST /api/mining-claim { action: 'claimTokens', ... }
+web/api/mining-claim.ts (Vercel Edge Function)
+  ↓ VERIFIER_PRIVATE_KEY로 트랜잭션 서명
+web/api/_lib/rpc.ts (경량 JSON-RPC)
+  ↓ MiningPool.claimForUser(userAddress, amountWei)
+Polygon Amoy (MiningPool 컨트랙트)
+  ↓ transfer(userAddress, amount)
+ALMANToken (사용자 지갑으로 토큰 이동)
+```
+
+#### 주요 설계 결정
+- **사용자 지갑에 MINTER_ROLE 불필요**: 서버가 CLAIMER_ROLE로 대신 전송
+- **Edge Runtime 호환**: ethers.js/viem 대신 raw fetch() + @noble/curves (< 4MB)
+- **일일 한도**: 전체 500K ALMAN/일, 사용자별 1K ALMAN/일
+- **반감기**: 4 에포크 (200M → 100M → 50M → 25M per epoch)
+
+#### 환경변수 (Game 프로젝트)
+```
+NEXT_PUBLIC_API_BASE_URL=https://almaneo.org
+NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS=0x2B52bD2daFd82683Dcf0A994eb24427afb9C1c63
+```
+
+#### 환경변수 (Web 프로젝트 - API 서버)
+```
+VERIFIER_PRIVATE_KEY=<Verifier 지갑 개인키>
+CHAIN_ID=80002
 ```

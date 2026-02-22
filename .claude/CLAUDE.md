@@ -2786,7 +2786,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 
 ---
 
-### 📊 페이지별 상태 요약 (Session 128 기준)
+### 📊 페이지별 상태 요약 (Session 132 기준)
 
 | 페이지 | 상태 | 비고 |
 |--------|------|------|
@@ -2805,7 +2805,7 @@ function updateReputation(node, delta) external onlyCoordinator;
 | **Partners** | ✅ | 지도/목록 토글, 바우처 QR, 15개 언어, PartnerSBT 인증 배지 (Session 121-127) |
 | **Admin** | ✅ | Partner SBT 관리, 밋업 검증, 유저 관리 (Session 128) |
 | NFT (외부) | ✅ | nft.almaneo.org + SEO/PWA |
-| Game (외부) | ✅ | game.almaneo.org (세계문화여행) |
+| Game (외부) | ✅ | game.almaneo.org (세계문화여행) + MiningPool API 연동 (Session 132) |
 
 ---
 
@@ -5372,16 +5372,75 @@ The logo should embody the philosophy "Cold Code, Warm Soul" - where AI technolo
 
 ---
 
-### 🔲 다음 세션 작업 (Session 132+)
+### ✅ 완료된 작업 (2026-02-22 - Session 132: Game MiningPool API 연동 & CLAIMER_ROLE 부여)
+
+#### 1. **Game 서버 smartContract.ts 전면 재작성** ✅
+   - **문제**: 기존 `contract.mint()` 직접 호출 — 유저 지갑에 MINTER_ROLE 필요 (불가능)
+   - **해결**: API 기반 클레임으로 전환 (`POST /api/mining-claim`)
+   - `game/lib/smartContract.ts` 재작성:
+     - `claimTokenReward(amount, userAddress, gamePoints?)` — API 호출
+     - `getMiningPoolStatus(userAddress?)` — 풀 상태 조회
+     - `MiningPoolStatus` 인터페이스
+     - `API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://almaneo.org'`
+
+#### 2. **TokenClaimModal 풀 잔량 표시 수정** ✅
+   - `game/components/TokenClaimModal.tsx`
+   - 하드코딩 `10,000,000` (구 MiMiG) → `poolStatus.remainingPool` (온체인 데이터)
+   - `MINING_POOL_TOTAL` (800M) 폴백
+
+#### 3. **rpc.ts 방어 코드 추가** ✅
+   - `web/api/_lib/rpc.ts`
+   - `rpcCall()`: `json.result === undefined || null` → 명시적 에러 throw
+   - `sendTransaction()`: nonce, gasPrice 빈 값 가드 추가
+
+#### 4. **Game 서버 환경변수 업데이트** ✅
+   - `game/.env.local`: 6개 TGE 컨트랙트 주소 업데이트 (2026-01-20 → 2026-02-06)
+   - Vercel game.almaneo.org: `NEXT_PUBLIC_API_BASE_URL=https://almaneo.org` 추가
+   - Vercel: 6개 컨트랙트 주소 업데이트 (`printf` 사용 — trailing newline 방지)
+
+#### 5. **CLAIMER_ROLE 부여** ✅
+   - **문제**: claimTokens API가 TX 전송 성공하나 온체인 리버트 (`status: 0x0`)
+   - **근본 원인**: Verifier 지갑(`0x3007...44E`)에 CLAIMER_ROLE 미부여 (TGE 배포 시 deployer에게만 부여됨)
+   - **해결**: `blockchain/scripts/grant-mining-claimer-role.js` 생성 & 실행
+   - TX: `0x39889a4d...` — block 34,303,612에서 확인
+
+#### 6. **End-to-End 클레임 테스트 성공** ✅
+   - `POST /api/mining-claim` — `claimTokens` 1 ALMAN 클레임
+   - TX: `0x34b487f7...` — **status: 0x1 (SUCCESS)**
+   - ERC-20 Transfer 이벤트: MiningPool → Foundation 지갑 (1 ALMAN)
+   - 풀 상태 확인: remainingPool=799,999,999, userDailyRemaining=999
+
+#### 7. **커밋 내역**
+   | 커밋 | 내용 |
+   |------|------|
+   | `b774727` | fix(web,game): Connect game MiningPool to API and harden rpc.ts |
+   | `d05a8fa` | fix(blockchain): Grant CLAIMER_ROLE to Verifier wallet on MiningPool |
+
+#### 8. **수정/생성 파일 요약**
+   | 파일 | 작업 |
+   |------|------|
+   | `game/lib/smartContract.ts` | 재작성 — direct mint → API 기반 클레임 |
+   | `game/components/TokenClaimModal.tsx` | 수정 — 풀 잔량 온체인 데이터 표시 |
+   | `web/api/_lib/rpc.ts` | 수정 — undefined 가드 추가 |
+   | `blockchain/scripts/grant-mining-claimer-role.js` | **신규** — CLAIMER_ROLE 부여 스크립트 |
+
+#### 9. **교훈: MiningPool 온체인 트랜잭션 디버깅**
+   - API가 txHash를 반환해도 온체인 status 확인 필수 (0x0=리버트, 0x1=성공)
+   - TGE 배포 스크립트에서 CLAIMER_ROLE 부여 누락 → 별도 스크립트로 보완
+   - Vercel 배포 전파 시간: ~30초~1분 소요 (테스트 시 대기 필요)
+
+---
+
+### 🔲 다음 세션 작업 (Session 133+)
 
 #### 🔴 높은 우선순위
 - **Admin Panel 실기기 테스트**: Partner SBT 민팅/갱신/취소, Meetup 승인, Users 검색, Access Management
+- **게임 실기기 토큰 클레임 테스트**: game.almaneo.org에서 실제 토큰 클레임 UI 테스트
 - **실기기 재테스트**: reverse geocoding, QR 카운트다운, 지도 제스처, 인증 배지 표시 확인
 
 #### 🟡 중간 우선순위
 - **GAII 페이지 i18n 완성**: 12개 언어 `platform.json` 추가
 - **Governance 실제 제안 로드**: Mock 데이터 제거
-- **게임 서버 MiningPool 연동**: mining-claim API 활용
 - **AlmaPaymentManager 수수료 할인 연동**: PartnerSBT 15% 할인 (NFT 마켓 활성화 후)
 - **앱스토어 URL 업데이트**: Google Play, App Store, APK 다운로드 링크
 
