@@ -353,9 +353,8 @@ export default function MeetupDetail() {
                   {t('meetup.almachat.openApp')}
                 </a>
                 <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="https://github.com/almaneo/almaneo-org/releases/download/v1.0.0/app-release.apk"
+                  download
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/10 transition-colors"
                 >
                   <Download className="w-4 h-4" />

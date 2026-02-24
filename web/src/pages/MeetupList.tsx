@@ -161,9 +161,8 @@ export default function MeetupList() {
               <p className="text-slate-400 text-sm">{t('meetup.almachat.bannerDesc')}</p>
             </div>
             <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="https://github.com/almaneo/almaneo-org/releases/download/v1.0.0/app-release.apk"
+              download
               className="flex items-center gap-1.5 text-sm font-medium text-jeong-orange hover:text-orange-300 transition-colors whitespace-nowrap"
             >
               {t('meetup.almachat.download')}

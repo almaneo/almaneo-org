@@ -231,7 +231,8 @@ export function AlmaChatSection() {
           {/* Direct APK Download */}
           <div className="mt-4">
             <a
-              href="#"
+              href="https://github.com/almaneo/almaneo-org/releases/download/v1.0.0/app-release.apk"
+              download
               className="inline-flex items-center gap-2 text-sm text-jeong-orange hover:text-orange-300 transition-colors"
             >
               <Download className="w-4 h-4" />
