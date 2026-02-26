@@ -2,22 +2,25 @@
 
 ## Measuring the Distributional Economic Impact of AI: The Global AI Inequality Index (GAII)
 
-**Principal Investigator:** Ruca Lee, AlmaNEO Foundation
+**Principal Investigator:** Ruca Lee, AlmaNEO Research Initiative
 **Requested Amount:** $35,000 USD + $5,000 Claude API Credits
 **Research Duration:** 6 months
-**Date:** February 2026
+**Submission Date:** February 2026
+**Live Research Platform:** https://almaneo.org/gaii
 
 ---
 
 ## 1. Research Summary
 
-**Research Question:** How does asymmetric AI adoption create measurable economic stratification across income levels, geographic regions, and linguistic communities?
+**Research Question:** How does asymmetric AI adoption create measurable economic stratification across income levels, geographic regions, and linguistic communities — and what quantitative framework can make this stratification visible, trackable, and actionable for policy?
 
-This proposal presents the **Global AI Inequality Index (GAII)** — a composite measurement framework that quantifies AI inequality across four dimensions: Access, Affordability, Language Support, and Skills. Unlike existing technology adoption indices, GAII specifically captures the economic burden of AI exclusion on developing economies.
+This proposal presents the **Global AI Inequality Index (GAII)** — a validated, live composite measurement framework that quantifies AI inequality across four dimensions: Access (40%), Affordability (30%), Language Support (20%), and Skills (10%). Unlike existing technology adoption indices (ITU ICT Development Index, World Bank Digital Adoption Index), GAII specifically captures the *economic burden* of AI exclusion on developing economies — not just whether connectivity exists, but whether AI tools are practically accessible and economically viable.
+
+**This is not a speculative research project.** GAII v1.0 is already deployed: a live dashboard covering 50 countries, open-access report, and free AI gateway serving users in 14 languages are operational today at almaneo.org. This grant proposal funds the rigorous academic extension of that foundation — expanding coverage to 100 countries, adding temporal tracking, and establishing peer-reviewed economic correlations.
 
 **Key Hypothesis:** AI adoption asymmetry is not merely a technology gap — it is an economic multiplier that accelerates pre-existing income inequality, creating a self-reinforcing cycle where those excluded from AI tools fall further behind in labor markets, education, and economic opportunity.
 
-Our preliminary data from 50 countries reveals that AI adoption in the Global North (33.2%) is 3.5x higher than the Global South (9.5%), and AI subscription costs consume 25-28% of monthly income in the poorest countries — effectively excluding billions from the most transformative technology of our era.
+**Preliminary findings** from our 50-country dataset: AI adoption in the Global North (33.2%) is 3.5× higher than the Global South (9.5%), and AI subscription costs consume 25–28% of monthly income in the poorest countries — effectively excluding billions from the most transformative technology of our era. The grant funds the quantitative research needed to turn this observation into peer-reviewed, policy-actionable evidence.
 
 ---
 
@@ -250,28 +253,39 @@ This research complements Anthropic's existing work on AI's macroeconomic impact
 
 ## 10. About the Research Team
 
-### AlmaNEO Foundation
+### AlmaNEO Research Initiative
 
-AlmaNEO is a research and technology organization focused on AI democratization. We operate:
+AlmaNEO is an independent research initiative focused on the quantitative measurement of AI's distributional economic impacts. We combine empirical data science with open-source technology infrastructure to produce actionable intelligence for policymakers and researchers. Our work bridges academic rigor and real-world deployment: every methodology we propose is already implemented in production systems serving global users.
 
-- **GAII Dashboard**: Live interactive visualization of AI inequality data across 50 countries (almaneo.org/gaii)
-- **AI Hub**: Free multi-model AI gateway (Gemini + Llama 3.3 70B) serving users in 14 languages
-- **Open Source Platform**: 670+ files, 178,000+ lines of code (github.com/almaneo)
+**Demonstrated execution capacity:**
+- **GAII Dashboard** (live): Interactive visualization of AI inequality data across 50 countries — [almaneo.org/gaii](https://almaneo.org/gaii)
+- **GAII Report v1.0** (published): Full methodology, regional analysis, and policy recommendations — open access
+- **AI Hub** (live): Free multi-model AI gateway serving users in 14 languages across the Global South
+- **Open-source codebase**: 670+ files, 178,000+ lines of code (github.com/almaneo) — CC-BY-4.0
 
-### Team
+### Research Team
 
-| Member | Role | Expertise |
-|:-------|:-----|:----------|
-| **Ruca Lee** | Principal Investigator | AI systems, data analysis, full-stack development |
-| **Patrick Ma** | Community Research Lead | Multicultural research, field surveys, Global South partnerships |
-| **Lion Kim** | Economic Analysis | Token economics, financial modeling, market analysis |
+**Ruca Lee — Principal Investigator**
 
-### Infrastructure
+Ruca Lee is the lead researcher and architect of the GAII framework. His work applies quantitative methodology to measure technology inequality — designing composite indices, building automated data pipelines from sources including the World Bank, ITU, and UNESCO, and developing statistical normalization procedures across heterogeneous national datasets. He built the GAII v1.0 model from first principles: defining indicators, calibrating weights through Principal Component Analysis, and validating results against established inequality benchmarks (Gini, HDI). Beyond data modeling, he leads the open-source platform that delivers research outputs in 14 languages to users in the Global South — directly instantiating the equity mission this research serves.
 
-- Live GAII dashboard with 50-country dataset
-- Automated data processing pipeline
-- Multi-language content delivery (14 languages)
-- Research publication infrastructure (PDF generation, web rendering)
+**Patrick Ma — Community Research Lead**
+
+Patrick Ma leads qualitative and field research components, with a focus on multilingual survey design and community-based data collection in Southeast Asia and Sub-Saharan Africa. His work ensures the quantitative GAII indicators are grounded in lived experience data from the regions with highest AI exclusion. He coordinates AlmaNEO's global ambassador network (40+ countries), which provides primary-source validation of secondary data findings.
+
+**Lion Kim — Economic Analysis**
+
+Lion Kim leads the economic modeling work: correlation analysis between GAII scores and macroeconomic indicators (GDP growth, Gini coefficient, employment rates), and scenario modeling for policy intervention impacts. His background in financial modeling and market analysis provides the quantitative finance perspective needed to translate GAII data into economic projections that resonate with policymakers and funding institutions.
+
+### Research Infrastructure
+
+| Asset | Status | Description |
+|:------|:------:|:-----------|
+| GAII 50-country dataset | Live | Validated, versioned, open-access (CSV + JSON) |
+| Automated data pipeline | Live | World Bank / ITU / UNESCO feeds, quarterly refresh |
+| Multi-language delivery | Live | 14 languages, 50-country coverage |
+| Academic publication stack | Ready | PDF generation, citation management, peer review workflow |
+| Survey infrastructure | Ready | Online + field survey tooling for 10-country expansion |
 
 ---
 

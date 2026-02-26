@@ -1,6 +1,6 @@
 # AlmaNEO Grant 신청 트래커
 
-**최종 업데이트:** 2026-02-10
+**최종 업데이트:** 2026-02-25 (Session 136)
 **담당:** Ruca Lee
 
 ---
@@ -9,9 +9,9 @@
 
 | # | 프로그램 | 상태 | 금액 | 마감 | 우선순위 | 제안서 |
 |:-:|:--------|:----:|:-----|:-----|:--------:|:------|
-| 1 | Polygon Village Grants S4 | 📨 제출됨 | $30K~$50K | - | - | `POLYGON_GRANT_PROPOSAL.md` |
-| 2 | **Vercel AI Accelerator** | ✍️ 작성 완료 | $100K+ 크레딧 | **2026-02-16** | 🔴 긴급 | `VERCEL_AI_ACCELERATOR.md` |
-| 3 | **Anthropic Economic Futures** | ✍️ 작성 완료 | $35K + API 크레딧 | Rolling | 🔴 즉시 | `ANTHROPIC_ECONOMIC_FUTURES.md` |
+| 1 | Polygon Village Grants S4 | ✍️ 작성 완료 | $30K~$50K | - | 🔴 즉시 | `POLYGON_GRANT_PROPOSAL.md` |
+| 2 | **Vercel AI Accelerator** | 📨 제출됨 | $100K+ 크레딧 | 2026-02-16 | - | `VERCEL_AI_ACCELERATOR.md` |
+| 3 | **Anthropic Economic Futures** | 📨 제출됨 | $35K + API 크레딧 | Rolling | - | `ANTHROPIC_ECONOMIC_FUTURES.md` |
 | 4 | **Mozilla Democracy x AI** | ✍️ 작성 완료 | $50K~$250K | Early 2026 | 🟠 준비 | `MOZILLA_DEMOCRACY_AI.md` |
 | 5 | **Optimism RetroPGF** | ✍️ 작성 완료 | OP 토큰 | 상시 | 🟠 준비 | `OPTIMISM_RETROPGF.md` |
 | 6 | **Gitcoin GG25** | ✍️ 작성 완료 | QF 매칭 | Q2 2026 | 🟡 대기 | `GITCOIN_GG25.md` |
@@ -27,9 +27,11 @@
 - [ ] Vercel AI Accelerator 온라인 지원서 제출 (마감 2/16)
   - 지원 URL: https://vercel.com/ai-accelerator
   - 제안서: `VERCEL_AI_ACCELERATOR.md` 내용 기반
-- [ ] Anthropic Economic Futures 온라인 지원서 제출
-  - 지원 URL: https://www.anthropic.com/economic-futures
-  - 제안서: `ANTHROPIC_ECONOMIC_FUTURES.md` 내용 기반
+- [x] Anthropic Economic Futures 이메일 제출 완료 (2026-02-25)
+  - 이메일: economicfutures@anthropic.com
+  - Google Form 400 오류로 이메일 대체 제출
+  - 첨부: Abstract, CV, Budget PDF 3개
+  - 파일: `ANTHROPIC_EMAIL_APPLICATION.md`
 
 ### 🟠 2~4주 내
 - [ ] Mozilla Democracy x AI 지원서 오픈 시 즉시 제출

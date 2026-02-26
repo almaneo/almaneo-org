@@ -142,7 +142,7 @@ function StatCard({
 // 국가 순위 테이블
 function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryRanking[]; showAll?: boolean }) {
   const { t, i18n } = useTranslation('platform');
-  const isKo = i18n.language === 'ko';
+  const isEn = i18n.language === 'en';
   const [expanded, setExpanded] = useState(showAll);
   const displayRankings = expanded ? rankings : rankings.slice(0, 10);
 
@@ -167,8 +167,8 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
               <td className="py-3 px-4 text-white font-medium">#{item.rank}</td>
               <td className="py-3 px-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-white">{isKo ? item.country.nameKo : item.country.name}</span>
-                  <span className="text-gray-500 text-sm hidden sm:inline">({isKo ? item.country.name : item.country.nameKo})</span>
+                  <span className="text-white">{item.country.name}</span>
+                  {!isEn && <span className="text-gray-500 text-sm hidden sm:inline">({t(`gaii.countryNames.${item.country.iso3}`, { defaultValue: item.country.name })})</span>}
                 </div>
               </td>
               <td className="py-3 px-4 text-center">
@@ -215,7 +215,8 @@ function CountryRankingTable({ rankings, showAll = false }: { rankings: CountryR
 // 지역 카드
 function RegionCard({ region }: { region: RegionReport }) {
   const { t, i18n } = useTranslation('platform');
-  const isKo = i18n.language === 'ko';
+  const isEn = i18n.language === 'en';
+  const localRegionName = t(`gaii.regionNames.${region.code}`, { defaultValue: region.name });
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -227,8 +228,8 @@ function RegionCard({ region }: { region: RegionReport }) {
         <div className="flex items-center gap-4">
           <div className="text-3xl font-bold text-[#FF6B00]">{region.avgGaii}</div>
           <div>
-            <h3 className="text-white font-semibold text-left">{isKo ? region.nameKo : region.name}</h3>
-            <p className="text-gray-400 text-sm text-left">{isKo ? region.name : region.nameKo} • {region.countries} {t('gaiiReport.region.countries')}</p>
+            <h3 className="text-white font-semibold text-left">{region.name}</h3>
+            <p className="text-gray-400 text-sm text-left">{!isEn ? `${localRegionName} • ` : ''}{region.countries} {t('gaiiReport.region.countries')}</p>
           </div>
         </div>
         {expanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}

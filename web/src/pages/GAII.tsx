@@ -102,7 +102,8 @@ function RegionCard({
   onToggle: () => void;
 }) {
   const { t, i18n } = useTranslation('platform');
-  const isKo = i18n.language === 'ko';
+  const localRegionName = t(`gaii.regionNames.${region.code}`, { defaultValue: region.name });
+  const isEn = i18n.language === 'en';
 
   return (
     <div className="card overflow-hidden">
@@ -115,8 +116,8 @@ function RegionCard({
             className={`w-3 h-3 rounded-full ${getGAIIBgColor(region.weightedGaii)}`}
           />
           <div className="text-left">
-            <p className="text-white font-medium">{isKo ? region.nameKo : region.name}</p>
-            <p className="text-slate-500 text-sm">{isKo ? region.name : region.nameKo}</p>
+            <p className="text-white font-medium">{region.name}</p>
+            {!isEn && <p className="text-slate-500 text-sm">{localRegionName}</p>}
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -200,7 +201,8 @@ function RegionCard({
 // 국가 카드 컴포넌트
 function CountryCard({ country }: { country: CountryGAIIData }) {
   const { t, i18n } = useTranslation('platform');
-  const isKo = i18n.language === 'ko';
+  const localCountryName = t(`gaii.countryNames.${country.iso3}`, { defaultValue: country.name });
+  const isEn = i18n.language === 'en';
 
   return (
     <div className="p-3 bg-slate-800/50 rounded-lg hover:bg-slate-800/70 transition-colors">
@@ -208,8 +210,8 @@ function CountryCard({ country }: { country: CountryGAIIData }) {
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${getGAIIBgColor(country.gaii)}`} />
           <div>
-            <p className="text-white text-sm font-medium">{isKo ? country.nameKo : country.name}</p>
-            <p className="text-slate-500 text-xs">{isKo ? country.name : country.nameKo}</p>
+            <p className="text-white text-sm font-medium">{country.name}</p>
+            {!isEn && <p className="text-slate-500 text-xs">{localCountryName}</p>}
           </div>
         </div>
         <div className="text-right">

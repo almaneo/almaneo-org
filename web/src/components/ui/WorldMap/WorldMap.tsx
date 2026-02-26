@@ -4,6 +4,7 @@
  */
 
 import { useState, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ComposableMap,
   Geographies,
@@ -75,6 +76,7 @@ const WorldMap = memo(function WorldMap({
   onCountryClick,
   selectedCountry
 }: WorldMapProps) {
+  const { t, i18n } = useTranslation('platform');
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState<{
     x: number;
@@ -163,7 +165,9 @@ const WorldMap = memo(function WorldMap({
           }}
         >
           <p className="text-white font-medium text-sm">{tooltip.country.name}</p>
-          <p className="text-slate-400 text-xs">{tooltip.country.nameKo}</p>
+          {i18n.language !== 'en' && (
+            <p className="text-slate-400 text-xs">{t(`gaii.countryNames.${tooltip.country.iso3}`, { defaultValue: tooltip.country.name })}</p>
+          )}
           <div className="flex items-center gap-2 mt-1">
             <div
               className="w-2 h-2 rounded-full"
