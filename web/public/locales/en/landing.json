@@ -262,7 +262,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "Connect Through",
+    "titlePrefix": "Connect Through ",
+    "titleSuffix": "",
     "subtitle": "Chat with kind people worldwide, without language barriers",
     "features": {
       "translate": {

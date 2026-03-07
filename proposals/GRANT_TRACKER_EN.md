@@ -1,53 +1,98 @@
 # AlmaNEO Grant Application Tracker
 
-**Last Updated:** 2026-02-11
+**Last Updated:** 2026-03-07 (Session 140)
 **Lead:** Ruca Lee
 
 ---
 
 ## Overview
 
-| # | Program | Status | Amount | Deadline | Priority | Proposal |
-|:-:|:--------|:------:|:-------|:---------|:--------:|:---------|
-| 1 | Polygon Village Grants S4 | 📨 Submitted | $30K~$50K | - | - | `POLYGON_GRANT_PROPOSAL.md` |
-| 2 | **Vercel AI Accelerator** | ✍️ Ready | $100K+ credits | **2026-02-16** | 🔴 Urgent | `VERCEL_AI_ACCELERATOR.md` |
-| 3 | **Anthropic Economic Futures** | ✍️ Ready | $35K + API credits | Rolling | 🔴 ASAP | `ANTHROPIC_ECONOMIC_FUTURES.md` |
-| 4 | **Mozilla Democracy x AI** | ✍️ Ready | $50K~$250K | Early 2026 | 🟠 Standby | `MOZILLA_DEMOCRACY_AI.md` |
-| 5 | **Optimism RetroPGF** | ✍️ Ready | OP tokens | Ongoing | 🟠 Standby | `OPTIMISM_RETROPGF.md` |
-| 6 | **Gitcoin GG25** | ✍️ Ready | QF matching | Q2 2026 | 🟡 Waiting | `GITCOIN_GG25.md` |
-| 7 | Polygon Grants S3 | 👀 Monitoring | TBD | TBD | 🟢 Monitor | - |
+| # | Program | Status | Amount | Timeline | Expected Result | Proposal |
+|:-:|:--------|:------:|:-------|:---------|:---------------|:---------|
+| 1 | **Vercel AI Accelerator** | ❌ Not Selected | $6M+ credits | Closed 2/16 | Program started 3/2, not selected | `VERCEL_AI_ACCELERATOR.md` |
+| 2 | **Anthropic Economic Futures** | 📨 Submitted | $35K + API credits | Rolling | Awaiting response | `ANTHROPIC_ECONOMIC_FUTURES.md` |
+| 3 | **Mozilla Democracy x AI** | 📨 Submitted | $50K~$250K | Submitted 2/26 | **Results 2026-04-02** | `MOZILLA_DEMOCRACY_AI.md` |
+| 4 | **Hadron Founders Club** | 📨 Submitted | Networking | Submitted 2/25 | Awaiting acceptance | - |
+| 5 | **Gitcoin GG25** | ✍️ Ready | QF matching | Q2 2026 | 🟡 Waiting for round | `GITCOIN_GG25.md` |
+| 6 | **Optimism RetroPGF** | ✍️ Ready | OP tokens | 2026 round TBA | 🟠 Monitoring | `OPTIMISM_RETROPGF.md` |
+| 7 | **Polygon Community Grants** | ✍️ Ready | $40K | S2 active, S3 TBA | 🟠 Monitoring | `POLYGON_GRANT_PROPOSAL.md` |
 | 8 | Google.org AI Accelerator | 👀 Monitoring | $500K~$2M | 2026 cohort | 🟢 Monitor | - |
 | 9 | McGovern Foundation | 👀 Monitoring | $125K+ | Invite only | 🟢 Networking | - |
+
+### AI API Credit Programs
+
+| # | Program | Status | Credits | Apply URL | Notes |
+|:-:|:--------|:------:|:--------|:----------|:------|
+| A1 | **Anthropic Startup Program** | 🏢 Needs Entity | Up to $100K API | https://claude.com/programs/startups | Rolling, Claude API credits |
+| A2 | **Microsoft Founders Hub** | 🏢 Needs Entity | $5K~$150K Azure + $2.5K OpenAI | https://www.microsoft.com/en-us/startups | No investment required for $5K |
+| A3 | **AWS Activate** | 🏢 Needs Entity | $1K~$300K (incl. Bedrock) | https://aws.amazon.com/startups/lp/aws-activate-credits | Founders $1K self-serve |
+| A4 | **Google for Startups Cloud** | 🏢 Needs Entity | $2K~$350K (4 tiers) | https://cloud.google.com/startup | **Start $2K / Scale $200K / AI $350K / Web3** — HQ address required, see details below |
+| A5 | **OpenAI Researcher Access** | 📨 Submitted | $1K API | https://openai.com/form/researcher-access-program/ | March review, results 4-6 wks |
+| A6 | **Meta Llama Startup** | 🏢 Needs Entity | $6K/mo × 6mo ($36K) | https://www.llama.com/programs/startups/ | Already using Llama 3.3 |
+| A7 | **Mistral Mistralship** | 👀 Monitoring | Up to $30K API | https://mistral.ai | Cohort 1 closed, Cohort 2 TBA |
+| A8 | **Meta Llama Impact Grants** | 🏢 Needs Entity | Up to $500K | https://ai.meta.com/llama-impact/ | Social impact AI projects |
 
 ---
 
 ## Next Actions
 
-### 🔴 Immediate (This Week)
-- [ ] Submit Vercel AI Accelerator online application (deadline 2/16)
-  - Apply: https://vercel.com/ai-accelerator
-  - Based on: `VERCEL_AI_ACCELERATOR.md`
-- [ ] Submit Anthropic Economic Futures online application
-  - Apply: https://www.anthropic.com/economic-futures
-  - Based on: `ANTHROPIC_ECONOMIC_FUTURES.md`
+### 📨 Awaiting Results
+- [x] ~~**Vercel AI Accelerator**~~ — ❌ Not Selected (confirmed 2026-03-07)
+  - 40 teams selected, 6-week program started 3/2 — AlmaNEO not selected
+- [x] **Anthropic Economic Futures** — Submitted (dual submission)
+  - 1st: Email submission (2026-02-25) — economicfutures@anthropic.com
+  - 2nd: Google Form submission (2026-03-07) — Form now working
+  - Dual submission ensures receipt
+  - File: `ANTHROPIC_EMAIL_APPLICATION.md`
+- [x] **Mozilla Democracy x AI** — Submitted (2026-02-26)
+  - Confirmation email received
+  - **Results: 2026-04-02** (Finalists notified)
+  - Draft: `.claude/mozilla_democracy_ai_application.md`
+- [x] **Hadron Founders Club (HFC)** — Submitted (2026-02-25)
+  - Polygon ecosystem founders community membership
+  - Awaiting acceptance email
 
-### 🟠 Within 2-4 Weeks
-- [ ] Submit Mozilla Democracy x AI application when open
-  - URL: https://www.mozillafoundation.org/en/what-we-do/grantmaking/incubator/democracy-ai-cohort/
-  - Based on: `MOZILLA_DEMOCRACY_AI.md`
-- [ ] Monitor Optimism RetroPGF next round
-  - URL: https://www.retropgf.com/
-  - Based on: `OPTIMISM_RETROPGF.md`
-
-### 🟡 Q2 2026
+### 🟡 Q2 2026 Preparation
 - [ ] Register project when Gitcoin GG25 round opens
   - URL: https://grants.gitcoin.co/
   - Based on: `GITCOIN_GG25.md`
   - Community voting outreach needed (SNS, Discord)
 
-### 🟢 Monitoring
-- [ ] Await Polygon Grants Season 3 announcement
-  - URL: https://polygon.technology/grow
+### 🟠 Monitoring (Submit when round opens)
+- [ ] Optimism RetroPGF — Awaiting 2026 new round announcement
+  - URL: https://gov.optimism.io/c/retrofunding/46
+  - Based on: `OPTIMISM_RETROPGF.md`
+- [ ] Polygon Community Grants S3 — Awaiting announcement (S2 currently active)
+  - URL: https://polygon.questbook.xyz/
+  - Based on: `POLYGON_GRANT_PROPOSAL.md`
+
+### 🔴 AI API Credit Applications (🏢 After Entity Registration)
+- [x] **OpenAI Researcher Access** — $1K API credits ✅ Submitted (2026-02-27)
+- [ ] **Anthropic Startup Program** — Claude API up to $100K credits
+  - URL: https://claude.com/programs/startups
+  - Rolling review, based on business traction & Claude usage
+- [ ] **Microsoft Founders Hub** — Azure $5K~$150K + OpenAI $2.5K
+  - URL: https://www.microsoft.com/en-us/startups
+  - $5K self-serve, no investment required
+- [ ] **AWS Activate Founders** — $1K~$300K (includes Bedrock)
+  - URL: https://aws.amazon.com/startups/lp/aws-activate-credits
+  - Founders $1K self-serve, 7-10 day approval
+- [ ] **Google for Startups Cloud** — $2K~$350K (4 tiers)
+  - URL: https://cloud.google.com/startup
+  - **Start**: $2K (1yr) — Pre-funded, <5yr old startups
+  - **Scale**: $200K (2yr) — Pre-seed to Series A funded companies
+  - **Scale AI**: $350K (2yr) — AI-first companies, Gemini/Claude frontier model access
+  - **Web3**: Blockchain-focused — Alchemy, Nansen partner perks
+  - Extras: Skill Boost training, Startup Success Manager, 12mo free Workspace
+  - ⭐ **AlmaNEO Strategy: Apply for Scale AI + Web3 tiers (AI + Blockchain)**
+- [ ] **Meta Llama Startup** — $6K/mo × 6 months ($36K)
+  - URL: https://www.llama.com/programs/startups/
+  - Already using Llama 3.3 70B in AI Hub
+- [ ] **Meta Llama Impact Grants** — Up to $500K
+  - URL: https://ai.meta.com/llama-impact/
+  - GAII + AI Hub (already using Llama 3.3) social impact pitch
+
+### 🟢 Long-term Monitoring
 - [ ] Await Google.org AI Accelerator 2026 cohort announcement
   - URL: https://blog.google/outreach-initiatives/google-org/
 - [ ] Explore McGovern Foundation networking opportunities

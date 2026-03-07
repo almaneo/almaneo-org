@@ -232,7 +232,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "でつながる",
+    "titlePrefix": "",
+    "titleSuffix": "でつながろう",
     "subtitle": "言語の壁なく、世界中の親切な人々とチャットしましょう",
     "features": {
       "translate": {

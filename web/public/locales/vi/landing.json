@@ -240,7 +240,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "Kết nối với",
+    "titlePrefix": "Kết nối với ",
+    "titleSuffix": "",
     "subtitle": "Trò chuyện với những người tử tế trên toàn thế giới, không rào cản ngôn ngữ",
     "features": {
       "translate": {

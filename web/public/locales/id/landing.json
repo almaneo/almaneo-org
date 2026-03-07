@@ -240,7 +240,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "Terhubung dengan",
+    "titlePrefix": "Terhubung dengan ",
+    "titleSuffix": "",
     "subtitle": "Mengobrol dengan orang-orang baik di seluruh dunia, tanpa hambatan bahasa",
     "features": {
       "translate": {

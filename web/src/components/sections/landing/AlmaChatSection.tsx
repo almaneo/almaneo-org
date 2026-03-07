@@ -56,8 +56,9 @@ export function AlmaChatSection() {
           tagColor="warm"
           title={
             <>
-              {t('almachat.titleSuffix')}{' '}
+              {t('almachat.titlePrefix')}
               <GradientText variant="warm">{t('almachat.title')}</GradientText>
+              {t('almachat.titleSuffix')}
             </>
           }
           subtitle={t('almachat.subtitle')}

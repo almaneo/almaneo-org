@@ -232,7 +232,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "Conecte-se com",
+    "titlePrefix": "Conecte-se com ",
+    "titleSuffix": "",
     "subtitle": "Converse com pessoas gentis ao redor do mundo, sem barreiras linguísticas",
     "features": {
       "translate": {

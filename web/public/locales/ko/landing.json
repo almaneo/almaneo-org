@@ -262,6 +262,7 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
+    "titlePrefix": "",
     "titleSuffix": "으로 연결하세요",
     "subtitle": "언어의 장벽 없이, 전 세계 친절한 사람들과 대화하세요",
     "features": {

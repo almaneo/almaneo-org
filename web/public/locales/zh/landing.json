@@ -232,7 +232,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "连接世界",
+    "titlePrefix": "",
+    "titleSuffix": " 连接世界",
     "subtitle": "无语言障碍，与全世界友善的人们交流",
     "features": {
       "translate": {

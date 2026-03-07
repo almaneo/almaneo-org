@@ -240,7 +240,8 @@
   "almachat": {
     "tag": "AlmaChat",
     "title": "AlmaChat",
-    "titleSuffix": "Ungana na",
+    "titlePrefix": "Ungana na ",
+    "titleSuffix": "",
     "subtitle": "Zungumza na watu wema duniani kote, bila vikwazo vya lugha",
     "features": {
       "translate": {
